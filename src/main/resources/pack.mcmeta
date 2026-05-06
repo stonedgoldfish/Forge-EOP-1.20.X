@@ -1,0 +1,23 @@
+{
+    "pack": {
+        "id": "Echoes of Power",
+        "description": "Echoes of Power by StonedGoldfish",
+        "pack_format": 15,
+        "version": "1.0.0.0"
+    },
+	"dependencies": {
+    "common": {
+      "minecraft": ">=1.20",
+      "kubejs": "*",
+	  "architectury": "*",
+	  "geckolib": "*",
+	  "rhino": "*",
+	  "pehkui": "*"
+		}
+	},
+	"custom": {
+        "curios": {
+            "head": true
+        }
+    }
+}
