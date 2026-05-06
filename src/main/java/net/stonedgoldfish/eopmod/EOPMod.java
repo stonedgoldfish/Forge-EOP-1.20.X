@@ -12,7 +12,9 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.threetag.palladiumcore.forge.PalladiumCoreForge;
 import org.slf4j.Logger;
+import net.stonedgoldfish.eopmod.power.ability.ModAbilities;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(EOPMod.MOD_ID)
@@ -21,19 +23,18 @@ public class EOPMod {
     public static final String MOD_ID = "echoesofpower";
     private static final Logger LOGGER = LogUtils.getLogger();
 
+
     public EOPMod(FMLJavaModLoadingContext context) {
         IEventBus modEventBus = context.getModEventBus();
 
-        // Register the commonSetup method for modloading
+        PalladiumCoreForge.registerModEventBus(MOD_ID, modEventBus);
+        ModAbilities.ABILITIES.register();
+
         modEventBus.addListener(this::commonSetup);
 
-
-        // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
 
-        // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
-
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
