@@ -10,64 +10,78 @@ import net.threetag.palladium.power.ability.Ability;
 import net.threetag.palladium.power.ability.AbilityInstance;
 import net.threetag.palladium.util.icon.ItemIcon;
 import net.threetag.palladium.util.property.PalladiumProperty;
-import net.threetag.palladium.util.property.StringProperty;
+import net.threetag.palladium.util.property.StringArrayProperty;
 
 import java.util.*;
 
 public class ImmuneToEffectAbility extends Ability {
 
-    public static final PalladiumProperty<String> EFFECT =
-            new StringProperty("effect")
-                    .configurable("The potion effect this ability makes the entity immune to. Example: minecraft:poison");
+    public static final PalladiumProperty<String[]> EFFECTS =
+            new StringArrayProperty("effects")
+                    .configurable("The potion effects this ability makes the entity immune to. Example: [\"minecraft:poison\", \"minecraft:wither\"]");
 
     private static final Map<UUID, Set<ResourceLocation>> IMMUNITIES = new HashMap<>();
 
     public ImmuneToEffectAbility() {
         this.withProperty(ICON, new ItemIcon(Items.MILK_BUCKET));
-        this.withProperty(EFFECT, "minecraft:poison");
+        this.withProperty(EFFECTS, new String[]{"minecraft:poison"});
     }
 
     @Override
     public void firstTick(LivingEntity entity, AbilityInstance entry, IPowerHolder holder, boolean enabled) {
         if (!entity.level().isClientSide && enabled) {
-            addImmunity(entity, entry.getProperty(EFFECT));
+            addImmunities(entity, entry.getProperty(EFFECTS));
         }
     }
 
     @Override
     public void lastTick(LivingEntity entity, AbilityInstance entry, IPowerHolder holder, boolean enabled) {
         if (!entity.level().isClientSide) {
-            removeImmunity(entity, entry.getProperty(EFFECT));
+            removeImmunities(entity, entry.getProperty(EFFECTS));
         }
     }
 
-    private static void addImmunity(LivingEntity entity, String effectId) {
-        ResourceLocation effectLocation = ResourceLocation.tryParse(effectId);
-
-        if (effectLocation == null || !BuiltInRegistries.MOB_EFFECT.containsKey(effectLocation)) {
+    private static void addImmunities(LivingEntity entity, String[] effectIds) {
+        if (effectIds == null) {
             return;
         }
 
-        IMMUNITIES
-                .computeIfAbsent(entity.getUUID(), uuid -> new HashSet<>())
-                .add(effectLocation);
+        Set<ResourceLocation> effects = IMMUNITIES.computeIfAbsent(entity.getUUID(), uuid -> new HashSet<>());
+
+        for (String effectId : effectIds) {
+            ResourceLocation effectLocation = ResourceLocation.tryParse(effectId);
+
+            if (effectLocation != null && BuiltInRegistries.MOB_EFFECT.getOptional(effectLocation).isPresent()) {
+                effects.add(effectLocation);
+            }
+        }
+
+        if (effects.isEmpty()) {
+            IMMUNITIES.remove(entity.getUUID());
+        }
     }
 
-    private static void removeImmunity(LivingEntity entity, String effectId) {
-        ResourceLocation effectLocation = ResourceLocation.tryParse(effectId);
-
-        if (effectLocation == null) {
+    private static void removeImmunities(LivingEntity entity, String[] effectIds) {
+        if (effectIds == null) {
             return;
         }
 
         Set<ResourceLocation> effects = IMMUNITIES.get(entity.getUUID());
 
-        if (effects != null) {
-            effects.remove(effectLocation);
+        if (effects == null) {
+            return;
+        }
 
-            if (effects.isEmpty()) {
-                IMMUNITIES.remove(entity.getUUID());
+        for (String effectId : effectIds) {
+            ResourceLocation effectLocation = ResourceLocation.tryParse(effectId);
+
+            if (effectLocation != null) {
+                effects.remove(effectLocation);
             }
+        }
+
+        if (effects.isEmpty()) {
+            IMMUNITIES.remove(entity.getUUID());
         }
     }
 
@@ -85,6 +99,6 @@ public class ImmuneToEffectAbility extends Ability {
 
     @Override
     public String getDocumentationDescription() {
-        return "Makes the entity completely immune to a chosen potion effect.";
+        return "Makes the entity completely immune to multiple chosen potion effects.";
     }
 }

@@ -14,6 +14,10 @@ public class ModAbilities {
             ABILITIES.register("say_hi", SayHiAbility::new);
     public static final RegistrySupplier<Ability> IMMUNE_TO_EFFECT =
             ABILITIES.register("immune_to_effect", ImmuneToEffectAbility::new);
+    public static final RegistrySupplier<Ability> NO_NATURAL_REGEN =
+            ABILITIES.register("no_natural_regen", NoNaturalRegenAbility::new);
+    public static final RegistrySupplier<Ability> GILLS =
+            ABILITIES.register("gills", GillsAbility::new);
 
     public static void init() {
 
