@@ -14,6 +14,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.threetag.palladiumcore.forge.PalladiumCoreForge;
 import org.slf4j.Logger;
 import net.stonedgoldfish.eopmod.power.ability.EOPAbilities;
+import net.stonedgoldfish.eopmod.client.EOPClientEvents;
+import net.stonedgoldfish.eopmod.attribute.EOPAttributes;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(EOPMod.MOD_ID)
@@ -27,6 +29,7 @@ public class EOPMod {
         IEventBus modEventBus = context.getModEventBus();
 
         PalladiumCoreForge.registerModEventBus(MOD_ID, modEventBus);
+        EOPAttributes.ATTRIBUTES.register(modEventBus);
         EOPAbilities.ABILITIES.register();
 
         modEventBus.addListener(this::commonSetup);
@@ -34,6 +37,10 @@ public class EOPMod {
         MinecraftForge.EVENT_BUS.register(this);
 
         modEventBus.addListener(this::addCreative);
+
+        if (net.threetag.palladiumcore.util.Platform.isClient()) {
+            EOPClientEvents.init();
+        }
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {

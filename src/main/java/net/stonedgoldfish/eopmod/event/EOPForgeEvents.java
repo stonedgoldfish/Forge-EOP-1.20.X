@@ -11,14 +11,15 @@ import net.minecraftforge.fml.common.Mod;
 import net.stonedgoldfish.eopmod.EOPMod;
 import net.stonedgoldfish.eopmod.power.ability.ImmuneToEffectAbility;
 import net.stonedgoldfish.eopmod.power.ability.NoNaturalRegenAbility;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.event.TickEvent;
 import net.stonedgoldfish.eopmod.power.ability.GillsAbility;
 import net.minecraftforge.event.entity.living.LivingBreatheEvent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.event.TickEvent;
+import net.stonedgoldfish.eopmod.attribute.EOPAttributes;
 
 @Mod.EventBusSubscriber(modid = EOPMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class ModForgeEvents {
+public class EOPForgeEvents {
 
     @SubscribeEvent
     public static void onMobEffectApplicable(MobEffectEvent.Applicable event) {
@@ -58,12 +59,44 @@ public class ModForgeEvents {
             return;
         }
 
-        if (player.isEyeInFluid(FluidTags.WATER)) {
+        if (player.isEyeInFluidType(net.minecraftforge.common.ForgeMod.WATER_TYPE.get())) {
             event.setCanBreathe(true);
             event.setCanRefillAir(true);
         } else {
             event.setCanBreathe(false);
             event.setCanRefillAir(false);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if (event.phase != TickEvent.Phase.END) {
+            return;
+        }
+
+        if (!(event.player instanceof ServerPlayer player)) {
+            return;
+        }
+
+        double flight = player.getAttributeValue(EOPAttributes.FLIGHT.get());
+
+        boolean hasFlight = flight >= 1.0D;
+
+        if (hasFlight) {
+            player.getAbilities().mayfly = true;
+
+            float speed = 0.05F * (float) flight;
+            player.getAbilities().setFlyingSpeed(speed);
+
+            player.onUpdateAbilities();
+        } else {
+            if (!player.isCreative() && !player.isSpectator()) {
+                player.getAbilities().mayfly = false;
+                player.getAbilities().flying = false;
+                player.getAbilities().setFlyingSpeed(0.05F);
+
+                player.onUpdateAbilities();
+            }
         }
     }
 }
