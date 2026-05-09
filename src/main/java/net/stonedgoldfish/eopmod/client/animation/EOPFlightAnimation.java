@@ -80,39 +80,24 @@ public class EOPFlightAnimation extends PalladiumAnimation {
             return;
         }
 
-        float strafeCounterRotation = strafe * -36F;
 
         // Upright hovering body
         builder.get(PlayerModelPart.BODY)
-                .setXRotShortestDegrees(0F)
-                .setYRotShortestDegrees(strafeCounterRotation)
-                .setZRotShortestDegrees(0F)
                 .resetX()
                 .resetZ()
                 .animate(Easing.LINEAR, 1.0F);
 
         builder.get(PlayerModelPart.CHEST)
-                .setXRotShortestDegrees(0F)
-                .setYRotShortestDegrees(0F)
-                .setZRotShortestDegrees(0F)
                 .animate(Easing.LINEAR, 1.0F);
 
         builder.get(PlayerModelPart.RIGHT_ARM)
                 .setXRotShortestDegrees(-10F + forward * -15F)
-                .setYRotShortestDegrees(0F)
                 .setZRotShortestDegrees(12.5F + strafe * 18F * rightArmStrafeAmount)
                 .animate(Easing.INOUTCUBIC, anim);
 
         builder.get(PlayerModelPart.LEFT_ARM)
                 .setXRotShortestDegrees(-10F + forward * -15F)
-                .setYRotShortestDegrees(0F)
                 .setZRotShortestDegrees(-12.5F + strafe * 18F * leftArmStrafeAmount)
-                .animate(Easing.INOUTCUBIC, anim);
-
-        builder.get(PlayerModelPart.LEFT_ARM)
-                .setXRotShortestDegrees(-10F + forward * -15F)
-                .setYRotShortestDegrees(strafe * 8F)
-                .setZRotShortestDegrees(-12.5F + strafe * 18F)
                 .animate(Easing.INOUTCUBIC, anim);
 
         builder.get(PlayerModelPart.RIGHT_LEG)
