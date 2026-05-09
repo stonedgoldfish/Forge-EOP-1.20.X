@@ -7,6 +7,7 @@ import net.stonedgoldfish.eopmod.attribute.EOPAttributes;
 import net.threetag.palladium.client.model.animation.PalladiumAnimation;
 import net.threetag.palladium.util.Easing;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.entity.HumanoidArm;
 
 public class EOPFlightAnimation extends PalladiumAnimation {
 
@@ -75,6 +76,17 @@ public class EOPFlightAnimation extends PalladiumAnimation {
 
         float rightArmStrafeAmount = rightStrafe * 0.35F + leftStrafe;
         float leftArmStrafeAmount = leftStrafe * 0.35F + rightStrafe;
+        float attackAnim = player.getAttackAnim(partialTicks);
+        float attackSin = Mth.sin(attackAnim * (float) Math.PI);
+
+        boolean rightHanded = player.getMainArm() == HumanoidArm.RIGHT;
+
+        float attackX = attackSin * -65F;
+        float swingOut = Mth.sin(attackAnim * (float) Math.PI);
+        float swingIn = Mth.sin(Mth.clamp((attackAnim - 0.35F) / 0.65F, 0.0F, 1.0F) * (float) Math.PI);
+
+        float attackY = swingOut * 35F - swingIn * 55F;
+        float attackZ = swingOut * -18F + swingIn * 25F;
 
         if (anim <= 0.0F) {
             return;
@@ -91,13 +103,15 @@ public class EOPFlightAnimation extends PalladiumAnimation {
                 .animate(Easing.LINEAR, 1.0F);
 
         builder.get(PlayerModelPart.RIGHT_ARM)
-                .setXRotShortestDegrees(-10F + forward * -15F)
-                .setZRotShortestDegrees(12.5F + strafe * 18F * rightArmStrafeAmount)
+                .setXRotShortestDegrees(-10F + forward * -15F + (rightHanded ? attackX : 0F))
+                .setYRotShortestDegrees(rightHanded ? attackY : 0F)
+                .setZRotShortestDegrees(12.5F + strafe * 18F * rightArmStrafeAmount + (rightHanded ? attackZ : 0F))
                 .animate(Easing.INOUTCUBIC, anim);
 
         builder.get(PlayerModelPart.LEFT_ARM)
-                .setXRotShortestDegrees(-10F + forward * -15F)
-                .setZRotShortestDegrees(-12.5F + strafe * 18F * leftArmStrafeAmount)
+                .setXRotShortestDegrees(-10F + forward * -15F + (!rightHanded ? attackX : 0F))
+                .setYRotShortestDegrees(!rightHanded ? -attackY : 0F)
+                .setZRotShortestDegrees(-12.5F + strafe * 18F * leftArmStrafeAmount + (!rightHanded ? -attackZ : 0F))
                 .animate(Easing.INOUTCUBIC, anim);
 
         builder.get(PlayerModelPart.RIGHT_LEG)
