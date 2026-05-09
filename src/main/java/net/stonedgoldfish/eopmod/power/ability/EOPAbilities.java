@@ -16,6 +16,8 @@ public class EOPAbilities {
             ABILITIES.register("no_natural_regen", NoNaturalRegenAbility::new);
     public static final RegistrySupplier<Ability> GILLS =
             ABILITIES.register("gills", GillsAbility::new);
+    public static final RegistrySupplier<Ability> CUSTOM_FLIGHT =
+            ABILITIES.register("custom_flight", CustomFlightAbility::new);
 
     public static void init() {
 

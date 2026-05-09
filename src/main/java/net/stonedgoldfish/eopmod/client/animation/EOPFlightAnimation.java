@@ -3,11 +3,11 @@ package net.stonedgoldfish.eopmod.client.animation;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.util.Mth;
-import net.stonedgoldfish.eopmod.attribute.EOPAttributes;
 import net.threetag.palladium.client.model.animation.PalladiumAnimation;
 import net.threetag.palladium.util.Easing;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.entity.HumanoidArm;
+import net.stonedgoldfish.eopmod.power.ability.CustomFlightAbility;
 
 public class EOPFlightAnimation extends PalladiumAnimation {
 
@@ -33,7 +33,7 @@ public class EOPFlightAnimation extends PalladiumAnimation {
             return;
         }
 
-        if (player.getAttributeValue(EOPAttributes.FLIGHT.get()) < 1.0D) {
+        if (!CustomFlightAbility.hasCustomFlight(player)) {
             return;
         }
 

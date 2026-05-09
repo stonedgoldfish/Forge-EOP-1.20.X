@@ -16,7 +16,9 @@ import net.stonedgoldfish.eopmod.power.ability.GillsAbility;
 import net.minecraftforge.event.entity.living.LivingBreatheEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.TickEvent;
-import net.stonedgoldfish.eopmod.attribute.EOPAttributes;
+import net.stonedgoldfish.eopmod.power.ability.CustomFlightAbility;
+import net.minecraftforge.event.RegisterCommandsEvent;
+import net.stonedgoldfish.eopmod.command.EOPCommands;
 
 @Mod.EventBusSubscriber(modid = EOPMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class EOPForgeEvents {
@@ -78,25 +80,23 @@ public class EOPForgeEvents {
             return;
         }
 
-        double flight = player.getAttributeValue(EOPAttributes.FLIGHT.get());
-
-        boolean hasFlight = flight >= 1.0D;
-
-        if (hasFlight) {
-            player.getAbilities().mayfly = true;
-
-            float speed = 0.05F * (float) flight;
-            player.getAbilities().setFlyingSpeed(speed);
-
-            player.onUpdateAbilities();
-        } else {
+        if (!CustomFlightAbility.hasCustomFlight(player)) {
             if (!player.isCreative() && !player.isSpectator()) {
                 player.getAbilities().mayfly = false;
                 player.getAbilities().flying = false;
                 player.getAbilities().setFlyingSpeed(0.05F);
-
                 player.onUpdateAbilities();
             }
+
+            return;
         }
+
+        player.getAbilities().mayfly = true;
+        player.getAbilities().setFlyingSpeed(0.0F);
+        player.onUpdateAbilities();
+    }
+    @SubscribeEvent
+    public static void onRegisterCommands(RegisterCommandsEvent event) {
+        EOPCommands.register(event.getDispatcher());
     }
 }
