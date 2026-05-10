@@ -19,9 +19,20 @@ import net.minecraftforge.event.TickEvent;
 import net.stonedgoldfish.eopmod.power.ability.CustomFlightAbility;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.stonedgoldfish.eopmod.command.EOPCommands;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.stonedgoldfish.eopmod.power.EOPPalladiumProperties;
+import net.stonedgoldfish.eopmod.power.EOPPowerRegistry;
+import net.stonedgoldfish.eopmod.power.EOPPowerConstants;
+import net.minecraft.resources.ResourceLocation;
 
 @Mod.EventBusSubscriber(modid = EOPMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class EOPForgeEvents {
+
+    private static boolean hasEopPower(ServerPlayer player, String powerKey) {
+        ResourceLocation powerId = ResourceLocation.fromNamespaceAndPath("eop", powerKey);
+
+        return net.threetag.palladium.power.SuperpowerUtil.hasSuperpower(player, powerId);
+    }
 
     @SubscribeEvent
     public static void onMobEffectApplicable(MobEffectEvent.Applicable event) {
@@ -95,8 +106,52 @@ public class EOPForgeEvents {
         player.getAbilities().setFlyingSpeed(0.0F);
         player.onUpdateAbilities();
     }
+
     @SubscribeEvent
     public static void onRegisterCommands(RegisterCommandsEvent event) {
+
         EOPCommands.register(event.getDispatcher());
+    }
+
+    @SubscribeEvent
+    public static void onLivingDeath(LivingDeathEvent event) {
+        if (!(event.getSource().getEntity() instanceof ServerPlayer player)) {
+            return;
+        }
+
+        for (EOPPowerRegistry.EOPPower power : EOPPowerRegistry.getAll()) {
+            String powerKey = power.key();
+
+            if (!hasEopPower(player, powerKey)) {
+                continue;
+            }
+
+            int currentXp = EOPPalladiumProperties.getXp(player, powerKey);
+            int currentLevel = EOPPalladiumProperties.getLevel(player, powerKey);
+            int maxXp = EOPPowerConstants.getMaxXpForLevel(currentLevel);
+
+            int xpGain = 2;
+            currentXp += xpGain;
+
+            if (currentLevel < EOPPowerConstants.MAX_LEVEL) {
+                if (currentXp >= maxXp) {
+                    currentXp = 0;
+                    currentLevel++;
+
+                    player.sendSystemMessage(
+                            net.minecraft.network.chat.Component.literal(
+                                    "§6" + power.display().replace("_", " ")
+                                            + " leveled up to Level "
+                                            + currentLevel + "!"
+                            )
+                    );
+                }
+            } else {
+                currentXp = EOPPowerConstants.getMaxXpForLevel(currentLevel);
+            }
+
+            EOPPalladiumProperties.setXp(player, powerKey, currentXp);
+            EOPPalladiumProperties.setLevel(player, powerKey, currentLevel);
+        }
     }
 }

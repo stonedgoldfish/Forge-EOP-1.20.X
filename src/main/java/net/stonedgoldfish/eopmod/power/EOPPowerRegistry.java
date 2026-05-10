@@ -73,7 +73,7 @@ public class EOPPowerRegistry {
         register("Sanguine_Refraction", "bloodweaver_vitrum", 2, "SR", 0xCC2121);
         register("Clairvoyance", "oracle", 10, null, 0x3941D4);
         register("Spiritual_Energy_Manipulation", "ascendant", 2, null, 0x5237CE);
-        register("Umbrakinesis", "pitch", 5, null, 0x3F1357);
+        register("Umbrakinesis", "pitch", 5, "UM", 0x3F1357);
     }
 
     private static void register(String display, String key, int weight, String score, int titleColor) {
