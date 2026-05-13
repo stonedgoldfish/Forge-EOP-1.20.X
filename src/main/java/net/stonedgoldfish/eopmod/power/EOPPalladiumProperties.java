@@ -5,6 +5,7 @@ import net.minecraft.world.entity.EntityType;
 import net.threetag.palladium.event.PalladiumEvents;
 import net.threetag.palladium.util.property.IntegerProperty;
 import net.threetag.palladium.util.property.PalladiumProperty;
+import net.threetag.palladium.util.property.BooleanProperty;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +14,7 @@ public class EOPPalladiumProperties {
 
     private static final Map<String, PalladiumProperty<Integer>> XP_PROPERTIES = new HashMap<>();
     private static final Map<String, PalladiumProperty<Integer>> LEVEL_PROPERTIES = new HashMap<>();
+    private static final PalladiumProperty<Boolean> CLIMB_EXTRA = new BooleanProperty("eop_climb_extra");
 
     public static void init() {
         PalladiumEvents.REGISTER_PROPERTY.register(handler -> {
@@ -20,6 +22,7 @@ public class EOPPalladiumProperties {
                 for (EOPPowerRegistry.EOPPower power : EOPPowerRegistry.getAll()) {
                     handler.register(getOrCreateXpProperty(power.key()), 0);
                     handler.register(getOrCreateLevelProperty(power.key()), 1);
+                    handler.register(CLIMB_EXTRA, false);
                 }
             }
         });
@@ -61,5 +64,13 @@ public class EOPPalladiumProperties {
 
     public static void setLevel(Entity entity, String powerKey, int level) {
         getOrCreateLevelProperty(powerKey).set(entity, level);
+    }
+
+    public static boolean hasClimbExtra(net.minecraft.world.entity.Entity entity) {
+        return CLIMB_EXTRA.get(entity);
+    }
+
+    public static void setClimbExtra(net.minecraft.world.entity.Entity entity, boolean value) {
+        CLIMB_EXTRA.set(entity, value);
     }
 }

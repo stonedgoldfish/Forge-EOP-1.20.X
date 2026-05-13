@@ -8,10 +8,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.threetag.palladium.client.screen.power.PowersScreen;
 import net.threetag.palladium.event.PalladiumClientEvents;
 import net.stonedgoldfish.eopmod.power.EOPPalladiumProperties;
-import net.minecraft.resources.ResourceLocation;
-import net.stonedgoldfish.eopmod.EOPMod;
 import net.stonedgoldfish.eopmod.client.animation.EOPFlightAnimation;
-import net.threetag.palladium.event.PalladiumClientEvents;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -19,6 +16,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.stonedgoldfish.eopmod.power.ability.CustomFlightAbility;
 import net.stonedgoldfish.eopmod.power.EOPPowerRegistry;
 import net.stonedgoldfish.eopmod.power.EOPPowerConstants;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.network.chat.Component;
 @Mod.EventBusSubscriber(modid = EOPMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 
 public class EOPClientEvents {
@@ -29,6 +28,27 @@ public class EOPClientEvents {
                     "textures/gui/ability_bars/power_gui/eop_border.png"
             );
 
+    private static final ResourceLocation ICON_BORDER =
+            ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "textures/gui/ability_bars/power_gui/eop_icon_border.png");
+
+    private static final ResourceLocation XP_BAR_BACKGROUND =
+            ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "textures/gui/ability_bars/power_gui/xp_bar_background.png");
+
+    private static final ResourceLocation XP_BAR_FILL =
+            ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "textures/gui/ability_bars/power_gui/xp_bar_fill.png");
+
+    private static final ResourceLocation CLASS_ICON =
+            ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "textures/gui/ability_bars/power_gui/icon_class.png");
+
+    private static final ResourceLocation SUBCLASS_ICON =
+            ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "textures/gui/ability_bars/power_gui/icon_subclass.png");
+
+    private static final ResourceLocation COMBAT_ICON =
+            ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "textures/gui/ability_bars/power_gui/icon_combat.png");
+
+    private static final ResourceLocation DIFFICULTY_ICON =
+            ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "textures/gui/ability_bars/power_gui/icon_difficulty.png");
+
     public static void init() {
         PalladiumClientEvents.RENDER_POWER_SCREEN.register(EOPClientEvents::renderPowerScreen);
 
@@ -38,6 +58,38 @@ public class EOPClientEvents {
                     new EOPFlightAnimation(1000)
             );
         });
+    }
+
+    private static void drawIconText(
+            GuiGraphics guiGraphics,
+            ResourceLocation icon,
+            String text,
+            int x,
+            int y,
+            int iconSize,
+            int textOffset,
+            int color
+    ) {
+        guiGraphics.blit(
+                icon,
+                x,
+                y,
+                0,
+                0,
+                iconSize,
+                iconSize,
+                iconSize,
+                iconSize
+        );
+
+        guiGraphics.drawString(
+                Minecraft.getInstance().font,
+                text,
+                x + textOffset,
+                y,
+                color,
+                true
+        );
     }
 
     private static void renderPowerScreen(
@@ -85,6 +137,12 @@ public class EOPClientEvents {
 
         String powerKey = tab.getPath();
 
+        EOPPowerRegistry.EOPPower powerData = EOPPowerRegistry.getByKey(powerKey);
+
+        String powerName = powerData != null
+                ? powerData.display().replace("_", " ")
+                : powerKey;
+
         ResourceLocation powerIcon = ResourceLocation.fromNamespaceAndPath(
                 "eop",
                 "textures/gui/" + powerKey + ".png"
@@ -98,36 +156,42 @@ public class EOPClientEvents {
         float progress = Math.min((float) xp / maxXp, 1.0F);
 
         int barX = x + 74;
-        int barY = y + 213;
+        int barY = y + 209;
         int barWidth = 45;
         int barHeight = 2;
 
         int filledWidth = (int) (barWidth * progress);
 
-        guiGraphics.fill(
+        // Background texture
+        guiGraphics.blit(
+                XP_BAR_BACKGROUND,
                 barX,
                 barY,
-                barX + barWidth,
-                barY + barHeight,
-                0xFF222222
+                0,
+                0,
+                barWidth,
+                barHeight,
+                barWidth,
+                barHeight
         );
 
-        int titleColor = EOPPowerRegistry.getTitleColor(powerKey);
-
-        int xpBarColor = 0xFF000000 | titleColor;
-
-        guiGraphics.fill(
+// Filled texture, cropped by XP progress
+        guiGraphics.blit(
+                XP_BAR_FILL,
                 barX,
                 barY,
-                barX + filledWidth,
-                barY + barHeight,
-                xpBarColor
+                0,
+                0,
+                filledWidth,
+                barHeight,
+                barWidth,
+                barHeight
         );
 
         int iconSize = 33;
 
         int iconX = barX + (barWidth / 2) - (iconSize / 2);
-        int iconY = barY - 65;
+        int iconY = barY - 61;
 
         guiGraphics.blit(
                 powerIcon,
@@ -141,22 +205,149 @@ public class EOPClientEvents {
                 iconSize
         );
 
+        int borderSize = 43;
+        int borderX = iconX - 5;
+        int borderY = iconY - 5;
+
+        guiGraphics.blit(
+                ICON_BORDER,
+                borderX,
+                borderY,
+                0,
+                0,
+                borderSize,
+                borderSize,
+                borderSize,
+                borderSize
+        );
+
+        float powerNameScale = 0.7F;
+
+        if (powerName.length() > 16) {
+            powerNameScale *= 0.85F;
+        }
+
+        int powerNameColor = powerData != null
+                ? (0xFF000000 | powerData.titleColor())
+                : 0xFFFFFFFF;
+
+        int powerNameWidth = Minecraft.getInstance().font.width(powerName);
+
+        int powerNameWidthScaled = (int) (powerNameWidth * powerNameScale);
+
+        int powerNameCenterX = iconX + 357;
+
+        int powerNameX = (int) (
+                (powerNameCenterX - (powerNameWidthScaled / 2))
+                        / powerNameScale
+        );
+        int powerNameY = (int) ((iconY - 4) / powerNameScale);
+
+        guiGraphics.pose().pushPose();
+
+        guiGraphics.pose().scale(powerNameScale, powerNameScale, 1.0F);
+
+        guiGraphics.drawString(
+                Minecraft.getInstance().font,
+                powerName,
+                powerNameX,
+                powerNameY,
+                powerNameColor,
+                true
+        );
+
+        guiGraphics.pose().popPose();
+
+        if (powerData != null) {
+            String classificationTitle = "Classification";
+
+            String classText = "Class: " + powerData.powerClass();
+            String subclassText = "Subclass: " + powerData.subclass();
+            String combatText = "Combat: " + powerData.combatStyle();
+            String difficultyText = "Difficulty: " + powerData.difficulty();
+
+            float classificationScale = 0.55F;
+
+            int classificationX = (int) ((powerNameCenterX - 18) / classificationScale);
+            int classificationY = (int) ((powerNameY * powerNameScale + 30) / classificationScale);
+
+            guiGraphics.pose().pushPose();
+            guiGraphics.pose().scale(classificationScale, classificationScale, 1.0F);
+
+            int smallIconSize = 8;
+            int textOffset = 12;
+
+            guiGraphics.drawString(Minecraft.getInstance().font, classificationTitle, classificationX, classificationY, 0x7FDBFF, true);
+            drawIconText(guiGraphics, CLASS_ICON, classText, classificationX - 45, classificationY + 12, smallIconSize, textOffset, 0xFFFFFFFF);
+            drawIconText(guiGraphics, SUBCLASS_ICON, subclassText, classificationX - 45, classificationY + 23, smallIconSize, textOffset, 0xFFFFFFFF);
+            drawIconText(guiGraphics, COMBAT_ICON, combatText, classificationX - 45, classificationY + 34, smallIconSize, textOffset, 0xFFFFFFFF);
+            drawIconText(guiGraphics, DIFFICULTY_ICON, difficultyText, classificationX - 45, classificationY + 45, smallIconSize, textOffset, 0xFFFFFFFF);
+
+            guiGraphics.pose().popPose();
+
+            String descriptionTitle = "Description";
+
+            String descriptionKey = "power.eop." + powerKey + ".description";
+            String descriptionText = Component.translatable(descriptionKey).getString();
+
+            if (descriptionText.equals(descriptionKey)) {
+                descriptionText = "No description available.";
+            }
+
+            float descriptionScale = 0.55F;
+
+            int descriptionX = (int) ((powerNameCenterX - 16) / descriptionScale);
+            int descriptionY = (int) ((classificationY * classificationScale + 37) / descriptionScale);
+
+            guiGraphics.pose().pushPose();
+            guiGraphics.pose().scale(descriptionScale, descriptionScale, 1.0F);
+
+            guiGraphics.drawString(
+                    Minecraft.getInstance().font,
+                    descriptionTitle,
+                    descriptionX,
+                    descriptionY,
+                    0x7FDBFF,
+                    true
+            );
+
+            float descriptionTextScale = 0.9F;
+
+            guiGraphics.pose().pushPose();
+
+            guiGraphics.pose().scale(descriptionTextScale, descriptionTextScale, 1.0F);
+
+            drawWrappedText(
+                    guiGraphics,
+                    descriptionText,
+                    (int) ((descriptionX - 47) / descriptionTextScale),
+                    (int) ((descriptionY + 12) / descriptionTextScale),
+                    (int) (165 / descriptionTextScale),
+                    10,
+                    0xFFFFFFFF
+            );
+
+            guiGraphics.pose().popPose();
+
+            guiGraphics.pose().popPose();
+        }
+
         String levelLabel = "Level";
         String levelValue = String.valueOf(level);
 
         float labelScale = 0.6F;
-        float numberScale = 1.2F;
+        float numberScale = 1.1F;
 
         int labelWidth = Minecraft.getInstance().font.width(levelLabel);
         int valueWidth = Minecraft.getInstance().font.width(levelValue);
 
-        int labelY = barY - 23;
+        int labelY = barY - 21;
         int valueY = labelY + 9;
 
 // CENTERED POSITIONS
-        int labelX = (int) ((barX + (barWidth / 2) - ((labelWidth * labelScale) / 2)) / labelScale);
+        int labelX = (int) (((barX + (barWidth / 2) - ((labelWidth * labelScale) / 2)) + 0.5) / labelScale);
 
-        int valueX = (int) ((barX + (barWidth / 2) - ((valueWidth * numberScale) / 2)) / numberScale);
+        int valueX = (int) (((barX + (barWidth / 2) - ((valueWidth * numberScale) / 2)) + 0.5) / numberScale);
 
 // LEVEL LABEL
         guiGraphics.pose().pushPose();
@@ -168,7 +359,7 @@ public class EOPClientEvents {
                 levelLabel,
                 labelX,
                 (int) (labelY / labelScale),
-                0x7FDBFF,
+                0x69889a,
                 true
         );
 
@@ -189,7 +380,221 @@ public class EOPClientEvents {
         );
 
         guiGraphics.pose().popPose();
+
+        String xpText = xp + "/" + maxXp;
+
+        float xpTextScale = 0.6F;
+
+        int xpTextWidth = Minecraft.getInstance().font.width(xpText);
+
+        int xpTextX = (int) ((barX + (barWidth / 2) - ((xpTextWidth * xpTextScale) / 2)) / xpTextScale);
+
+        int xpTextY = barY + 8;
+
+        guiGraphics.pose().pushPose();
+
+        guiGraphics.pose().scale(xpTextScale, xpTextScale, 1.0F);
+
+        guiGraphics.drawString(
+                Minecraft.getInstance().font,
+                xpText,
+                xpTextX,
+                (int) (xpTextY / xpTextScale),
+                0xFFFFFFFF,
+                true
+        );
+
+        guiGraphics.pose().popPose();
+
+        String attributesLabel = "Attributes";
+
+        float attributesLabelScale = 0.6F;
+
+        int attributesLabelWidth = Minecraft.getInstance().font.width(attributesLabel);
+
+        int attributesLabelX = (int) (
+                (barX + (barWidth / 2) - ((attributesLabelWidth * attributesLabelScale) / 2))
+                        / attributesLabelScale
+        );
+
+        int attributesLabelY = (int) ((barY + 28) / attributesLabelScale);
+
+        guiGraphics.pose().pushPose();
+
+        guiGraphics.pose().scale(attributesLabelScale, attributesLabelScale, 1.0F);
+
+        guiGraphics.drawString(
+                Minecraft.getInstance().font,
+                attributesLabel,
+                attributesLabelX,
+                attributesLabelY,
+                0x69889a,
+                true
+        );
+
+        guiGraphics.pose().popPose();
+
+        double health = player.getAttributeBaseValue(Attributes.MAX_HEALTH);
+        double attackDamage = player.getAttributeBaseValue(Attributes.ATTACK_DAMAGE);
+        double armor = player.getAttributeBaseValue(Attributes.ARMOR);
+        double armorToughness = player.getAttributeBaseValue(Attributes.ARMOR_TOUGHNESS);
+        double speed = player.getAttributeBaseValue(Attributes.MOVEMENT_SPEED);
+
+        float attributeScale = 0.70F;
+
+        int attrX = (int) (barX / attributeScale);
+        int attrY = (int) ((barY + 38) / attributeScale);
+
+        int lineHeight = 15;
+
+        guiGraphics.pose().pushPose();
+
+        guiGraphics.pose().scale(attributeScale, attributeScale, 1.0F);
+
+        String valueColorExample;
+        int valueColor = 0xFFFFFF;
+
+        String healthLabel = "Health: ";
+        String healthValue = formatAttribute(health);
+
+        guiGraphics.drawString(
+                Minecraft.getInstance().font,
+                healthLabel,
+                attrX,
+                attrY,
+                0xf57d84,
+                true
+        );
+
+        guiGraphics.drawString(
+                Minecraft.getInstance().font,
+                healthValue,
+                attrX + Minecraft.getInstance().font.width(healthLabel),
+                attrY,
+                valueColor,
+                true
+        );
+
+        String attackLabel = "Attack: ";
+        String attackValue = formatAttribute(attackDamage);
+
+        guiGraphics.drawString(
+                Minecraft.getInstance().font,
+                attackLabel,
+                attrX,
+                attrY + lineHeight,
+                0x8ad28a,
+                true
+        );
+
+        guiGraphics.drawString(
+                Minecraft.getInstance().font,
+                attackValue,
+                attrX + Minecraft.getInstance().font.width(attackLabel),
+                attrY + lineHeight,
+                valueColor,
+                true
+        );
+
+        String armorLabel = "Armor: ";
+        String armorValue = formatAttribute(armor);
+
+        guiGraphics.drawString(
+                Minecraft.getInstance().font,
+                armorLabel,
+                attrX,
+                attrY + lineHeight * 2,
+                0x77b8da,
+                true
+        );
+
+        guiGraphics.drawString(
+                Minecraft.getInstance().font,
+                armorValue,
+                attrX + Minecraft.getInstance().font.width(armorLabel),
+                attrY + lineHeight * 2,
+                valueColor,
+                true
+        );
+
+        String toughnessLabel = "Toughness: ";
+        String toughnessValue = formatAttribute(armorToughness);
+
+        guiGraphics.drawString(
+                Minecraft.getInstance().font,
+                toughnessLabel,
+                attrX,
+                attrY + lineHeight * 3,
+                0x3384ae,
+                true
+        );
+
+        guiGraphics.drawString(
+                Minecraft.getInstance().font,
+                toughnessValue,
+                attrX + Minecraft.getInstance().font.width(toughnessLabel),
+                attrY + lineHeight * 3,
+                valueColor,
+                true
+        );
+
+        String speedLabel = "Speed: ";
+        String speedValue = formatAttribute(speed);
+
+        guiGraphics.drawString(
+                Minecraft.getInstance().font,
+                speedLabel,
+                attrX,
+                attrY + lineHeight * 4,
+                0xd6b578,
+                true
+        );
+
+        guiGraphics.drawString(
+                Minecraft.getInstance().font,
+                speedValue,
+                attrX + Minecraft.getInstance().font.width(speedLabel),
+                attrY + lineHeight * 4,
+                valueColor,
+                true
+        );
+
+        guiGraphics.pose().popPose();
     }
+
+    private static void drawWrappedText(
+            GuiGraphics guiGraphics,
+            String text,
+            int x,
+            int y,
+            int maxWidth,
+            int lineHeight,
+            int color
+    ) {
+        var font = Minecraft.getInstance().font;
+
+        for (var line : font.split(Component.literal(text), maxWidth)) {
+            guiGraphics.drawString(
+                    font,
+                    line,
+                    x,
+                    y,
+                    color,
+                    true
+            );
+
+            y += lineHeight;
+        }
+    }
+
+    private static String formatAttribute(double value) {
+        if (value == (int) value) {
+            return String.valueOf((int) value);
+        }
+
+        return String.format("%.2f", value);
+    }
+
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END) {

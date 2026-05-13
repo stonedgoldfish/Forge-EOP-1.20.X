@@ -91,6 +91,9 @@ public class EOPForgeEvents {
             return;
         }
 
+        boolean hasClimbTag = player.getTags().contains("climb");
+        EOPPalladiumProperties.setClimbExtra(player, hasClimbTag);
+
         if (!CustomFlightAbility.hasCustomFlight(player)) {
             if (!player.isCreative() && !player.isSpectator()) {
                 player.getAbilities().mayfly = false;
