@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import net.stonedgoldfish.eopmod.power.ability.EOPAbilities;
 import net.stonedgoldfish.eopmod.client.EOPClientEvents;
 import net.stonedgoldfish.eopmod.power.EOPPalladiumProperties;
+import net.stonedgoldfish.eopmod.network.EOPNetwork;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(EOPMod.MOD_ID)
@@ -31,6 +32,7 @@ public class EOPMod {
         PalladiumCoreForge.registerModEventBus(MOD_ID, modEventBus);
         EOPAbilities.ABILITIES.register();
         EOPPalladiumProperties.init();
+        EOPNetwork.register();
 
         modEventBus.addListener(this::commonSetup);
 

@@ -151,6 +151,7 @@ public class EOPClientEvents {
         int xp = EOPPalladiumProperties.getXp(player, powerKey);
 
         int level = EOPPalladiumProperties.getLevel(player, powerKey);
+        int skillPoints = EOPPalladiumProperties.getSkillPoints(player, powerKey);
         int maxXp = EOPPowerConstants.getMaxXpForLevel(level);
 
         float progress = Math.min((float) xp / maxXp, 1.0F);
@@ -253,6 +254,34 @@ public class EOPClientEvents {
                 powerNameX,
                 powerNameY,
                 powerNameColor,
+                true
+        );
+
+        guiGraphics.pose().popPose();
+
+        String skillPointText = "Skill Points: " + skillPoints;
+
+        float skillPointScale = 0.75F;
+
+        int skillPointWidth = Minecraft.getInstance().font.width(skillPointText);
+
+        int skillPointX = (int) (
+                (powerNameCenterX - ((skillPointWidth * skillPointScale) / 2))
+                        / skillPointScale
+        );
+
+        int skillPointY = (int) ((powerNameY * powerNameScale + 15) / skillPointScale);
+
+        guiGraphics.pose().pushPose();
+
+        guiGraphics.pose().scale(skillPointScale, skillPointScale, 1.0F);
+
+        guiGraphics.drawString(
+                Minecraft.getInstance().font,
+                skillPointText,
+                skillPointX,
+                skillPointY,
+                0xFFFFFFFF,
                 true
         );
 
@@ -434,11 +463,22 @@ public class EOPClientEvents {
 
         guiGraphics.pose().popPose();
 
-        double health = player.getAttributeBaseValue(Attributes.MAX_HEALTH);
-        double attackDamage = player.getAttributeBaseValue(Attributes.ATTACK_DAMAGE);
-        double armor = player.getAttributeBaseValue(Attributes.ARMOR);
-        double armorToughness = player.getAttributeBaseValue(Attributes.ARMOR_TOUGHNESS);
-        double speed = player.getAttributeBaseValue(Attributes.MOVEMENT_SPEED);
+        double health = player.getAttributeValue(Attributes.MAX_HEALTH);
+        double armor = player.getAttributeValue(Attributes.ARMOR);
+        double armorToughness = player.getAttributeValue(Attributes.ARMOR_TOUGHNESS);
+        double speed = player.getAttributeValue(Attributes.MOVEMENT_SPEED);
+        double attackDamage = player.getAttributeValue(Attributes.ATTACK_DAMAGE);
+
+        if (player.getMainHandItem().getAttributeModifiers(
+                net.minecraft.world.entity.EquipmentSlot.MAINHAND
+        ).containsKey(Attributes.ATTACK_DAMAGE)) {
+            attackDamage += player.getMainHandItem()
+                    .getAttributeModifiers(net.minecraft.world.entity.EquipmentSlot.MAINHAND)
+                    .get(Attributes.ATTACK_DAMAGE)
+                    .stream()
+                    .mapToDouble(modifier -> modifier.getAmount())
+                    .sum();
+        }
 
         float attributeScale = 0.70F;
 

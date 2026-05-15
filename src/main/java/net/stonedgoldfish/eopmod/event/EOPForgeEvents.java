@@ -91,8 +91,18 @@ public class EOPForgeEvents {
             return;
         }
 
-        boolean hasClimbTag = player.getTags().contains("climb");
-        EOPPalladiumProperties.setClimbExtra(player, hasClimbTag);
+        EOPPalladiumProperties.setClimbExtra(player, player.getTags().contains("EOP.Extra.Climb"));
+        EOPPalladiumProperties.setNightVisionExtra(player, player.getTags().contains("EOP.Extra.Night.Vision"));
+        EOPPalladiumProperties.setSmeltingExtra(player, player.getTags().contains("EOP.Extra.Smelting"));
+        EOPPalladiumProperties.setFireResistanceExtra(player, player.getTags().contains("EOP.Extra.Fire.Resistance"));
+        EOPPalladiumProperties.setEntitySenseExtra(player, player.getTags().contains("EOP.Extra.Entity.Sense"));
+        EOPPalladiumProperties.setSuperJumpExtra(player, player.getTags().contains("EOP.Extra.Super.Jump"));
+        EOPPalladiumProperties.setEraseExtra(player, player.getTags().contains("EOP.Extra.Erase"));
+        EOPPalladiumProperties.setExtraReachExtra(player, player.getTags().contains("EOP.Extra.Extra.Reach"));
+        EOPPalladiumProperties.setSlowFallExtra(player, player.getTags().contains("EOP.Extra.Slow.Fall"));
+        EOPPalladiumProperties.setLightExtra(player, player.getTags().contains("EOP.Extra.Light"));
+        EOPPalladiumProperties.setWaterBreathingExtra(player, player.getTags().contains("EOP.Extra.Water.Breathing"));
+        EOPPalladiumProperties.setFrostWalkerExtra(player, player.getTags().contains("EOP.Extra.Frost.Walker"));
 
         if (!CustomFlightAbility.hasCustomFlight(player)) {
             if (!player.isCreative() && !player.isSpectator()) {
@@ -133,13 +143,21 @@ public class EOPForgeEvents {
             int currentLevel = EOPPalladiumProperties.getLevel(player, powerKey);
             int maxXp = EOPPowerConstants.getMaxXpForLevel(currentLevel);
 
-            int xpGain = 2;
+            float mobMaxHealth = event.getEntity().getMaxHealth();
+
+            int xpGain = Math.round(mobMaxHealth / 5.0F);
+
+            xpGain = Math.max(1, xpGain);
+            xpGain = Math.min(50, xpGain);
             currentXp += xpGain;
 
             if (currentLevel < EOPPowerConstants.MAX_LEVEL) {
                 if (currentXp >= maxXp) {
                     currentXp = 0;
                     currentLevel++;
+
+                    int currentSkillPoints = EOPPalladiumProperties.getSkillPoints(player, powerKey);
+                    EOPPalladiumProperties.setSkillPoints(player, powerKey, currentSkillPoints + 3);
 
                     player.sendSystemMessage(
                             net.minecraft.network.chat.Component.literal(
