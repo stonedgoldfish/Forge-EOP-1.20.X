@@ -55,6 +55,8 @@ public class EOPClientEvents {
     public static void init() {
         PalladiumClientEvents.RENDER_POWER_SCREEN.register(EOPClientEvents::renderPowerScreen);
 
+        EOPScreenShakeEvents.init();
+
         PalladiumClientEvents.REGISTER_ANIMATIONS.register(registry -> {
             registry.accept(
                     ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "flight"),

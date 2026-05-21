@@ -17,6 +17,7 @@ import net.stonedgoldfish.eopmod.power.ability.EOPAbilities;
 import net.stonedgoldfish.eopmod.client.EOPClientEvents;
 import net.stonedgoldfish.eopmod.power.EOPPalladiumProperties;
 import net.stonedgoldfish.eopmod.network.EOPNetwork;
+import net.stonedgoldfish.eopmod.effect.EOPEffects;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(EOPMod.MOD_ID)
@@ -33,6 +34,7 @@ public class EOPMod {
         EOPAbilities.ABILITIES.register();
         EOPPalladiumProperties.init();
         EOPNetwork.register();
+        EOPEffects.MOB_EFFECTS.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
 

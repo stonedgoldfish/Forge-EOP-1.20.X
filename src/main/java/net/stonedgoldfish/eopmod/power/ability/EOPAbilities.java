@@ -26,6 +26,16 @@ public class EOPAbilities {
             ABILITIES.register("aoe_damage", AOEDamageAbility::new);
     public static final RegistrySupplier<Ability> LINEAR_DAMAGE =
             ABILITIES.register("linear_damage", LinearDamageAbility::new);
+    public static final RegistrySupplier<Ability> SPAWN_ARMOR_STAND =
+            ABILITIES.register("spawn_armor_stand", SpawnArmorStandAbility::new);
+    public static final RegistrySupplier<Ability> SILENT_STEPS =
+            ABILITIES.register("silent_steps", SilentStepsAbility::new);
+    public static final RegistrySupplier<Ability> NO_INTERACTION =
+            ABILITIES.register("no_interaction", NoInteractionAbility::new);
+    public static final RegistrySupplier<Ability> SCREEN_SHAKE =
+            ABILITIES.register("screen_shake", ScreenShakeAbility::new);
+    public static final RegistrySupplier<Ability> MULTI_ATTRIBUTE_MODIFIER =
+            ABILITIES.register("multi_attribute_modifier", MultiAttributeModifierAbility::new);
 
     public static void init() {
 

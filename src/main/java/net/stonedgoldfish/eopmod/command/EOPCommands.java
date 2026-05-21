@@ -145,6 +145,23 @@ public class EOPCommands {
 
         gamerule.then(
                 Commands.literal("destructionMode")
+
+                        // QUERY CURRENT VALUE
+                        .executes(ctx -> {
+
+                            boolean current = EOPGameRules.isDestructionMode();
+
+                            ctx.getSource().sendSuccess(
+                                    () -> Component.literal(
+                                            "Gamerule destructionMode is currently set to: " + current
+                                    ),
+                                    false
+                            );
+
+                            return 1;
+                        })
+
+                        // SET VALUE
                         .then(Commands.argument("value", BoolArgumentType.bool())
                                 .executes(ctx -> {
 
@@ -154,7 +171,7 @@ public class EOPCommands {
 
                                     ctx.getSource().sendSuccess(
                                             () -> Component.literal(
-                                                    "destructionMode set to " + value
+                                                    "Gamerule destructionMode is now set to: " + value
                                             ),
                                             true
                                     );
