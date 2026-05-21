@@ -6,6 +6,8 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
+import com.mojang.brigadier.arguments.BoolArgumentType;
+import net.stonedgoldfish.eopmod.util.EOPGameRules;
 import net.minecraft.server.level.ServerPlayer;
 import net.stonedgoldfish.eopmod.power.EOPPalladiumProperties;
 import net.stonedgoldfish.eopmod.power.EOPPowerConstants;
@@ -20,8 +22,8 @@ public class EOPCommands {
         var root = Commands.literal("echoesofpower")
                 .requires(source -> source.hasPermission(2));
 
-        // OLD POWER ADD/REMOVE COMMAND
-        var addPower = Commands.literal("add_power");
+        // POWER ADD/REMOVE COMMAND
+        var powerCommand = Commands.literal("power");
         var entityArg = Commands.argument("entity", EntityArgument.player());
 
         var add = Commands.literal("add");
@@ -62,115 +64,138 @@ public class EOPCommands {
 
         entityArg.then(add);
         entityArg.then(remove);
-        addPower.then(entityArg);
+        powerCommand.then(entityArg);
+        root.then(powerCommand);
 
-        root.then(addPower);
+        // SKILL POINTS COMMAND
+        var skillPoints = Commands.literal("skill_points");
+        var skillEntityArg = Commands.argument("entity", EntityArgument.player());
 
-        // NEW SKILL POINTS COMMAND
-        var skillPoints = Commands.literal("skill_points")
-                .then(Commands.argument("entity", EntityArgument.player())
-                        .then(buildPowerOperationCommand("skill_points")));
+        skillEntityArg.then(Commands.literal("set")
+                .then(Commands.argument("amount", IntegerArgumentType.integer(0))
+                        .executes(ctx -> modifyAllProperties(
+                                ctx.getSource(),
+                                EntityArgument.getPlayer(ctx, "entity"),
+                                "skill_points",
+                                "set",
+                                IntegerArgumentType.getInteger(ctx, "amount")
+                        ))));
 
+        skillEntityArg.then(Commands.literal("add")
+                .then(Commands.argument("amount", IntegerArgumentType.integer(0))
+                        .executes(ctx -> modifyAllProperties(
+                                ctx.getSource(),
+                                EntityArgument.getPlayer(ctx, "entity"),
+                                "skill_points",
+                                "add",
+                                IntegerArgumentType.getInteger(ctx, "amount")
+                        ))));
+
+        skillEntityArg.then(Commands.literal("remove")
+                .then(Commands.argument("amount", IntegerArgumentType.integer(0))
+                        .executes(ctx -> modifyAllProperties(
+                                ctx.getSource(),
+                                EntityArgument.getPlayer(ctx, "entity"),
+                                "skill_points",
+                                "remove",
+                                IntegerArgumentType.getInteger(ctx, "amount")
+                        ))));
+
+        skillPoints.then(skillEntityArg);
         root.then(skillPoints);
 
-        // NEW LEVEL COMMAND
-        var level = Commands.literal("level")
-                .then(Commands.argument("entity", EntityArgument.player())
-                        .then(buildPowerOperationCommand("level")));
+        // LEVEL COMMAND
+        var level = Commands.literal("level");
+        var levelEntityArg = Commands.argument("entity", EntityArgument.player());
 
+        levelEntityArg.then(Commands.literal("set")
+                .then(Commands.argument("amount", IntegerArgumentType.integer(0))
+                        .executes(ctx -> modifyAllProperties(
+                                ctx.getSource(),
+                                EntityArgument.getPlayer(ctx, "entity"),
+                                "level",
+                                "set",
+                                IntegerArgumentType.getInteger(ctx, "amount")
+                        ))));
+
+        levelEntityArg.then(Commands.literal("add")
+                .then(Commands.argument("amount", IntegerArgumentType.integer(0))
+                        .executes(ctx -> modifyAllProperties(
+                                ctx.getSource(),
+                                EntityArgument.getPlayer(ctx, "entity"),
+                                "level",
+                                "add",
+                                IntegerArgumentType.getInteger(ctx, "amount")
+                        ))));
+
+        levelEntityArg.then(Commands.literal("remove")
+                .then(Commands.argument("amount", IntegerArgumentType.integer(0))
+                        .executes(ctx -> modifyAllProperties(
+                                ctx.getSource(),
+                                EntityArgument.getPlayer(ctx, "entity"),
+                                "level",
+                                "remove",
+                                IntegerArgumentType.getInteger(ctx, "amount")
+                        ))));
+
+        level.then(levelEntityArg);
         root.then(level);
+
+        var gamerule = Commands.literal("gamerule");
+
+        gamerule.then(
+                Commands.literal("destructionMode")
+                        .then(Commands.argument("value", BoolArgumentType.bool())
+                                .executes(ctx -> {
+
+                                    boolean value = BoolArgumentType.getBool(ctx, "value");
+
+                                    EOPGameRules.setDestructionMode(value);
+
+                                    ctx.getSource().sendSuccess(
+                                            () -> Component.literal(
+                                                    "destructionMode set to " + value
+                                            ),
+                                            true
+                                    );
+
+                                    return 1;
+                                }))
+        );
+
+        root.then(gamerule);
 
         dispatcher.register(root);
     }
 
-    private static com.mojang.brigadier.builder.LiteralArgumentBuilder<CommandSourceStack> buildPowerOperationCommand(String type) {
-        var powerRoot = Commands.literal("power");
-
-        for (EOPPowerRegistry.EOPPower power : EOPPowerRegistry.getAll()) {
-            String display = power.display();
-            String key = power.key();
-
-            var powerLiteral = Commands.literal(display);
-
-            powerLiteral.then(Commands.literal("set")
-                    .then(Commands.argument("amount", IntegerArgumentType.integer(0))
-                            .executes(ctx -> modifyProperty(
-                                    ctx.getSource(),
-                                    EntityArgument.getPlayer(ctx, "entity"),
-                                    key,
-                                    type,
-                                    "set",
-                                    IntegerArgumentType.getInteger(ctx, "amount")
-                            ))));
-
-            powerLiteral.then(Commands.literal("add")
-                    .then(Commands.argument("amount", IntegerArgumentType.integer(0))
-                            .executes(ctx -> modifyProperty(
-                                    ctx.getSource(),
-                                    EntityArgument.getPlayer(ctx, "entity"),
-                                    key,
-                                    type,
-                                    "add",
-                                    IntegerArgumentType.getInteger(ctx, "amount")
-                            ))));
-
-            powerLiteral.then(Commands.literal("remove")
-                    .then(Commands.argument("amount", IntegerArgumentType.integer(0))
-                            .executes(ctx -> modifyProperty(
-                                    ctx.getSource(),
-                                    EntityArgument.getPlayer(ctx, "entity"),
-                                    key,
-                                    type,
-                                    "remove",
-                                    IntegerArgumentType.getInteger(ctx, "amount")
-                            ))));
-
-            powerRoot.then(powerLiteral);
-        }
-
-        return powerRoot;
-    }
-
-    private static int modifyProperty(
+    private static int modifyAllProperties(
             CommandSourceStack source,
             ServerPlayer target,
-            String powerKey,
             String type,
             String operation,
             int amount
     ) {
-        if (type.equals("skill_points")) {
-            int current = EOPPalladiumProperties.getSkillPoints(target, powerKey);
-            int result = applyOperation(current, operation, amount);
+        for (EOPPowerRegistry.EOPPower power : EOPPowerRegistry.getAll()) {
+            String powerKey = power.key();
 
-            EOPPalladiumProperties.setSkillPoints(target, powerKey, result);
+            if (type.equals("skill_points")) {
+                int current = EOPPalladiumProperties.getSkillPoints(target, powerKey);
+                int result = applyOperation(current, operation, amount);
 
-            source.sendSuccess(
-                    () -> Component.literal("Set " + powerKey + " skill points to " + result),
-                    true
-            );
+                EOPPalladiumProperties.setSkillPoints(target, powerKey, result);
+            }
 
-            return 1;
+            if (type.equals("level")) {
+                int current = EOPPalladiumProperties.getLevel(target, powerKey);
+                int result = applyOperation(current, operation, amount);
+
+                result = Math.max(1, Math.min(EOPPowerConstants.MAX_LEVEL, result));
+
+                EOPPalladiumProperties.setLevel(target, powerKey, result);
+            }
         }
 
-        if (type.equals("level")) {
-            int current = EOPPalladiumProperties.getLevel(target, powerKey);
-            int result = applyOperation(current, operation, amount);
-
-            result = Math.max(1, Math.min(EOPPowerConstants.MAX_LEVEL, result));
-
-            EOPPalladiumProperties.setLevel(target, powerKey, result);
-
-            int finalResult = result;
-            source.sendSuccess(
-                    () -> Component.literal("Set " + powerKey + " level to " + finalResult),
-                    true
-            );
-
-            return 1;
-        }
-
-        return 0;
+        return 1;
     }
 
     private static int applyOperation(int current, String operation, int amount) {

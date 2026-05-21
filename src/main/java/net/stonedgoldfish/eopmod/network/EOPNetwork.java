@@ -26,5 +26,12 @@ public class EOPNetwork {
                 EOPTagPacket::decode,
                 EOPTagPacket::handle
         );
+        CHANNEL.registerMessage(
+                packetId++,
+                DashPacket.class,
+                DashPacket::encode,
+                DashPacket::decode,
+                DashPacket::handle
+        );
     }
 }

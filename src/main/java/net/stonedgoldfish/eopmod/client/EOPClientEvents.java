@@ -5,12 +5,15 @@ import net.minecraft.resources.ResourceLocation;
 import net.stonedgoldfish.eopmod.EOPMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.stonedgoldfish.eopmod.client.animation.EOPAnimationHandler;
 import net.threetag.palladium.client.screen.power.PowersScreen;
 import net.threetag.palladium.event.PalladiumClientEvents;
 import net.stonedgoldfish.eopmod.power.EOPPalladiumProperties;
 import net.stonedgoldfish.eopmod.client.animation.EOPFlightAnimation;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.stonedgoldfish.eopmod.client.animation.EOPDashAnimation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.stonedgoldfish.eopmod.power.ability.CustomFlightAbility;
@@ -56,6 +59,10 @@ public class EOPClientEvents {
             registry.accept(
                     ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "flight"),
                     new EOPFlightAnimation(1000)
+            );
+            registry.accept(
+                    ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "dash"),
+                    new EOPDashAnimation(1200)
             );
         });
     }
@@ -351,7 +358,7 @@ public class EOPClientEvents {
                     descriptionText,
                     (int) ((descriptionX - 47) / descriptionTextScale),
                     (int) ((descriptionY + 12) / descriptionTextScale),
-                    (int) (165 / descriptionTextScale),
+                    (int) (160 / descriptionTextScale),
                     10,
                     0xFFFFFFFF
             );
@@ -467,18 +474,7 @@ public class EOPClientEvents {
         double armor = player.getAttributeValue(Attributes.ARMOR);
         double armorToughness = player.getAttributeValue(Attributes.ARMOR_TOUGHNESS);
         double speed = player.getAttributeValue(Attributes.MOVEMENT_SPEED);
-        double attackDamage = player.getAttributeValue(Attributes.ATTACK_DAMAGE);
-
-        if (player.getMainHandItem().getAttributeModifiers(
-                net.minecraft.world.entity.EquipmentSlot.MAINHAND
-        ).containsKey(Attributes.ATTACK_DAMAGE)) {
-            attackDamage += player.getMainHandItem()
-                    .getAttributeModifiers(net.minecraft.world.entity.EquipmentSlot.MAINHAND)
-                    .get(Attributes.ATTACK_DAMAGE)
-                    .stream()
-                    .mapToDouble(modifier -> modifier.getAmount())
-                    .sum();
-        }
+        double attackDamage = player.getAttributeBaseValue(Attributes.ATTACK_DAMAGE);
 
         float attributeScale = 0.70F;
 
@@ -640,6 +636,8 @@ public class EOPClientEvents {
         if (event.phase != TickEvent.Phase.END) {
             return;
         }
+
+        EOPAnimationHandler.tick();
 
         Minecraft minecraft = Minecraft.getInstance();
         LocalPlayer player = minecraft.player;

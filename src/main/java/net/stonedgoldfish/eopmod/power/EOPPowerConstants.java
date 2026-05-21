@@ -8,6 +8,6 @@ public class EOPPowerConstants {
     public static int getMaxXpForLevel(int level) {
         return BASE_MAX_XP + ((level - 1) * XP_INCREASE_PER_LEVEL);
     }
-    public static final int MAX_LEVEL = 10;
+    public static final int MAX_LEVEL = 25;
 
 }

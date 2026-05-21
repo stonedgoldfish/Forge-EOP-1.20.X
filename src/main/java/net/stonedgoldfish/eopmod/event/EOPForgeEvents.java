@@ -141,6 +141,16 @@ public class EOPForgeEvents {
 
             int currentXp = EOPPalladiumProperties.getXp(player, powerKey);
             int currentLevel = EOPPalladiumProperties.getLevel(player, powerKey);
+
+            if (currentLevel >= EOPPowerConstants.MAX_LEVEL) {
+                currentLevel = EOPPowerConstants.MAX_LEVEL;
+                currentXp = EOPPowerConstants.getMaxXpForLevel(currentLevel);
+
+                EOPPalladiumProperties.setXp(player, powerKey, currentXp);
+                EOPPalladiumProperties.setLevel(player, powerKey, currentLevel);
+                continue;
+            }
+
             int maxXp = EOPPowerConstants.getMaxXpForLevel(currentLevel);
 
             float mobMaxHealth = event.getEntity().getMaxHealth();
@@ -148,27 +158,30 @@ public class EOPForgeEvents {
             int xpGain = Math.round(mobMaxHealth / 5.0F);
 
             xpGain = Math.max(1, xpGain);
-            xpGain = Math.min(50, xpGain);
+            xpGain = Math.min(100, xpGain);
+
             currentXp += xpGain;
 
-            if (currentLevel < EOPPowerConstants.MAX_LEVEL) {
-                if (currentXp >= maxXp) {
+            if (currentXp >= maxXp) {
+                currentLevel++;
+
+                int currentSkillPoints = EOPPalladiumProperties.getSkillPoints(player, powerKey);
+                EOPPalladiumProperties.setSkillPoints(player, powerKey, currentSkillPoints + 3);
+
+                player.sendSystemMessage(
+                        net.minecraft.network.chat.Component.literal(
+                                "§6" + power.display().replace("_", " ")
+                                        + " leveled up to Level "
+                                        + currentLevel + "!"
+                        )
+                );
+
+                if (currentLevel >= EOPPowerConstants.MAX_LEVEL) {
+                    currentLevel = EOPPowerConstants.MAX_LEVEL;
+                    currentXp = EOPPowerConstants.getMaxXpForLevel(currentLevel);
+                } else {
                     currentXp = 0;
-                    currentLevel++;
-
-                    int currentSkillPoints = EOPPalladiumProperties.getSkillPoints(player, powerKey);
-                    EOPPalladiumProperties.setSkillPoints(player, powerKey, currentSkillPoints + 3);
-
-                    player.sendSystemMessage(
-                            net.minecraft.network.chat.Component.literal(
-                                    "§6" + power.display().replace("_", " ")
-                                            + " leveled up to Level "
-                                            + currentLevel + "!"
-                            )
-                    );
                 }
-            } else {
-                currentXp = EOPPowerConstants.getMaxXpForLevel(currentLevel);
             }
 
             EOPPalladiumProperties.setXp(player, powerKey, currentXp);

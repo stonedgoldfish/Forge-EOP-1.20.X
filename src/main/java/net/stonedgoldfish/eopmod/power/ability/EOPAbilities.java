@@ -18,6 +18,14 @@ public class EOPAbilities {
             ABILITIES.register("gills", GillsAbility::new);
     public static final RegistrySupplier<Ability> CUSTOM_FLIGHT =
             ABILITIES.register("custom_flight", CustomFlightAbility::new);
+    public static final RegistrySupplier<Ability> DASH =
+            ABILITIES.register("dash", DashAbility::new);
+    public static final RegistrySupplier<Ability> EXTINGUISH_FIRE =
+            ABILITIES.register("extinguish_fire", ExtinguishFireAbility::new);
+    public static final RegistrySupplier<Ability> AOE_DAMAGE =
+            ABILITIES.register("aoe_damage", AOEDamageAbility::new);
+    public static final RegistrySupplier<Ability> LINEAR_DAMAGE =
+            ABILITIES.register("linear_damage", LinearDamageAbility::new);
 
     public static void init() {
 
