@@ -7,17 +7,41 @@ import net.threetag.palladium.power.IPowerHolder;
 import net.threetag.palladium.power.ability.Ability;
 import net.threetag.palladium.power.ability.AbilityInstance;
 import net.threetag.palladium.util.icon.ItemIcon;
+import net.threetag.palladium.util.property.BooleanProperty;
+import net.threetag.palladium.util.property.PalladiumProperty;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class NoInteractionAbility extends Ability {
 
-    private static final Set<UUID> BLOCKED_PLAYERS = new HashSet<>();
+    public static final PalladiumProperty<Boolean> BLOCKS =
+            new BooleanProperty("blocks")
+                    .configurable("Disable block interaction.");
+
+    public static final PalladiumProperty<Boolean> ITEMS =
+            new BooleanProperty("items")
+                    .configurable("Disable item interaction.");
+
+    public static final PalladiumProperty<Boolean> ENTITIES =
+            new BooleanProperty("entities")
+                    .configurable("Disable entity interaction.");
+
+    private static final Map<UUID, Settings> BLOCKED_PLAYERS = new HashMap<>();
+
+    public record Settings(
+            boolean blocks,
+            boolean items,
+            boolean entities
+    ) {}
 
     public NoInteractionAbility() {
         this.withProperty(ICON, new ItemIcon(Items.BARRIER));
+
+        this.withProperty(BLOCKS, true);
+        this.withProperty(ITEMS, true);
+        this.withProperty(ENTITIES, true);
     }
 
     @Override
@@ -27,7 +51,14 @@ public class NoInteractionAbility extends Ability {
         }
 
         if (enabled) {
-            BLOCKED_PLAYERS.add(player.getUUID());
+            BLOCKED_PLAYERS.put(
+                    player.getUUID(),
+                    new Settings(
+                            entry.getProperty(BLOCKS),
+                            entry.getProperty(ITEMS),
+                            entry.getProperty(ENTITIES)
+                    )
+            );
         } else {
             BLOCKED_PLAYERS.remove(player.getUUID());
         }
@@ -40,12 +71,28 @@ public class NoInteractionAbility extends Ability {
         }
     }
 
+    public static boolean blocksBlocks(Player player) {
+        Settings settings = BLOCKED_PLAYERS.get(player.getUUID());
+        return settings != null && settings.blocks();
+    }
+
+    public static boolean blocksItems(Player player) {
+        Settings settings = BLOCKED_PLAYERS.get(player.getUUID());
+        return settings != null && settings.items();
+    }
+
+    public static boolean blocksEntities(Player player) {
+        Settings settings = BLOCKED_PLAYERS.get(player.getUUID());
+        return settings != null && settings.entities();
+    }
+
     public static boolean isBlocked(Player player) {
-        return BLOCKED_PLAYERS.contains(player.getUUID());
+        Settings settings = BLOCKED_PLAYERS.get(player.getUUID());
+        return settings != null;
     }
 
     @Override
     public String getDocumentationDescription() {
-        return "Prevents the player from interacting with blocks, entities, or items.";
+        return "Prevents the player from interacting with blocks, items, or entities, with configurable interaction categories.";
     }
 }

@@ -11,6 +11,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraft.sounds.SoundEvents;
 import net.stonedgoldfish.eopmod.client.screen.EOPExtrasScreen;
+import net.stonedgoldfish.eopmod.network.EOPNetwork;
+import net.stonedgoldfish.eopmod.network.ToggleBattleModePacket;
 
 import net.stonedgoldfish.eopmod.EOPMod;
 
@@ -30,7 +32,7 @@ public class EOPKeybindHandler {
         boolean pressed = EOPKeybinds.BATTLE_MODE.isDown();
 
         if (pressed && !wasPressed) {
-            toggleBattleMode(minecraft.player);
+            EOPNetwork.CHANNEL.sendToServer(new ToggleBattleModePacket());
         }
 
         wasPressed = pressed;

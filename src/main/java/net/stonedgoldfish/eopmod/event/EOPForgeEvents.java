@@ -21,6 +21,8 @@ import net.stonedgoldfish.eopmod.power.EOPPowerConstants;
 import net.stonedgoldfish.eopmod.power.EOPPowerRegistry;
 import net.stonedgoldfish.eopmod.power.ability.CustomFlightAbility;
 import net.stonedgoldfish.eopmod.util.EOPTargeting;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.stonedgoldfish.eopmod.power.ability.NoInteractionAbility;
 import net.minecraft.world.phys.Vec3;
 import java.util.HashMap;
@@ -282,36 +284,36 @@ public class EOPForgeEvents {
     }
 
     @SubscribeEvent
-    public static void onRightClickBlock(net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock event) {
-        if (cannotInteract(event.getEntity())) {
+    public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
+        if (NoInteractionAbility.blocksBlocks(event.getEntity())) {
             event.setCanceled(true);
         }
     }
 
     @SubscribeEvent
-    public static void onRightClickItem(net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem event) {
-        if (cannotInteract(event.getEntity())) {
+    public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
+        if (NoInteractionAbility.blocksItems(event.getEntity())) {
             event.setCanceled(true);
         }
     }
 
     @SubscribeEvent
-    public static void onRightClickEntity(net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract event) {
-        if (cannotInteract(event.getEntity())) {
+    public static void onRightClickEntity(PlayerInteractEvent.EntityInteract event) {
+        if (NoInteractionAbility.blocksEntities(event.getEntity())) {
             event.setCanceled(true);
         }
     }
 
     @SubscribeEvent
-    public static void onLeftClickBlock(net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock event) {
-        if (cannotInteract(event.getEntity())) {
+    public static void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
+        if (NoInteractionAbility.blocksBlocks(event.getEntity())) {
             event.setCanceled(true);
         }
     }
 
     @SubscribeEvent
-    public static void onEntityAttack(net.minecraftforge.event.entity.player.AttackEntityEvent event) {
-        if (cannotInteract(event.getEntity())) {
+    public static void onEntityAttack(AttackEntityEvent event) {
+        if (NoInteractionAbility.blocksEntities(event.getEntity())) {
             event.setCanceled(true);
         }
     }

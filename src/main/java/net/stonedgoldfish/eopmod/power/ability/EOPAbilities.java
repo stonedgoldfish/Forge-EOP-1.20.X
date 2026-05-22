@@ -36,6 +36,8 @@ public class EOPAbilities {
             ABILITIES.register("screen_shake", ScreenShakeAbility::new);
     public static final RegistrySupplier<Ability> MULTI_ATTRIBUTE_MODIFIER =
             ABILITIES.register("multi_attribute_modifier", MultiAttributeModifierAbility::new);
+    public static final RegistrySupplier<Ability> TRIGGER_ANIMATION =
+            ABILITIES.register("trigger_animation", TriggerAnimationAbility::new);
 
     public static void init() {
 

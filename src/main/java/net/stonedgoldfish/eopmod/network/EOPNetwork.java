@@ -33,5 +33,12 @@ public class EOPNetwork {
                 DashPacket::decode,
                 DashPacket::handle
         );
+        CHANNEL.registerMessage(
+                packetId++,
+                ToggleBattleModePacket.class,
+                ToggleBattleModePacket::encode,
+                ToggleBattleModePacket::decode,
+                ToggleBattleModePacket::handle
+        );
     }
 }

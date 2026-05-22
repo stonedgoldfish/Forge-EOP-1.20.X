@@ -24,7 +24,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.stonedgoldfish.eopmod.util.EOPGameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -42,6 +42,37 @@ public class EOPProjectileEntity extends ThrowableProjectile implements ItemSupp
     private static final EntityDataAccessor<String> RENDER_LAYERS =
             SynchedEntityData.defineId(EOPProjectileEntity.class, EntityDataSerializers.STRING);
 
+    private static ListTag stringArrayToListTag(String[] array) {
+        ListTag list = new ListTag();
+
+        if (array == null) {
+            return list;
+        }
+
+        for (String value : array) {
+            if (value != null) {
+                list.add(StringTag.valueOf(value));
+            }
+        }
+
+        return list;
+    }
+
+    private static String[] readStringArray(CompoundTag tag, String key) {
+        if (!tag.contains(key, Tag.TAG_LIST)) {
+            return new String[]{};
+        }
+
+        ListTag list = tag.getList(key, Tag.TAG_STRING);
+        String[] result = new String[list.size()];
+
+        for (int i = 0; i < list.size(); i++) {
+            result[i] = list.getString(i);
+        }
+
+        return result;
+    }
+
     private float damage = 6.0F;
     private String damageType = "minecraft:generic";
     private int lifetime = 100;
@@ -54,8 +85,30 @@ public class EOPProjectileEntity extends ThrowableProjectile implements ItemSupp
     private boolean explosionCausesFire = false;
     private String explosionBlockInteraction = "KEEP";
     private float knockbackStrength = 0.0F;
-    private String commandsOnBlockHit = "";
-    private String commandsOnEntityHit = "";
+    private String[] commandsOnBlockHit = new String[]{};
+    private String[] commandsOnEntityHit = new String[]{};
+    private String[] commandsForTargets = new String[]{};
+    private float commandsForTargetsRadius = 0.0F;
+
+    private boolean spawnArmorStandOnBlockHit = false;
+    private boolean spawnArmorStandOnEntityHit = false;
+    private int armorStandLifetime = 100;
+    private float armorStandAoeDamage = 0.0F;
+    private float armorStandAoeRadius = 3.0F;
+    private String armorStandAoeDamageType = "minecraft:magic";
+    private boolean armorStandEnableDamage = true;
+    private boolean armorStandDamageOnLastTick = false;
+    private float armorStandKnockbackOnLastTick = 0.0F;
+    private float armorStandTargetCommandRadius = 3.0F;
+    private float armorStandPullStrength = 0.0F;
+    private boolean armorStandInvertPull = false;
+    private String armorStandPower = "";
+    private String[] armorStandFirstTickCommands = new String[]{};
+    private String[] armorStandCommands = new String[]{};
+    private String[] armorStandLastTickCommands = new String[]{};
+    private String[] armorStandTargetFirstTickCommands = new String[]{};
+    private String[] armorStandTargetCommands = new String[]{};
+    private String[] armorStandTargetLastTickCommands = new String[]{};
 
     private ListTag appearances = new ListTag();
 
@@ -65,7 +118,7 @@ public class EOPProjectileEntity extends ThrowableProjectile implements ItemSupp
 
     @Override
     protected void defineSynchedData() {
-        this.entityData.define(APPEARANCE_ITEM, new ItemStack(Items.ENDER_PEARL));
+        this.entityData.define(APPEARANCE_ITEM, ItemStack.EMPTY);
         this.entityData.define(RENDER_LAYERS, "");
     }
 
@@ -125,6 +178,9 @@ public class EOPProjectileEntity extends ThrowableProjectile implements ItemSupp
             if (dieOnEntityHit) {
                 createFilteredExplosion();
                 runCommands(commandsOnEntityHit);
+                if (spawnArmorStandOnEntityHit) {
+                    spawnArmorStandFromProjectile();
+                }
                 this.discard();
             }
             return;
@@ -134,6 +190,9 @@ public class EOPProjectileEntity extends ThrowableProjectile implements ItemSupp
             if (dieOnEntityHit) {
                 createFilteredExplosion();
                 runCommands(commandsOnEntityHit);
+                if (spawnArmorStandOnEntityHit) {
+                    spawnArmorStandFromProjectile();
+                }
                 this.discard();
             }
             return;
@@ -153,8 +212,12 @@ public class EOPProjectileEntity extends ThrowableProjectile implements ItemSupp
 
         runCommands(commandsOnEntityHit);
         createFilteredExplosion();
+        runCommandsForTargets();
 
         if (dieOnEntityHit) {
+            if (spawnArmorStandOnEntityHit) {
+                spawnArmorStandFromProjectile();
+            }
             this.discard();
         }
     }
@@ -169,10 +232,56 @@ public class EOPProjectileEntity extends ThrowableProjectile implements ItemSupp
 
         runCommands(commandsOnBlockHit);
         createFilteredExplosion();
+        runCommandsForTargets();
 
         if (dieOnBlockHit) {
+            if (spawnArmorStandOnBlockHit) {
+                spawnArmorStandFromProjectile();
+            }
             this.discard();
         }
+    }
+
+    private void spawnArmorStandFromProjectile() {
+        Entity owner = this.getOwner();
+
+        if (!(owner instanceof LivingEntity caster)) {
+            return;
+        }
+
+        net.minecraft.world.entity.decoration.ArmorStand armorStand =
+                net.stonedgoldfish.eopmod.util.EOPArmorStandSpawner.spawnBasic(
+                        caster,
+                        this.level(),
+                        this.position(),
+                        this.getYRot()
+                );
+
+        net.stonedgoldfish.eopmod.util.EOPArmorStandSpawner.applyCommonData(
+                armorStand,
+                armorStandLifetime,
+                armorStandAoeDamage,
+                armorStandAoeRadius,
+                armorStandAoeDamageType,
+                armorStandEnableDamage,
+                armorStandDamageOnLastTick,
+                armorStandKnockbackOnLastTick,
+                armorStandTargetCommandRadius,
+                armorStandPullStrength,
+                armorStandInvertPull,
+                armorStandPower,
+                armorStandFirstTickCommands,
+                armorStandCommands,
+                armorStandLastTickCommands,
+                armorStandTargetFirstTickCommands,
+                armorStandTargetCommands,
+                armorStandTargetLastTickCommands
+        );
+
+        net.stonedgoldfish.eopmod.event.EOPForgeEvents.runStandCommands(
+                armorStand,
+                "EOPStandFirstTickCommands"
+        );
     }
 
     private void spawnAppearanceParticles() {
@@ -396,6 +505,10 @@ public class EOPProjectileEntity extends ThrowableProjectile implements ItemSupp
                 ? "KEEP"
                 : explosionBlockInteraction.toUpperCase();
 
+        if (!EOPGameRules.isDestructionMode()) {
+            mode = "KEEP";
+        }
+
         if (mode.equals("KEEP")) {
             return;
         }
@@ -477,8 +590,50 @@ public class EOPProjectileEntity extends ThrowableProjectile implements ItemSupp
         }
     }
 
-    private void runCommands(String rawCommands) {
-        if (rawCommands == null || rawCommands.isBlank()) {
+    private void runCommandsForTargets() {
+        if (commandsForTargets == null || commandsForTargets.length == 0) {
+            return;
+        }
+
+        Entity owner = this.getOwner();
+
+        if (!(owner instanceof LivingEntity caster)) {
+            return;
+        }
+
+        for (LivingEntity target : this.level().getEntitiesOfClass(
+                LivingEntity.class,
+                this.getBoundingBox().inflate(commandsForTargetsRadius)
+        )) {
+            if (!EOPTargeting.isValidTarget(caster, target)) {
+                continue;
+            }
+
+            runCommandsAsTarget(target, commandsForTargets);
+        }
+    }
+
+    private void runCommandsAsTarget(LivingEntity target, String[] commands) {
+        if (commands == null || commands.length == 0 || target.getServer() == null) {
+            return;
+        }
+
+        for (String command : commands) {
+            if (command == null || command.isBlank()) {
+                continue;
+            }
+
+            target.getServer().getCommands().performPrefixedCommand(
+                    target.createCommandSourceStack()
+                            .withSuppressedOutput()
+                            .withPermission(2),
+                    command
+            );
+        }
+    }
+
+    private void runCommands(String[] commands) {
+        if (commands == null || commands.length == 0) {
             return;
         }
 
@@ -486,10 +641,8 @@ public class EOPProjectileEntity extends ThrowableProjectile implements ItemSupp
             return;
         }
 
-        String[] commands = rawCommands.split("\\|\\|");
-
         for (String command : commands) {
-            if (command.isBlank()) {
+            if (command == null || command.isBlank()) {
                 continue;
             }
 
@@ -537,10 +690,48 @@ public class EOPProjectileEntity extends ThrowableProjectile implements ItemSupp
         tag.putBoolean("ExplosionCausesFire", this.explosionCausesFire);
         tag.putString("ExplosionBlockInteraction", this.explosionBlockInteraction);
         tag.putFloat("KnockbackStrength", this.knockbackStrength);
-        tag.putString("CommandsOnBlockHit", this.commandsOnBlockHit);
-        tag.putString("CommandsOnEntityHit", this.commandsOnEntityHit);
+        ListTag targetCommands = new ListTag();
+        tag.putFloat("CommandsForTargetsRadius", this.commandsForTargetsRadius);
+        for (String command : this.commandsForTargets) {
+            targetCommands.add(StringTag.valueOf(command));
+        }
+        tag.put("CommandsForTargets", targetCommands);
+        ListTag blockCommands = new ListTag();
+        for (String command : this.commandsOnBlockHit) {
+            blockCommands.add(StringTag.valueOf(command));
+        }
+        tag.put("CommandsOnBlockHit", blockCommands);
+
+        ListTag entityCommands = new ListTag();
+        for (String command : this.commandsOnEntityHit) {
+            entityCommands.add(StringTag.valueOf(command));
+        }
+        tag.put("CommandsOnEntityHit", entityCommands);
 
         tag.put("Appearances", this.appearances);
+
+        tag.putBoolean("SpawnArmorStandOnBlockHit", this.spawnArmorStandOnBlockHit);
+        tag.putBoolean("SpawnArmorStandOnEntityHit", this.spawnArmorStandOnEntityHit);
+
+        tag.putInt("ArmorStandLifetime", this.armorStandLifetime);
+        tag.putFloat("ArmorStandAOEDamage", this.armorStandAoeDamage);
+        tag.putFloat("ArmorStandAOERadius", this.armorStandAoeRadius);
+        tag.putString("ArmorStandAOEDamageType", this.armorStandAoeDamageType);
+        tag.putBoolean("ArmorStandEnableDamage", this.armorStandEnableDamage);
+        tag.putBoolean("ArmorStandDamageOnLastTick", this.armorStandDamageOnLastTick);
+        tag.putFloat("ArmorStandKnockbackOnLastTick", this.armorStandKnockbackOnLastTick);
+        tag.putFloat("ArmorStandTargetCommandRadius", this.armorStandTargetCommandRadius);
+        tag.putFloat("ArmorStandPullStrength", this.armorStandPullStrength);
+        tag.putBoolean("ArmorStandInvertPull", this.armorStandInvertPull);
+        tag.putString("ArmorStandPower", this.armorStandPower);
+
+        tag.put("ArmorStandFirstTickCommands", stringArrayToListTag(this.armorStandFirstTickCommands));
+        tag.put("ArmorStandCommands", stringArrayToListTag(this.armorStandCommands));
+        tag.put("ArmorStandLastTickCommands", stringArrayToListTag(this.armorStandLastTickCommands));
+
+        tag.put("ArmorStandTargetFirstTickCommands", stringArrayToListTag(this.armorStandTargetFirstTickCommands));
+        tag.put("ArmorStandTargetCommands", stringArrayToListTag(this.armorStandTargetCommands));
+        tag.put("ArmorStandTargetLastTickCommands", stringArrayToListTag(this.armorStandTargetLastTickCommands));
     }
 
     @Override
@@ -559,6 +750,10 @@ public class EOPProjectileEntity extends ThrowableProjectile implements ItemSupp
 
         if (tag.contains("Gravity")) {
             this.gravity = tag.getFloat("Gravity");
+        }
+
+        if (tag.contains("CommandsForTargetsRadius")) {
+            this.commandsForTargetsRadius = tag.getFloat("CommandsForTargetsRadius");
         }
 
         if (tag.contains("DieOnEntityHit")) {
@@ -589,13 +784,92 @@ public class EOPProjectileEntity extends ThrowableProjectile implements ItemSupp
             this.knockbackStrength = tag.getFloat("KnockbackStrength");
         }
 
-        if (tag.contains("CommandsOnBlockHit")) {
-            this.commandsOnBlockHit = tag.getString("CommandsOnBlockHit");
+        if (tag.contains("CommandsForTargets", Tag.TAG_LIST)) {
+            ListTag list = tag.getList("CommandsForTargets", Tag.TAG_STRING);
+            this.commandsForTargets = new String[list.size()];
+
+            for (int i = 0; i < list.size(); i++) {
+                this.commandsForTargets[i] = list.getString(i);
+            }
         }
 
-        if (tag.contains("CommandsOnEntityHit")) {
-            this.commandsOnEntityHit = tag.getString("CommandsOnEntityHit");
+        if (tag.contains("CommandsOnBlockHit", Tag.TAG_LIST)) {
+            ListTag list = tag.getList("CommandsOnBlockHit", Tag.TAG_STRING);
+            this.commandsOnBlockHit = new String[list.size()];
+
+            for (int i = 0; i < list.size(); i++) {
+                this.commandsOnBlockHit[i] = list.getString(i);
+            }
         }
+
+        if (tag.contains("CommandsOnEntityHit", Tag.TAG_LIST)) {
+            ListTag list = tag.getList("CommandsOnEntityHit", Tag.TAG_STRING);
+            this.commandsOnEntityHit = new String[list.size()];
+
+            for (int i = 0; i < list.size(); i++) {
+                this.commandsOnEntityHit[i] = list.getString(i);
+            }
+        }
+
+        if (tag.contains("SpawnArmorStandOnBlockHit")) {
+            this.spawnArmorStandOnBlockHit = tag.getBoolean("SpawnArmorStandOnBlockHit");
+        }
+
+        if (tag.contains("SpawnArmorStandOnEntityHit")) {
+            this.spawnArmorStandOnEntityHit = tag.getBoolean("SpawnArmorStandOnEntityHit");
+        }
+
+        if (tag.contains("ArmorStandLifetime")) {
+            this.armorStandLifetime = tag.getInt("ArmorStandLifetime");
+        }
+
+        if (tag.contains("ArmorStandAOEDamage")) {
+            this.armorStandAoeDamage = tag.getFloat("ArmorStandAOEDamage");
+        }
+
+        if (tag.contains("ArmorStandAOERadius")) {
+            this.armorStandAoeRadius = tag.getFloat("ArmorStandAOERadius");
+        }
+
+        if (tag.contains("ArmorStandAOEDamageType")) {
+            this.armorStandAoeDamageType = tag.getString("ArmorStandAOEDamageType");
+        }
+
+        if (tag.contains("ArmorStandEnableDamage")) {
+            this.armorStandEnableDamage = tag.getBoolean("ArmorStandEnableDamage");
+        }
+
+        if (tag.contains("ArmorStandDamageOnLastTick")) {
+            this.armorStandDamageOnLastTick = tag.getBoolean("ArmorStandDamageOnLastTick");
+        }
+
+        if (tag.contains("ArmorStandKnockbackOnLastTick")) {
+            this.armorStandKnockbackOnLastTick = tag.getFloat("ArmorStandKnockbackOnLastTick");
+        }
+
+        if (tag.contains("ArmorStandTargetCommandRadius")) {
+            this.armorStandTargetCommandRadius = tag.getFloat("ArmorStandTargetCommandRadius");
+        }
+
+        if (tag.contains("ArmorStandPullStrength")) {
+            this.armorStandPullStrength = tag.getFloat("ArmorStandPullStrength");
+        }
+
+        if (tag.contains("ArmorStandInvertPull")) {
+            this.armorStandInvertPull = tag.getBoolean("ArmorStandInvertPull");
+        }
+
+        if (tag.contains("ArmorStandPower")) {
+            this.armorStandPower = tag.getString("ArmorStandPower");
+        }
+
+        this.armorStandFirstTickCommands = readStringArray(tag, "ArmorStandFirstTickCommands");
+        this.armorStandCommands = readStringArray(tag, "ArmorStandCommands");
+        this.armorStandLastTickCommands = readStringArray(tag, "ArmorStandLastTickCommands");
+
+        this.armorStandTargetFirstTickCommands = readStringArray(tag, "ArmorStandTargetFirstTickCommands");
+        this.armorStandTargetCommands = readStringArray(tag, "ArmorStandTargetCommands");
+        this.armorStandTargetLastTickCommands = readStringArray(tag, "ArmorStandTargetLastTickCommands");
 
         readAppearances(tag);
     }
