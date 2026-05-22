@@ -149,7 +149,7 @@ public class EOPCommands {
                         // QUERY CURRENT VALUE
                         .executes(ctx -> {
 
-                            boolean current = EOPGameRules.isDestructionMode();
+                            boolean current = EOPGameRules.isDestructionMode(ctx.getSource().getServer());
 
                             ctx.getSource().sendSuccess(
                                     () -> Component.literal(
@@ -167,7 +167,7 @@ public class EOPCommands {
 
                                     boolean value = BoolArgumentType.getBool(ctx, "value");
 
-                                    EOPGameRules.setDestructionMode(value);
+                                    EOPGameRules.setDestructionMode(ctx.getSource().getServer(), value);
 
                                     ctx.getSource().sendSuccess(
                                             () -> Component.literal(

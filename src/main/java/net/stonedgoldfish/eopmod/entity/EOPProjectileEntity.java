@@ -505,7 +505,7 @@ public class EOPProjectileEntity extends ThrowableProjectile implements ItemSupp
                 ? "KEEP"
                 : explosionBlockInteraction.toUpperCase();
 
-        if (!EOPGameRules.isDestructionMode()) {
+        if (!EOPGameRules.isDestructionMode(this.level().getServer())) {
             mode = "KEEP";
         }
 

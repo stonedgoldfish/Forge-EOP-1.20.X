@@ -46,6 +46,26 @@ public class ToggleBattleModePacket {
 
             boolean nowOn = !currentlyOn;
 
+            var scoreboard = player.getScoreboard();
+
+            var objective = scoreboard.getObjective("EOP.Battle.Mode");
+
+            if (objective == null) {
+                objective = scoreboard.addObjective(
+                        "EOP.Battle.Mode",
+                        net.minecraft.world.scores.criteria.ObjectiveCriteria.DUMMY,
+                        net.minecraft.network.chat.Component.literal("Battle Mode"),
+                        net.minecraft.world.scores.criteria.ObjectiveCriteria.RenderType.INTEGER
+                );
+            }
+
+            var score = scoreboard.getOrCreatePlayerScore(
+                    player.getScoreboardName(),
+                    objective
+            );
+
+            score.setScore(nowOn ? 1 : 0);
+
             player.level().playSound(
                     null,
                     player.getX(),

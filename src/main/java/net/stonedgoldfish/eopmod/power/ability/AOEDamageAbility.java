@@ -101,7 +101,7 @@ public class AOEDamageAbility extends Ability {
                     entity,
                     explosionRadius,
                     explosionDropBlocks,
-                    EOPGameRules.isDestructionMode()
+                    EOPGameRules.isDestructionMode(entity.level().getServer())
             );
         }
     }
