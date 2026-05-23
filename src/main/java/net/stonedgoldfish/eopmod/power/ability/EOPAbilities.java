@@ -38,6 +38,10 @@ public class EOPAbilities {
             ABILITIES.register("multi_attribute_modifier", MultiAttributeModifierAbility::new);
     public static final RegistrySupplier<Ability> TRIGGER_ANIMATION =
             ABILITIES.register("trigger_animation", TriggerAnimationAbility::new);
+    public static final RegistrySupplier<Ability> AREA_LIGHT =
+            ABILITIES.register("area_light", AreaLightAbility::new);
+    public static final RegistrySupplier<Ability> INFINITY_OXYGEN =
+            ABILITIES.register("infinite_oxygen", InfiniteAirAbility::new);
 
     public static void init() {
 

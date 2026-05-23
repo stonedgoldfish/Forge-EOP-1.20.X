@@ -14,6 +14,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.threetag.palladiumcore.forge.PalladiumCoreForge;
 import org.slf4j.Logger;
 import net.stonedgoldfish.eopmod.power.ability.EOPAbilities;
+import net.stonedgoldfish.eopmod.power.condition.EOPConditions;
 import net.stonedgoldfish.eopmod.client.EOPClientEvents;
 import net.stonedgoldfish.eopmod.power.EOPPalladiumProperties;
 import net.stonedgoldfish.eopmod.network.EOPNetwork;
@@ -33,6 +34,7 @@ public class EOPMod {
 
         PalladiumCoreForge.registerModEventBus(MOD_ID, modEventBus);
         EOPAbilities.ABILITIES.register();
+        EOPConditions.CONDITIONS.register();
         EOPPalladiumProperties.init();
         EOPNetwork.register();
         EOPEntities.ENTITIES.register(modEventBus);

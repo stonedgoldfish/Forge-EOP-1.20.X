@@ -10,12 +10,9 @@ import net.threetag.palladium.power.IPowerHolder;
 import net.threetag.palladium.power.ability.Ability;
 import net.threetag.palladium.power.ability.AbilityInstance;
 import net.threetag.palladium.util.icon.ItemIcon;
-import net.threetag.palladium.util.property.FloatProperty;
-import net.threetag.palladium.util.property.PalladiumProperty;
-import net.threetag.palladium.util.property.StringProperty;
-import net.threetag.palladium.util.property.IntegerProperty;
-import net.threetag.palladium.util.property.BooleanProperty;
+import net.threetag.palladium.util.property.*;
 import net.stonedgoldfish.eopmod.util.EOPGameRules;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
@@ -25,9 +22,29 @@ public class AOEDamageAbility extends Ability {
             new FloatProperty("damage")
                     .configurable("Amount of damage dealt to nearby entities.");
 
+    public static final PalladiumProperty<Boolean> ENABLE_DAMAGE =
+            new BooleanProperty("enable_damage")
+                    .configurable("Whether the ability deals damage.");
+
+    public static final PalladiumProperty<Float> KNOCKBACK =
+            new FloatProperty("knockback")
+                    .configurable("Knockback strength applied to damaged targets");
+
     public static final PalladiumProperty<Float> RADIUS =
             new FloatProperty("radius")
                     .configurable("Radius around the user that entities will be damaged in.");
+
+    public static final PalladiumProperty<String[]> COMMANDS_ON_TARGET =
+            new StringArrayProperty("commands_on_target")
+                    .configurable("Commands executed as valid targets in range.");
+
+    public static final PalladiumProperty<Boolean> CONE =
+            new BooleanProperty("cone")
+                    .configurable("If true, only damages entities in front of the user.");
+
+    public static final PalladiumProperty<Float> CONE_ANGLE =
+            new FloatProperty("cone_angle")
+                    .configurable("Width of the cone in degrees.");
 
     public static final PalladiumProperty<String> DAMAGE_TYPE =
             new StringProperty("damage_type")
@@ -52,7 +69,12 @@ public class AOEDamageAbility extends Ability {
     public AOEDamageAbility() {
         this.withProperty(ICON, new ItemIcon(Items.TNT));
         this.withProperty(DAMAGE, 6.0F);
+        this.withProperty(ENABLE_DAMAGE, true);
+        this.withProperty(KNOCKBACK, 0.0F);
         this.withProperty(RADIUS, 4.0F);
+        this.withProperty(COMMANDS_ON_TARGET, new String[]{});
+        this.withProperty(CONE, false);
+        this.withProperty(CONE_ANGLE, 90.0F);
         this.withProperty(DAMAGE_TYPE, "minecraft:magic");
         this.withProperty(SET_ON_FIRE, 0);
         this.withProperty(CREATE_EXPLOSION, false);
@@ -67,7 +89,12 @@ public class AOEDamageAbility extends Ability {
         }
 
         float damage = entry.getProperty(DAMAGE);
+        boolean enableDamage = entry.getProperty(ENABLE_DAMAGE);
+        float knockback = entry.getProperty(KNOCKBACK);
         float radius = entry.getProperty(RADIUS);
+        String[] commandsOnTarget = entry.getProperty(COMMANDS_ON_TARGET);
+        boolean cone = entry.getProperty(CONE);
+        float coneAngle = entry.getProperty(CONE_ANGLE);
         String damageTypeId = entry.getProperty(DAMAGE_TYPE);
         int fireSeconds = entry.getProperty(SET_ON_FIRE);
         boolean createExplosion = entry.getProperty(CREATE_EXPLOSION);
@@ -89,11 +116,37 @@ public class AOEDamageAbility extends Ability {
                 continue;
             }
 
-            target.hurt(damageSource, damage);
+            if (cone && !isInsideCone(entity, target, coneAngle)) {
+                continue;
+            }
+
+            if (enableDamage) {
+                target.hurt(damageSource, damage);
+            }
 
             if (fireSeconds > 0) {
                 target.setSecondsOnFire(fireSeconds);
             }
+
+            if (knockback > 0.0F) {
+                Vec3 direction = target.position()
+                        .add(0.0D, target.getBbHeight() * 0.5D, 0.0D)
+                        .subtract(entity.position().add(0.0D, entity.getBbHeight() * 0.5D, 0.0D));
+
+                if (direction.lengthSqr() < 0.001D) {
+                    direction = new Vec3(0.0D, 0.2D, 0.0D);
+                } else {
+                    direction = direction.normalize();
+                }
+
+                target.setDeltaMovement(
+                        target.getDeltaMovement().add(direction.scale(knockback))
+                );
+
+                target.hurtMarked = true;
+            }
+
+            runCommandsAsTarget(target, commandsOnTarget);
         }
         if (createExplosion) {
 
@@ -104,6 +157,43 @@ public class AOEDamageAbility extends Ability {
                     EOPGameRules.isDestructionMode(entity.level().getServer())
             );
         }
+    }
+
+    private static void runCommandsAsTarget(LivingEntity target, String[] commands) {
+        if (commands == null || commands.length == 0) {
+            return;
+        }
+
+        if (target.getServer() == null) {
+            return;
+        }
+
+        for (String command : commands) {
+            if (command == null || command.isBlank()) {
+                continue;
+            }
+
+            target.getServer().getCommands().performPrefixedCommand(
+                    target.createCommandSourceStack()
+                            .withSuppressedOutput()
+                            .withPermission(2),
+                    command
+            );
+        }
+    }
+
+    private static boolean isInsideCone(LivingEntity caster, LivingEntity target, float coneAngle) {
+        Vec3 look = caster.getLookAngle().normalize();
+
+        Vec3 toTarget = target.position()
+                .add(0.0D, target.getBbHeight() * 0.5D, 0.0D)
+                .subtract(caster.position().add(0.0D, caster.getBbHeight() * 0.5D, 0.0D))
+                .normalize();
+
+        double halfAngleRad = Math.toRadians(coneAngle / 2.0F);
+        double threshold = Math.cos(halfAngleRad);
+
+        return look.dot(toTarget) >= threshold;
     }
 
     private static DamageSource createDamageSource(LivingEntity entity, String damageTypeId) {
