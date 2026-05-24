@@ -32,6 +32,7 @@ public class EOPPlayerAnimation extends PalladiumAnimation {
         boolean firstPerson = firstPersonContext.firstPerson();
 
         switch (EOPAnimationHandler.getCurrentAnimation()) {
+
             case DASH_FRONT -> {
                 if (!firstPerson) {
                     EOPDashAnimation.front(builder, anim);

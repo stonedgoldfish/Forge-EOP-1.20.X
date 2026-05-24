@@ -1,6 +1,12 @@
 package net.stonedgoldfish.eopmod.event;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.*;
+import net.stonedgoldfish.eopmod.power.ability.GillsAbility;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -10,9 +16,10 @@ import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraftforge.client.event.RenderGuiOverlayEvent;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.stonedgoldfish.eopmod.EOPMod;
@@ -20,6 +27,8 @@ import net.stonedgoldfish.eopmod.power.EOPPalladiumProperties;
 import net.stonedgoldfish.eopmod.power.EOPPowerConstants;
 import net.stonedgoldfish.eopmod.power.EOPPowerRegistry;
 import net.stonedgoldfish.eopmod.power.ability.CustomFlightAbility;
+import net.stonedgoldfish.eopmod.power.ability.ImmuneToEffectAbility;
+import net.stonedgoldfish.eopmod.power.ability.NoNaturalRegenAbility;
 import net.stonedgoldfish.eopmod.util.EOPTargeting;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -35,6 +44,53 @@ import java.util.UUID;
 public class EOPForgeEvents {
 
     private static final Map<UUID, Set<UUID>> ARMOR_STAND_TARGETS = new HashMap<>();
+
+    @SubscribeEvent
+    public static void onMobEffectApplicable(MobEffectEvent.Applicable event) {
+        if (ImmuneToEffectAbility.isImmuneTo(
+                event.getEntity(),
+                event.getEffectInstance().getEffect()
+        )) {
+            event.setResult(Event.Result.DENY);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onLivingHeal(LivingHealEvent event) {
+        if (NoNaturalRegenAbility.hasNoNaturalRegen(event.getEntity())) {
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onRenderGuiOverlayPre(RenderGuiOverlayEvent.Pre event) {
+        if (event.getOverlay() == VanillaGuiOverlay.FOOD_LEVEL.type()) {
+            Minecraft minecraft = Minecraft.getInstance();
+
+            if (minecraft.player != null && NoNaturalRegenAbility.shouldHideHungerBar(minecraft.player)) {
+                event.setCanceled(true);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onLivingBreathe(LivingBreatheEvent event) {
+        if (!(event.getEntity() instanceof Player player)) {
+            return;
+        }
+
+        if (!player.getTags().contains("gills")) {
+            return;
+        }
+
+        if (player.isEyeInFluidType(net.minecraftforge.common.ForgeMod.WATER_TYPE.get())) {
+            event.setCanBreathe(true);
+            event.setCanRefillAir(true);
+        } else {
+            event.setCanBreathe(false);
+            event.setCanRefillAir(false);
+        }
+    }
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {

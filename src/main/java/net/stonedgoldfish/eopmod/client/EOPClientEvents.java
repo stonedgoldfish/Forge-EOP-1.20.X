@@ -10,10 +10,8 @@ import net.stonedgoldfish.eopmod.client.animation.EOPPlayerAnimation;
 import net.threetag.palladium.client.screen.power.PowersScreen;
 import net.threetag.palladium.event.PalladiumClientEvents;
 import net.stonedgoldfish.eopmod.power.EOPPalladiumProperties;
-import net.stonedgoldfish.eopmod.client.animation.EOPFlightAnimation;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
-import net.stonedgoldfish.eopmod.client.animation.anim.EOPDashAnimation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.stonedgoldfish.eopmod.power.ability.CustomFlightAbility;
@@ -58,10 +56,6 @@ public class EOPClientEvents {
         EOPScreenShakeEvents.init();
 
         PalladiumClientEvents.REGISTER_ANIMATIONS.register(registry -> {
-            registry.accept(
-                    ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "flight"),
-                    new EOPFlightAnimation(1000)
-            );
             registry.accept(
                     ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "player_animation"),
                     new EOPPlayerAnimation(1200)
