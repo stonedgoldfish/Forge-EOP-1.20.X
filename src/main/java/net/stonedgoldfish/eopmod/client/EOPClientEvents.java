@@ -6,6 +6,7 @@ import net.stonedgoldfish.eopmod.EOPMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.stonedgoldfish.eopmod.client.animation.EOPAnimationHandler;
+import net.stonedgoldfish.eopmod.client.animation.EOPFlightAnimation;
 import net.stonedgoldfish.eopmod.client.animation.EOPPlayerAnimation;
 import net.threetag.palladium.client.screen.power.PowersScreen;
 import net.threetag.palladium.event.PalladiumClientEvents;
@@ -59,6 +60,10 @@ public class EOPClientEvents {
             registry.accept(
                     ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "player_animation"),
                     new EOPPlayerAnimation(1200)
+            );
+            registry.accept(
+                    ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "flight_animation"),
+                    new EOPFlightAnimation(1300)
             );
         });
     }
