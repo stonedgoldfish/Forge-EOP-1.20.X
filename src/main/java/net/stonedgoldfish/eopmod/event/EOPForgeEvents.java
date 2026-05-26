@@ -34,6 +34,8 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.stonedgoldfish.eopmod.power.ability.NoInteractionAbility;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.entity.living.LivingEvent;
+import net.stonedgoldfish.eopmod.power.ability.NoMovementAbility;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -116,19 +118,8 @@ public class EOPForgeEvents {
         EOPPalladiumProperties.setFrostWalkerExtra(player, player.getTags().contains("EOP.Extra.Frost.Walker"));
 
         if (!CustomFlightAbility.hasCustomFlight(player)) {
-            if (!player.isCreative() && !player.isSpectator()) {
-                player.getAbilities().mayfly = false;
-                player.getAbilities().flying = false;
-                player.getAbilities().setFlyingSpeed(0.05F);
-                player.onUpdateAbilities();
-            }
-
             return;
         }
-
-        player.getAbilities().mayfly = true;
-        player.getAbilities().setFlyingSpeed(0.0F);
-        player.onUpdateAbilities();
     }
 
     @SubscribeEvent

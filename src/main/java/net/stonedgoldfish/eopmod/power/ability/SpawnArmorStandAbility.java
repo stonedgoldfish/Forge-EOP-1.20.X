@@ -1,5 +1,7 @@
 package net.stonedgoldfish.eopmod.power.ability;
 
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.Items;
@@ -82,6 +84,18 @@ public class SpawnArmorStandAbility extends Ability {
     public static final PalladiumProperty<String[]> TARGET_LAST_TICK_COMMANDS =
             new StringArrayProperty("target_last_tick_commands").configurable("Commands executed once as each valid target when they leave the AOE.");
 
+    public static final PalladiumProperty<Boolean> SUCTION_PARTICLES =
+            new BooleanProperty("suction_particles")
+                    .configurable("Creates inward-moving particles around the summoned armor stand.");
+
+    public static final PalladiumProperty<Float> SUCTION_PARTICLE_RADIUS =
+            new FloatProperty("suction_particle_radius")
+                    .configurable("Radius around the armor stand where particles spawn.");
+
+    public static final PalladiumProperty<Integer> SUCTION_PARTICLE_COUNT =
+            new IntegerProperty("suction_particle_count")
+                    .configurable("Particles spawned per tick.");
+
     public SpawnArmorStandAbility() {
         this.withProperty(ICON, new ItemIcon(Items.ARMOR_STAND));
 
@@ -110,6 +124,10 @@ public class SpawnArmorStandAbility extends Ability {
         this.withProperty(TARGET_FIRST_TICK_COMMANDS, new String[]{});
         this.withProperty(TARGET_COMMANDS, new String[]{});
         this.withProperty(TARGET_LAST_TICK_COMMANDS, new String[]{});
+
+        this.withProperty(SUCTION_PARTICLES, false);
+        this.withProperty(SUCTION_PARTICLE_RADIUS, 2.5F);
+        this.withProperty(SUCTION_PARTICLE_COUNT, 6);
     }
 
     @Override
@@ -206,6 +224,41 @@ public class SpawnArmorStandAbility extends Ability {
         }
 
         return end;
+    }
+
+    private static void spawnSuctionParticles(
+            ServerLevel level,
+            double centerX,
+            double centerY,
+            double centerZ,
+            float radius,
+            int count
+    ) {
+        for (int i = 0; i < count; i++) {
+            double angle = level.random.nextDouble() * Math.PI * 2.0D;
+            double height = (level.random.nextDouble() - 0.5D) * radius;
+            double distance = radius * (0.6D + level.random.nextDouble() * 0.4D);
+
+            double x = centerX + Math.cos(angle) * distance;
+            double y = centerY + height;
+            double z = centerZ + Math.sin(angle) * distance;
+
+            double motionX = (centerX - x) * 0.08D;
+            double motionY = (centerY - y) * 0.08D;
+            double motionZ = (centerZ - z) * 0.08D;
+
+            level.sendParticles(
+                    ParticleTypes.SMOKE,
+                    x,
+                    y,
+                    z,
+                    0,
+                    motionX,
+                    motionY,
+                    motionZ,
+                    1.0D
+            );
+        }
     }
 
     @Override

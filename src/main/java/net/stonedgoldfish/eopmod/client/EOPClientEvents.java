@@ -1,9 +1,20 @@
 package net.stonedgoldfish.eopmod.client;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.resources.sounds.Sound;
+import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.client.sounds.SoundManager;
+import net.minecraft.client.sounds.WeighedSoundEvents;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
+import net.minecraftforge.client.event.sound.PlaySoundEvent;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.stonedgoldfish.eopmod.EOPMod;
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.client.event.RenderGuiOverlayEvent;
+import net.stonedgoldfish.eopmod.effect.EOPEffects;
 import net.minecraft.client.player.LocalPlayer;
 import net.stonedgoldfish.eopmod.client.animation.EOPAnimationHandler;
 import net.stonedgoldfish.eopmod.client.animation.EOPFlightAnimation;
@@ -632,6 +643,184 @@ public class EOPClientEvents {
         return String.format("%.2f", value);
     }
 
+    private static float lunarCloakTintProgress = 0.0F;
+    private static final ResourceLocation[] LUNAR_CLOAK_FRAMES = new ResourceLocation[31];
+    static {
+        for (int i = 0; i < LUNAR_CLOAK_FRAMES.length; i++) {
+            LUNAR_CLOAK_FRAMES[i] = ResourceLocation.fromNamespaceAndPath(
+                    EOPMod.MOD_ID,
+                    "textures/gui/hud/lunar_cloak/lunar_cloak_overlay_" + i + ".png"
+            );
+        }
+    }
+
+    @SubscribeEvent
+    public static void onRenderGuiOverlay(RenderGuiOverlayEvent.Pre event) {
+        if (event.getOverlay() != VanillaGuiOverlay.HOTBAR.type()) {
+            return;
+        }
+
+        Minecraft minecraft = Minecraft.getInstance();
+
+        boolean active = minecraft.player != null
+                && minecraft.player.hasEffect(EOPEffects.LUNAR_CLOAK.get());
+
+        float fadeInSpeed = 0.05F;
+        float fadeOutSpeed = 0.08F;
+
+        if (active) {
+            lunarCloakTintProgress += (1.0F - lunarCloakTintProgress) * fadeInSpeed;
+        } else {
+            lunarCloakTintProgress += (0.0F - lunarCloakTintProgress) * fadeOutSpeed;
+        }
+
+        if (lunarCloakTintProgress <= 0.01F) {
+            return;
+        }
+
+        int screenWidth = minecraft.getWindow().getGuiScaledWidth();
+        int screenHeight = minecraft.getWindow().getGuiScaledHeight();
+
+        float maxOpacity = 0.4F;
+        float opacity = maxOpacity * lunarCloakTintProgress;
+
+        int alpha = (int)(opacity * 255.0F);
+
+        int rgb = 0x000000;
+        int color = (alpha << 24) | rgb;
+
+        event.getGuiGraphics().fill(
+                0,
+                0,
+                screenWidth,
+                screenHeight,
+                color
+        );
+
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        float textureOpacity = 0.3F;
+
+        RenderSystem.setShaderColor(
+                1.0F,
+                1.0F,
+                1.0F,
+                lunarCloakTintProgress * textureOpacity
+        );
+
+        long gameTime = minecraft.level != null ? minecraft.level.getGameTime() : 0L;
+
+        int ticksPerFrame = 3;
+        int frame = (int) ((gameTime / ticksPerFrame) % LUNAR_CLOAK_FRAMES.length);
+
+        ResourceLocation currentFrame = LUNAR_CLOAK_FRAMES[frame];
+
+        event.getGuiGraphics().blit(
+                currentFrame,
+                0,
+                0,
+                0,
+                0,
+                screenWidth,
+                screenHeight,
+                screenWidth,
+                screenHeight
+        );
+
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.disableBlend();
+    }
+
+    @SubscribeEvent
+    public static void onPlaySound(PlaySoundEvent event) {
+        Minecraft minecraft = Minecraft.getInstance();
+
+        if (minecraft.player == null || !minecraft.player.hasEffect(EOPEffects.LUNAR_CLOAK.get())) {
+            return;
+        }
+
+        SoundInstance original = event.getSound();
+
+        if (original == null) {
+            return;
+        }
+
+        event.setSound(new MuffledSoundInstance(original, 0.15F, 0.85F));
+    }
+
+    private record MuffledSoundInstance(
+            SoundInstance original,
+            float volumeMultiplier,
+            float pitchMultiplier
+    ) implements SoundInstance {
+
+        @Override
+        public ResourceLocation getLocation() {
+            return original.getLocation();
+        }
+
+        @Override
+        public WeighedSoundEvents resolve(SoundManager soundManager) {
+            return original.resolve(soundManager);
+        }
+
+        @Override
+        public Sound getSound() {
+            return original.getSound();
+        }
+
+        @Override
+        public SoundSource getSource() {
+            return original.getSource();
+        }
+
+        @Override
+        public boolean isLooping() {
+            return original.isLooping();
+        }
+
+        @Override
+        public boolean isRelative() {
+            return original.isRelative();
+        }
+
+        @Override
+        public int getDelay() {
+            return original.getDelay();
+        }
+
+        @Override
+        public float getVolume() {
+            return original.getVolume() * volumeMultiplier;
+        }
+
+        @Override
+        public float getPitch() {
+            return original.getPitch() * pitchMultiplier;
+        }
+
+        @Override
+        public double getX() {
+            return original.getX();
+        }
+
+        @Override
+        public double getY() {
+            return original.getY();
+        }
+
+        @Override
+        public double getZ() {
+            return original.getZ();
+        }
+
+        @Override
+        public Attenuation getAttenuation() {
+            return original.getAttenuation();
+        }
+    }
+
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END) {
@@ -665,12 +854,24 @@ public class EOPClientEvents {
             speed *= settings.sprintMultiplier();
         }
 
-        // Forward
+        double verticalSpeed = player.isSprinting()
+                ? speed * 0.3D
+                : speed * 2.6D;
+
+// Up
+        if (minecraft.options.keyJump.isDown()) {
+            motion = motion.add(0.0D, verticalSpeed, 0.0D);
+        }
+
+// Down
+        if (minecraft.options.keyShift.isDown()) {
+            motion = motion.add(0.0D, -verticalSpeed, 0.0D);
+        }
+
         if (minecraft.options.keyUp.isDown()) {
             motion = motion.add(player.getLookAngle().normalize().scale(speed));
         }
 
-        // Backward
         if (minecraft.options.keyDown.isDown()) {
             motion = motion.add(player.getLookAngle().normalize().scale(-speed * 0.6D));
         }
@@ -683,12 +884,10 @@ public class EOPClientEvents {
                 Math.sin(yawRad)
         ).normalize();
 
-        // Right
         if (minecraft.options.keyRight.isDown()) {
             motion = motion.add(right.scale(-speed * 0.7D));
         }
 
-        // Left
         if (minecraft.options.keyLeft.isDown()) {
             motion = motion.add(right.scale(speed * 0.7D));
         }
@@ -699,7 +898,9 @@ public class EOPClientEvents {
         boolean moving = minecraft.options.keyUp.isDown()
                 || minecraft.options.keyDown.isDown()
                 || minecraft.options.keyLeft.isDown()
-                || minecraft.options.keyRight.isDown();
+                || minecraft.options.keyRight.isDown()
+                || minecraft.options.keyJump.isDown()
+                || minecraft.options.keyShift.isDown();
 
         double acceleration = settings.allowSprint() && player.isSprinting()
                 ? Math.min(settings.acceleration() * 1.5D, 1.0D)
@@ -708,8 +909,17 @@ public class EOPClientEvents {
         if (moving) {
             player.setDeltaMovement(currentMotion.lerp(motion, acceleration));
         } else {
-            player.setDeltaMovement(currentMotion.scale(settings.drag()));
+            double currentSpeed = currentMotion.length();
+            double speedDragPenalty = Math.min(currentSpeed * 0.08D, 0.25D);
+            double baseDrag = Math.min(settings.drag(), 1.0D);
+            double dynamicDrag = baseDrag - speedDragPenalty;
+
+            dynamicDrag = Math.max(dynamicDrag, 0.65D);
+
+            player.setDeltaMovement(currentMotion.scale(dynamicDrag));
+            if (!minecraft.options.keyJump.isDown()) {
+                player.fallDistance += (float)Math.max(-player.getDeltaMovement().y, 0.0D);
+            }
         }
-        player.fallDistance = 0.0F;
     }
 }

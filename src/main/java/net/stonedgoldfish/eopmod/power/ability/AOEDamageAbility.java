@@ -58,6 +58,10 @@ public class AOEDamageAbility extends Ability {
             new BooleanProperty("create_explosion")
                     .configurable("If true, creates an explosion effect");
 
+    public static final PalladiumProperty<Boolean> EXPLOSION_CAUSES_FIRE =
+            new BooleanProperty("explosion_causes_fire")
+                    .configurable("If true, the explosion creates fire when destructionMode is enabled.");
+
     public static final PalladiumProperty<Float> EXPLOSION_RADIUS =
             new FloatProperty("explosion_radius")
                     .configurable("Radius of the explosion");
@@ -65,6 +69,21 @@ public class AOEDamageAbility extends Ability {
     public static final PalladiumProperty<Boolean> EXPLOSION_DROP_BLOCKS =
             new BooleanProperty("explosion_drop_blocks")
                     .configurable("If true, destroyed explosion blocks will drop items");
+
+    public static final PalladiumProperty<Boolean> ENABLE_PARTICLES =
+            new BooleanProperty("enable_particles")
+                    .configurable("Whether this ability spawns outward burst particles.");
+    public static final PalladiumProperty<String> PARTICLE_TYPE =
+            new StringProperty("particle_type")
+                    .configurable("Particle ID to spawn. Example: minecraft:flame");
+
+    public static final PalladiumProperty<Float> PARTICLE_SPEED =
+            new FloatProperty("particle_speed")
+                    .configurable("Speed particles travel outward.");
+
+    public static final PalladiumProperty<Integer> PARTICLE_AMOUNT =
+            new IntegerProperty("particle_amount")
+                    .configurable("Base amount of particles spawned. Scales with radius.");
 
     public AOEDamageAbility() {
         this.withProperty(ICON, new ItemIcon(Items.TNT));
@@ -78,8 +97,13 @@ public class AOEDamageAbility extends Ability {
         this.withProperty(DAMAGE_TYPE, "minecraft:magic");
         this.withProperty(SET_ON_FIRE, 0);
         this.withProperty(CREATE_EXPLOSION, false);
+        this.withProperty(EXPLOSION_CAUSES_FIRE, false);
         this.withProperty(EXPLOSION_RADIUS, 3.0F);
         this.withProperty(EXPLOSION_DROP_BLOCKS, false);
+        this.withProperty(ENABLE_PARTICLES, false);
+        this.withProperty(PARTICLE_TYPE, "minecraft:poof");
+        this.withProperty(PARTICLE_SPEED, 0.2F);
+        this.withProperty(PARTICLE_AMOUNT, 24);
     }
 
     @Override
@@ -98,8 +122,13 @@ public class AOEDamageAbility extends Ability {
         String damageTypeId = entry.getProperty(DAMAGE_TYPE);
         int fireSeconds = entry.getProperty(SET_ON_FIRE);
         boolean createExplosion = entry.getProperty(CREATE_EXPLOSION);
+        boolean explosionCausesFire = entry.getProperty(EXPLOSION_CAUSES_FIRE);
         float explosionRadius = entry.getProperty(EXPLOSION_RADIUS);
         boolean explosionDropBlocks = entry.getProperty(EXPLOSION_DROP_BLOCKS);
+        boolean enableParticles = entry.getProperty(ENABLE_PARTICLES);
+        String particleType = entry.getProperty(PARTICLE_TYPE);
+        float particleSpeed = entry.getProperty(PARTICLE_SPEED);
+        int particleAmount = entry.getProperty(PARTICLE_AMOUNT);
 
         AABB area = entity.getBoundingBox().inflate(radius);
 
@@ -154,9 +183,120 @@ public class AOEDamageAbility extends Ability {
                     entity,
                     explosionRadius,
                     explosionDropBlocks,
-                    EOPGameRules.isDestructionMode(entity.level().getServer())
+                    EOPGameRules.isDestructionMode(entity.level().getServer()),
+                    explosionCausesFire
             );
         }
+
+        if (enableParticles) {
+            spawnOutwardParticles(
+                    entity,
+                    radius,
+                    cone,
+                    coneAngle,
+                    particleAmount,
+                    particleType,
+                    particleSpeed
+            );
+        }
+    }
+
+    private static void spawnOutwardParticles(
+            LivingEntity entity,
+            float radius,
+            boolean cone,
+            float coneAngle,
+            int baseAmount,
+            String particleId,
+            float particleSpeed
+    ) {
+        if (!(entity.level() instanceof net.minecraft.server.level.ServerLevel level)) {
+            return;
+        }
+
+        java.util.Random random = new java.util.Random();
+
+        Vec3 origin = entity.position().add(0.0D, entity.getBbHeight() * 0.5D, 0.0D);
+        Vec3 look = entity.getLookAngle().normalize();
+
+        int amount = Math.max(1, (int) (baseAmount * Math.max(1.0F, radius)));
+
+        net.minecraft.core.particles.ParticleOptions particle = getParticle(particleId);
+
+        for (int i = 0; i < amount; i++) {
+            Vec3 direction;
+
+            if (cone) {
+                direction = randomDirectionInCone(look, coneAngle, random);
+            } else {
+                direction = randomDirectionSphere(random);
+            }
+
+            Vec3 spawnPos = origin.add(direction.scale(0.4D));
+
+            level.sendParticles(
+                    particle,
+                    spawnPos.x,
+                    spawnPos.y,
+                    spawnPos.z,
+                    0,
+                    direction.x * particleSpeed,
+                    direction.y * particleSpeed,
+                    direction.z * particleSpeed,
+                    1.0D
+            );
+        }
+    }
+
+    private static net.minecraft.core.particles.ParticleOptions getParticle(String particleId) {
+        net.minecraft.resources.ResourceLocation id =
+                net.minecraft.resources.ResourceLocation.tryParse(particleId);
+
+        if (id == null) {
+            return net.minecraft.core.particles.ParticleTypes.POOF;
+        }
+
+        var particleType =
+                net.minecraft.core.registries.BuiltInRegistries.PARTICLE_TYPE.get(id);
+
+        if (particleType instanceof net.minecraft.core.particles.SimpleParticleType simple) {
+            return simple;
+        }
+
+        return net.minecraft.core.particles.ParticleTypes.POOF;
+    }
+
+    private static Vec3 randomDirectionSphere(java.util.Random random) {
+        double theta = random.nextDouble() * Math.PI * 2.0D;
+        double z = (random.nextDouble() * 2.0D) - 1.0D;
+        double root = Math.sqrt(1.0D - z * z);
+
+        return new Vec3(
+                root * Math.cos(theta),
+                z,
+                root * Math.sin(theta)
+        ).normalize();
+    }
+
+    private static Vec3 randomDirectionInCone(Vec3 forward, float coneAngle, java.util.Random random) {
+        double halfAngleRad = Math.toRadians(coneAngle / 2.0F);
+
+        double cosHalfAngle = Math.cos(halfAngleRad);
+        double cosTheta = cosHalfAngle + random.nextDouble() * (1.0D - cosHalfAngle);
+        double sinTheta = Math.sqrt(1.0D - cosTheta * cosTheta);
+        double phi = random.nextDouble() * Math.PI * 2.0D;
+
+        Vec3 up = Math.abs(forward.y) > 0.99D
+                ? new Vec3(1.0D, 0.0D, 0.0D)
+                : new Vec3(0.0D, 1.0D, 0.0D);
+
+        Vec3 right = forward.cross(up).normalize();
+        Vec3 actualUp = right.cross(forward).normalize();
+
+        return forward.scale(cosTheta)
+                .add(right.scale(Math.cos(phi) * sinTheta))
+                .add(actualUp.scale(Math.sin(phi) * sinTheta))
+                .normalize();
     }
 
     private static void runCommandsAsTarget(LivingEntity target, String[] commands) {
@@ -220,7 +360,8 @@ public class AOEDamageAbility extends Ability {
             LivingEntity entity,
             float radius,
             boolean dropBlocks,
-            boolean destroyBlocks
+            boolean destroyBlocks,
+            boolean createFire
     ) {
         if (!(entity.level() instanceof net.minecraft.server.level.ServerLevel level)) {
             return;
@@ -314,6 +455,38 @@ public class AOEDamageAbility extends Ability {
                 Math.min(4.0F, radius / 2.0F),
                 1.0F
         );
+
+        if (createFire && destroyBlocks) {
+
+            for (net.minecraft.core.BlockPos pos : net.minecraft.core.BlockPos.betweenClosed(
+                    center.offset(-r, -1, -r),
+                    center.offset(r, 1, r)
+            )) {
+
+                if (random.nextFloat() > 0.25F) {
+                    continue;
+                }
+
+                if (pos.distSqr(center) > radius * radius) {
+                    continue;
+                }
+
+                net.minecraft.core.BlockPos firePos = pos.above();
+
+                if (!level.getBlockState(firePos).isAir()) {
+                    continue;
+                }
+
+                if (level.getBlockState(pos).isAir()) {
+                    continue;
+                }
+
+                level.setBlockAndUpdate(
+                        firePos,
+                        net.minecraft.world.level.block.Blocks.FIRE.defaultBlockState()
+                );
+            }
+        }
     }
 
     @Override

@@ -418,7 +418,7 @@ public class EOPProjectileEntity extends ThrowableProjectile implements ItemSupp
             );
         }
 
-        if (explosionCausesFire) {
+        if (explosionCausesFire && EOPGameRules.isDestructionMode(this.level().getServer())) {
             placeFireAroundExplosion();
         }
 

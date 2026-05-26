@@ -42,6 +42,10 @@ public class EOPAbilities {
             ABILITIES.register("area_light", AreaLightAbility::new);
     public static final RegistrySupplier<Ability> INFINITY_OXYGEN =
             ABILITIES.register("infinite_oxygen", InfiniteAirAbility::new);
+    public static final RegistrySupplier<Ability> NO_MOVEMENT =
+            ABILITIES.register("no_movement", NoMovementAbility::new);
+    public static final RegistrySupplier<Ability> PARTICLE_PATTERN =
+            ABILITIES.register("particle_pattern", ParticlePatternAbility::new);
 
     public static void init() {
 

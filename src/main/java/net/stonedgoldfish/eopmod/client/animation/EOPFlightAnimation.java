@@ -15,6 +15,8 @@ public class EOPFlightAnimation extends PalladiumAnimation {
     private static final float SPRINT_ANIMATION_SPEED = 0.02F;
     private static final float MOVEMENT_SCALE = 8.0F;
     private static final float MOVEMENT_SMOOTHING = 0.10F;
+    private static final float VERTICAL_SCALE = 1.1F;
+    private static final float VERTICAL_PITCH_STRENGTH = 65F;
 
     private float previousAnimationProgress = 0.0F;
     private float animationProgress = 0.0F;
@@ -24,6 +26,7 @@ public class EOPFlightAnimation extends PalladiumAnimation {
 
     private float smoothForward = 0.0F;
     private float smoothStrafe = 0.0F;
+    private float smoothVertical = 0.0F;
 
     public EOPFlightAnimation(int priority) {
         super(priority);
@@ -81,15 +84,21 @@ public class EOPFlightAnimation extends PalladiumAnimation {
 
         float forward = (float) (motion.x * forwardX + motion.z * forwardZ);
         float strafe = (float) (motion.x * rightX + motion.z * rightZ);
+        float horizontalSpeed = (float) Math.sqrt(motion.x * motion.x + motion.z * motion.z);
+        float speedScale = horizontalSpeed > 0.0F ? 1.0F / horizontalSpeed : 1.0F;
+
+        float vertical = Mth.clamp((float) motion.y * VERTICAL_SCALE * speedScale, -1.0F, 1.0F);
 
         forward = Mth.clamp(forward * MOVEMENT_SCALE, -1.0F, 1.0F);
         strafe = Mth.clamp(strafe * MOVEMENT_SCALE, -1.0F, 1.0F);
 
         smoothForward = Mth.lerp(MOVEMENT_SMOOTHING, smoothForward, forward);
         smoothStrafe = Mth.lerp(MOVEMENT_SMOOTHING, smoothStrafe, strafe);
+        smoothVertical = Mth.lerp(MOVEMENT_SMOOTHING, smoothVertical, vertical);
 
         forward = smoothForward;
         strafe = smoothStrafe;
+        vertical = smoothVertical;
 
         float leftStrafe = Math.max(-strafe, 0.0F);
         float rightStrafe = Math.max(strafe, 0.0F);
@@ -120,6 +129,7 @@ public class EOPFlightAnimation extends PalladiumAnimation {
                 sprintAnim,
                 forward,
                 strafe,
+                vertical,
                 rightArmStrafeAmount,
                 leftArmStrafeAmount,
                 rightHanded,
@@ -135,6 +145,7 @@ public class EOPFlightAnimation extends PalladiumAnimation {
             float sprintAnim,
             float forward,
             float strafe,
+            float vertical,
             float rightArmStrafeAmount,
             float leftArmStrafeAmount,
             boolean rightHanded,
@@ -142,12 +153,34 @@ public class EOPFlightAnimation extends PalladiumAnimation {
             float attackY,
             float attackZ
     ) {
+        float bodyPitch = vertical * VERTICAL_PITCH_STRENGTH;
+        float bodyPitchRad = bodyPitch * Mth.DEG_TO_RAD;
+        float bodyY = Mth.lerp(
+                sprintAnim,
+                0F,
+                24F * (1F - Mth.cos(bodyPitchRad))
+        );
+        float bodyZ = Mth.lerp(
+                sprintAnim,
+                0F,
+                -24F * Mth.sin(bodyPitchRad)
+        );
+
+        float normalHeadX = 0F;
+        float sprintHeadX = vertical * 3F;
+
+        float headX = Mth.lerp(sprintAnim, normalHeadX, sprintHeadX);
         float headZ = Mth.lerp(sprintAnim, 0F, strafe * -8F);
 
         float chestX = Mth.lerp(sprintAnim, 0F, 75F);
-        float chestZ = Mth.lerp(sprintAnim, 0F, strafe * -12F);
-        float sprintArmTilt = strafe * -10F;
+        float chestZ = Mth.lerp(sprintAnim, 0F, strafe * -20F);
         float chestY = Mth.lerp(sprintAnim, 0F, 1F);
+
+        float sprintArmTilt = strafe * -10F;
+        float sprintArmYOffset = strafe * 2F;
+
+        float sprintLegTilt = strafe * -10F;
+        float sprintLegYOffset = strafe * 0.75F;
 
         float normalRightArmX = -10F + forward * -15F + (rightHanded ? attackX : 0F);
         float normalRightArmYRot = rightHanded ? attackY : 0F;
@@ -159,26 +192,14 @@ public class EOPFlightAnimation extends PalladiumAnimation {
 
         float rightArmX = Mth.lerp(sprintAnim, normalRightArmX, 75F);
         float rightArmYRot = Mth.lerp(sprintAnim, normalRightArmYRot, 0F);
-        float rightArmZRot = Mth.lerp(
-                sprintAnim,
-                normalRightArmZRot,
-                13F + sprintArmTilt
-        );
-        float sprintArmYOffset = strafe * 2F;
-        float sprintLegTilt = strafe * -10F;
-        float sprintLegYOffset = strafe * 0.75F;
-
-        float rightArmY = Mth.lerp(sprintAnim, 0F, 1F + sprintArmYOffset);
+        float rightArmZRot = Mth.lerp(sprintAnim, normalRightArmZRot, 13F + sprintArmTilt);
+        float rightArmY = Mth.lerp(sprintAnim, 2F, 1F + sprintArmYOffset);
         float rightArmZ = Mth.lerp(sprintAnim, 0F, 3F);
 
         float leftArmX = Mth.lerp(sprintAnim, normalLeftArmX, 75F);
         float leftArmYRot = Mth.lerp(sprintAnim, normalLeftArmYRot, 0F);
-        float leftArmZRot = Mth.lerp(
-                sprintAnim,
-                normalLeftArmZRot,
-                -13F + sprintArmTilt
-        );
-        float leftArmY = Mth.lerp(sprintAnim, 0F, 1F - sprintArmYOffset);
+        float leftArmZRot = Mth.lerp(sprintAnim, normalLeftArmZRot, -13F + sprintArmTilt);
+        float leftArmY = Mth.lerp(sprintAnim, 2F, 1F - sprintArmYOffset);
         float leftArmZ = Mth.lerp(sprintAnim, 0F, 3F);
 
         float normalRightLegX = forward * 10F;
@@ -188,34 +209,29 @@ public class EOPFlightAnimation extends PalladiumAnimation {
         float normalLeftLegZRot = -3F + strafe * 6F;
 
         float rightLegX = Mth.lerp(sprintAnim, normalRightLegX, 75F);
-        float rightLegZRot = Mth.lerp(
-                sprintAnim,
-                normalRightLegZRot,
-                13F + sprintLegTilt
-        );
-        float rightLegY = Mth.lerp(
-                sprintAnim,
-                12F,
-                4F + sprintLegYOffset
-        );
+        float rightLegZRot = Mth.lerp(sprintAnim, normalRightLegZRot, 13F + sprintLegTilt);
+        float rightLegY = Mth.lerp(sprintAnim, 12F, 4F + sprintLegYOffset);
         float rightLegZ = Mth.lerp(sprintAnim, 0F, 11F);
 
         float leftLegX = Mth.lerp(sprintAnim, normalLeftLegX, 75F);
-        float leftLegZRot = Mth.lerp(
-                sprintAnim,
-                normalLeftLegZRot,
-                -13F + sprintLegTilt
-        );
-        float leftLegY = Mth.lerp(
-                sprintAnim,
-                12F,
-                4F - sprintLegYOffset
-        );
+        float leftLegZRot = Mth.lerp(sprintAnim, normalLeftLegZRot, -13F + sprintLegTilt);
+        float leftLegY = Mth.lerp(sprintAnim, 12F, 4F - sprintLegYOffset);
         float leftLegZ = Mth.lerp(sprintAnim, 0F, 11F);
 
-        builder.get(PlayerModelPart.HEAD)
-                .setZRotShortestDegrees(headZ)
+        builder.get(PlayerModelPart.BODY)
+                .setXRotShortestDegrees(Mth.lerp(sprintAnim, 0F, bodyPitch))
+                .setYRotShortestDegrees(0F)
+                .setZRotShortestDegrees(0F)
+                .setY(bodyY)
+                .setZ(bodyZ)
                 .animate(Easing.INOUTCUBIC, anim);
+
+        if (sprintAnim > 0.0F) {
+            builder.get(PlayerModelPart.HEAD)
+                    .setXRotShortestDegrees(vertical * 3F)
+                    .setZRotShortestDegrees(headZ)
+                    .animate(Easing.INOUTCUBIC, anim * sprintAnim);
+        }
 
         builder.get(PlayerModelPart.CHEST)
                 .setXRotShortestDegrees(chestX)
