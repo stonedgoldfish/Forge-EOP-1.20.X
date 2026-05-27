@@ -24,6 +24,9 @@ import net.threetag.palladium.util.property.IntegerProperty;
 import net.threetag.palladium.util.property.PalladiumProperty;
 import net.threetag.palladium.util.property.StringArrayProperty;
 import net.threetag.palladium.util.property.StringProperty;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class SpawnArmorStandAbility extends Ability {
 
@@ -32,6 +35,9 @@ public class SpawnArmorStandAbility extends Ability {
 
     public static final PalladiumProperty<Boolean> SPAWN_AT_PLAYER =
             new BooleanProperty("spawn_at_player").configurable("If true, ignores raycast and spawns at the player's location.");
+
+    public static final PalladiumProperty<Boolean> FOLLOW_MOUSE =
+            new BooleanProperty("follow_mouse").configurable("If true, the armor stand follows the player's mouse/raycast position and dies on lastTick.");
 
     public static final PalladiumProperty<Integer> LIFETIME =
             new IntegerProperty("lifetime").configurable("Lifetime of the spawned armor stand in ticks. 0 = infinite.");
@@ -84,23 +90,14 @@ public class SpawnArmorStandAbility extends Ability {
     public static final PalladiumProperty<String[]> TARGET_LAST_TICK_COMMANDS =
             new StringArrayProperty("target_last_tick_commands").configurable("Commands executed once as each valid target when they leave the AOE.");
 
-    public static final PalladiumProperty<Boolean> SUCTION_PARTICLES =
-            new BooleanProperty("suction_particles")
-                    .configurable("Creates inward-moving particles around the summoned armor stand.");
-
-    public static final PalladiumProperty<Float> SUCTION_PARTICLE_RADIUS =
-            new FloatProperty("suction_particle_radius")
-                    .configurable("Radius around the armor stand where particles spawn.");
-
-    public static final PalladiumProperty<Integer> SUCTION_PARTICLE_COUNT =
-            new IntegerProperty("suction_particle_count")
-                    .configurable("Particles spawned per tick.");
+    private static final Map<UUID, ArmorStand> FOLLOWING_STANDS = new HashMap<>();
 
     public SpawnArmorStandAbility() {
         this.withProperty(ICON, new ItemIcon(Items.ARMOR_STAND));
 
         this.withProperty(RANGE, 5.0F);
         this.withProperty(SPAWN_AT_PLAYER, false);
+        this.withProperty(FOLLOW_MOUSE, false);
         this.withProperty(LIFETIME, 100);
 
         this.withProperty(AOE_DAMAGE, 0.0F);
@@ -125,9 +122,6 @@ public class SpawnArmorStandAbility extends Ability {
         this.withProperty(TARGET_COMMANDS, new String[]{});
         this.withProperty(TARGET_LAST_TICK_COMMANDS, new String[]{});
 
-        this.withProperty(SUCTION_PARTICLES, false);
-        this.withProperty(SUCTION_PARTICLE_RADIUS, 2.5F);
-        this.withProperty(SUCTION_PARTICLE_COUNT, 6);
     }
 
     @Override
@@ -177,6 +171,9 @@ public class SpawnArmorStandAbility extends Ability {
                 entry.getProperty(TARGET_COMMANDS),
                 entry.getProperty(TARGET_LAST_TICK_COMMANDS)
         );
+        if (entry.getProperty(FOLLOW_MOUSE)) {
+            FOLLOWING_STANDS.put(entity.getUUID(), armorStand);
+        }
 
         EOPForgeEvents.runStandCommands(armorStand, "EOPStandFirstTickCommands");
     }
@@ -226,38 +223,54 @@ public class SpawnArmorStandAbility extends Ability {
         return end;
     }
 
-    private static void spawnSuctionParticles(
-            ServerLevel level,
-            double centerX,
-            double centerY,
-            double centerZ,
-            float radius,
-            int count
-    ) {
-        for (int i = 0; i < count; i++) {
-            double angle = level.random.nextDouble() * Math.PI * 2.0D;
-            double height = (level.random.nextDouble() - 0.5D) * radius;
-            double distance = radius * (0.6D + level.random.nextDouble() * 0.4D);
+    @Override
+    public void tick(LivingEntity entity, AbilityInstance entry, IPowerHolder holder, boolean enabled) {
+        if (entity.level().isClientSide || !enabled) {
+            return;
+        }
 
-            double x = centerX + Math.cos(angle) * distance;
-            double y = centerY + height;
-            double z = centerZ + Math.sin(angle) * distance;
+        if (!entry.getProperty(FOLLOW_MOUSE)) {
+            return;
+        }
 
-            double motionX = (centerX - x) * 0.08D;
-            double motionY = (centerY - y) * 0.08D;
-            double motionZ = (centerZ - z) * 0.08D;
+        ArmorStand armorStand = FOLLOWING_STANDS.get(entity.getUUID());
 
-            level.sendParticles(
-                    ParticleTypes.SMOKE,
-                    x,
-                    y,
-                    z,
-                    0,
-                    motionX,
-                    motionY,
-                    motionZ,
-                    1.0D
-            );
+        if (armorStand == null || !armorStand.isAlive()) {
+            return;
+        }
+
+        Vec3 pos = entry.getProperty(SPAWN_AT_PLAYER)
+                ? entity.position()
+                : raycastSpawnPosition(entity, entry.getProperty(RANGE));
+
+        if (pos == null) {
+            return;
+        }
+
+        armorStand.setDeltaMovement(Vec3.ZERO);
+        armorStand.moveTo(
+                pos.x,
+                pos.y,
+                pos.z,
+                entity.getYRot(),
+                entity.getXRot()
+        );
+        armorStand.setYHeadRot(entity.getYRot());
+        armorStand.setYBodyRot(entity.getYRot());
+        armorStand.hurtMarked = true;
+    }
+
+    @Override
+    public void lastTick(LivingEntity entity, AbilityInstance entry, IPowerHolder holder, boolean enabled) {
+        if (entity.level().isClientSide) {
+            return;
+        }
+
+        ArmorStand armorStand = FOLLOWING_STANDS.remove(entity.getUUID());
+
+        if (armorStand != null && armorStand.isAlive()) {
+            EOPForgeEvents.runStandCommands(armorStand, "EOPStandLastTickCommands");
+            armorStand.discard();
         }
     }
 

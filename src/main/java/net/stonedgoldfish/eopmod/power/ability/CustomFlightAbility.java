@@ -32,9 +32,17 @@ public class CustomFlightAbility extends Ability {
     public static final PalladiumProperty<Boolean> ALLOW_SPRINT =
             new BooleanProperty("allow_sprint").configurable("Whether sprint flying is allowed.");
 
-    public record FlightSettings(float speed, float sprintMultiplier, float acceleration, float drag, boolean allowSprint) {}
+    public record FlightSettings(
+            float speed,
+            float sprintMultiplier,
+            float acceleration,
+            float drag,
+            boolean allowSprint
+    ) {}
 
-    private static final Map<UUID, FlightSettings> FLYING_PLAYERS = new HashMap<>();
+    private static final Map<UUID, FlightSettings> FLIGHT_SETTINGS = new HashMap<>();
+    private static final Map<UUID, Boolean> FLYING_STATE = new HashMap<>();
+    private static final Map<UUID, Boolean> INSTANT_CANCEL_ANIMATION = new HashMap<>();
 
     public CustomFlightAbility() {
         this.withProperty(ICON, new ItemIcon(Items.FEATHER));
@@ -49,30 +57,26 @@ public class CustomFlightAbility extends Ability {
     @Override
     public void firstTick(LivingEntity entity, AbilityInstance entry, IPowerHolder holder, boolean enabled) {
         if (!entity.level().isClientSide && enabled && entity instanceof Player player) {
-            enableFlight(player, entry);
+            enableFlightAbility(player, entry);
         }
     }
 
     @Override
     public void tick(LivingEntity entity, AbilityInstance entry, IPowerHolder holder, boolean enabled) {
         if (!entity.level().isClientSide && enabled && entity instanceof Player player) {
-            enableFlight(player, entry);
+            enableFlightAbility(player, entry);
         }
     }
 
     @Override
     public void lastTick(LivingEntity entity, AbilityInstance entry, IPowerHolder holder, boolean enabled) {
         if (!entity.level().isClientSide && entity instanceof Player player) {
-            disableFlight(player);
+            disableFlightAbility(player);
         }
     }
 
-    private static void enableFlight(Player player, AbilityInstance entry) {
-        player.getAbilities().mayfly = true;
-        player.getAbilities().setFlyingSpeed(0.0F);
-        player.onUpdateAbilities();
-
-        FLYING_PLAYERS.put(player.getUUID(), new FlightSettings(
+    private static void enableFlightAbility(Player player, AbilityInstance entry) {
+        FLIGHT_SETTINGS.put(player.getUUID(), new FlightSettings(
                 entry.getProperty(SPEED),
                 entry.getProperty(SPRINT_MULTIPLIER),
                 entry.getProperty(ACCELERATION),
@@ -81,23 +85,46 @@ public class CustomFlightAbility extends Ability {
         ));
     }
 
-    private static void disableFlight(Player player) {
-        FLYING_PLAYERS.remove(player.getUUID());
+    private static void disableFlightAbility(Player player) {
+        FLIGHT_SETTINGS.remove(player.getUUID());
+        FLYING_STATE.remove(player.getUUID());
 
-        if (!player.isCreative() && !player.isSpectator()) {
-            player.getAbilities().mayfly = false;
-            player.getAbilities().flying = false;
-            player.getAbilities().setFlyingSpeed(0.05F);
-            player.onUpdateAbilities();
-        }
+        player.setNoGravity(false);
     }
 
     public static boolean hasCustomFlight(Player player) {
-        return FLYING_PLAYERS.containsKey(player.getUUID());
+        return FLIGHT_SETTINGS.containsKey(player.getUUID());
     }
 
     public static FlightSettings getSettings(Player player) {
-        return FLYING_PLAYERS.get(player.getUUID());
+        return FLIGHT_SETTINGS.get(player.getUUID());
+    }
+
+    public static boolean isFlying(Player player) {
+        return FLYING_STATE.getOrDefault(player.getUUID(), false);
+    }
+
+    public static void setFlying(Player player, boolean flying) {
+        if (!hasCustomFlight(player)) {
+            flying = false;
+        }
+
+        boolean wasFlying = isFlying(player);
+
+        FLYING_STATE.put(player.getUUID(), flying);
+        player.setNoGravity(flying);
+
+        if (wasFlying && !flying && player.isShiftKeyDown()) {
+            INSTANT_CANCEL_ANIMATION.put(player.getUUID(), true);
+        }
+    }
+
+    public static boolean consumeInstantCancelAnimation(Player player) {
+        return INSTANT_CANCEL_ANIMATION.remove(player.getUUID()) != null;
+    }
+
+    public static void toggleFlying(Player player) {
+        setFlying(player, !isFlying(player));
     }
 
     @Override

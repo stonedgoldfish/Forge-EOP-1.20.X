@@ -13,8 +13,8 @@ public class EOPFlightAnimation extends PalladiumAnimation {
 
     private static final float ANIMATION_SPEED = 0.01F;
     private static final float SPRINT_ANIMATION_SPEED = 0.02F;
-    private static final float MOVEMENT_SCALE = 8.0F;
-    private static final float MOVEMENT_SMOOTHING = 0.10F;
+    private static final float MOVEMENT_SCALE = 6.0F;
+    private static final float MOVEMENT_SMOOTHING = 0.06F;
     private static final float VERTICAL_SCALE = 1.1F;
     private static final float VERTICAL_PITCH_STRENGTH = 65F;
 
@@ -48,8 +48,18 @@ public class EOPFlightAnimation extends PalladiumAnimation {
             return;
         }
 
-        boolean flying = player.getAbilities().flying;
+        boolean flying = CustomFlightAbility.isFlying(player);
         boolean sprintFlying = flying && player.isSprinting();
+
+        if (CustomFlightAbility.consumeInstantCancelAnimation(player)) {
+            animationProgress = 0.0F;
+            previousAnimationProgress = 0.0F;
+            return;
+        }
+
+        if (flying) {
+            model.crouching = false;
+        }
 
         previousAnimationProgress = animationProgress;
         animationProgress = Mth.clamp(
@@ -89,8 +99,8 @@ public class EOPFlightAnimation extends PalladiumAnimation {
 
         float vertical = Mth.clamp((float) motion.y * VERTICAL_SCALE * speedScale, -1.0F, 1.0F);
 
-        forward = Mth.clamp(forward * MOVEMENT_SCALE, -1.0F, 1.0F);
-        strafe = Mth.clamp(strafe * MOVEMENT_SCALE, -1.0F, 1.0F);
+        forward = Mth.clamp(forward * MOVEMENT_SCALE, -0.85F, 0.85F);
+        strafe = Mth.clamp(strafe * MOVEMENT_SCALE, -0.85F, 0.85F);
 
         smoothForward = Mth.lerp(MOVEMENT_SMOOTHING, smoothForward, forward);
         smoothStrafe = Mth.lerp(MOVEMENT_SMOOTHING, smoothStrafe, strafe);
@@ -224,13 +234,13 @@ public class EOPFlightAnimation extends PalladiumAnimation {
                 .setZRotShortestDegrees(0F)
                 .setY(bodyY)
                 .setZ(bodyZ)
-                .animate(Easing.INOUTCUBIC, anim);
+                .animate(Easing.OUTQUINT, anim);
 
         if (sprintAnim > 0.0F) {
             builder.get(PlayerModelPart.HEAD)
                     .setXRotShortestDegrees(vertical * 3F)
                     .setZRotShortestDegrees(headZ)
-                    .animate(Easing.INOUTCUBIC, anim * sprintAnim);
+                    .animate(Easing.OUTQUINT, anim * sprintAnim);
         }
 
         builder.get(PlayerModelPart.CHEST)
@@ -238,7 +248,7 @@ public class EOPFlightAnimation extends PalladiumAnimation {
                 .setYRotShortestDegrees(0F)
                 .setZRotShortestDegrees(chestZ)
                 .setY(chestY)
-                .animate(Easing.INOUTCUBIC, anim);
+                .animate(Easing.OUTQUINT, anim);
 
         builder.get(PlayerModelPart.RIGHT_ARM)
                 .setXRotShortestDegrees(rightArmX)
@@ -246,7 +256,7 @@ public class EOPFlightAnimation extends PalladiumAnimation {
                 .setZRotShortestDegrees(rightArmZRot)
                 .setY(rightArmY)
                 .setZ(rightArmZ)
-                .animate(Easing.INOUTCUBIC, anim);
+                .animate(Easing.OUTQUINT, anim);
 
         builder.get(PlayerModelPart.LEFT_ARM)
                 .setXRotShortestDegrees(leftArmX)
@@ -254,7 +264,7 @@ public class EOPFlightAnimation extends PalladiumAnimation {
                 .setZRotShortestDegrees(leftArmZRot)
                 .setY(leftArmY)
                 .setZ(leftArmZ)
-                .animate(Easing.INOUTCUBIC, anim);
+                .animate(Easing.OUTQUINT, anim);
 
         builder.get(PlayerModelPart.RIGHT_LEG)
                 .setXRotShortestDegrees(rightLegX)
@@ -262,7 +272,7 @@ public class EOPFlightAnimation extends PalladiumAnimation {
                 .setZRotShortestDegrees(rightLegZRot)
                 .setY(rightLegY)
                 .setZ(rightLegZ)
-                .animate(Easing.INOUTCUBIC, anim);
+                .animate(Easing.OUTQUINT, anim);
 
         builder.get(PlayerModelPart.LEFT_LEG)
                 .setXRotShortestDegrees(leftLegX)
@@ -270,6 +280,6 @@ public class EOPFlightAnimation extends PalladiumAnimation {
                 .setZRotShortestDegrees(leftLegZRot)
                 .setY(leftLegY)
                 .setZ(leftLegZ)
-                .animate(Easing.INOUTCUBIC, anim);
+                .animate(Easing.OUTQUINT, anim);
     }
 }

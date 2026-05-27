@@ -5,8 +5,11 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
 import net.minecraftforge.event.entity.living.*;
-import net.stonedgoldfish.eopmod.power.ability.GillsAbility;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.server.ServerStoppingEvent;
+import net.stonedgoldfish.eopmod.power.ability.*;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -26,16 +29,12 @@ import net.stonedgoldfish.eopmod.EOPMod;
 import net.stonedgoldfish.eopmod.power.EOPPalladiumProperties;
 import net.stonedgoldfish.eopmod.power.EOPPowerConstants;
 import net.stonedgoldfish.eopmod.power.EOPPowerRegistry;
-import net.stonedgoldfish.eopmod.power.ability.CustomFlightAbility;
-import net.stonedgoldfish.eopmod.power.ability.ImmuneToEffectAbility;
-import net.stonedgoldfish.eopmod.power.ability.NoNaturalRegenAbility;
 import net.stonedgoldfish.eopmod.util.EOPTargeting;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
-import net.stonedgoldfish.eopmod.power.ability.NoInteractionAbility;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingEvent;
-import net.stonedgoldfish.eopmod.power.ability.NoMovementAbility;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -117,13 +116,38 @@ public class EOPForgeEvents {
         EOPPalladiumProperties.setWaterBreathingExtra(player, player.getTags().contains("EOP.Extra.Water.Breathing"));
         EOPPalladiumProperties.setFrostWalkerExtra(player, player.getTags().contains("EOP.Extra.Frost.Walker"));
 
-        if (!CustomFlightAbility.hasCustomFlight(player)) {
-            return;
+        if (CustomFlightAbility.hasCustomFlight(player) && CustomFlightAbility.isFlying(player)) {
+            player.setNoGravity(true);
+            player.fallDistance = 0.0F;
+        } else {
+            player.setNoGravity(false);
+        }
+
+    }
+
+    @SubscribeEvent
+    public static void onServerStopping(ServerStoppingEvent event) {
+        AreaLightAbility.removeAllLights(event.getServer());
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
+        if (event.getEntity().level() instanceof ServerLevel level) {
+            AreaLightAbility.removeLights(level, event.getEntity().getUUID());
+        }
+    }
+    @SubscribeEvent
+    public static void onEntityLeaveLevel(EntityLeaveLevelEvent event) {
+        if (event.getLevel() instanceof ServerLevel level) {
+            AreaLightAbility.removeLights(level, event.getEntity().getUUID());
         }
     }
 
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent event) {
+        if (event.getEntity().level() instanceof ServerLevel level) {
+            AreaLightAbility.removeLights(level, event.getEntity().getUUID());
+        }
         if (!(event.getSource().getEntity() instanceof ServerPlayer player)) {
             return;
         }

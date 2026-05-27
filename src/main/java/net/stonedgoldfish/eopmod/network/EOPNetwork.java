@@ -40,5 +40,12 @@ public class EOPNetwork {
                 ToggleBattleModePacket::decode,
                 ToggleBattleModePacket::handle
         );
+        CHANNEL.registerMessage(
+                packetId++,
+                ToggleCustomFlightPacket.class,
+                ToggleCustomFlightPacket::encode,
+                ToggleCustomFlightPacket::decode,
+                ToggleCustomFlightPacket::handle
+        );
     }
 }

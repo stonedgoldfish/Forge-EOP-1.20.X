@@ -9,16 +9,21 @@ import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.client.sounds.WeighedSoundEvents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.stonedgoldfish.eopmod.EOPMod;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
+import net.stonedgoldfish.eopmod.client.sound.EOPFlightSound;
+import net.stonedgoldfish.eopmod.client.sound.EOPFlightSoundHandler;
 import net.stonedgoldfish.eopmod.effect.EOPEffects;
 import net.minecraft.client.player.LocalPlayer;
 import net.stonedgoldfish.eopmod.client.animation.EOPAnimationHandler;
 import net.stonedgoldfish.eopmod.client.animation.EOPFlightAnimation;
 import net.stonedgoldfish.eopmod.client.animation.EOPPlayerAnimation;
+import net.stonedgoldfish.eopmod.network.EOPNetwork;
+import net.stonedgoldfish.eopmod.network.ToggleCustomFlightPacket;
 import net.threetag.palladium.client.screen.power.PowersScreen;
 import net.threetag.palladium.event.PalladiumClientEvents;
 import net.stonedgoldfish.eopmod.power.EOPPalladiumProperties;
@@ -62,6 +67,8 @@ public class EOPClientEvents {
     private static final ResourceLocation DIFFICULTY_ICON =
             ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "textures/gui/ability_bars/power_gui/icon_difficulty.png");
 
+    private static boolean wasSprintFlying = false;
+
     public static void init() {
         PalladiumClientEvents.RENDER_POWER_SCREEN.register(EOPClientEvents::renderPowerScreen);
 
@@ -70,7 +77,7 @@ public class EOPClientEvents {
         PalladiumClientEvents.REGISTER_ANIMATIONS.register(registry -> {
             registry.accept(
                     ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "player_animation"),
-                    new EOPPlayerAnimation(1200)
+                    new EOPPlayerAnimation(1400)
             );
             registry.accept(
                     ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "flight_animation"),
@@ -821,6 +828,10 @@ public class EOPClientEvents {
         }
     }
 
+    private static boolean wasJumpDown = false;
+    private static long lastJumpPressTime = 0L;
+    private static EOPFlightSound flightSound = null;
+
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END) {
@@ -836,8 +847,44 @@ public class EOPClientEvents {
             return;
         }
 
-        if (!CustomFlightAbility.hasCustomFlight(player) || !player.getAbilities().flying) {
+        if (CustomFlightAbility.isFlying(player) && player.onGround()) {
+            EOPNetwork.CHANNEL.sendToServer(new ToggleCustomFlightPacket());
             return;
+        }
+
+        boolean jumpDown = minecraft.options.keyJump.isDown();
+
+        if (jumpDown && !wasJumpDown) {
+            long now = System.currentTimeMillis();
+
+            if (now - lastJumpPressTime <= 300L && CustomFlightAbility.hasCustomFlight(player)) {
+                EOPNetwork.CHANNEL.sendToServer(new ToggleCustomFlightPacket());
+                lastJumpPressTime = 0L;
+            } else {
+                lastJumpPressTime = now;
+            }
+        }
+
+        wasJumpDown = jumpDown;
+
+        if (!CustomFlightAbility.hasCustomFlight(player) || !CustomFlightAbility.isFlying(player)) {
+            return;
+        }
+
+        boolean sprintFlying = CustomFlightAbility.isFlying(player)
+                && player.isSprinting()
+                && minecraft.options.keyUp.isDown();
+
+        if (sprintFlying && !wasSprintFlying) {
+            EOPFlightSoundHandler.start(player);
+        }
+
+        wasSprintFlying = sprintFlying;
+        player.input.shiftKeyDown = false;
+        player.setShiftKeyDown(false);
+        player.setPose(net.minecraft.world.entity.Pose.STANDING);
+        if (player.getAbilities().flying) {
+            player.getAbilities().flying = false;
         }
 
         CustomFlightAbility.FlightSettings settings = CustomFlightAbility.getSettings(player);
@@ -854,18 +901,18 @@ public class EOPClientEvents {
             speed *= settings.sprintMultiplier();
         }
 
-        double verticalSpeed = player.isSprinting()
-                ? speed * 0.3D
-                : speed * 2.6D;
+        double verticalKeySpeed = player.isSprinting()
+                ? settings.speed() * 0.15D
+                : settings.speed() * 0.45D;
 
-// Up
+        double verticalInput = 0.0D;
+
         if (minecraft.options.keyJump.isDown()) {
-            motion = motion.add(0.0D, verticalSpeed, 0.0D);
+            verticalInput += verticalKeySpeed;
         }
 
-// Down
         if (minecraft.options.keyShift.isDown()) {
-            motion = motion.add(0.0D, -verticalSpeed, 0.0D);
+            verticalInput -= verticalKeySpeed;
         }
 
         if (minecraft.options.keyUp.isDown()) {
@@ -907,19 +954,37 @@ public class EOPClientEvents {
                 : settings.acceleration();
 
         if (moving) {
-            player.setDeltaMovement(currentMotion.lerp(motion, acceleration));
+            Vec3 horizontalAndLookMotion = new Vec3(motion.x, motion.y, motion.z);
+
+            if (horizontalAndLookMotion.lengthSqr() > 0.0D) {
+                horizontalAndLookMotion = horizontalAndLookMotion.normalize().scale(speed);
+            }
+
+            player.setDeltaMovement(
+                    horizontalAndLookMotion.x,
+                    horizontalAndLookMotion.y + verticalInput,
+                    horizontalAndLookMotion.z
+            );
         } else {
             double currentSpeed = currentMotion.length();
+
             double speedDragPenalty = Math.min(currentSpeed * 0.08D, 0.25D);
             double baseDrag = Math.min(settings.drag(), 1.0D);
             double dynamicDrag = baseDrag - speedDragPenalty;
 
             dynamicDrag = Math.max(dynamicDrag, 0.65D);
 
-            player.setDeltaMovement(currentMotion.scale(dynamicDrag));
-            if (!minecraft.options.keyJump.isDown()) {
-                player.fallDistance += (float)Math.max(-player.getDeltaMovement().y, 0.0D);
-            }
+// Horizontal keeps your normal glide
+            double horizontalDrag = dynamicDrag;
+
+// Vertical stops much faster
+            double verticalDrag = 0.65D;
+
+            player.setDeltaMovement(
+                    currentMotion.x * horizontalDrag,
+                    currentMotion.y * verticalDrag,
+                    currentMotion.z * horizontalDrag
+            );
         }
     }
 }

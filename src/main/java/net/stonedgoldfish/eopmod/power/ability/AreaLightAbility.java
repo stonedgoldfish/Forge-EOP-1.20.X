@@ -1,6 +1,7 @@
 package net.stonedgoldfish.eopmod.power.ability;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Items;
@@ -14,7 +15,11 @@ import net.threetag.palladium.util.icon.ItemIcon;
 import net.threetag.palladium.util.property.IntegerProperty;
 import net.threetag.palladium.util.property.PalladiumProperty;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 public class AreaLightAbility extends Ability {
 
@@ -37,7 +42,7 @@ public class AreaLightAbility extends Ability {
 
         UUID uuid = entity.getUUID();
 
-        if (!enabled) {
+        if (!enabled || entity.isRemoved() || !entity.isAlive()) {
             removeLights(level, uuid);
             return;
         }
@@ -53,17 +58,17 @@ public class AreaLightAbility extends Ability {
                 center.offset(-1, -1, -1),
                 center.offset(1, 1, 1)
         )) {
-            BlockPos immutablePos = pos.immutable();
-            BlockState state = level.getBlockState(immutablePos);
+            BlockPos lightPos = pos.immutable();
+            BlockState state = level.getBlockState(lightPos);
 
             if (isAir(state) || state.is(Blocks.LIGHT)) {
                 level.setBlock(
-                        immutablePos,
+                        lightPos,
                         Blocks.LIGHT.defaultBlockState().setValue(LightBlock.LEVEL, lightLevel),
                         3
                 );
 
-                newLights.add(immutablePos);
+                newLights.add(lightPos);
             }
         }
 
@@ -83,13 +88,7 @@ public class AreaLightAbility extends Ability {
         }
     }
 
-    private static boolean isAir(BlockState state) {
-        return state.is(Blocks.AIR)
-                || state.is(Blocks.CAVE_AIR)
-                || state.is(Blocks.VOID_AIR);
-    }
-
-    private static void removeLights(ServerLevel level, UUID uuid) {
+    public static void removeLights(ServerLevel level, UUID uuid) {
         Set<BlockPos> lights = PLACED_LIGHTS.remove(uuid);
 
         if (lights == null) {
@@ -101,6 +100,26 @@ public class AreaLightAbility extends Ability {
                 level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
             }
         }
+    }
+
+    public static void removeAllLights(MinecraftServer server) {
+        for (ServerLevel level : server.getAllLevels()) {
+            for (Set<BlockPos> lights : PLACED_LIGHTS.values()) {
+                for (BlockPos pos : lights) {
+                    if (level.getBlockState(pos).is(Blocks.LIGHT)) {
+                        level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+                    }
+                }
+            }
+        }
+
+        PLACED_LIGHTS.clear();
+    }
+
+    private static boolean isAir(BlockState state) {
+        return state.is(Blocks.AIR)
+                || state.is(Blocks.CAVE_AIR)
+                || state.is(Blocks.VOID_AIR);
     }
 
     @Override
