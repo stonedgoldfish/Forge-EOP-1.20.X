@@ -64,6 +64,28 @@ public class EOPForgeEvents {
     }
 
     @SubscribeEvent
+    public static void onLivingTick(LivingEvent.LivingTickEvent event) {
+
+        LivingEntity entity = event.getEntity();
+
+        // ONLY RUN SERVER SIDE
+        if (entity.level().isClientSide()) {
+            return;
+        }
+
+        boolean shouldBeLiving =
+                !(entity instanceof ArmorStand)
+                        && !entity.getTags().contains("EOP.Not.Living");
+
+        Boolean current = EOPPalladiumProperties.LIVING_CREATURE.get(entity);
+
+        // extra null safety
+        if (current == null || current != shouldBeLiving) {
+            EOPPalladiumProperties.LIVING_CREATURE.set(entity, shouldBeLiving);
+        }
+    }
+
+    @SubscribeEvent
     public static void onRenderGuiOverlayPre(RenderGuiOverlayEvent.Pre event) {
         if (event.getOverlay() == VanillaGuiOverlay.FOOD_LEVEL.type()) {
             Minecraft minecraft = Minecraft.getInstance();
@@ -389,7 +411,7 @@ public class EOPForgeEvents {
         }
     }
 
-    private static boolean hasEopPower(ServerPlayer player, String powerKey) {
+    static boolean hasEopPower(ServerPlayer player, String powerKey) {
         ResourceLocation powerId = ResourceLocation.fromNamespaceAndPath("eop", powerKey);
 
         return net.threetag.palladium.power.SuperpowerUtil.hasSuperpower(player, powerId);

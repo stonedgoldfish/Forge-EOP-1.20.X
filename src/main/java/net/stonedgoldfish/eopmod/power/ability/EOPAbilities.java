@@ -46,6 +46,8 @@ public class EOPAbilities {
             ABILITIES.register("no_movement", NoMovementAbility::new);
     public static final RegistrySupplier<Ability> PARTICLE_PATTERN =
             ABILITIES.register("particle_pattern", ParticlePatternAbility::new);
+    public static final RegistrySupplier<Ability> ENERGY_REGEN =
+            ABILITIES.register("energy_regen", EnergyRegenAbility::new);
 
     public static void init() {
 

@@ -15,6 +15,8 @@ public class EOPPalladiumProperties {
     private static final Map<String, PalladiumProperty<Integer>> XP_PROPERTIES = new HashMap<>();
     private static final Map<String, PalladiumProperty<Integer>> LEVEL_PROPERTIES = new HashMap<>();
     private static final Map<String, PalladiumProperty<Integer>> SKILL_POINT_PROPERTIES = new HashMap<>();
+    private static final Map<String, PalladiumProperty<Integer>> ENERGY_PROPERTIES = new HashMap<>();
+    public static final PalladiumProperty<Boolean> LIVING_CREATURE = new BooleanProperty("EOP.LivingCreature");
     private static final PalladiumProperty<Boolean> CLIMB_EXTRA = new BooleanProperty("eop_climb_extra");
     public static final PalladiumProperty<Boolean> NIGHT_VISION_EXTRA = new BooleanProperty("eop_night_vision_extra");
     public static final PalladiumProperty<Boolean> SMELTING_EXTRA = new BooleanProperty("eop_smelting_extra");
@@ -47,9 +49,23 @@ public class EOPPalladiumProperties {
                     handler.register(LIGHT_EXTRA, false);
                     handler.register(WATER_BREATHING_EXTRA, false);
                     handler.register(FROST_WALKER_EXTRA, false);
+                    if (!power.energy()) {
+                        continue;
+                    }
+                    handler.register(getOrCreateEnergyProperty(power.key()), 0);
                 }
             }
+            if (handler.getEntity() instanceof net.minecraft.world.entity.LivingEntity) {
+                handler.register(EOPPalladiumProperties.LIVING_CREATURE, true);
+            }
         });
+    }
+
+    public static PalladiumProperty<Integer> getOrCreateEnergyProperty(String powerKey) {
+        return ENERGY_PROPERTIES.computeIfAbsent(
+                powerKey,
+                key -> new IntegerProperty(getEnergyPropertyName(key))
+        );
     }
 
     public static PalladiumProperty<Integer> getOrCreateXpProperty(String powerKey) {
@@ -75,6 +91,10 @@ public class EOPPalladiumProperties {
 
     public static String getSkillPointPropertyName(String powerKey) {
         return "eop_" + powerKey + "_skill_points";
+    }
+
+    public static String getEnergyPropertyName(String powerKey) {
+        return "eop_" + powerKey + "_energy";
     }
 
     public static int getSkillPoints(Entity entity, String powerKey) {
@@ -107,6 +127,14 @@ public class EOPPalladiumProperties {
 
     public static void setLevel(Entity entity, String powerKey, int level) {
         getOrCreateLevelProperty(powerKey).set(entity, level);
+    }
+
+    public static int getEnergy(Entity entity, String powerKey) {
+        return getOrCreateEnergyProperty(powerKey).get(entity);
+    }
+
+    public static void setEnergy(Entity entity, String powerKey, int amount) {
+        getOrCreateEnergyProperty(powerKey).set(entity, amount);
     }
 
     public static boolean hasClimbExtra(net.minecraft.world.entity.Entity entity) {return CLIMB_EXTRA.get(entity);}

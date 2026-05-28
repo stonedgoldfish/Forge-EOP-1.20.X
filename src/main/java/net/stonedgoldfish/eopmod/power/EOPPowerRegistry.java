@@ -10,7 +10,7 @@ public class EOPPowerRegistry {
             String display,
             String key,
             int weight,
-            String score,
+            boolean energy,
             int titleColor,
             String powerClass,
             String subclass,
@@ -22,19 +22,19 @@ public class EOPPowerRegistry {
     private static final Map<String, EOPPower> BY_KEY = new HashMap<>();
 
     static {
-        register("Astral_Energy_Manipulation", "beyonder", 5, "AEM", 0xf7ff00, "Controller", "Zoner", "Melee/Ranged", "Easy");
-        register("Plane_Manipulation", "drifter", 2, "PM", 0xccffcc, "Controller", "Disrupter", "Ranged", "Easy");
-        register("Diamond_Mimicry", "fortress", 5, "DM", 0x00EDE8, "Tank", "Defender", "Melee", "Easy");
-        register("Hypervelocity", "speedster", 5, "HV", 0x5994FF, "Assassin", "Scout", "Melee", "Easy");
-        register("Neogenesis", "mender", 10, "NG", 0xFA82FF, "Support", "Healer", "Melee", "Easy");
-        register("Hydrokinesis", "marine", 10, "HK", 0x534FFF, "Support", "Adaptable", "Melee/Ranged", "Easy");
+        register("Astral_Energy_Manipulation", "beyonder", 5, true, 0xf7ff00, "Controller", "Zoner", "Melee/Ranged", "Easy");
+        register("Plane_Manipulation", "drifter", 2, true, 0xccffcc, "Controller", "Disrupter", "Ranged", "Easy");
+        register("Diamond_Mimicry", "fortress", 5, false, 0x00EDE8, "Tank", "Defender", "Melee", "Easy");
+        register("Hypervelocity", "speedster", 5, true, 0x5994FF, "Assassin", "Scout", "Melee", "Easy");
+        register("Neogenesis", "mender", 10, true, 0xFA82FF, "Support", "Healer", "Melee", "Easy");
+        register("Hydrokinesis", "marine", 10, true, 0x534FFF, "Support", "Adaptable", "Melee/Ranged", "Easy");
     }
 
     private static void register(
             String display,
             String key,
             int weight,
-            String score,
+            boolean energy,
             int titleColor,
             String powerClass,
             String subclass,
@@ -45,7 +45,7 @@ public class EOPPowerRegistry {
                 display,
                 key,
                 weight,
-                score,
+                energy,
                 titleColor,
                 powerClass,
                 subclass,
@@ -69,14 +69,14 @@ public class EOPPowerRegistry {
         return BY_KEY.containsKey(key);
     }
 
-    public static String getScoreKey(String key) {
-        EOPPower power = getByKey(key);
-        return power != null && power.score() != null ? power.score() : key;
-    }
-
     public static int getTitleColor(String key) {
         EOPPower power = getByKey(key);
         return power != null ? power.titleColor() : 0xFFFFFF;
+    }
+
+    public static boolean hasEnergySystem(String key) {
+        EOPPower power = getByKey(key);
+        return power != null && power.energy();
     }
 
     public static EOPPower getRandomWeighted(RandomSource random) {

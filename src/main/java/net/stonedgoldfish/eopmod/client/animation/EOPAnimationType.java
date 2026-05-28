@@ -1,21 +1,21 @@
 package net.stonedgoldfish.eopmod.client.animation;
 
 public enum EOPAnimationType {
-    NONE,
-    DASH_FRONT,
-    DASH_LEFT,
-    DASH_RIGHT,
-    DASH_BACK,
-    RIGHT_ARM_SWIPE,
-    SHOOT,
-    TRANSFORM,
-    FLIGHT_IDLE,
-    FLIGHT_FORWARD,
-    FLIGHT_BACK,
-    FLIGHT_LEFT,
-    FLIGHT_RIGHT,
-    FLIGHT_SPRINT_FORWARD,
-    FLIGHT_SPRINT_LEFT,
-    FLIGHT_SPRINT_RIGHT
+    NONE(EOPAnimationPlaybackType.ONE_SHOT),
 
+    DASH_FRONT(EOPAnimationPlaybackType.ONE_SHOT),
+    DASH_LEFT(EOPAnimationPlaybackType.ONE_SHOT),
+    DASH_RIGHT(EOPAnimationPlaybackType.ONE_SHOT),
+    DASH_BACK(EOPAnimationPlaybackType.ONE_SHOT),
+
+    RIGHT_ARM_SWIPE(EOPAnimationPlaybackType.ONE_SHOT),
+    SHOOT(EOPAnimationPlaybackType.ONE_SHOT),
+
+    TRANSFORM(EOPAnimationPlaybackType.TWO_PHASE);
+
+    public final EOPAnimationPlaybackType playbackType;
+
+    EOPAnimationType(EOPAnimationPlaybackType playbackType) {
+        this.playbackType = playbackType;
+    }
 }

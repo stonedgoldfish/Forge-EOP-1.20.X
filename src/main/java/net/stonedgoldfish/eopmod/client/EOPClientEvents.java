@@ -688,7 +688,7 @@ public class EOPClientEvents {
         int screenWidth = minecraft.getWindow().getGuiScaledWidth();
         int screenHeight = minecraft.getWindow().getGuiScaledHeight();
 
-        float maxOpacity = 0.4F;
+        float maxOpacity = 0.85F;
         float opacity = maxOpacity * lunarCloakTintProgress;
 
         int alpha = (int)(opacity * 255.0F);

@@ -180,6 +180,40 @@ public class EOPCommands {
                                 }))
         );
 
+        gamerule.then(
+                Commands.literal("infiniteEnergy")
+
+                        .executes(ctx -> {
+                            boolean current = EOPGameRules.isInfiniteEnergy(ctx.getSource().getServer());
+
+                            ctx.getSource().sendSuccess(
+                                    () -> Component.literal(
+                                            "Gamerule infiniteEnergy is currently set to: " + current
+                                    ),
+                                    false
+                            );
+
+                            return 1;
+                        })
+
+                        .then(Commands.argument("value", BoolArgumentType.bool())
+                                .executes(ctx -> {
+
+                                    boolean value = BoolArgumentType.getBool(ctx, "value");
+
+                                    EOPGameRules.setInfiniteEnergy(ctx.getSource().getServer(), value);
+
+                                    ctx.getSource().sendSuccess(
+                                            () -> Component.literal(
+                                                    "Gamerule infiniteEnergy is now set to: " + value
+                                            ),
+                                            true
+                                    );
+
+                                    return 1;
+                                }))
+        );
+
         root.then(gamerule);
 
         dispatcher.register(root);

@@ -9,6 +9,7 @@ public class EOPWorldData extends SavedData {
     private static final String NAME = "echoesofpower_data";
 
     private boolean destructionMode = true;
+    private boolean infiniteEnergy = false;
 
     public static EOPWorldData get(ServerLevel level) {
         return level.getDataStorage().computeIfAbsent(
@@ -40,6 +41,13 @@ public class EOPWorldData extends SavedData {
 
     public void setDestructionMode(boolean value) {
         this.destructionMode = value;
+        this.setDirty();
+    }
+
+    public boolean isInfiniteEnergy() { return infiniteEnergy; }
+
+    public void setInfiniteEnergy(boolean value) {
+        this.infiniteEnergy = value;
         this.setDirty();
     }
 }

@@ -72,9 +72,17 @@ public class EOPPlayerAnimation extends PalladiumAnimation {
 
             case TRANSFORM -> {
                 if (firstPerson) {
-                    TransformAnimation.animateFirstPerson(builder, anim);
+                    TransformAnimation.animateFirstPerson(
+                            builder,
+                            EOPAnimationHandler.getPhase(),
+                            anim
+                    );
                 } else {
-                    TransformAnimation.animate(builder, anim);
+                    TransformAnimation.animate(
+                            builder,
+                            EOPAnimationHandler.getPhase(),
+                            anim
+                    );
                 }
             }
 
