@@ -11,7 +11,9 @@ public enum EOPAnimationType {
     RIGHT_ARM_SWIPE(EOPAnimationPlaybackType.ONE_SHOT),
     SHOOT(EOPAnimationPlaybackType.ONE_SHOT),
 
-    TRANSFORM(EOPAnimationPlaybackType.TWO_PHASE);
+    TRANSFORM(EOPAnimationPlaybackType.TWO_PHASE),
+
+    RIGHT_ARM_HOLD(EOPAnimationPlaybackType.HOLD);
 
     public final EOPAnimationPlaybackType playbackType;
 

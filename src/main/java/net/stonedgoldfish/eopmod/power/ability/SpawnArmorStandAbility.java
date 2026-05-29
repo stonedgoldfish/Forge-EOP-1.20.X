@@ -1,6 +1,7 @@
 package net.stonedgoldfish.eopmod.power.ability;
 
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
@@ -90,6 +91,18 @@ public class SpawnArmorStandAbility extends Ability {
     public static final PalladiumProperty<String[]> TARGET_LAST_TICK_COMMANDS =
             new StringArrayProperty("target_last_tick_commands").configurable("Commands executed once as each valid target when they leave the AOE.");
 
+    public static final PalladiumProperty<String> LOOPING_SOUND =
+            new StringProperty("looping_sound")
+                    .configurable("Sound played repeatedly from the armor stand. Empty = none.");
+
+    public static final PalladiumProperty<Float> LOOPING_SOUND_VOLUME =
+            new FloatProperty("looping_sound_volume")
+                    .configurable("Volume of the looping armor stand sound.");
+
+    public static final PalladiumProperty<Float> LOOPING_SOUND_PITCH =
+            new FloatProperty("looping_sound_pitch")
+                    .configurable("Pitch of the looping armor stand sound.");
+
     private static final Map<UUID, ArmorStand> FOLLOWING_STANDS = new HashMap<>();
 
     public SpawnArmorStandAbility() {
@@ -121,6 +134,10 @@ public class SpawnArmorStandAbility extends Ability {
         this.withProperty(TARGET_FIRST_TICK_COMMANDS, new String[]{});
         this.withProperty(TARGET_COMMANDS, new String[]{});
         this.withProperty(TARGET_LAST_TICK_COMMANDS, new String[]{});
+
+        this.withProperty(LOOPING_SOUND, "");
+        this.withProperty(LOOPING_SOUND_VOLUME, 1.0F);
+        this.withProperty(LOOPING_SOUND_PITCH, 1.0F);
 
     }
 
@@ -169,8 +186,24 @@ public class SpawnArmorStandAbility extends Ability {
                 entry.getProperty(STAND_LAST_TICK_COMMANDS),
                 entry.getProperty(TARGET_FIRST_TICK_COMMANDS),
                 entry.getProperty(TARGET_COMMANDS),
-                entry.getProperty(TARGET_LAST_TICK_COMMANDS)
+                entry.getProperty(TARGET_LAST_TICK_COMMANDS),
+                entry.getProperty(LOOPING_SOUND),
+                entry.getProperty(LOOPING_SOUND_VOLUME),
+                entry.getProperty(LOOPING_SOUND_PITCH)
         );
+        ResourceLocation sound = ResourceLocation.tryParse(entry.getProperty(LOOPING_SOUND));
+
+        if (sound != null && !entry.getProperty(LOOPING_SOUND).isEmpty()) {
+            net.stonedgoldfish.eopmod.network.EOPNetwork.CHANNEL.send(
+                    net.minecraftforge.network.PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> armorStand),
+                    new net.stonedgoldfish.eopmod.network.PlayArmorStandLoopingSoundPacket(
+                            armorStand.getId(),
+                            sound,
+                            entry.getProperty(LOOPING_SOUND_VOLUME),
+                            entry.getProperty(LOOPING_SOUND_PITCH)
+                    )
+            );
+        }
         if (entry.getProperty(FOLLOW_MOUSE)) {
             FOLLOWING_STANDS.put(entity.getUUID(), armorStand);
         }

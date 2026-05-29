@@ -16,69 +16,64 @@ import java.util.UUID;
 
 public class NoMovementAbility extends Ability {
 
-    private static final UUID NO_MOVEMENT_SPEED_UUID =
-            UUID.fromString("9f44f29e-3d7e-4e0f-8b53-d5d7d1d8a901");
+    private static final UUID NO_MOVEMENT_MODIFIER_UUID =
+            UUID.fromString("0b12f4ce-9b7d-4d5c-9b78-2206d34c43ef");
 
-    private static final AttributeModifier NO_MOVEMENT_SPEED_MODIFIER =
+    private static final AttributeModifier NO_MOVEMENT_MODIFIER =
             new AttributeModifier(
-                    NO_MOVEMENT_SPEED_UUID,
-                    "No movement ability",
-                    -1.0D,
-                    AttributeModifier.Operation.MULTIPLY_TOTAL
+                    NO_MOVEMENT_MODIFIER_UUID,
+                    "EOP no movement",
+                    -1000.0D,
+                    AttributeModifier.Operation.MULTIPLY_BASE
             );
 
     private static final Set<UUID> FROZEN_PLAYERS = new HashSet<>();
 
     public NoMovementAbility() {
-        this.withProperty(ICON, new ItemIcon(Items.ICE));
-    }
-
-    @Override
-    public void firstTick(LivingEntity entity, AbilityInstance entry, IPowerHolder holder, boolean enabled) {
-        if (!entity.level().isClientSide && enabled && entity instanceof Player player) {
-            freeze(player);
-        }
+        this.withProperty(ICON, new ItemIcon(Items.COBWEB));
     }
 
     @Override
     public void tick(LivingEntity entity, AbilityInstance entry, IPowerHolder holder, boolean enabled) {
-        if (!entity.level().isClientSide && enabled && entity instanceof Player player) {
-            freeze(player);
 
-            player.setDeltaMovement(
-                    0.0D,
-                    Math.min(player.getDeltaMovement().y, 0.0D),
-                    0.0D
-            );
+        if (!(entity instanceof Player player)) {
+            return;
+        }
 
-            player.hurtMarked = true;
+        var speedAttribute = player.getAttribute(Attributes.MOVEMENT_SPEED);
+
+        if (speedAttribute == null) {
+            return;
+        }
+
+        if (enabled) {
+            FROZEN_PLAYERS.add(player.getUUID());
+
+            if (!speedAttribute.hasModifier(NO_MOVEMENT_MODIFIER)) {
+                speedAttribute.addTransientModifier(NO_MOVEMENT_MODIFIER);
+            }
+        } else {
+            FROZEN_PLAYERS.remove(player.getUUID());
+
+            if (speedAttribute.hasModifier(NO_MOVEMENT_MODIFIER)) {
+                speedAttribute.removeModifier(NO_MOVEMENT_MODIFIER_UUID);
+            }
         }
     }
 
     @Override
     public void lastTick(LivingEntity entity, AbilityInstance entry, IPowerHolder holder, boolean enabled) {
-        if (!entity.level().isClientSide && entity instanceof Player player) {
-            unfreeze(player);
+
+        if (!(entity instanceof Player player)) {
+            return;
         }
-    }
 
-    private static void freeze(Player player) {
-        FROZEN_PLAYERS.add(player.getUUID());
-
-        var attribute = player.getAttribute(Attributes.MOVEMENT_SPEED);
-
-        if (attribute != null && !attribute.hasModifier(NO_MOVEMENT_SPEED_MODIFIER)) {
-            attribute.addTransientModifier(NO_MOVEMENT_SPEED_MODIFIER);
-        }
-    }
-
-    private static void unfreeze(Player player) {
         FROZEN_PLAYERS.remove(player.getUUID());
 
-        var attribute = player.getAttribute(Attributes.MOVEMENT_SPEED);
+        var speedAttribute = player.getAttribute(Attributes.MOVEMENT_SPEED);
 
-        if (attribute != null) {
-            attribute.removeModifier(NO_MOVEMENT_SPEED_UUID);
+        if (speedAttribute != null && speedAttribute.hasModifier(NO_MOVEMENT_MODIFIER)) {
+            speedAttribute.removeModifier(NO_MOVEMENT_MODIFIER_UUID);
         }
     }
 
@@ -88,6 +83,6 @@ public class NoMovementAbility extends Ability {
 
     @Override
     public String getDocumentationDescription() {
-        return "Sets movement speed to 0 and disables jumping.";
+        return "Prevents movement by heavily reducing movement speed and blocks jumping through the no jump handler.";
     }
 }

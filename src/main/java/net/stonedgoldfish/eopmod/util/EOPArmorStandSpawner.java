@@ -48,7 +48,10 @@ public class EOPArmorStandSpawner {
             String[] standLastTickCommands,
             String[] targetFirstTickCommands,
             String[] targetCommands,
-            String[] targetLastTickCommands
+            String[] targetLastTickCommands,
+            String loopingSound,
+            float loopingSoundVolume,
+            float loopingSoundPitch
     ) {
         if (lifetime > 0) {
             armorStand.getPersistentData().putInt("EOPLifetime", lifetime);
@@ -73,6 +76,10 @@ public class EOPArmorStandSpawner {
         armorStand.getPersistentData().putString("EOPTargetFirstTickCommands", String.join("||", targetFirstTickCommands));
         armorStand.getPersistentData().putString("EOPTargetCommands", String.join("||", targetCommands));
         armorStand.getPersistentData().putString("EOPTargetLastTickCommands", String.join("||", targetLastTickCommands));
+        armorStand.getPersistentData().putString("EOPLoopingSound", loopingSound);
+        armorStand.getPersistentData().putFloat("EOPLoopingSoundVolume", loopingSoundVolume);
+        armorStand.getPersistentData().putFloat("EOPLoopingSoundPitch", loopingSoundPitch);
+        armorStand.getPersistentData().putInt("EOPLoopingSoundTick", 0);
 
         if (standPower != null && !standPower.isEmpty() && armorStand.getServer() != null) {
             armorStand.getServer().getCommands().performPrefixedCommand(

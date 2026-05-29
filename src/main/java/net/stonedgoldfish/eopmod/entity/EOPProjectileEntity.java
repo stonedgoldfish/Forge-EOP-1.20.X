@@ -34,6 +34,8 @@ import net.stonedgoldfish.eopmod.util.EOPTargeting;
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.stonedgoldfish.eopmod.power.ability.SpawnArmorStandAbility.*;
+
 public class EOPProjectileEntity extends ThrowableProjectile implements ItemSupplier {
 
     private static final EntityDataAccessor<ItemStack> APPEARANCE_ITEM =
@@ -109,6 +111,9 @@ public class EOPProjectileEntity extends ThrowableProjectile implements ItemSupp
     private String[] armorStandTargetFirstTickCommands = new String[]{};
     private String[] armorStandTargetCommands = new String[]{};
     private String[] armorStandTargetLastTickCommands = new String[]{};
+    private String armorStandLoopingSound = "";
+    private float armorStandLoopingSoundVolume = 1.0F;
+    private float armorStandLoopingSoundPitch = 1.0F;
 
     private ListTag appearances = new ListTag();
 
@@ -275,9 +280,24 @@ public class EOPProjectileEntity extends ThrowableProjectile implements ItemSupp
                 armorStandLastTickCommands,
                 armorStandTargetFirstTickCommands,
                 armorStandTargetCommands,
-                armorStandTargetLastTickCommands
+                armorStandTargetLastTickCommands,
+                armorStandLoopingSound,
+                armorStandLoopingSoundVolume,
+                armorStandLoopingSoundPitch
         );
+        ResourceLocation sound = ResourceLocation.tryParse(armorStandLoopingSound);
 
+        if (sound != null && !armorStandLoopingSound.isEmpty()) {
+            net.stonedgoldfish.eopmod.network.EOPNetwork.CHANNEL.send(
+                    net.minecraftforge.network.PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> armorStand),
+                    new net.stonedgoldfish.eopmod.network.PlayArmorStandLoopingSoundPacket(
+                            armorStand.getId(),
+                            sound,
+                            armorStandLoopingSoundVolume,
+                            armorStandLoopingSoundPitch
+                    )
+            );
+        }
         net.stonedgoldfish.eopmod.event.EOPForgeEvents.runStandCommands(
                 armorStand,
                 "EOPStandFirstTickCommands"
@@ -732,6 +752,9 @@ public class EOPProjectileEntity extends ThrowableProjectile implements ItemSupp
         tag.put("ArmorStandTargetFirstTickCommands", stringArrayToListTag(this.armorStandTargetFirstTickCommands));
         tag.put("ArmorStandTargetCommands", stringArrayToListTag(this.armorStandTargetCommands));
         tag.put("ArmorStandTargetLastTickCommands", stringArrayToListTag(this.armorStandTargetLastTickCommands));
+        tag.putString("ArmorStandLoopingSound", this.armorStandLoopingSound);
+        tag.putFloat("ArmorStandLoopingSoundVolume", this.armorStandLoopingSoundVolume);
+        tag.putFloat("ArmorStandLoopingSoundPitch", this.armorStandLoopingSoundPitch);
     }
 
     @Override
@@ -870,6 +893,18 @@ public class EOPProjectileEntity extends ThrowableProjectile implements ItemSupp
         this.armorStandTargetFirstTickCommands = readStringArray(tag, "ArmorStandTargetFirstTickCommands");
         this.armorStandTargetCommands = readStringArray(tag, "ArmorStandTargetCommands");
         this.armorStandTargetLastTickCommands = readStringArray(tag, "ArmorStandTargetLastTickCommands");
+        if (tag.contains("ArmorStandLoopingSound")) {
+            this.armorStandLoopingSound = tag.getString("ArmorStandLoopingSound");
+        }
+        if (tag.contains("ArmorStandLoopingSoundVolume")) {
+            this.armorStandLoopingSoundVolume =
+                    tag.getFloat("ArmorStandLoopingSoundVolume");
+        }
+
+        if (tag.contains("ArmorStandLoopingSoundPitch")) {
+            this.armorStandLoopingSoundPitch =
+                    tag.getFloat("ArmorStandLoopingSoundPitch");
+        }
 
         readAppearances(tag);
     }

@@ -68,8 +68,11 @@ public class EOPForgeEvents {
 
         LivingEntity entity = event.getEntity();
 
-        // ONLY RUN SERVER SIDE
         if (entity.level().isClientSide()) {
+            return;
+        }
+
+        if (entity.tickCount % 20 != 0) {
             return;
         }
 
@@ -79,7 +82,6 @@ public class EOPForgeEvents {
 
         Boolean current = EOPPalladiumProperties.LIVING_CREATURE.get(entity);
 
-        // extra null safety
         if (current == null || current != shouldBeLiving) {
             EOPPalladiumProperties.LIVING_CREATURE.set(entity, shouldBeLiving);
         }
@@ -277,7 +279,12 @@ public class EOPForgeEvents {
         UUID casterUuid = armorStand.getPersistentData().getUUID("EOPCaster");
         Entity casterEntity = serverLevel.getEntity(casterUuid);
 
-        if (!(casterEntity instanceof LivingEntity caster)) {
+        if (!(casterEntity instanceof LivingEntity caster) || !caster.isAlive()) {
+            runStandCommands(armorStand, "EOPStandLastTickCommands");
+            runLastTargetCommandsForStand(armorStand);
+            ARMOR_STAND_TARGETS.remove(armorStand.getUUID());
+
+            armorStand.discard();
             return;
         }
 
@@ -460,9 +467,9 @@ public class EOPForgeEvents {
                 direction = direction.normalize();
             }
 
-            target.setDeltaMovement(
-                    target.getDeltaMovement().add(direction.scale(strength))
-            );
+            target.setDeltaMovement(Vec3.ZERO);
+
+            target.setDeltaMovement(direction.scale(strength));
 
             target.hurtMarked = true;
         }

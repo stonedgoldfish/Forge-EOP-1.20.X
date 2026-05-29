@@ -164,10 +164,11 @@ public class EOPClientEvents {
         String powerKey = tab.getPath();
 
         EOPPowerRegistry.EOPPower powerData = EOPPowerRegistry.getByKey(powerKey);
+        if (powerData == null) {
+            return;
+        }
 
-        String powerName = powerData != null
-                ? powerData.display().replace("_", " ")
-                : powerKey;
+        String powerName = powerData.display().replace("_", " ");
 
         ResourceLocation powerIcon = ResourceLocation.fromNamespaceAndPath(
                 "eop",
@@ -688,26 +689,10 @@ public class EOPClientEvents {
         int screenWidth = minecraft.getWindow().getGuiScaledWidth();
         int screenHeight = minecraft.getWindow().getGuiScaledHeight();
 
-        float maxOpacity = 0.85F;
-        float opacity = maxOpacity * lunarCloakTintProgress;
-
-        int alpha = (int)(opacity * 255.0F);
-
-        int rgb = 0x000000;
-        int color = (alpha << 24) | rgb;
-
-        event.getGuiGraphics().fill(
-                0,
-                0,
-                screenWidth,
-                screenHeight,
-                color
-        );
-
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        float textureOpacity = 0.3F;
+        float textureOpacity = 0.7F;
 
         RenderSystem.setShaderColor(
                 1.0F,
@@ -831,6 +816,7 @@ public class EOPClientEvents {
     private static boolean wasJumpDown = false;
     private static long lastJumpPressTime = 0L;
     private static EOPFlightSound flightSound = null;
+    private static final java.util.Set<Integer> LOOPING_ARMOR_STAND_SOUNDS = new java.util.HashSet<>();
 
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
@@ -852,7 +838,9 @@ public class EOPClientEvents {
             return;
         }
 
-        boolean jumpDown = minecraft.options.keyJump.isDown();
+        boolean jumpDown =
+                minecraft.options.keyJump.isDown()
+                        && !NoJumpHandler.isJumpBlocked(player);
 
         if (jumpDown && !wasJumpDown) {
             long now = System.currentTimeMillis();
@@ -883,8 +871,10 @@ public class EOPClientEvents {
         player.input.shiftKeyDown = false;
         player.setShiftKeyDown(false);
         player.setPose(net.minecraft.world.entity.Pose.STANDING);
-        if (player.getAbilities().flying) {
-            player.getAbilities().flying = false;
+        if (!player.isCreative() && !player.isSpectator()) {
+            if (player.getAbilities().flying) {
+                player.getAbilities().flying = false;
+            }
         }
 
         CustomFlightAbility.FlightSettings settings = CustomFlightAbility.getSettings(player);
@@ -985,6 +975,45 @@ public class EOPClientEvents {
                     currentMotion.y * verticalDrag,
                     currentMotion.z * horizontalDrag
             );
+        }
+        for (var armorStand : player.level().getEntitiesOfClass(
+                net.minecraft.world.entity.decoration.ArmorStand.class,
+                player.getBoundingBox().inflate(128.0D)
+        )) {
+            if (!armorStand.getPersistentData().contains("EOPLoopingSound")) {
+                continue;
+            }
+
+            if (LOOPING_ARMOR_STAND_SOUNDS.contains(armorStand.getId())) {
+                continue;
+            }
+
+            String soundRaw = armorStand.getPersistentData().getString("EOPLoopingSound");
+
+            if (soundRaw == null || soundRaw.isEmpty()) {
+                continue;
+            }
+
+            net.minecraft.resources.ResourceLocation sound =
+                    net.minecraft.resources.ResourceLocation.tryParse(soundRaw);
+
+            if (sound == null) {
+                continue;
+            }
+
+            float volume = armorStand.getPersistentData().getFloat("EOPLoopingSoundVolume");
+            float pitch = armorStand.getPersistentData().getFloat("EOPLoopingSoundPitch");
+
+            Minecraft.getInstance().getSoundManager().play(
+                    new net.stonedgoldfish.eopmod.client.sound.EOPArmorStandLoopingSound(
+                            armorStand,
+                            sound,
+                            volume,
+                            pitch
+                    )
+            );
+
+            LOOPING_ARMOR_STAND_SOUNDS.add(armorStand.getId());
         }
     }
 }

@@ -3,7 +3,6 @@ package net.stonedgoldfish.eopmod.power.ability;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Items;
-import net.stonedgoldfish.eopmod.power.EOPPowerRegistry;
 import net.threetag.palladium.power.IPowerHolder;
 import net.threetag.palladium.power.ability.Ability;
 import net.threetag.palladium.power.ability.AbilityInstance;
@@ -12,6 +11,7 @@ import net.threetag.palladium.util.property.BooleanProperty;
 import net.threetag.palladium.util.property.IntegerProperty;
 import net.threetag.palladium.util.property.PalladiumProperty;
 import net.stonedgoldfish.eopmod.power.EOPPalladiumProperties;
+import net.stonedgoldfish.eopmod.power.EOPPowerRegistry;
 import net.stonedgoldfish.eopmod.util.EOPGameRules;
 
 public class EnergyRegenAbility extends Ability {
@@ -70,66 +70,65 @@ public class EnergyRegenAbility extends Ability {
             return;
         }
 
-        // INFINITE ENERGY OVERRIDE
-        if (net.stonedgoldfish.eopmod.util.EOPGameRules.isInfiniteEnergy(player.getServer())) {
+        int max = Math.max(0, instance.getProperty(MAX));
+        boolean invert = instance.getProperty(INVERT);
+        boolean abilityBeingUsed = player.getTags().contains("Ability.Being.Used");
 
-            boolean invert = instance.getProperty(INVERT);
-
-            if (invert) {
-                EOPPalladiumProperties.setEnergy(player, powerKey, 0);
-            } else {
-                EOPPalladiumProperties.setEnergy(player, powerKey, instance.getProperty(MAX));
-            }
-
+        if (EOPGameRules.isInfiniteEnergy(player.getServer())) {
+            EOPPalladiumProperties.setEnergy(player, powerKey, invert ? 0 : max);
             return;
         }
 
         String baseKey = "eop_energy_tick_" + powerKey;
 
-        // =========================
-        // REGEN SYSTEM
-        // =========================
+        int current = EOPPalladiumProperties.getEnergy(player, powerKey);
+
+        if (current < 0) {
+            EOPPalladiumProperties.setEnergy(player, powerKey, 0);
+            current = 0;
+        }
+
+        int interval = Math.max(1, instance.getProperty(INTERVAL));
         int regenTick = player.getPersistentData().getInt(baseKey + "_regen");
         regenTick++;
 
-        if (regenTick >= instance.getProperty(INTERVAL)) {
+        if (regenTick >= interval) {
             regenTick = 0;
 
-            int amount = instance.getProperty(AMOUNT);
-            int max = instance.getProperty(MAX);
+            if (!abilityBeingUsed) {
+                int amount = Math.max(0, instance.getProperty(AMOUNT));
+                int updated = Math.min(current + amount, max);
 
-            int current = EOPPalladiumProperties.getEnergy(player, powerKey);
-            int updated = Math.min(current + amount, max);
-
-            EOPPalladiumProperties.setEnergy(player, powerKey, updated);
+                EOPPalladiumProperties.setEnergy(player, powerKey, updated);
+                current = updated;
+            }
         }
 
         player.getPersistentData().putInt(baseKey + "_regen", regenTick);
 
-        // =========================
-        // DRAIN SYSTEM
-        // =========================
         if (instance.getProperty(ENABLE_DRAIN)) {
 
+            int drainInterval = Math.max(1, instance.getProperty(DRAIN_INTERVAL));
             int drainTick = player.getPersistentData().getInt(baseKey + "_drain");
             drainTick++;
 
-            if (drainTick >= instance.getProperty(DRAIN_INTERVAL)) {
+            if (drainTick >= drainInterval) {
                 drainTick = 0;
 
-                int amount = instance.getProperty(DRAIN_AMOUNT);
+                if (!(invert && abilityBeingUsed)) {
+                    int drainAmount = Math.max(0, instance.getProperty(DRAIN_AMOUNT));
+                    int updated = Math.max(current - drainAmount, 0);
 
-                int current = EOPPalladiumProperties.getEnergy(player, powerKey);
-                int updated = current - amount;
-
-                if (updated < 0) {
-                    updated = 0;
+                    EOPPalladiumProperties.setEnergy(player, powerKey, updated);
+                    current = updated;
                 }
-
-                EOPPalladiumProperties.setEnergy(player, powerKey, updated);
             }
 
             player.getPersistentData().putInt(baseKey + "_drain", drainTick);
+        }
+
+        if (current < 0) {
+            EOPPalladiumProperties.setEnergy(player, powerKey, 0);
         }
     }
 

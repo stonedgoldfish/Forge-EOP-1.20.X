@@ -47,5 +47,12 @@ public class EOPNetwork {
                 ToggleCustomFlightPacket::decode,
                 ToggleCustomFlightPacket::handle
         );
+        CHANNEL.registerMessage(
+                packetId++,
+                PlayArmorStandLoopingSoundPacket.class,
+                PlayArmorStandLoopingSoundPacket::encode,
+                PlayArmorStandLoopingSoundPacket::decode,
+                PlayArmorStandLoopingSoundPacket::handle
+        );
     }
 }

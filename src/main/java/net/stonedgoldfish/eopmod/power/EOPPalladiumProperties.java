@@ -37,6 +37,9 @@ public class EOPPalladiumProperties {
                     handler.register(getOrCreateXpProperty(power.key()), 0);
                     handler.register(getOrCreateLevelProperty(power.key()), 1);
                     handler.register(getOrCreateSkillPointProperty(power.key()), 0);
+                    if (power.energy()) {
+                        handler.register(getOrCreateEnergyProperty(power.key()), 0);
+                    }
                     handler.register(CLIMB_EXTRA, false);
                     handler.register(NIGHT_VISION_EXTRA, false);
                     handler.register(SMELTING_EXTRA, false);
@@ -49,10 +52,6 @@ public class EOPPalladiumProperties {
                     handler.register(LIGHT_EXTRA, false);
                     handler.register(WATER_BREATHING_EXTRA, false);
                     handler.register(FROST_WALKER_EXTRA, false);
-                    if (!power.energy()) {
-                        continue;
-                    }
-                    handler.register(getOrCreateEnergyProperty(power.key()), 0);
                 }
             }
             if (handler.getEntity() instanceof net.minecraft.world.entity.LivingEntity) {

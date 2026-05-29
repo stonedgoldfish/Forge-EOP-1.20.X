@@ -26,7 +26,7 @@ import net.stonedgoldfish.eopmod.entity.EOPEntities;
 public class EOPMod {
     // Define mod id in a common place for everything to reference
     public static final String MOD_ID = "eop";
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
 
     public EOPMod(FMLJavaModLoadingContext context) {

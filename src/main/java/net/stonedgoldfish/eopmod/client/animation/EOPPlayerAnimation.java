@@ -2,10 +2,7 @@ package net.stonedgoldfish.eopmod.client.animation;
 
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.stonedgoldfish.eopmod.client.animation.anim.EOPDashAnimation;
-import net.stonedgoldfish.eopmod.client.animation.anim.RightArmShootAnimation;
-import net.stonedgoldfish.eopmod.client.animation.anim.RightArmSwipeAnimation;
-import net.stonedgoldfish.eopmod.client.animation.anim.TransformAnimation;
+import net.stonedgoldfish.eopmod.client.animation.anim.*;
 import net.threetag.palladium.client.model.animation.PalladiumAnimation;
 
 public class EOPPlayerAnimation extends PalladiumAnimation {
@@ -23,7 +20,7 @@ public class EOPPlayerAnimation extends PalladiumAnimation {
             float partialTicks
     ) {
 
-        float anim = EOPAnimationHandler.getProgress(partialTicks);
+        float anim = EOPAnimationHandler.getPhaseProgress(partialTicks);
 
         if (anim <= 0.001F) {
             return;
@@ -83,6 +80,14 @@ public class EOPPlayerAnimation extends PalladiumAnimation {
                             EOPAnimationHandler.getPhase(),
                             anim
                     );
+                }
+            }
+
+            case RIGHT_ARM_HOLD -> {
+                if (firstPerson) {
+                    RightArmHoldAnimation.animateFirstPerson(builder, anim);
+                } else {
+                    RightArmHoldAnimation.animate(builder, anim);
                 }
             }
 

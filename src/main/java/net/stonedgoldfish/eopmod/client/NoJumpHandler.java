@@ -21,12 +21,16 @@ public class NoJumpHandler {
             return;
         }
 
-        if (!minecraft.player.hasEffect(EOPEffects.STUN.get())
-                && !minecraft.player.hasEffect(EOPEffects.SNARE.get())
-                && !NoMovementAbility.isFrozen(minecraft.player)) {
+        if (!isJumpBlocked(minecraft.player)) {
             return;
         }
 
         event.getInput().jumping = false;
+    }
+
+    public static boolean isJumpBlocked(net.minecraft.world.entity.player.Player player) {
+        return player.hasEffect(EOPEffects.STUN.get())
+                || player.hasEffect(EOPEffects.SNARE.get())
+                || NoMovementAbility.isFrozen(player);
     }
 }
