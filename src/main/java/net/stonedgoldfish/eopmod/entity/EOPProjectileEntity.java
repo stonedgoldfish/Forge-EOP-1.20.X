@@ -21,6 +21,7 @@ import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraft.world.item.ItemStack;
@@ -81,6 +82,7 @@ public class EOPProjectileEntity extends ThrowableProjectile implements ItemSupp
     private float gravity = 0.0F;
     private boolean dieOnEntityHit = true;
     private boolean dieOnBlockHit = true;
+    private boolean ignoreLiquids = false;
 
     private int setEntityOnFireSeconds = 0;
     private float explosionRadius = 0.0F;
@@ -156,7 +158,13 @@ public class EOPProjectileEntity extends ThrowableProjectile implements ItemSupp
 
     @Override
     public void tick() {
+        Vec3 motionBeforeTick = this.getDeltaMovement();
+
         super.tick();
+
+        if (ignoreLiquids && (this.isInWaterOrBubble() || this.isInLava())) {
+            this.setDeltaMovement(motionBeforeTick);
+        }
 
         spawnAppearanceParticles();
 
@@ -180,6 +188,26 @@ public class EOPProjectileEntity extends ThrowableProjectile implements ItemSupp
 
         Entity hitEntity = result.getEntity();
         Entity owner = this.getOwner();
+        if (hitEntity instanceof EnderDragonPart dragonPart) {
+            Entity parent = dragonPart.getParent();
+
+            if (parent instanceof LivingEntity dragon) {
+                dragon.hurt(createDamageSource(owner instanceof LivingEntity caster ? caster : dragon), this.damage);
+
+                runCommands(commandsOnEntityHit);
+                createFilteredExplosion();
+                runCommandsForTargets();
+
+                if (dieOnEntityHit) {
+                    if (spawnArmorStandOnEntityHit) {
+                        spawnArmorStandFromProjectile();
+                    }
+                    this.discard();
+                }
+            }
+
+            return;
+        }
 
         if (!(hitEntity instanceof LivingEntity target)) {
             if (dieOnEntityHit) {
@@ -708,6 +736,7 @@ public class EOPProjectileEntity extends ThrowableProjectile implements ItemSupp
         tag.putFloat("Gravity", this.gravity);
         tag.putBoolean("DieOnEntityHit", this.dieOnEntityHit);
         tag.putBoolean("DieOnBlockHit", this.dieOnBlockHit);
+        tag.putBoolean("IgnoreLiquids", this.ignoreLiquids);
 
         tag.putInt("SetEntityOnFireSeconds", this.setEntityOnFireSeconds);
         tag.putFloat("ExplosionRadius", this.explosionRadius);
@@ -791,6 +820,10 @@ public class EOPProjectileEntity extends ThrowableProjectile implements ItemSupp
 
         if (tag.contains("DieOnBlockHit")) {
             this.dieOnBlockHit = tag.getBoolean("DieOnBlockHit");
+        }
+
+        if (tag.contains("IgnoreLiquids")) {
+            this.ignoreLiquids = tag.getBoolean("IgnoreLiquids");
         }
 
         if (tag.contains("SetEntityOnFireSeconds")) {
