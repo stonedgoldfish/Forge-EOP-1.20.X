@@ -10,11 +10,13 @@ import net.minecraft.client.sounds.WeighedSoundEvents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraftforge.client.event.MovementInputUpdateEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.stonedgoldfish.eopmod.EOPMod;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
+import net.stonedgoldfish.eopmod.client.animation.EOPCameraTransition;
 import net.stonedgoldfish.eopmod.client.sound.EOPFlightSound;
 import net.stonedgoldfish.eopmod.client.sound.EOPFlightSoundHandler;
 import net.stonedgoldfish.eopmod.effect.EOPEffects;
@@ -819,18 +821,36 @@ public class EOPClientEvents {
     private static final java.util.Set<Integer> LOOPING_ARMOR_STAND_SOUNDS = new java.util.HashSet<>();
 
     @SubscribeEvent
+    public static void onMovementInputUpdate(MovementInputUpdateEvent event) {
+        Minecraft minecraft = Minecraft.getInstance();
+        LocalPlayer player = minecraft.player;
+        if (player == null) {
+            return;
+        }
+        if (!CustomFlightAbility.hasCustomFlight(player) || !CustomFlightAbility.isFlying(player)) {
+            return;
+        }
+        event.getInput().shiftKeyDown = false;
+    }
+
+    @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END) {
             return;
         }
 
         EOPAnimationHandler.tick();
+        EOPCameraTransition.tick();
 
         Minecraft minecraft = Minecraft.getInstance();
         LocalPlayer player = minecraft.player;
 
         if (player == null) {
             return;
+        }
+
+        if (CustomFlightAbility.hasCustomFlight(player) && player.isFallFlying()) {
+            player.stopFallFlying();
         }
 
         if (CustomFlightAbility.isFlying(player) && player.onGround()) {
@@ -869,8 +889,10 @@ public class EOPClientEvents {
 
         wasSprintFlying = sprintFlying;
         player.input.shiftKeyDown = false;
-        player.setShiftKeyDown(false);
-        player.setPose(net.minecraft.world.entity.Pose.STANDING);
+
+        if (player.getPose() != net.minecraft.world.entity.Pose.STANDING) {
+            player.setPose(net.minecraft.world.entity.Pose.STANDING);
+        }
         if (!player.isCreative() && !player.isSpectator()) {
             if (player.getAbilities().flying) {
                 player.getAbilities().flying = false;

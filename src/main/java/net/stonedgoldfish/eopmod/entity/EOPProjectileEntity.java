@@ -114,6 +114,8 @@ public class EOPProjectileEntity extends ThrowableProjectile implements ItemSupp
     private String armorStandLoopingSound = "";
     private float armorStandLoopingSoundVolume = 1.0F;
     private float armorStandLoopingSoundPitch = 1.0F;
+    private boolean armorStandDestroyBlocks = false;
+    private float armorStandDestroyBlockRadius = 0.0F;
 
     private ListTag appearances = new ListTag();
 
@@ -283,7 +285,9 @@ public class EOPProjectileEntity extends ThrowableProjectile implements ItemSupp
                 armorStandTargetLastTickCommands,
                 armorStandLoopingSound,
                 armorStandLoopingSoundVolume,
-                armorStandLoopingSoundPitch
+                armorStandLoopingSoundPitch,
+                armorStandDestroyBlocks,
+                armorStandDestroyBlockRadius
         );
         ResourceLocation sound = ResourceLocation.tryParse(armorStandLoopingSound);
 
@@ -755,6 +759,8 @@ public class EOPProjectileEntity extends ThrowableProjectile implements ItemSupp
         tag.putString("ArmorStandLoopingSound", this.armorStandLoopingSound);
         tag.putFloat("ArmorStandLoopingSoundVolume", this.armorStandLoopingSoundVolume);
         tag.putFloat("ArmorStandLoopingSoundPitch", this.armorStandLoopingSoundPitch);
+        tag.putBoolean("ArmorStandDestroyBlocks", this.armorStandDestroyBlocks);
+        tag.putFloat("ArmorStandDestroyBlockRadius", this.armorStandDestroyBlockRadius);
     }
 
     @Override
@@ -904,6 +910,13 @@ public class EOPProjectileEntity extends ThrowableProjectile implements ItemSupp
         if (tag.contains("ArmorStandLoopingSoundPitch")) {
             this.armorStandLoopingSoundPitch =
                     tag.getFloat("ArmorStandLoopingSoundPitch");
+        }
+        if (tag.contains("ArmorStandDestroyBlocks")) {
+            this.armorStandDestroyBlocks = tag.getBoolean("ArmorStandDestroyBlocks");
+        }
+
+        if (tag.contains("ArmorStandDestroyBlockRadius")) {
+            this.armorStandDestroyBlockRadius = tag.getFloat("ArmorStandDestroyBlockRadius");
         }
 
         readAppearances(tag);

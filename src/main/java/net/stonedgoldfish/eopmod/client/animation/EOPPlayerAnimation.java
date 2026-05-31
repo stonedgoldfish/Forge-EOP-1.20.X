@@ -68,13 +68,7 @@ public class EOPPlayerAnimation extends PalladiumAnimation {
             }
 
             case TRANSFORM -> {
-                if (firstPerson) {
-                    TransformAnimation.animateFirstPerson(
-                            builder,
-                            EOPAnimationHandler.getPhase(),
-                            anim
-                    );
-                } else {
+                if (!firstPerson) {
                     TransformAnimation.animate(
                             builder,
                             EOPAnimationHandler.getPhase(),
@@ -83,11 +77,15 @@ public class EOPPlayerAnimation extends PalladiumAnimation {
                 }
             }
 
-            case RIGHT_ARM_HOLD -> {
-                if (firstPerson) {
-                    RightArmHoldAnimation.animateFirstPerson(builder, anim);
-                } else {
-                    RightArmHoldAnimation.animate(builder, anim);
+            case THIRD_PERSON -> {
+                if (!firstPerson) {
+                    ThirdPersonAnimation.animate(builder, anim);
+                }
+            }
+
+            case RIGHT_ARM_LIFT -> {
+                if (!firstPerson) {
+                    RightArmLiftAnimation.animate(builder, anim);
                 }
             }
 

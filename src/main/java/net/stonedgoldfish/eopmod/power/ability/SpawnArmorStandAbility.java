@@ -103,6 +103,14 @@ public class SpawnArmorStandAbility extends Ability {
             new FloatProperty("looping_sound_pitch")
                     .configurable("Pitch of the looping armor stand sound.");
 
+    public static final PalladiumProperty<Boolean> DESTROY_BLOCKS =
+            new BooleanProperty("destroy_blocks")
+                    .configurable("If true, destroys blocks around the armor stand when destructionMode is enabled.");
+
+    public static final PalladiumProperty<Float> DESTROY_BLOCK_RADIUS =
+            new FloatProperty("destroy_block_radius")
+                    .configurable("Radius around the armor stand where blocks are destroyed.");
+
     private static final Map<UUID, ArmorStand> FOLLOWING_STANDS = new HashMap<>();
 
     public SpawnArmorStandAbility() {
@@ -138,6 +146,9 @@ public class SpawnArmorStandAbility extends Ability {
         this.withProperty(LOOPING_SOUND, "");
         this.withProperty(LOOPING_SOUND_VOLUME, 1.0F);
         this.withProperty(LOOPING_SOUND_PITCH, 1.0F);
+
+        this.withProperty(DESTROY_BLOCKS, false);
+        this.withProperty(DESTROY_BLOCK_RADIUS, 0.0F);
 
     }
 
@@ -189,7 +200,9 @@ public class SpawnArmorStandAbility extends Ability {
                 entry.getProperty(TARGET_LAST_TICK_COMMANDS),
                 entry.getProperty(LOOPING_SOUND),
                 entry.getProperty(LOOPING_SOUND_VOLUME),
-                entry.getProperty(LOOPING_SOUND_PITCH)
+                entry.getProperty(LOOPING_SOUND_PITCH),
+                entry.getProperty(DESTROY_BLOCKS),
+                entry.getProperty(DESTROY_BLOCK_RADIUS)
         );
         ResourceLocation sound = ResourceLocation.tryParse(entry.getProperty(LOOPING_SOUND));
 
@@ -209,6 +222,31 @@ public class SpawnArmorStandAbility extends Ability {
         }
 
         EOPForgeEvents.runStandCommands(armorStand, "EOPStandFirstTickCommands");
+    }
+
+    private static Vec3 raycastThroughBlocksPosition(LivingEntity entity, float range) {
+        Level level = entity.level();
+
+        Vec3 start = entity.getEyePosition();
+        Vec3 look = entity.getLookAngle().normalize();
+        Vec3 end = start.add(look.scale(range));
+
+        EntityHitResult entityHit = ProjectileUtil.getEntityHitResult(
+                level,
+                entity,
+                start,
+                end,
+                entity.getBoundingBox().expandTowards(look.scale(range)).inflate(1.0D),
+                target -> target instanceof LivingEntity
+                        && target != entity
+                        && target.isAlive()
+        );
+
+        if (entityHit != null) {
+            return entityHit.getLocation();
+        }
+
+        return end;
     }
 
     private static Vec3 raycastSpawnPosition(LivingEntity entity, float range) {
@@ -256,6 +294,12 @@ public class SpawnArmorStandAbility extends Ability {
         return end;
     }
 
+    private static Vec3 raycastFollowMousePosition(LivingEntity entity, float range) {
+        Vec3 start = entity.getEyePosition();
+        Vec3 look = entity.getLookAngle().normalize();
+        return start.add(look.scale(range));
+    }
+
     @Override
     public void tick(LivingEntity entity, AbilityInstance entry, IPowerHolder holder, boolean enabled) {
         if (entity.level().isClientSide || !enabled) {
@@ -274,7 +318,7 @@ public class SpawnArmorStandAbility extends Ability {
 
         Vec3 pos = entry.getProperty(SPAWN_AT_PLAYER)
                 ? entity.position()
-                : raycastSpawnPosition(entity, entry.getProperty(RANGE));
+                : raycastFollowMousePosition(entity, entry.getProperty(RANGE));
 
         if (pos == null) {
             return;

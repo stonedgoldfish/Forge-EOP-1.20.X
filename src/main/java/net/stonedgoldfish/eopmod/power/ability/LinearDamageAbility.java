@@ -12,10 +12,7 @@ import net.threetag.palladium.power.IPowerHolder;
 import net.threetag.palladium.power.ability.Ability;
 import net.threetag.palladium.power.ability.AbilityInstance;
 import net.threetag.palladium.util.icon.ItemIcon;
-import net.threetag.palladium.util.property.FloatProperty;
-import net.threetag.palladium.util.property.IntegerProperty;
-import net.threetag.palladium.util.property.PalladiumProperty;
-import net.threetag.palladium.util.property.StringProperty;
+import net.threetag.palladium.util.property.*;
 
 import java.util.*;
 
@@ -40,6 +37,18 @@ public class LinearDamageAbility extends Ability {
             new StringProperty("particle")
                     .configurable("Particle spawned as the linear damage travels. Empty disables particles.");
 
+    public static final PalladiumProperty<Integer> MAX_WALL_THICKNESS =
+            new IntegerProperty("max_wall_thickness")
+                    .configurable("Maximum wall thickness this line can penetrate. -1 disables wall collision.");
+
+    public static final PalladiumProperty<String[]> COMMANDS_ON_TARGETS =
+            new StringArrayProperty("commands_on_targets")
+                    .configurable("Commands to run as targets hit by the line.");
+
+    public static final PalladiumProperty<String[]> COMMANDS_ON_ALLIES =
+            new StringArrayProperty("commands_on_allies")
+                    .configurable("Commands to run as allies hit by the line.");
+
     private static final Map<UUID, Set<UUID>> HIT_ENTITIES = new HashMap<>();
 
     private static final Map<UUID, Integer> ACTIVE_TICKS = new HashMap<>();
@@ -52,6 +61,9 @@ public class LinearDamageAbility extends Ability {
         this.withProperty(TRAVEL_TIME, 10);
         this.withProperty(DAMAGE_TYPE, "minecraft:magic");
         this.withProperty(PARTICLE, "minecraft:poof");
+        this.withProperty(MAX_WALL_THICKNESS, -1);
+        this.withProperty(COMMANDS_ON_TARGETS, new String[0]);
+        this.withProperty(COMMANDS_ON_ALLIES, new String[0]);
     }
 
     @Override
@@ -67,7 +79,10 @@ public class LinearDamageAbility extends Ability {
                 entry.getProperty(WIDTH),
                 entry.getProperty(TRAVEL_TIME),
                 entry.getProperty(DAMAGE_TYPE),
-                entry.getProperty(PARTICLE)
+                entry.getProperty(PARTICLE),
+                entry.getProperty(COMMANDS_ON_TARGETS),
+                entry.getProperty(COMMANDS_ON_ALLIES),
+                entry.getProperty(MAX_WALL_THICKNESS)
         );
     }
 

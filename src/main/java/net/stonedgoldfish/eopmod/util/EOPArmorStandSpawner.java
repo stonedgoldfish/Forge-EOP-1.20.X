@@ -51,7 +51,9 @@ public class EOPArmorStandSpawner {
             String[] targetLastTickCommands,
             String loopingSound,
             float loopingSoundVolume,
-            float loopingSoundPitch
+            float loopingSoundPitch,
+            boolean destroyBlocks,
+            float destroyBlockRadius
     ) {
         if (lifetime > 0) {
             armorStand.getPersistentData().putInt("EOPLifetime", lifetime);
@@ -80,6 +82,8 @@ public class EOPArmorStandSpawner {
         armorStand.getPersistentData().putFloat("EOPLoopingSoundVolume", loopingSoundVolume);
         armorStand.getPersistentData().putFloat("EOPLoopingSoundPitch", loopingSoundPitch);
         armorStand.getPersistentData().putInt("EOPLoopingSoundTick", 0);
+        armorStand.getPersistentData().putBoolean("EOPDestroyBlocks", destroyBlocks);
+        armorStand.getPersistentData().putFloat("EOPDestroyBlockRadius", destroyBlockRadius);
 
         if (standPower != null && !standPower.isEmpty() && armorStand.getServer() != null) {
             armorStand.getServer().getCommands().performPrefixedCommand(

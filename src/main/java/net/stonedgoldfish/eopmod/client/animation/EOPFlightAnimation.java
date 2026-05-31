@@ -1,5 +1,6 @@
 package net.stonedgoldfish.eopmod.client.animation;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.util.Mth;
@@ -14,7 +15,7 @@ public class EOPFlightAnimation extends PalladiumAnimation {
     private static final float ANIMATION_SPEED = 0.01F;
     private static final float SPRINT_ANIMATION_SPEED = 0.02F;
     private static final float MOVEMENT_SCALE = 6.0F;
-    private static final float MOVEMENT_SMOOTHING = 0.06F;
+    private static final float MOVEMENT_SMOOTHING = 0.03F;
     private static final float VERTICAL_SCALE = 1.1F;
     private static final float VERTICAL_PITCH_STRENGTH = 65F;
 
@@ -49,15 +50,28 @@ public class EOPFlightAnimation extends PalladiumAnimation {
         }
 
         boolean flying = CustomFlightAbility.isFlying(player);
-        boolean sprintFlying = flying && player.isSprinting();
+        boolean sprintFlying = CustomFlightAbility.isFlying(player) && player.isSprinting();
 
-        if (CustomFlightAbility.consumeInstantCancelAnimation(player)) {
-            animationProgress = 0.0F;
+        boolean forceInstantExit =
+                !flying
+                        && animationProgress > 0.0F
+                        && Minecraft.getInstance().options.keyShift.isDown();
+
+        if (forceInstantExit) {
             previousAnimationProgress = 0.0F;
+            animationProgress = 0.0F;
+
+            previousSprintAnimationProgress = 0.0F;
+            sprintAnimationProgress = 0.0F;
+
+            smoothForward = 0.0F;
+            smoothStrafe = 0.0F;
+            smoothVertical = 0.0F;
+
             return;
         }
 
-        if (flying) {
+        if (CustomFlightAbility.isFlying(player)) {
             model.crouching = false;
         }
 

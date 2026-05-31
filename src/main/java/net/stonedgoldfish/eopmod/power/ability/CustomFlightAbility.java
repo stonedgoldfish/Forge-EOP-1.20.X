@@ -42,7 +42,6 @@ public class CustomFlightAbility extends Ability {
 
     private static final Map<UUID, FlightSettings> FLIGHT_SETTINGS = new HashMap<>();
     private static final Map<UUID, Boolean> FLYING_STATE = new HashMap<>();
-    private static final Map<UUID, Boolean> INSTANT_CANCEL_ANIMATION = new HashMap<>();
 
     public CustomFlightAbility() {
         this.withProperty(ICON, new ItemIcon(Items.FEATHER));
@@ -109,18 +108,12 @@ public class CustomFlightAbility extends Ability {
             flying = false;
         }
 
-        boolean wasFlying = isFlying(player);
-
         FLYING_STATE.put(player.getUUID(), flying);
         player.setNoGravity(flying);
 
-        if (wasFlying && !flying && player.isShiftKeyDown()) {
-            INSTANT_CANCEL_ANIMATION.put(player.getUUID(), true);
+        if (!flying) {
+            player.fallDistance = 0.0F;
         }
-    }
-
-    public static boolean consumeInstantCancelAnimation(Player player) {
-        return INSTANT_CANCEL_ANIMATION.remove(player.getUUID()) != null;
     }
 
     public static void toggleFlying(Player player) {

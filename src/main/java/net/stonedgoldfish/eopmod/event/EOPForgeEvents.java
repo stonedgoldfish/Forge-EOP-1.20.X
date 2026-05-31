@@ -1,14 +1,19 @@
 package net.stonedgoldfish.eopmod.event;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
+import net.minecraftforge.registries.RegistryObject;
+import net.stonedgoldfish.eopmod.effect.EOPEffects;
 import net.stonedgoldfish.eopmod.power.ability.*;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -29,11 +34,16 @@ import net.stonedgoldfish.eopmod.EOPMod;
 import net.stonedgoldfish.eopmod.power.EOPPalladiumProperties;
 import net.stonedgoldfish.eopmod.power.EOPPowerConstants;
 import net.stonedgoldfish.eopmod.power.EOPPowerRegistry;
+import net.stonedgoldfish.eopmod.util.EOPGameRules;
 import net.stonedgoldfish.eopmod.util.EOPTargeting;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.item.Items;
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
+import java.util.function.Supplier;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -48,12 +58,32 @@ public class EOPForgeEvents {
 
     @SubscribeEvent
     public static void onMobEffectApplicable(MobEffectEvent.Applicable event) {
+
+        if (isNaturallyImmune(
+                event.getEntity(),
+                event.getEffectInstance().getEffect()
+        )) {
+            event.setResult(Event.Result.DENY);
+            return;
+        }
+
         if (ImmuneToEffectAbility.isImmuneTo(
                 event.getEntity(),
                 event.getEffectInstance().getEffect()
         )) {
             event.setResult(Event.Result.DENY);
         }
+    }
+
+    private static boolean isNaturallyImmune(LivingEntity entity, MobEffect effect) {
+
+        if (entity.getType() == EntityType.IRON_GOLEM) { // MUST CHANGE LATER
+            return effect == EOPEffects.STUN.get()
+                    || effect == EOPEffects.SNARE.get()
+                    || effect == EOPEffects.SILENCED.get();
+        }
+
+        return false;
     }
 
     @SubscribeEvent
@@ -147,6 +177,29 @@ public class EOPForgeEvents {
             player.setNoGravity(false);
         }
 
+    }
+
+    @SubscribeEvent
+    public static void onMilkBucketUse(PlayerInteractEvent.RightClickItem event) {
+
+        if (event.getEntity().level().isClientSide()) {
+            return;
+        }
+
+        if (event.getItemStack().getItem() != Items.MILK_BUCKET) {
+            return;
+        }
+
+        if (hasMilkProtectedEffect(event.getEntity())) {
+            event.setCanceled(true);
+        }
+    }
+
+    private static boolean hasMilkProtectedEffect(Player player) {
+        return player.hasEffect(EOPEffects.STUN.get())
+                || player.hasEffect(EOPEffects.SNARE.get())
+                || player.hasEffect(EOPEffects.SILENCED.get())
+                || player.hasEffect(EOPEffects.LUNAR_CLOAK.get());
     }
 
     @SubscribeEvent
@@ -288,6 +341,15 @@ public class EOPForgeEvents {
             return;
         }
 
+        if (armorStand.getPersistentData().getBoolean("EOPDestroyBlocks")
+                && EOPGameRules.isDestructionMode(armorStand.getServer())) {
+
+            destroyBlocksAroundArmorStand(
+                    armorStand,
+                    armorStand.getPersistentData().getFloat("EOPDestroyBlockRadius")
+            );
+        }
+
         float damage = armorStand.getPersistentData().getFloat("EOPAOEDamage");
         boolean enableDamage =
                 armorStand.getPersistentData().getBoolean("EOPEnableDamage");
@@ -376,6 +438,36 @@ public class EOPForgeEvents {
         }
 
         ARMOR_STAND_TARGETS.put(armorStand.getUUID(), currentTargets);
+    }
+
+    private static void destroyBlocksAroundArmorStand(ArmorStand armorStand, float radius) {
+        if (radius <= 0.0F) {
+            return;
+        }
+
+        int blockRadius = (int) Math.ceil(radius);
+        BlockPos center = armorStand.blockPosition();
+
+        for (BlockPos pos : BlockPos.betweenClosed(
+                center.offset(-blockRadius, -blockRadius, -blockRadius),
+                center.offset(blockRadius, blockRadius, blockRadius)
+        )) {
+            if (pos.distSqr(center) > radius * radius) {
+                continue;
+            }
+
+            var state = armorStand.level().getBlockState(pos);
+
+            if (state.isAir()) {
+                continue;
+            }
+
+            if (state.getDestroySpeed(armorStand.level(), pos) < 0.0F) {
+                continue;
+            }
+
+            armorStand.level().destroyBlock(pos, false, armorStand);
+        }
     }
 
     private static boolean cannotInteract(net.minecraft.world.entity.player.Player player) {

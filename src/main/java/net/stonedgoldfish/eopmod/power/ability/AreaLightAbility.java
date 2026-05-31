@@ -27,7 +27,7 @@ public class AreaLightAbility extends Ability {
             new IntegerProperty("light_level")
                     .configurable("Light level of the temporary light blocks. 0-15.");
 
-    private static final Map<UUID, Set<BlockPos>> PLACED_LIGHTS = new HashMap<>();
+    private static final Map<String, Set<BlockPos>> PLACED_LIGHTS = new HashMap<>();
 
     public AreaLightAbility() {
         this.withProperty(ICON, new ItemIcon(Items.GLOWSTONE_DUST));
@@ -40,16 +40,16 @@ public class AreaLightAbility extends Ability {
             return;
         }
 
-        UUID uuid = entity.getUUID();
+        String lightKey = entity.getUUID() + ":" + entry.getReference();
 
         if (!enabled || entity.isRemoved() || !entity.isAlive()) {
-            removeLights(level, uuid);
+            removeLights(level, lightKey);
             return;
         }
 
         int lightLevel = Math.max(0, Math.min(15, entry.getProperty(LIGHT_LEVEL)));
 
-        Set<BlockPos> oldLights = PLACED_LIGHTS.getOrDefault(uuid, new HashSet<>());
+        Set<BlockPos> oldLights = PLACED_LIGHTS.getOrDefault(lightKey, new HashSet<>());
         Set<BlockPos> newLights = new HashSet<>();
 
         BlockPos center = entity.blockPosition();
@@ -78,18 +78,18 @@ public class AreaLightAbility extends Ability {
             }
         }
 
-        PLACED_LIGHTS.put(uuid, newLights);
+        PLACED_LIGHTS.put(lightKey, newLights);
     }
 
     @Override
     public void lastTick(LivingEntity entity, AbilityInstance entry, IPowerHolder holder, boolean enabled) {
         if (entity.level() instanceof ServerLevel level) {
-            removeLights(level, entity.getUUID());
+            removeLights(level, entity.getUUID() + ":" + entry.getReference());
         }
     }
 
-    public static void removeLights(ServerLevel level, UUID uuid) {
-        Set<BlockPos> lights = PLACED_LIGHTS.remove(uuid);
+    public static void removeLights(ServerLevel level, String lightKey) {
+        Set<BlockPos> lights = PLACED_LIGHTS.remove(lightKey);
 
         if (lights == null) {
             return;
@@ -99,6 +99,22 @@ public class AreaLightAbility extends Ability {
             if (level.getBlockState(pos).is(Blocks.LIGHT)) {
                 level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
             }
+        }
+    }
+
+    public static void removeLights(ServerLevel level, UUID uuid) {
+        String prefix = uuid.toString() + ":";
+
+        Set<String> keysToRemove = new HashSet<>();
+
+        for (String key : PLACED_LIGHTS.keySet()) {
+            if (key.startsWith(prefix)) {
+                keysToRemove.add(key);
+            }
+        }
+
+        for (String key : keysToRemove) {
+            removeLights(level, key);
         }
     }
 

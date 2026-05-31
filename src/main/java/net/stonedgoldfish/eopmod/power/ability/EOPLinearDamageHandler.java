@@ -1,13 +1,16 @@
 package net.stonedgoldfish.eopmod.power.ability;
 
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
@@ -30,7 +33,10 @@ public class EOPLinearDamageHandler {
             float width,
             int travelTime,
             String damageType,
-            String particle
+            String particle,
+            String[] commandsOnTargets,
+            String[] commandsOnAllies,
+            int maxWallThickness
     ) {
         ACTIVE.add(new LinearDamageInstance(
                 caster,
@@ -41,7 +47,10 @@ public class EOPLinearDamageHandler {
                 width,
                 Math.max(1, travelTime),
                 damageType,
-                particle
+                particle,
+                commandsOnTargets,
+                commandsOnAllies,
+                maxWallThickness
         ));
     }
 
@@ -73,7 +82,10 @@ public class EOPLinearDamageHandler {
         private final int travelTime;
         private final String damageType;
         private final String particle;
+        private final String[] commandsOnTargets;
+        private final String[] commandsOnAllies;
         private final Set<UUID> hitEntities = new HashSet<>();
+        private final int maxWallThickness;
 
         private int age = 0;
 
@@ -86,7 +98,10 @@ public class EOPLinearDamageHandler {
                 float width,
                 int travelTime,
                 String damageType,
-                String particle
+                String particle,
+                String[] commandsOnTargets,
+                String[] commandsOnAllies,
+                int maxWallThickness
         ) {
             this.caster = caster;
             this.origin = origin;
@@ -97,6 +112,9 @@ public class EOPLinearDamageHandler {
             this.travelTime = travelTime;
             this.damageType = damageType;
             this.particle = particle;
+            this.commandsOnTargets = commandsOnTargets;
+            this.commandsOnAllies = commandsOnAllies;
+            this.maxWallThickness = maxWallThickness;
         }
 
         private boolean tick() {
@@ -110,6 +128,15 @@ public class EOPLinearDamageHandler {
             double currentDistance = range * progress;
 
             Vec3 center = origin.add(direction.scale(currentDistance));
+            if (maxWallThickness >= 0
+                    && exceedsWallThickness(
+                    origin,
+                    center,
+                    caster,
+                    maxWallThickness
+            )) {
+                return false;
+            }
 
             spawnTravelParticle(center);
 
@@ -125,7 +152,7 @@ public class EOPLinearDamageHandler {
             DamageSource source = createDamageSource(caster, damageType);
 
             for (LivingEntity target : caster.level().getEntitiesOfClass(LivingEntity.class, searchBox)) {
-                if (!EOPTargeting.isValidTarget(caster, target)) {
+                if (target == caster || !target.isAlive()) {
                     continue;
                 }
 
@@ -139,11 +166,59 @@ public class EOPLinearDamageHandler {
                     continue;
                 }
 
-                target.hurt(source, damage);
+                boolean ally = isAlly(caster, target);
+
+                if (ally) {
+                    runCommandsAs(target, commandsOnAllies);
+                } else {
+                    if (!EOPTargeting.isValidTarget(caster, target)) {
+                        continue;
+                    }
+
+                    target.hurt(source, damage);
+                    runCommandsAs(target, commandsOnTargets);
+                }
+
                 hitEntities.add(target.getUUID());
             }
 
             return age < travelTime;
+        }
+
+        private static boolean exceedsWallThickness(
+                Vec3 start,
+                Vec3 end,
+                LivingEntity caster,
+                int allowedThickness
+        ) {
+            var level = caster.level();
+
+            Vec3 direction = end.subtract(start).normalize();
+
+            double distance = start.distanceTo(end);
+
+            int solidBlocksInRow = 0;
+            int maxSolidBlocks = 0;
+
+            for (double d = 0; d <= distance; d += 0.25D) {
+
+                Vec3 pos = start.add(direction.scale(d));
+
+                var blockPos = net.minecraft.core.BlockPos.containing(pos);
+
+                boolean solid = !level.getBlockState(blockPos).isAir()
+                        && level.getBlockState(blockPos)
+                        .isCollisionShapeFullBlock(level, blockPos);
+
+                if (solid) {
+                    solidBlocksInRow++;
+                    maxSolidBlocks = Math.max(maxSolidBlocks, solidBlocksInRow);
+                } else {
+                    solidBlocksInRow = 0;
+                }
+            }
+
+            return maxSolidBlocks > allowedThickness;
         }
 
         private void spawnTravelParticle(Vec3 center) {
@@ -151,7 +226,7 @@ public class EOPLinearDamageHandler {
                 return;
             }
 
-            if (!(caster.level() instanceof net.minecraft.server.level.ServerLevel serverLevel)) {
+            if (!(caster.level() instanceof ServerLevel serverLevel)) {
                 return;
             }
 
@@ -178,6 +253,62 @@ public class EOPLinearDamageHandler {
                     width * 0.25D,
                     0.02D
             );
+        }
+    }
+
+    private static boolean isAlly(LivingEntity source, LivingEntity target) {
+        if (source.isAlliedTo(target) || target.isAlliedTo(source)) {
+            return true;
+        }
+
+        if (target instanceof TamableAnimal pet) {
+            return pet.isOwnedBy(source);
+        }
+
+        if (source instanceof TamableAnimal sourcePet) {
+            LivingEntity owner = sourcePet.getOwner();
+
+            if (owner != null && target.isAlliedTo(owner)) {
+                return true;
+            }
+
+            if (target instanceof TamableAnimal targetPet
+                    && owner != null
+                    && targetPet.isOwnedBy(owner)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static void runCommandsAs(LivingEntity executor, String[] commands) {
+        if (commands == null || commands.length == 0 || executor.level().isClientSide) {
+            return;
+        }
+
+        if (!(executor.level() instanceof ServerLevel serverLevel)) {
+            return;
+        }
+
+        CommandSourceStack sourceStack = executor
+                .createCommandSourceStack()
+                .withLevel(serverLevel)
+                .withPermission(2)
+                .withSuppressedOutput();
+
+        for (String command : commands) {
+            if (command == null || command.isBlank()) {
+                continue;
+            }
+
+            String cleanedCommand = command.startsWith("/")
+                    ? command.substring(1)
+                    : command;
+
+            serverLevel.getServer()
+                    .getCommands()
+                    .performPrefixedCommand(sourceStack, cleanedCommand);
         }
     }
 

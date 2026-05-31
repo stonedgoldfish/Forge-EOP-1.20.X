@@ -48,6 +48,16 @@ public class EOPAbilities {
             ABILITIES.register("particle_pattern", ParticlePatternAbility::new);
     public static final RegistrySupplier<Ability> ENERGY_REGEN =
             ABILITIES.register("energy_regen", EnergyRegenAbility::new);
+    public static final RegistrySupplier<Ability> FORWARD_MOTION =
+            ABILITIES.register("forward_motion", ForwardMotionAbility::new);
+    public static final RegistrySupplier<Ability> MAX_HUNGER =
+            ABILITIES.register("max_hunger", MaxHungerAbility::new);
+    public static final RegistrySupplier<Ability> HUNGER_RESISTANCE =
+            ABILITIES.register("hunger_resistance", HungerResistanceAbility::new);
+    public static final RegistrySupplier<Ability> SMELT =
+            ABILITIES.register("smelt", SmeltAbility::new);
+    public static final RegistrySupplier<Ability> AOE_COMMANDS =
+            ABILITIES.register("aoe_commands", AOECommandAbility::new);
 
     public static void init() {
 

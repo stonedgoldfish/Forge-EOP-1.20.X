@@ -45,6 +45,10 @@ public class ScreenShakeAbility extends Ability {
             new BooleanProperty("end_burst")
                     .configurable("When the ability ends, double the screen shake for 1 second and fade out.");
 
+    public static final PalladiumProperty<Boolean> ONLY_GROUNDED_TARGETS =
+            new BooleanProperty("only_grounded_targets")
+                    .configurable("If true, only players currently on the ground will be affected by screen shake.");
+
     private static final int SHAKE_TIMEOUT_TICKS = 5;
     private static final int END_BURST_DURATION_TICKS = 20;
 
@@ -71,6 +75,7 @@ public class ScreenShakeAbility extends Ability {
         this.withProperty(RANGE, 16.0F);
         this.withProperty(RESISTANCE_TAGS, new String[0]);
         this.withProperty(END_BURST, false);
+        this.withProperty(ONLY_GROUNDED_TARGETS, false);
     }
 
     @Override
@@ -91,6 +96,7 @@ public class ScreenShakeAbility extends Ability {
         boolean affectOthers = entry.getProperty(AFFECT_OTHERS);
         float range = entry.getProperty(RANGE);
         String[] resistanceTags = entry.getProperty(RESISTANCE_TAGS);
+        boolean onlyGroundedTargets = entry.getProperty(ONLY_GROUNDED_TARGETS);
 
         float rangeSqr = range * range;
         long currentTick = entity.level().getGameTime();
@@ -105,6 +111,10 @@ public class ScreenShakeAbility extends Ability {
             }
 
             if (!isSourcePlayer && entity.distanceToSqr(targetPlayer) > rangeSqr) {
+                continue;
+            }
+
+            if (onlyGroundedTargets && !targetPlayer.onGround()) {
                 continue;
             }
 

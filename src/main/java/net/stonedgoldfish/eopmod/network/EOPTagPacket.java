@@ -40,8 +40,10 @@ public class EOPTagPacket {
 
             if (packet.enabled) {
                 player.addTag(packet.tag);
+                player.getPersistentData().putBoolean(packet.tag, true);
             } else {
                 player.removeTag(packet.tag);
+                player.getPersistentData().remove(packet.tag);
             }
         });
 

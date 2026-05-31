@@ -13,8 +13,6 @@ public class EOPAnimationHandler {
         RETURN
     }
 
-    private static boolean forceThirdPerson = false;
-    private static boolean restoreFirstPerson = false;
     private static CameraType previousCameraType = null;
     private static boolean cameraWasChanged = false;
 
@@ -45,6 +43,42 @@ public class EOPAnimationHandler {
         }
 
         minecraft.options.setCameraType(CameraType.THIRD_PERSON_BACK);
+
+        if (previousCameraType == CameraType.FIRST_PERSON) {
+            EOPCameraTransition.start(getCameraProfile(animationType));
+        }
+    }
+
+    private static EOPCameraTransition.CameraProfile getCameraProfile(EOPAnimationType type) {
+        return switch (type) {
+
+            case TRANSFORM -> new EOPCameraTransition.CameraProfile(
+                    0.0D,
+                    0.25D,
+                    8.0D,
+                    0.30F,
+                    0.40F,
+                    0.10F
+            );
+
+            case THIRD_PERSON -> new EOPCameraTransition.CameraProfile(
+                    0.0D,
+                    0.25D,
+                    5.0D,
+                    0.30F,
+                    0.55F,
+                    0.15F
+            );
+
+            default -> new EOPCameraTransition.CameraProfile(
+                    0.0D,
+                    0.0D,
+                    4.0D,
+                    0.30F,
+                    0.20F,
+                    0.15F
+            );
+        };
     }
 
     public static void play(EOPAnimationType animationType) {
@@ -183,7 +217,9 @@ public class EOPAnimationHandler {
             return;
         }
 
-        if (cameraWasChanged && previousCameraType != null) {
+        if (cameraWasChanged && previousCameraType == CameraType.FIRST_PERSON) {
+            EOPCameraTransition.stop();
+        } else if (cameraWasChanged && previousCameraType != null) {
             minecraft.options.setCameraType(previousCameraType);
         }
 
@@ -194,7 +230,7 @@ public class EOPAnimationHandler {
     private static boolean shouldForceThirdPerson(EOPAnimationType type) {
         return switch (type) {
             case TRANSFORM,
-                 RIGHT_ARM_HOLD -> true;
+                 THIRD_PERSON -> true;
 
             default -> false;
         };
@@ -275,8 +311,9 @@ public class EOPAnimationHandler {
         return switch (type) {
             case RIGHT_ARM_SWIPE -> 0.28F;
             case SHOOT -> 0.19F;
-            case RIGHT_ARM_HOLD -> 0.05F;
+            case THIRD_PERSON -> 0.05F;
             case TRANSFORM -> 0.50F;
+            case RIGHT_ARM_LIFT -> 0.25F;
 
             case DASH_FRONT,
                  DASH_LEFT,
@@ -291,8 +328,9 @@ public class EOPAnimationHandler {
         return switch (type) {
             case RIGHT_ARM_SWIPE -> 0.08F;
             case SHOOT -> 0.11F;
-            case RIGHT_ARM_HOLD -> 0.05F;
+            case THIRD_PERSON -> 0.05F;
             case TRANSFORM -> 0.40F;
+            case RIGHT_ARM_LIFT -> 0.25F;
 
             case DASH_FRONT,
                  DASH_LEFT,

@@ -45,6 +45,6 @@ public class SilentStepsAbility extends Ability {
 
     @Override
     public String getDocumentationDescription() {
-        return "Removes walking step sounds, with an optional setting for walking particles.";
+        return "Removes walking step sounds and sprint particles";
     }
 }
