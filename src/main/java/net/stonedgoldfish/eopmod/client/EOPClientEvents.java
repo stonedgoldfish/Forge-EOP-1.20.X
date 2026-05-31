@@ -854,7 +854,9 @@ public class EOPClientEvents {
         }
 
         if (CustomFlightAbility.isFlying(player) && player.onGround()) {
+            CustomFlightAbility.resetSprintFlyingHitbox(player);
             EOPNetwork.CHANNEL.sendToServer(new ToggleCustomFlightPacket());
+            wasSprintFlying = false;
             return;
         }
 
@@ -882,6 +884,8 @@ public class EOPClientEvents {
         boolean sprintFlying = CustomFlightAbility.isFlying(player)
                 && player.isSprinting()
                 && minecraft.options.keyUp.isDown();
+
+        CustomFlightAbility.setSprintFlying(player, sprintFlying);
 
         if (sprintFlying && !wasSprintFlying) {
             EOPFlightSoundHandler.start(player);

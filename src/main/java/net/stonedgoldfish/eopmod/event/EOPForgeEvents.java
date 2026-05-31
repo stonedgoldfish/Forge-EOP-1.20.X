@@ -176,6 +176,18 @@ public class EOPForgeEvents {
         } else {
             player.setNoGravity(false);
         }
+        boolean sprintFlying =
+                CustomFlightAbility.hasCustomFlight(player)
+                        && CustomFlightAbility.isFlying(player)
+                        && player.isSprinting();
+
+        boolean wasSprintFlyingServer =
+                player.getPersistentData().getBoolean("EOPSprintFlying");
+
+        if (sprintFlying != wasSprintFlyingServer) {
+            player.refreshDimensions();
+            player.getPersistentData().putBoolean("EOPSprintFlying", sprintFlying);
+        }
 
     }
 

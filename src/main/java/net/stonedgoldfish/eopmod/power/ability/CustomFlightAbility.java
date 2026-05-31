@@ -3,6 +3,7 @@ package net.stonedgoldfish.eopmod.power.ability;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.phys.AABB;
 import net.threetag.palladium.power.IPowerHolder;
 import net.threetag.palladium.power.ability.Ability;
 import net.threetag.palladium.power.ability.AbilityInstance;
@@ -42,6 +43,7 @@ public class CustomFlightAbility extends Ability {
 
     private static final Map<UUID, FlightSettings> FLIGHT_SETTINGS = new HashMap<>();
     private static final Map<UUID, Boolean> FLYING_STATE = new HashMap<>();
+    private static final Map<UUID, Boolean> SPRINT_FLYING_STATE = new HashMap<>();
 
     public CustomFlightAbility() {
         this.withProperty(ICON, new ItemIcon(Items.FEATHER));
@@ -51,6 +53,36 @@ public class CustomFlightAbility extends Ability {
         this.withProperty(ACCELERATION, 0.35F);
         this.withProperty(DRAG, 0.90F);
         this.withProperty(ALLOW_SPRINT, true);
+    }
+
+    public static void resetSprintFlyingHitbox(Player player) {
+        if (!isSprintFlying(player)) {
+            return;
+        }
+
+        player.setPos(
+                player.getX(),
+                player.getY() + 1.2D,
+                player.getZ()
+        );
+
+        setSprintFlying(player, false);
+        player.refreshDimensions();
+    }
+
+    public static boolean isSprintFlying(Player player) {
+        return SPRINT_FLYING_STATE.getOrDefault(player.getUUID(), false);
+    }
+
+    public static void setSprintFlying(Player player, boolean sprintFlying) {
+        boolean old = isSprintFlying(player);
+
+        if (old == sprintFlying) {
+            return;
+        }
+
+        SPRINT_FLYING_STATE.put(player.getUUID(), sprintFlying);
+        player.refreshDimensions();
     }
 
     @Override
@@ -87,6 +119,8 @@ public class CustomFlightAbility extends Ability {
     private static void disableFlightAbility(Player player) {
         FLIGHT_SETTINGS.remove(player.getUUID());
         FLYING_STATE.remove(player.getUUID());
+        SPRINT_FLYING_STATE.remove(player.getUUID());
+        player.refreshDimensions();
 
         player.setNoGravity(false);
     }
@@ -108,10 +142,17 @@ public class CustomFlightAbility extends Ability {
             flying = false;
         }
 
+        boolean wasFlying = isFlying(player);
+
         FLYING_STATE.put(player.getUUID(), flying);
         player.setNoGravity(flying);
 
+        if (wasFlying != flying) {
+            player.refreshDimensions();
+        }
+
         if (!flying) {
+            resetSprintFlyingHitbox(player);
             player.fallDistance = 0.0F;
         }
     }
