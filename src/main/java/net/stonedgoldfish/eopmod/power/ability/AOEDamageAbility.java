@@ -85,6 +85,18 @@ public class AOEDamageAbility extends Ability {
             new IntegerProperty("particle_amount")
                     .configurable("Base amount of particles spawned. Scales with radius.");
 
+    public static final PalladiumProperty<Boolean> CAUSE_FIRE =
+            new BooleanProperty("cause_fire")
+                    .configurable("Sets random blocks in the radius on fire. Requires destructionMode.");
+
+    public static final PalladiumProperty<Boolean> SMELT_BLOCKS =
+            new BooleanProperty("smelt_blocks")
+                    .configurable("Smelts random blocks in the radius. Requires destructionMode.");
+
+    public static final PalladiumProperty<Float> BLOCK_EFFECT_QUANTITY =
+            new FloatProperty("block_effect_quantity")
+                    .configurable("Chance per block to be affected. 0.4 = 40%.");
+
     public AOEDamageAbility() {
         this.withProperty(ICON, new ItemIcon(Items.TNT));
         this.withProperty(DAMAGE, 6.0F);
@@ -104,6 +116,9 @@ public class AOEDamageAbility extends Ability {
         this.withProperty(PARTICLE_TYPE, "minecraft:poof");
         this.withProperty(PARTICLE_SPEED, 0.2F);
         this.withProperty(PARTICLE_AMOUNT, 24);
+        this.withProperty(CAUSE_FIRE, false);
+        this.withProperty(SMELT_BLOCKS, false);
+        this.withProperty(BLOCK_EFFECT_QUANTITY, 0.4F);
     }
 
     @Override
@@ -129,6 +144,9 @@ public class AOEDamageAbility extends Ability {
         String particleType = entry.getProperty(PARTICLE_TYPE);
         float particleSpeed = entry.getProperty(PARTICLE_SPEED);
         int particleAmount = entry.getProperty(PARTICLE_AMOUNT);
+        boolean causeFire = entry.getProperty(CAUSE_FIRE);
+        boolean smeltBlocks = entry.getProperty(SMELT_BLOCKS);
+        float blockEffectQuantity = entry.getProperty(BLOCK_EFFECT_QUANTITY);
 
         AABB area = entity.getBoundingBox().inflate(radius);
 
@@ -199,6 +217,123 @@ public class AOEDamageAbility extends Ability {
                     particleSpeed
             );
         }
+
+        if (EOPGameRules.isDestructionMode(entity.level().getServer())) {
+            if (causeFire) {
+                causeFireInRadius(entity, radius, blockEffectQuantity);
+            }
+
+            if (smeltBlocks) {
+                smeltBlocksInRadius(entity, radius, blockEffectQuantity);
+            }
+        }
+    }
+
+    private static void causeFireInRadius(LivingEntity entity, float radius, float quantity) {
+        if (!(entity.level() instanceof net.minecraft.server.level.ServerLevel level)) {
+            return;
+        }
+
+        quantity = Math.max(0.0F, Math.min(1.0F, quantity));
+
+        java.util.Random random = new java.util.Random();
+        net.minecraft.core.BlockPos center = entity.blockPosition();
+        int r = (int) Math.ceil(radius);
+
+        for (net.minecraft.core.BlockPos pos : net.minecraft.core.BlockPos.betweenClosed(
+                center.offset(-r, -r, -r),
+                center.offset(r, r, r)
+        )) {
+            if (random.nextFloat() > quantity) {
+                continue;
+            }
+
+            if (pos.distSqr(center) > radius * radius) {
+                continue;
+            }
+
+            net.minecraft.core.BlockPos firePos = pos.above();
+
+            if (!level.getBlockState(firePos).isAir()) {
+                continue;
+            }
+
+            if (level.getBlockState(pos).isAir()) {
+                continue;
+            }
+
+            level.setBlockAndUpdate(
+                    firePos,
+                    net.minecraft.world.level.block.Blocks.FIRE.defaultBlockState()
+            );
+        }
+    }
+
+    private static void smeltBlocksInRadius(LivingEntity entity, float radius, float quantity) {
+        if (!(entity.level() instanceof net.minecraft.server.level.ServerLevel level)) {
+            return;
+        }
+
+        quantity = Math.max(0.0F, Math.min(1.0F, quantity));
+
+        java.util.Random random = new java.util.Random();
+        net.minecraft.core.BlockPos center = entity.blockPosition();
+        int r = (int) Math.ceil(radius);
+
+        for (net.minecraft.core.BlockPos pos : net.minecraft.core.BlockPos.betweenClosed(
+                center.offset(-r, -r, -r),
+                center.offset(r, r, r)
+        )) {
+            if (random.nextFloat() > quantity) {
+                continue;
+            }
+
+            if (pos.distSqr(center) > radius * radius) {
+                continue;
+            }
+
+            smeltBlockAt(level, pos);
+        }
+    }
+
+    private static void smeltBlockAt(
+            net.minecraft.server.level.ServerLevel level,
+            net.minecraft.core.BlockPos pos
+    ) {
+        var state = level.getBlockState(pos);
+
+        if (state.isAir()) {
+            return;
+        }
+
+        net.minecraft.world.item.ItemStack input =
+                new net.minecraft.world.item.ItemStack(state.getBlock());
+
+        var recipe = level.getRecipeManager().getRecipeFor(
+                net.minecraft.world.item.crafting.RecipeType.SMELTING,
+                new net.minecraft.world.SimpleContainer(input),
+                level
+        );
+
+        if (recipe.isEmpty()) {
+            return;
+        }
+
+        net.minecraft.world.item.ItemStack result =
+                recipe.get().getResultItem(level.registryAccess());
+
+        if (result.isEmpty()) {
+            return;
+        }
+
+        net.minecraft.world.level.block.Block block =
+                net.minecraft.world.level.block.Block.byItem(result.getItem());
+
+        if (block == net.minecraft.world.level.block.Blocks.AIR) {
+            return;
+        }
+
+        level.setBlockAndUpdate(pos, block.defaultBlockState());
     }
 
     private static void spawnOutwardParticles(

@@ -64,7 +64,7 @@ public class EOPAnimationHandler {
             case THIRD_PERSON -> new EOPCameraTransition.CameraProfile(
                     0.0D,
                     0.25D,
-                    5.0D,
+                    8.0D,
                     0.30F,
                     0.55F,
                     0.15F
