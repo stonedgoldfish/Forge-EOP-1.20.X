@@ -58,6 +58,8 @@ public class EOPAbilities {
             ABILITIES.register("smelt", SmeltAbility::new);
     public static final RegistrySupplier<Ability> AOE_COMMANDS =
             ABILITIES.register("aoe_commands", AOECommandAbility::new);
+    public static final RegistrySupplier<Ability> RAYCAST_DAMAGE =
+            ABILITIES.register("raycast_damage", RaycastDamageAbility::new);
 
     public static void init() {
 
