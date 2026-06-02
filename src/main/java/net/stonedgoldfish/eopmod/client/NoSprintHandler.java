@@ -6,33 +6,28 @@ import net.minecraftforge.client.event.MovementInputUpdateEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.stonedgoldfish.eopmod.EOPMod;
-import net.stonedgoldfish.eopmod.effect.EOPEffects;
 import net.stonedgoldfish.eopmod.power.ability.ChargeAbility;
-import net.stonedgoldfish.eopmod.power.ability.NoMovementAbility;
 
 @Mod.EventBusSubscriber(modid = EOPMod.MOD_ID, value = Dist.CLIENT)
-public class NoJumpHandler {
+public class NoSprintHandler {
 
     @SubscribeEvent
     public static void onMovementInput(MovementInputUpdateEvent event) {
-
         Minecraft minecraft = Minecraft.getInstance();
 
         if (minecraft.player == null) {
             return;
         }
 
-        if (!isJumpBlocked(minecraft.player)) {
+        if (!isSprintBlocked(minecraft.player)) {
             return;
         }
 
-        event.getInput().jumping = false;
+        minecraft.options.keySprint.setDown(false);
+        minecraft.player.setSprinting(false);
     }
 
-    public static boolean isJumpBlocked(net.minecraft.world.entity.player.Player player) {
-        return player.hasEffect(EOPEffects.STUN.get())
-                || player.hasEffect(EOPEffects.SNARE.get())
-                || NoMovementAbility.isFrozen(player)
-                || ChargeAbility.isCharging(player);
+    public static boolean isSprintBlocked(net.minecraft.world.entity.player.Player player) {
+        return ChargeAbility.isCharging(player);
     }
 }

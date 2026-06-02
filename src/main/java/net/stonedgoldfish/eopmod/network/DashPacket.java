@@ -6,6 +6,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraftforge.common.ForgeMod;
 import java.util.UUID;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -16,11 +17,13 @@ import java.util.function.Supplier;
 public class DashPacket {
 
     private final double x;
+    private final double y;
     private final double z;
     private final float strength;
 
-    public DashPacket(double x, double z, float strength) {
+    public DashPacket(double x, double y, double z, float strength) {
         this.x = x;
+        this.y = y;
         this.z = z;
         this.strength = strength;
     }
@@ -28,14 +31,19 @@ public class DashPacket {
     private static final UUID DASH_KNOCKBACK_UUID =
             UUID.fromString("7c4bbf2d-4c4f-4f63-8f83-df6e6d2e8a11");
 
+    private static final UUID DASH_STEP_HEIGHT_UUID =
+            UUID.fromString("2fa72a42-96c5-4c4e-a34b-2d28f55d3d9d");
+
     public static void encode(DashPacket packet, FriendlyByteBuf buf) {
         buf.writeDouble(packet.x);
+        buf.writeDouble(packet.y);
         buf.writeDouble(packet.z);
         buf.writeFloat(packet.strength);
     }
 
     public static DashPacket decode(FriendlyByteBuf buf) {
         return new DashPacket(
+                buf.readDouble(),
                 buf.readDouble(),
                 buf.readDouble(),
                 buf.readFloat()
@@ -52,7 +60,13 @@ public class DashPacket {
                 return;
             }
 
-            Vec3 direction = new Vec3(packet.x, 0.0D, packet.z).normalize();
+            Vec3 direction = new Vec3(packet.x, packet.y, packet.z);
+
+            if (direction.lengthSqr() < 0.001D) {
+                return;
+            }
+
+            direction = direction.normalize();
 
             player.setDeltaMovement(
                     player.getDeltaMovement().add(direction.scale(packet.strength))
@@ -61,7 +75,6 @@ public class DashPacket {
             var attribute = player.getAttribute(Attributes.KNOCKBACK_RESISTANCE);
 
             if (attribute != null) {
-
                 attribute.removeModifier(DASH_KNOCKBACK_UUID);
 
                 attribute.addTransientModifier(
@@ -72,8 +85,25 @@ public class DashPacket {
                                 AttributeModifier.Operation.ADDITION
                         )
                 );
+
                 DashKnockbackHandler.startDash(player);
             }
+
+            var stepHeight = player.getAttribute(ForgeMod.STEP_HEIGHT_ADDITION.get());
+
+            if (stepHeight != null) {
+                stepHeight.removeModifier(DASH_STEP_HEIGHT_UUID);
+
+                stepHeight.addTransientModifier(
+                        new AttributeModifier(
+                                DASH_STEP_HEIGHT_UUID,
+                                "eop_dash_step_height",
+                                1.0D,
+                                AttributeModifier.Operation.ADDITION
+                        )
+                );
+            }
+
             player.hurtMarked = true;
         });
 
@@ -104,15 +134,19 @@ public class DashPacket {
             int ticks = DASH_TICKS.get(uuid) - 1;
 
             if (ticks <= 0) {
-
                 var attribute = player.getAttribute(Attributes.KNOCKBACK_RESISTANCE);
 
                 if (attribute != null) {
                     attribute.removeModifier(DASH_KNOCKBACK_UUID);
                 }
 
-                DASH_TICKS.remove(uuid);
+                var stepHeight = player.getAttribute(ForgeMod.STEP_HEIGHT_ADDITION.get());
 
+                if (stepHeight != null) {
+                    stepHeight.removeModifier(DASH_STEP_HEIGHT_UUID);
+                }
+
+                DASH_TICKS.remove(uuid);
             } else {
                 DASH_TICKS.put(uuid, ticks);
             }

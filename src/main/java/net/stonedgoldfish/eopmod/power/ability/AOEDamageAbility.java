@@ -97,6 +97,26 @@ public class AOEDamageAbility extends Ability {
             new FloatProperty("block_effect_quantity")
                     .configurable("Chance per block to be affected. 0.4 = 40%.");
 
+    public static final PalladiumProperty<Boolean> LAUNCH_BLOCKS =
+            new BooleanProperty("launch_blocks")
+                    .configurable("If true, launches nearby blocks outward as falling blocks. Requires destructionMode.");
+
+    public static final PalladiumProperty<Integer> LAUNCHED_BLOCK_AMOUNT =
+            new IntegerProperty("launched_block_amount")
+                    .configurable("Maximum amount of blocks launched.");
+
+    public static final PalladiumProperty<Float> LAUNCHED_BLOCK_SIDEWAYS_STRENGTH =
+            new FloatProperty("launched_block_sideways_strength")
+                    .configurable("Sideways velocity strength of launched blocks.");
+
+    public static final PalladiumProperty<Float> LAUNCHED_BLOCK_UPWARD_STRENGTH =
+            new FloatProperty("launched_block_upward_strength")
+                    .configurable("Upward velocity strength of launched blocks.");
+
+    public static final PalladiumProperty<Boolean> STOP_MOTION_ON_FIRST_TARGET =
+            new BooleanProperty("stop_motion_on_first_target")
+                    .configurable("If true, sets the caster's motion to 0 when the first valid target is found.");
+
     public AOEDamageAbility() {
         this.withProperty(ICON, new ItemIcon(Items.TNT));
         this.withProperty(DAMAGE, 6.0F);
@@ -119,6 +139,11 @@ public class AOEDamageAbility extends Ability {
         this.withProperty(CAUSE_FIRE, false);
         this.withProperty(SMELT_BLOCKS, false);
         this.withProperty(BLOCK_EFFECT_QUANTITY, 0.4F);
+        this.withProperty(LAUNCH_BLOCKS, false);
+        this.withProperty(LAUNCHED_BLOCK_AMOUNT, 12);
+        this.withProperty(LAUNCHED_BLOCK_SIDEWAYS_STRENGTH, 1.2F);
+        this.withProperty(LAUNCHED_BLOCK_UPWARD_STRENGTH, 0.15F);
+        this.withProperty(STOP_MOTION_ON_FIRST_TARGET, false);
     }
 
     @Override
@@ -147,6 +172,12 @@ public class AOEDamageAbility extends Ability {
         boolean causeFire = entry.getProperty(CAUSE_FIRE);
         boolean smeltBlocks = entry.getProperty(SMELT_BLOCKS);
         float blockEffectQuantity = entry.getProperty(BLOCK_EFFECT_QUANTITY);
+        boolean launchBlocks = entry.getProperty(LAUNCH_BLOCKS);
+        int launchedBlockAmount = entry.getProperty(LAUNCHED_BLOCK_AMOUNT);
+        float launchedBlockSidewaysStrength = entry.getProperty(LAUNCHED_BLOCK_SIDEWAYS_STRENGTH);
+        float launchedBlockUpwardStrength = entry.getProperty(LAUNCHED_BLOCK_UPWARD_STRENGTH);
+        boolean stopMotionOnFirstTarget = entry.getProperty(STOP_MOTION_ON_FIRST_TARGET);
+        boolean stoppedMotion = false;
 
         AABB area = entity.getBoundingBox().inflate(radius);
 
@@ -165,6 +196,12 @@ public class AOEDamageAbility extends Ability {
 
             if (cone && !isInsideCone(entity, target, coneAngle)) {
                 continue;
+            }
+
+            if (stopMotionOnFirstTarget && !stoppedMotion) {
+                entity.setDeltaMovement(Vec3.ZERO);
+                entity.hurtMarked = true;
+                stoppedMotion = true;
             }
 
             if (enableDamage) {
@@ -194,6 +231,15 @@ public class AOEDamageAbility extends Ability {
             }
 
             runCommandsAsTarget(target, commandsOnTarget);
+        }
+        if (launchBlocks && EOPGameRules.isDestructionMode(entity.level().getServer())) {
+            launchBlocksOutward(
+                    entity,
+                    radius,
+                    launchedBlockAmount,
+                    launchedBlockSidewaysStrength,
+                    launchedBlockUpwardStrength
+            );
         }
         if (createExplosion) {
 
@@ -226,6 +272,114 @@ public class AOEDamageAbility extends Ability {
             if (smeltBlocks) {
                 smeltBlocksInRadius(entity, radius, blockEffectQuantity);
             }
+        }
+    }
+
+    private static void launchBlocksOutward(
+            LivingEntity entity,
+            float radius,
+            int amount,
+            float sidewaysStrength,
+            float upwardStrength
+    ) {
+        if (!(entity.level() instanceof net.minecraft.server.level.ServerLevel level)) {
+            return;
+        }
+
+        if (amount <= 0
+                || radius <= 0.0F
+                || (sidewaysStrength <= 0.0F && upwardStrength <= 0.0F)) {
+            return;
+        }
+
+        java.util.Random random = new java.util.Random();
+        java.util.List<net.minecraft.core.BlockPos> possibleBlocks = new java.util.ArrayList<>();
+
+        net.minecraft.core.BlockPos center = entity.blockPosition().below();
+        int r = (int) Math.ceil(radius);
+
+        for (net.minecraft.core.BlockPos pos : net.minecraft.core.BlockPos.betweenClosed(
+                center.offset(-r, 0, -r),
+                center.offset(r, 0, r)
+        )) {
+            double dx = pos.getX() + 0.5D - (center.getX() + 0.5D);
+            double dz = pos.getZ() + 0.5D - (center.getZ() + 0.5D);
+
+            if ((dx * dx) + (dz * dz) > radius * radius) {
+                continue;
+            }
+
+            var state = level.getBlockState(pos);
+
+            if (state.isAir()) {
+                continue;
+            }
+
+            if (state.getDestroySpeed(level, pos) < 0.0F) {
+                continue;
+            }
+
+            possibleBlocks.add(pos.immutable());
+        }
+
+        java.util.Collections.shuffle(possibleBlocks, random);
+
+        int launched = 0;
+
+        for (net.minecraft.core.BlockPos pos : possibleBlocks) {
+            if (launched >= amount) {
+                break;
+            }
+
+            var state = level.getBlockState(pos);
+
+            if (state.isAir()) {
+                continue;
+            }
+
+            String blockId = net.minecraft.core.registries.BuiltInRegistries.BLOCK
+                    .getKey(state.getBlock())
+                    .toString();
+
+            double dx = (pos.getX() + 0.5D) - entity.getX();
+            double dz = (pos.getZ() + 0.5D) - entity.getZ();
+
+            Vec3 direction = new Vec3(dx, 0.0D, dz);
+
+            if (direction.lengthSqr() < 0.001D) {
+                double angle = random.nextDouble() * Math.PI * 2.0D;
+
+                direction = new Vec3(
+                        Math.cos(angle),
+                        0.0D,
+                        Math.sin(angle)
+                );
+            } else {
+                direction = direction.normalize();
+            }
+
+            Vec3 motion = direction.scale(sidewaysStrength)
+                    .add(0.0D, upwardStrength, 0.0D);
+
+            String command = "summon falling_block "
+                    + (pos.getX() + 0.5D) + " "
+                    + (pos.getY() + 1.05D) + " "
+                    + (pos.getZ() + 0.5D)
+                    + " {BlockState:{Name:\""
+                    + blockId
+                    + "\"},Time:1,DropItem:0b,CancelDrop:1b,Motion:["
+                    + motion.x + "d,"
+                    + motion.y + "d,"
+                    + motion.z + "d]}";
+
+            level.getServer().getCommands().performPrefixedCommand(
+                    entity.createCommandSourceStack()
+                            .withSuppressedOutput()
+                            .withPermission(4),
+                    command
+            );
+
+            launched++;
         }
     }
 

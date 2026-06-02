@@ -17,6 +17,8 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.stonedgoldfish.eopmod.EOPMod;
+import net.stonedgoldfish.eopmod.event.EOPForgeEvents;
+import net.stonedgoldfish.eopmod.util.EOPArmorStandSpawner;
 import net.stonedgoldfish.eopmod.util.EOPTargeting;
 
 import java.util.*;
@@ -36,12 +38,38 @@ public class EOPLinearDamageHandler {
             String particle,
             String[] commandsOnTargets,
             String[] commandsOnAllies,
-            int maxWallThickness
+            int maxWallThickness,
+            boolean ignorePitch,
+
+            boolean spawnArmorStand,
+            int armorStandInterval,
+            int armorStandLifetime,
+            float armorStandAoeDamage,
+            float armorStandAoeRadius,
+            String armorStandAoeDamageType,
+            boolean armorStandEnableDamage,
+            boolean armorStandDamageOnLastTick,
+            float armorStandKnockbackOnLastTick,
+            float armorStandTargetCommandRadius,
+            float armorStandPullStrength,
+            boolean armorStandInvertPull,
+            String armorStandPower,
+            String[] armorStandFirstTickCommands,
+            String[] armorStandCommands,
+            String[] armorStandLastTickCommands,
+            String[] armorStandTargetFirstTickCommands,
+            String[] armorStandTargetCommands,
+            String[] armorStandTargetLastTickCommands,
+            String armorStandLoopingSound,
+            float armorStandLoopingSoundVolume,
+            float armorStandLoopingSoundPitch,
+            boolean armorStandDestroyBlocks,
+            float armorStandDestroyBlockRadius
     ) {
         ACTIVE.add(new LinearDamageInstance(
                 caster,
                 caster.position().add(0.0D, caster.getBbHeight() * 0.5D, 0.0D),
-                caster.getLookAngle().normalize(),
+                getDirection(caster, ignorePitch),
                 damage,
                 range,
                 width,
@@ -50,8 +78,47 @@ public class EOPLinearDamageHandler {
                 particle,
                 commandsOnTargets,
                 commandsOnAllies,
-                maxWallThickness
+                maxWallThickness,
+
+                spawnArmorStand,
+                Math.max(1, armorStandInterval),
+                armorStandLifetime,
+                armorStandAoeDamage,
+                armorStandAoeRadius,
+                armorStandAoeDamageType,
+                armorStandEnableDamage,
+                armorStandDamageOnLastTick,
+                armorStandKnockbackOnLastTick,
+                armorStandTargetCommandRadius,
+                armorStandPullStrength,
+                armorStandInvertPull,
+                armorStandPower,
+                armorStandFirstTickCommands,
+                armorStandCommands,
+                armorStandLastTickCommands,
+                armorStandTargetFirstTickCommands,
+                armorStandTargetCommands,
+                armorStandTargetLastTickCommands,
+                armorStandLoopingSound,
+                armorStandLoopingSoundVolume,
+                armorStandLoopingSoundPitch,
+                armorStandDestroyBlocks,
+                armorStandDestroyBlockRadius
         ));
+    }
+
+    private static Vec3 getDirection(LivingEntity caster, boolean ignorePitch) {
+        if (!ignorePitch) {
+            return caster.getLookAngle().normalize();
+        }
+
+        float yawRad = caster.getYRot() * ((float) Math.PI / 180.0F);
+
+        return new Vec3(
+                -Math.sin(yawRad),
+                0.0D,
+                Math.cos(yawRad)
+        ).normalize();
     }
 
     @SubscribeEvent
@@ -87,6 +154,31 @@ public class EOPLinearDamageHandler {
         private final Set<UUID> hitEntities = new HashSet<>();
         private final int maxWallThickness;
 
+        private final boolean spawnArmorStand;
+        private final int armorStandInterval;
+        private final int armorStandLifetime;
+        private final float armorStandAoeDamage;
+        private final float armorStandAoeRadius;
+        private final String armorStandAoeDamageType;
+        private final boolean armorStandEnableDamage;
+        private final boolean armorStandDamageOnLastTick;
+        private final float armorStandKnockbackOnLastTick;
+        private final float armorStandTargetCommandRadius;
+        private final float armorStandPullStrength;
+        private final boolean armorStandInvertPull;
+        private final String armorStandPower;
+        private final String[] armorStandFirstTickCommands;
+        private final String[] armorStandCommands;
+        private final String[] armorStandLastTickCommands;
+        private final String[] armorStandTargetFirstTickCommands;
+        private final String[] armorStandTargetCommands;
+        private final String[] armorStandTargetLastTickCommands;
+        private final String armorStandLoopingSound;
+        private final float armorStandLoopingSoundVolume;
+        private final float armorStandLoopingSoundPitch;
+        private final boolean armorStandDestroyBlocks;
+        private final float armorStandDestroyBlockRadius;
+
         private int age = 0;
 
         private LinearDamageInstance(
@@ -101,7 +193,32 @@ public class EOPLinearDamageHandler {
                 String particle,
                 String[] commandsOnTargets,
                 String[] commandsOnAllies,
-                int maxWallThickness
+                int maxWallThickness,
+
+                boolean spawnArmorStand,
+                int armorStandInterval,
+                int armorStandLifetime,
+                float armorStandAoeDamage,
+                float armorStandAoeRadius,
+                String armorStandAoeDamageType,
+                boolean armorStandEnableDamage,
+                boolean armorStandDamageOnLastTick,
+                float armorStandKnockbackOnLastTick,
+                float armorStandTargetCommandRadius,
+                float armorStandPullStrength,
+                boolean armorStandInvertPull,
+                String armorStandPower,
+                String[] armorStandFirstTickCommands,
+                String[] armorStandCommands,
+                String[] armorStandLastTickCommands,
+                String[] armorStandTargetFirstTickCommands,
+                String[] armorStandTargetCommands,
+                String[] armorStandTargetLastTickCommands,
+                String armorStandLoopingSound,
+                float armorStandLoopingSoundVolume,
+                float armorStandLoopingSoundPitch,
+                boolean armorStandDestroyBlocks,
+                float armorStandDestroyBlockRadius
         ) {
             this.caster = caster;
             this.origin = origin;
@@ -115,6 +232,31 @@ public class EOPLinearDamageHandler {
             this.commandsOnTargets = commandsOnTargets;
             this.commandsOnAllies = commandsOnAllies;
             this.maxWallThickness = maxWallThickness;
+
+            this.spawnArmorStand = spawnArmorStand;
+            this.armorStandInterval = armorStandInterval;
+            this.armorStandLifetime = armorStandLifetime;
+            this.armorStandAoeDamage = armorStandAoeDamage;
+            this.armorStandAoeRadius = armorStandAoeRadius;
+            this.armorStandAoeDamageType = armorStandAoeDamageType;
+            this.armorStandEnableDamage = armorStandEnableDamage;
+            this.armorStandDamageOnLastTick = armorStandDamageOnLastTick;
+            this.armorStandKnockbackOnLastTick = armorStandKnockbackOnLastTick;
+            this.armorStandTargetCommandRadius = armorStandTargetCommandRadius;
+            this.armorStandPullStrength = armorStandPullStrength;
+            this.armorStandInvertPull = armorStandInvertPull;
+            this.armorStandPower = armorStandPower;
+            this.armorStandFirstTickCommands = armorStandFirstTickCommands;
+            this.armorStandCommands = armorStandCommands;
+            this.armorStandLastTickCommands = armorStandLastTickCommands;
+            this.armorStandTargetFirstTickCommands = armorStandTargetFirstTickCommands;
+            this.armorStandTargetCommands = armorStandTargetCommands;
+            this.armorStandTargetLastTickCommands = armorStandTargetLastTickCommands;
+            this.armorStandLoopingSound = armorStandLoopingSound;
+            this.armorStandLoopingSoundVolume = armorStandLoopingSoundVolume;
+            this.armorStandLoopingSoundPitch = armorStandLoopingSoundPitch;
+            this.armorStandDestroyBlocks = armorStandDestroyBlocks;
+            this.armorStandDestroyBlockRadius = armorStandDestroyBlockRadius;
         }
 
         private boolean tick() {
@@ -128,14 +270,14 @@ public class EOPLinearDamageHandler {
             double currentDistance = range * progress;
 
             Vec3 center = origin.add(direction.scale(currentDistance));
+
             if (maxWallThickness >= 0
-                    && exceedsWallThickness(
-                    origin,
-                    center,
-                    caster,
-                    maxWallThickness
-            )) {
+                    && exceedsWallThickness(origin, center, caster, maxWallThickness)) {
                 return false;
+            }
+
+            if (spawnArmorStand && age % armorStandInterval == 0) {
+                spawnArmorStandAt(center);
             }
 
             spawnTravelParticle(center);
@@ -185,6 +327,50 @@ public class EOPLinearDamageHandler {
             return age < travelTime;
         }
 
+        private void spawnArmorStandAt(Vec3 position) {
+            if (!(caster.level() instanceof ServerLevel level)) {
+                return;
+            }
+
+            var armorStand = EOPArmorStandSpawner.spawnBasic(
+                    caster,
+                    level,
+                    position,
+                    caster.getYRot()
+            );
+
+            EOPArmorStandSpawner.applyCommonData(
+                    armorStand,
+                    armorStandLifetime,
+                    armorStandAoeDamage,
+                    armorStandAoeRadius,
+                    armorStandAoeDamageType,
+                    armorStandEnableDamage,
+                    armorStandDamageOnLastTick,
+                    armorStandKnockbackOnLastTick,
+                    armorStandTargetCommandRadius,
+                    armorStandPullStrength,
+                    armorStandInvertPull,
+                    armorStandPower,
+                    armorStandFirstTickCommands,
+                    armorStandCommands,
+                    armorStandLastTickCommands,
+                    armorStandTargetFirstTickCommands,
+                    armorStandTargetCommands,
+                    armorStandTargetLastTickCommands,
+                    armorStandLoopingSound,
+                    armorStandLoopingSoundVolume,
+                    armorStandLoopingSoundPitch,
+                    armorStandDestroyBlocks,
+                    armorStandDestroyBlockRadius
+            );
+
+            EOPForgeEvents.runStandCommands(
+                    armorStand,
+                    "EOPStandFirstTickCommands"
+            );
+        }
+
         private static boolean exceedsWallThickness(
                 Vec3 start,
                 Vec3 end,
@@ -194,16 +380,13 @@ public class EOPLinearDamageHandler {
             var level = caster.level();
 
             Vec3 direction = end.subtract(start).normalize();
-
             double distance = start.distanceTo(end);
 
             int solidBlocksInRow = 0;
             int maxSolidBlocks = 0;
 
             for (double d = 0; d <= distance; d += 0.25D) {
-
                 Vec3 pos = start.add(direction.scale(d));
-
                 var blockPos = net.minecraft.core.BlockPos.containing(pos);
 
                 boolean solid = !level.getBlockState(blockPos).isAir()

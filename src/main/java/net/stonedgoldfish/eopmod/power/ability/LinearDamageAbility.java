@@ -49,6 +49,84 @@ public class LinearDamageAbility extends Ability {
             new StringArrayProperty("commands_on_allies")
                     .configurable("Commands to run as allies hit by the line.");
 
+    public static final PalladiumProperty<Boolean> IGNORE_PITCH =
+            new BooleanProperty("ignore_pitch")
+                    .configurable("If true, the line travels horizontally forward, ignoring look pitch.");
+
+    public static final PalladiumProperty<Boolean> SPAWN_ARMOR_STAND =
+            new BooleanProperty("spawn_armor_stand")
+                    .configurable("If true, spawns EOP armor stands along the linear path.");
+
+    public static final PalladiumProperty<Integer> ARMOR_STAND_INTERVAL =
+            new IntegerProperty("armor_stand_interval")
+                    .configurable("Ticks between armor stand spawns along the line.");
+
+    public static final PalladiumProperty<Integer> ARMOR_STAND_LIFETIME =
+            new IntegerProperty("armor_stand_lifetime").configurable("Armor stand lifetime.");
+
+    public static final PalladiumProperty<Float> ARMOR_STAND_AOE_DAMAGE =
+            new FloatProperty("armor_stand_aoe_damage").configurable("Armor stand AOE damage.");
+
+    public static final PalladiumProperty<Float> ARMOR_STAND_AOE_RADIUS =
+            new FloatProperty("armor_stand_aoe_radius").configurable("Armor stand AOE radius.");
+
+    public static final PalladiumProperty<String> ARMOR_STAND_AOE_DAMAGE_TYPE =
+            new StringProperty("armor_stand_aoe_damage_type").configurable("Armor stand damage type.");
+
+    public static final PalladiumProperty<Boolean> ARMOR_STAND_ENABLE_DAMAGE =
+            new BooleanProperty("armor_stand_enable_damage").configurable("Enable armor stand damage.");
+
+    public static final PalladiumProperty<Boolean> ARMOR_STAND_DAMAGE_ON_LAST_TICK =
+            new BooleanProperty("armor_stand_damage_on_last_tick").configurable("Damage on last tick.");
+
+    public static final PalladiumProperty<Float> ARMOR_STAND_KNOCKBACK_ON_LAST_TICK =
+            new FloatProperty("armor_stand_knockback_on_last_tick").configurable("Last tick knockback.");
+
+    public static final PalladiumProperty<Float> ARMOR_STAND_TARGET_COMMAND_RADIUS =
+            new FloatProperty("armor_stand_target_command_radius").configurable("Target command radius.");
+
+    public static final PalladiumProperty<Float> ARMOR_STAND_PULL_STRENGTH =
+            new FloatProperty("armor_stand_pull_strength").configurable("Pull strength.");
+
+    public static final PalladiumProperty<Boolean> ARMOR_STAND_INVERT_PULL =
+            new BooleanProperty("armor_stand_invert_pull").configurable("Invert pull.");
+
+    public static final PalladiumProperty<String> ARMOR_STAND_POWER =
+            new StringProperty("armor_stand_power").configurable("Power given to stand.");
+
+    public static final PalladiumProperty<String[]> ARMOR_STAND_FIRST_TICK_COMMANDS =
+            new StringArrayProperty("armor_stand_first_tick_commands").configurable("First tick commands.");
+
+    public static final PalladiumProperty<String[]> ARMOR_STAND_COMMANDS =
+            new StringArrayProperty("armor_stand_commands").configurable("Tick commands.");
+
+    public static final PalladiumProperty<String[]> ARMOR_STAND_LAST_TICK_COMMANDS =
+            new StringArrayProperty("armor_stand_last_tick_commands").configurable("Last tick commands.");
+
+    public static final PalladiumProperty<String[]> ARMOR_STAND_TARGET_FIRST_TICK_COMMANDS =
+            new StringArrayProperty("armor_stand_target_first_tick_commands").configurable("Target first tick commands.");
+
+    public static final PalladiumProperty<String[]> ARMOR_STAND_TARGET_COMMANDS =
+            new StringArrayProperty("armor_stand_target_commands").configurable("Target tick commands.");
+
+    public static final PalladiumProperty<String[]> ARMOR_STAND_TARGET_LAST_TICK_COMMANDS =
+            new StringArrayProperty("armor_stand_target_last_tick_commands").configurable("Target last tick commands.");
+
+    public static final PalladiumProperty<String> ARMOR_STAND_LOOPING_SOUND =
+            new StringProperty("armor_stand_looping_sound").configurable("Looping sound.");
+
+    public static final PalladiumProperty<Float> ARMOR_STAND_LOOPING_SOUND_VOLUME =
+            new FloatProperty("armor_stand_looping_sound_volume").configurable("Looping sound volume.");
+
+    public static final PalladiumProperty<Float> ARMOR_STAND_LOOPING_SOUND_PITCH =
+            new FloatProperty("armor_stand_looping_sound_pitch").configurable("Looping sound pitch.");
+
+    public static final PalladiumProperty<Boolean> ARMOR_STAND_DESTROY_BLOCKS =
+            new BooleanProperty("armor_stand_destroy_blocks").configurable("Destroy blocks.");
+
+    public static final PalladiumProperty<Float> ARMOR_STAND_DESTROY_BLOCK_RADIUS =
+            new FloatProperty("armor_stand_destroy_block_radius").configurable("Destroy block radius.");
+
     private static final Map<UUID, Set<UUID>> HIT_ENTITIES = new HashMap<>();
 
     private static final Map<UUID, Integer> ACTIVE_TICKS = new HashMap<>();
@@ -64,6 +142,31 @@ public class LinearDamageAbility extends Ability {
         this.withProperty(MAX_WALL_THICKNESS, -1);
         this.withProperty(COMMANDS_ON_TARGETS, new String[0]);
         this.withProperty(COMMANDS_ON_ALLIES, new String[0]);
+        this.withProperty(IGNORE_PITCH, false);
+        this.withProperty(SPAWN_ARMOR_STAND, false);
+        this.withProperty(ARMOR_STAND_INTERVAL, 1);
+        this.withProperty(ARMOR_STAND_LIFETIME, 20);
+        this.withProperty(ARMOR_STAND_AOE_DAMAGE, 0.0F);
+        this.withProperty(ARMOR_STAND_AOE_RADIUS, 3.0F);
+        this.withProperty(ARMOR_STAND_AOE_DAMAGE_TYPE, "minecraft:magic");
+        this.withProperty(ARMOR_STAND_ENABLE_DAMAGE, true);
+        this.withProperty(ARMOR_STAND_DAMAGE_ON_LAST_TICK, false);
+        this.withProperty(ARMOR_STAND_KNOCKBACK_ON_LAST_TICK, 0.0F);
+        this.withProperty(ARMOR_STAND_TARGET_COMMAND_RADIUS, 3.0F);
+        this.withProperty(ARMOR_STAND_PULL_STRENGTH, 0.0F);
+        this.withProperty(ARMOR_STAND_INVERT_PULL, false);
+        this.withProperty(ARMOR_STAND_POWER, "");
+        this.withProperty(ARMOR_STAND_FIRST_TICK_COMMANDS, new String[]{});
+        this.withProperty(ARMOR_STAND_COMMANDS, new String[]{});
+        this.withProperty(ARMOR_STAND_LAST_TICK_COMMANDS, new String[]{});
+        this.withProperty(ARMOR_STAND_TARGET_FIRST_TICK_COMMANDS, new String[]{});
+        this.withProperty(ARMOR_STAND_TARGET_COMMANDS, new String[]{});
+        this.withProperty(ARMOR_STAND_TARGET_LAST_TICK_COMMANDS, new String[]{});
+        this.withProperty(ARMOR_STAND_LOOPING_SOUND, "");
+        this.withProperty(ARMOR_STAND_LOOPING_SOUND_VOLUME, 1.0F);
+        this.withProperty(ARMOR_STAND_LOOPING_SOUND_PITCH, 1.0F);
+        this.withProperty(ARMOR_STAND_DESTROY_BLOCKS, false);
+        this.withProperty(ARMOR_STAND_DESTROY_BLOCK_RADIUS, 0.0F);
     }
 
     @Override
@@ -82,7 +185,32 @@ public class LinearDamageAbility extends Ability {
                 entry.getProperty(PARTICLE),
                 entry.getProperty(COMMANDS_ON_TARGETS),
                 entry.getProperty(COMMANDS_ON_ALLIES),
-                entry.getProperty(MAX_WALL_THICKNESS)
+                entry.getProperty(MAX_WALL_THICKNESS),
+                entry.getProperty(IGNORE_PITCH),
+                entry.getProperty(SPAWN_ARMOR_STAND),
+                entry.getProperty(ARMOR_STAND_INTERVAL),
+                entry.getProperty(ARMOR_STAND_LIFETIME),
+                entry.getProperty(ARMOR_STAND_AOE_DAMAGE),
+                entry.getProperty(ARMOR_STAND_AOE_RADIUS),
+                entry.getProperty(ARMOR_STAND_AOE_DAMAGE_TYPE),
+                entry.getProperty(ARMOR_STAND_ENABLE_DAMAGE),
+                entry.getProperty(ARMOR_STAND_DAMAGE_ON_LAST_TICK),
+                entry.getProperty(ARMOR_STAND_KNOCKBACK_ON_LAST_TICK),
+                entry.getProperty(ARMOR_STAND_TARGET_COMMAND_RADIUS),
+                entry.getProperty(ARMOR_STAND_PULL_STRENGTH),
+                entry.getProperty(ARMOR_STAND_INVERT_PULL),
+                entry.getProperty(ARMOR_STAND_POWER),
+                entry.getProperty(ARMOR_STAND_FIRST_TICK_COMMANDS),
+                entry.getProperty(ARMOR_STAND_COMMANDS),
+                entry.getProperty(ARMOR_STAND_LAST_TICK_COMMANDS),
+                entry.getProperty(ARMOR_STAND_TARGET_FIRST_TICK_COMMANDS),
+                entry.getProperty(ARMOR_STAND_TARGET_COMMANDS),
+                entry.getProperty(ARMOR_STAND_TARGET_LAST_TICK_COMMANDS),
+                entry.getProperty(ARMOR_STAND_LOOPING_SOUND),
+                entry.getProperty(ARMOR_STAND_LOOPING_SOUND_VOLUME),
+                entry.getProperty(ARMOR_STAND_LOOPING_SOUND_PITCH),
+                entry.getProperty(ARMOR_STAND_DESTROY_BLOCKS),
+                entry.getProperty(ARMOR_STAND_DESTROY_BLOCK_RADIUS)
         );
     }
 

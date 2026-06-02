@@ -72,6 +72,8 @@ public class EOPAbilities {
             ABILITIES.register("reset_cooldown", ResetCooldownAbility::new);
     public static final RegistrySupplier<Ability> PLAY_SOUND =
             ABILITIES.register("play_sound", PlaySoundAbility::new);
+    public static final RegistrySupplier<Ability> CHARGE =
+            ABILITIES.register("charge", ChargeAbility::new);
 
     public static void init() {
 

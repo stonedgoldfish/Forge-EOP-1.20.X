@@ -10,7 +10,7 @@ import net.stonedgoldfish.eopmod.network.EOPNetwork;
 
 public class EOPClientDashHelper {
 
-    public static void dash(float strength) {
+    public static void dash(float strength, boolean addPitch) {
         Minecraft minecraft = Minecraft.getInstance();
         LocalPlayer player = minecraft.player;
 
@@ -42,24 +42,35 @@ public class EOPClientDashHelper {
         boolean pressingAnything =
                 pressingForward || pressingBack || pressingLeft || pressingRight;
 
-        if (pressingForward) {
-            direction = direction.add(forward);
-        }
+        boolean pitchDash =
+                addPitch
+                        && !pressingBack
+                        && !pressingLeft
+                        && !pressingRight
+                        && (pressingForward || !pressingAnything);
 
-        if (pressingBack) {
-            direction = direction.add(forward.scale(-1.0D));
-        }
+        if (pitchDash) {
+            direction = player.getLookAngle();
+        } else {
+            if (pressingForward) {
+                direction = direction.add(forward);
+            }
 
-        if (pressingLeft) {
-            direction = direction.add(right);
-        }
+            if (pressingBack) {
+                direction = direction.add(forward.scale(-1.0D));
+            }
 
-        if (pressingRight) {
-            direction = direction.add(right.scale(-1.0D));
-        }
+            if (pressingLeft) {
+                direction = direction.add(right);
+            }
 
-        if (direction.lengthSqr() < 0.001D) {
-            direction = forward;
+            if (pressingRight) {
+                direction = direction.add(right.scale(-1.0D));
+            }
+
+            if (direction.lengthSqr() < 0.001D) {
+                direction = forward;
+            }
         }
 
         direction = direction.normalize();
@@ -75,7 +86,7 @@ public class EOPClientDashHelper {
         }
 
         EOPNetwork.CHANNEL.sendToServer(
-                new DashPacket(direction.x, direction.z, strength)
+                new DashPacket(direction.x, direction.y, direction.z, strength)
         );
     }
 }

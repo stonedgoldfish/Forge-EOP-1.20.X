@@ -7,10 +7,13 @@ import net.minecraft.client.resources.sounds.Sound;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.client.sounds.WeighedSoundEvents;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraftforge.client.event.MovementInputUpdateEvent;
+import net.minecraftforge.client.event.RenderBlockScreenEffectEvent;
+import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.stonedgoldfish.eopmod.EOPMod;
@@ -26,6 +29,7 @@ import net.stonedgoldfish.eopmod.client.animation.EOPFlightAnimation;
 import net.stonedgoldfish.eopmod.client.animation.EOPPlayerAnimation;
 import net.stonedgoldfish.eopmod.network.EOPNetwork;
 import net.stonedgoldfish.eopmod.network.ToggleCustomFlightPacket;
+import net.stonedgoldfish.eopmod.power.ability.IntangibilityAbility;
 import net.threetag.palladium.client.screen.power.PowersScreen;
 import net.threetag.palladium.event.PalladiumClientEvents;
 import net.stonedgoldfish.eopmod.power.EOPPalladiumProperties;
@@ -831,6 +835,59 @@ public class EOPClientEvents {
             return;
         }
         event.getInput().shiftKeyDown = false;
+    }
+
+    @SubscribeEvent
+    public static void onFogRender(ViewportEvent.RenderFog event) {
+        Minecraft minecraft = Minecraft.getInstance();
+
+        if (minecraft.player == null) {
+            return;
+        }
+
+        float viewDistance =
+                IntangibilityAbility.getInsideBlockViewDistance(minecraft.player);
+
+        if (viewDistance <= 0.0F) {
+            return;
+        }
+
+        if (!isInsideBlock(minecraft.player)) {
+            return;
+        }
+
+        event.setNearPlaneDistance(0.0F);
+        event.setFarPlaneDistance(viewDistance);
+        event.setCanceled(true);
+    }
+
+    @SubscribeEvent
+    public static void onBlockOverlay(RenderBlockScreenEffectEvent event) {
+        Minecraft minecraft = Minecraft.getInstance();
+
+        if (minecraft.player == null) {
+            return;
+        }
+
+        float viewDistance =
+                IntangibilityAbility.getInsideBlockViewDistance(minecraft.player);
+
+        if (viewDistance <= 0.0F) {
+            return;
+        }
+
+        if (isInsideBlock(minecraft.player)) {
+            event.setCanceled(true);
+        }
+    }
+
+    private static boolean isInsideBlock(LocalPlayer player) {
+        BlockPos eyePos = BlockPos.containing(player.getEyePosition());
+
+        var state = player.level().getBlockState(eyePos);
+
+        return !state.isAir()
+                && state.getCollisionShape(player.level(), eyePos).isEmpty() == false;
     }
 
     @SubscribeEvent

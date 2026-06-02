@@ -1,15 +1,18 @@
 package net.stonedgoldfish.eopmod.power.ability;
 
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.threetag.palladium.power.ability.AbilityUtil;
 import net.threetag.palladium.tags.PalladiumBlockTags;
 import net.threetag.palladium.power.ability.Ability;
 import net.threetag.palladium.power.ability.AbilityInstance;
 import net.threetag.palladium.util.icon.ItemIcon;
 import net.threetag.palladium.util.property.BlockTagProperty;
 import net.threetag.palladium.util.property.BooleanProperty;
+import net.threetag.palladium.util.property.FloatProperty;
 import net.threetag.palladium.util.property.PalladiumProperty;
 
 public class IntangibilityAbility extends Ability {
@@ -17,6 +20,10 @@ public class IntangibilityAbility extends Ability {
     public static final PalladiumProperty<Boolean> VERTICAL =
             new BooleanProperty("vertical")
                     .configurable("Makes the player vertically intangible as well.");
+
+    public static final PalladiumProperty<Float> INSIDE_BLOCK_VIEW_DISTANCE =
+            new FloatProperty("inside_block_view_distance")
+                    .configurable("How far the player can see while inside blocks. 0 disables block vision.");
 
     public static final PalladiumProperty<TagKey<Block>> WHITELIST =
             new BlockTagProperty("whitelist")
@@ -30,6 +37,7 @@ public class IntangibilityAbility extends Ability {
         this.withProperty(ICON, new ItemIcon(Items.ENDER_PEARL));
 
         this.withProperty(VERTICAL, false);
+        this.withProperty(INSIDE_BLOCK_VIEW_DISTANCE, 0.0F);
         this.withProperty(WHITELIST, null);
         this.withProperty(BLACKLIST, PalladiumBlockTags.PREVENTS_INTANGIBILITY);
     }
@@ -51,6 +59,19 @@ public class IntangibilityAbility extends Ability {
                 return true;
             }
         }
+    }
+
+    public static float getInsideBlockViewDistance(LivingEntity entity) {
+        float highest = 0.0F;
+
+        for (AbilityInstance entry : AbilityUtil.getEnabledEntries(
+                entity,
+                EOPAbilities.INTANGIBILITY.get()
+        )) {
+            highest = Math.max(highest, entry.getProperty(INSIDE_BLOCK_VIEW_DISTANCE));
+        }
+
+        return highest;
     }
 
     @Override

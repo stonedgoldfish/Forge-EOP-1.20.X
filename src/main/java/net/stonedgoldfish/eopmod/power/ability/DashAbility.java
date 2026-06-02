@@ -16,12 +16,17 @@ import net.threetag.palladium.util.icon.ItemIcon;
 import net.threetag.palladium.util.property.FloatProperty;
 import net.threetag.palladium.util.property.PalladiumProperty;
 import net.threetag.palladium.util.property.StringProperty;
+import net.threetag.palladium.util.property.BooleanProperty;
 
 public class DashAbility extends Ability {
 
     public static final PalladiumProperty<Float> STRENGTH =
             new FloatProperty("strength")
                     .configurable("How strong the dash is.");
+
+    public static final PalladiumProperty<Boolean> ADD_PITCH =
+            new BooleanProperty("add_pitch")
+                    .configurable("If true, forward/no-input dashes follow the player's pitch.");
 
     public static final PalladiumProperty<String> SOUND =
             new StringProperty("sound")
@@ -50,6 +55,7 @@ public class DashAbility extends Ability {
     public DashAbility() {
         this.withProperty(ICON, new ItemIcon(Items.FEATHER));
         this.withProperty(STRENGTH, 1.5F);
+        this.withProperty(ADD_PITCH, false);
         this.withProperty(SOUND, "minecraft:entity.player.attack.sweep");
         this.withProperty(PARTICLE, "minecraft:cloud");
         this.withProperty(SOUND_VOLUME, 1.0F);
@@ -67,7 +73,7 @@ public class DashAbility extends Ability {
         if (entity.level().isClientSide) {
             net.minecraftforge.fml.DistExecutor.unsafeRunWhenOn(
                     net.minecraftforge.api.distmarker.Dist.CLIENT,
-                    () -> () -> net.stonedgoldfish.eopmod.client.EOPClientDashHelper.dash(entry.getProperty(STRENGTH))
+                    () -> () -> net.stonedgoldfish.eopmod.client.EOPClientDashHelper.dash(entry.getProperty(STRENGTH),entry.getProperty(ADD_PITCH))
             );
 
             return;
