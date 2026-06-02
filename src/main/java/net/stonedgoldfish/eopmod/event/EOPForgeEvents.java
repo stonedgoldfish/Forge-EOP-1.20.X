@@ -87,6 +87,23 @@ public class EOPForgeEvents {
     }
 
     @SubscribeEvent
+    public static void onLivingHurt(LivingHurtEvent event) {
+        if (!(event.getEntity() instanceof Player player)) {
+            return;
+        }
+
+        float reduction = DamageReductionAbility.consumeHighestReduction(player);
+
+        if (reduction <= 0.0F) {
+            return;
+        }
+
+        float multiplier = 1.0F - (reduction / 100.0F);
+
+        event.setAmount(event.getAmount() * multiplier);
+    }
+
+    @SubscribeEvent
     public static void onLivingHeal(LivingHealEvent event) {
         if (NoNaturalRegenAbility.hasNoNaturalRegen(event.getEntity())) {
             event.setCanceled(true);

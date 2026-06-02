@@ -12,6 +12,7 @@ public enum EOPAnimationType {
     SHOOT(EOPAnimationPlaybackType.ONE_SHOT),
 
     TRANSFORM(EOPAnimationPlaybackType.TWO_PHASE),
+    CREATE(EOPAnimationPlaybackType.TWO_PHASE),
 
     THIRD_PERSON(EOPAnimationPlaybackType.HOLD),
     RIGHT_ARM_LIFT(EOPAnimationPlaybackType.HOLD);

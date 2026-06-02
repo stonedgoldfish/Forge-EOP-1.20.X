@@ -77,6 +77,16 @@ public class EOPPlayerAnimation extends PalladiumAnimation {
                 }
             }
 
+            case CREATE -> {
+                if (!firstPerson) {
+                    CreateAnimation.animate(
+                            builder,
+                            EOPAnimationHandler.getPhase(),
+                            anim
+                    );
+                }
+            }
+
             case THIRD_PERSON -> {
                 if (!firstPerson) {
                     ThirdPersonAnimation.animate(builder, anim);

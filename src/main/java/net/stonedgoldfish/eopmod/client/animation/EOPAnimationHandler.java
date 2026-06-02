@@ -61,6 +61,15 @@ public class EOPAnimationHandler {
                     0.10F
             );
 
+            case CREATE -> new EOPCameraTransition.CameraProfile(
+                    -1.0D,
+                    0.21D,
+                    2.0D,
+                    0.30F,
+                    0.40F,
+                    0.10F
+            );
+
             case THIRD_PERSON -> new EOPCameraTransition.CameraProfile(
                     0.0D,
                     0.25D,
@@ -230,6 +239,7 @@ public class EOPAnimationHandler {
     private static boolean shouldForceThirdPerson(EOPAnimationType type) {
         return switch (type) {
             case TRANSFORM,
+                 CREATE,
                  THIRD_PERSON -> true;
 
             default -> false;
@@ -264,12 +274,16 @@ public class EOPAnimationHandler {
         int duration = getDuration(currentAnimation);
 
         if (phase == Phase.PHASE_1) {
-            return Mth.clamp(interpolatedTick / phaseOneEnd, 0.0F, 1.0F);
+            return Mth.clamp(
+                    (interpolatedTick / phaseOneEnd) * getPhaseOneSpeed(currentAnimation),
+                    0.0F,
+                    1.0F
+            );
         }
 
         if (phase == Phase.PHASE_2) {
             return Mth.clamp(
-                    (interpolatedTick - phaseOneEnd) / (phaseTwoEnd - phaseOneEnd),
+                    ((interpolatedTick - phaseOneEnd) / (phaseTwoEnd - phaseOneEnd)) * getPhaseTwoSpeed(currentAnimation),
                     0.0F,
                     1.0F
             );
@@ -277,7 +291,7 @@ public class EOPAnimationHandler {
 
         if (phase == Phase.RETURN) {
             return Mth.clamp(
-                    (interpolatedTick - phaseTwoEnd) / (duration - phaseTwoEnd),
+                    ((interpolatedTick - phaseTwoEnd) / (duration - phaseTwoEnd)) * getReturnSpeedTwoPhase(currentAnimation),
                     0.0F,
                     1.0F
             );
@@ -286,25 +300,66 @@ public class EOPAnimationHandler {
         return 0.0F;
     }
 
-    private static int getPhaseOneEnd(EOPAnimationType type) {
+    private static int getPhaseOneDuration(EOPAnimationType type) {
         return switch (type) {
             case TRANSFORM -> 10;
-            default -> getDuration(type) / 2;
+            case CREATE -> 12;
+            default -> 10;
         };
+    }
+
+    private static int getPhaseTwoDuration(EOPAnimationType type) {
+        return switch (type) {
+            case TRANSFORM -> 6;
+            case CREATE -> 8;
+            default -> 5;
+        };
+    }
+
+    private static int getReturnDuration(EOPAnimationType type) {
+        return switch (type) {
+            case TRANSFORM -> 15;
+            case CREATE -> 10;
+            default -> 5;
+        };
+    }
+
+    private static float getPhaseOneSpeed(EOPAnimationType type) {
+        return switch (type) {
+            case TRANSFORM -> 1.0F;
+            case CREATE -> 1.0F;
+            default -> 1.0F;
+        };
+    }
+
+    private static float getPhaseTwoSpeed(EOPAnimationType type) {
+        return switch (type) {
+            case TRANSFORM -> 1.0F;
+            case CREATE -> 2.0F;
+            default -> 1.0F;
+        };
+    }
+
+    private static float getReturnSpeedTwoPhase(EOPAnimationType type) {
+        return switch (type) {
+            case TRANSFORM -> 1.0F;
+            case CREATE -> 1.0F;
+            default -> 1.0F;
+        };
+    }
+
+    private static int getPhaseOneEnd(EOPAnimationType type) {
+        return getPhaseOneDuration(type);
     }
 
     private static int getPhaseTwoEnd(EOPAnimationType type) {
-        return switch (type) {
-            case TRANSFORM -> 16;
-            default -> getDuration(type) - 5;
-        };
+        return getPhaseOneDuration(type) + getPhaseTwoDuration(type);
     }
 
     private static int getDuration(EOPAnimationType type) {
-        return switch (type) {
-            case TRANSFORM -> 31;
-            default -> 20;
-        };
+        return getPhaseOneDuration(type)
+                + getPhaseTwoDuration(type)
+                + getReturnDuration(type);
     }
 
     private static float getEnterSpeed(EOPAnimationType type) {
@@ -312,7 +367,6 @@ public class EOPAnimationHandler {
             case RIGHT_ARM_SWIPE -> 0.28F;
             case SHOOT -> 0.19F;
             case THIRD_PERSON -> 0.05F;
-            case TRANSFORM -> 0.50F;
             case RIGHT_ARM_LIFT -> 0.25F;
 
             case DASH_FRONT,
@@ -329,7 +383,6 @@ public class EOPAnimationHandler {
             case RIGHT_ARM_SWIPE -> 0.08F;
             case SHOOT -> 0.11F;
             case THIRD_PERSON -> 0.05F;
-            case TRANSFORM -> 0.40F;
             case RIGHT_ARM_LIFT -> 0.25F;
 
             case DASH_FRONT,

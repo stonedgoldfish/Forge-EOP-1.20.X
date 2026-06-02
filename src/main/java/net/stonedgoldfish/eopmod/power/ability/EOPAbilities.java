@@ -60,6 +60,14 @@ public class EOPAbilities {
             ABILITIES.register("aoe_commands", AOECommandAbility::new);
     public static final RegistrySupplier<Ability> RAYCAST_DAMAGE =
             ABILITIES.register("raycast_damage", RaycastDamageAbility::new);
+    public static final RegistrySupplier<Ability> DAMAGE_REDUCTION =
+            ABILITIES.register("damage_reduction", DamageReductionAbility::new);
+    public static final RegistrySupplier<Ability> NO_COLLISION =
+            ABILITIES.register("no_collision", NoCollisionAbility::new);
+    public static final RegistrySupplier<Ability> RAYCAST_TELEPORT =
+            ABILITIES.register("teleport", RaycastTeleportAbility::new);
+    public static final RegistrySupplier<Ability> INTANGIBILITY =
+            ABILITIES.register("intangibility", IntangibilityAbility::new);
 
     public static void init() {
 
