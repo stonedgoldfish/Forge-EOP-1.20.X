@@ -68,6 +68,10 @@ public class EOPAbilities {
             ABILITIES.register("teleport", RaycastTeleportAbility::new);
     public static final RegistrySupplier<Ability> INTANGIBILITY =
             ABILITIES.register("intangibility", IntangibilityAbility::new);
+    public static final RegistrySupplier<Ability> RESET_COOLDOWN =
+            ABILITIES.register("reset_cooldown", ResetCooldownAbility::new);
+    public static final RegistrySupplier<Ability> PLAY_SOUND =
+            ABILITIES.register("play_sound", PlaySoundAbility::new);
 
     public static void init() {
 
