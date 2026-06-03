@@ -68,5 +68,12 @@ public class EOPNetwork {
                 SyncSelectedPowerPacket::decode,
                 SyncSelectedPowerPacket::handle
         );
+        CHANNEL.registerMessage(
+                packetId++,
+                WallJumpPacket.class,
+                WallJumpPacket::encode,
+                WallJumpPacket::decode,
+                WallJumpPacket::handle
+        );
     }
 }

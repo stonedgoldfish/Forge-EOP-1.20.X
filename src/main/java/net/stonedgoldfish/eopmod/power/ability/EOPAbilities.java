@@ -86,6 +86,8 @@ public class EOPAbilities {
             ABILITIES.register("scoreboard_attribute", ScoreboardAttributeAbility::new);
     public static final RegistrySupplier<Ability> PUNCH_COMMAND =
             ABILITIES.register("punch_command", CommandOnPunchAbility::new);
+    public static final RegistrySupplier<Ability> CLIMB =
+            ABILITIES.register("wall_climb", WallClimbAbility::new);
 
     public static void init() {
 
