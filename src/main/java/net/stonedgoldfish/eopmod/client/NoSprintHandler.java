@@ -7,6 +7,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.stonedgoldfish.eopmod.EOPMod;
 import net.stonedgoldfish.eopmod.power.ability.ChargeAbility;
+import net.stonedgoldfish.eopmod.power.ability.SinkAbility;
 
 @Mod.EventBusSubscriber(modid = EOPMod.MOD_ID, value = Dist.CLIENT)
 public class NoSprintHandler {
@@ -28,6 +29,7 @@ public class NoSprintHandler {
     }
 
     public static boolean isSprintBlocked(net.minecraft.world.entity.player.Player player) {
-        return ChargeAbility.isCharging(player);
+        return ChargeAbility.isCharging(player)
+                || SinkAbility.shouldBlockSprint(player);
     }
 }

@@ -13,7 +13,11 @@ public class ProjectileMixin {
 
     @Inject(method = "canHitEntity", at = @At("HEAD"), cancellable = true)
     private void eop$projectilesIgnorePhasingEntities(Entity target, CallbackInfoReturnable<Boolean> cir) {
-        if (NoCollisionAbility.isProjectilePhasing(target)) {
+
+        Projectile projectile = (Projectile) (Object) this;
+
+        if (NoCollisionAbility.isProjectilePhasing(target)
+                && !NoCollisionAbility.isProjectileBlacklisted(target, projectile)) {
             cir.setReturnValue(false);
         }
     }

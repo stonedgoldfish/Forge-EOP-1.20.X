@@ -74,6 +74,18 @@ public class EOPAbilities {
             ABILITIES.register("play_sound", PlaySoundAbility::new);
     public static final RegistrySupplier<Ability> CHARGE =
             ABILITIES.register("charge", ChargeAbility::new);
+    public static final RegistrySupplier<Ability> AREA_DESTROY =
+            ABILITIES.register("area_destroy", AreaDestroyAbility::new);
+    public static final RegistrySupplier<Ability> SINK =
+            ABILITIES.register("sink", SinkAbility::new);
+    public static final RegistrySupplier<Ability> LAVA_SWIMMING =
+            ABILITIES.register("lava_swimming", LavaSwimmingAbility::new);
+    public static final RegistrySupplier<Ability> FAST_TRAVEL =
+            ABILITIES.register("fast_travel", FastTravelAbility::new);
+    public static final RegistrySupplier<Ability> SCOREBOARD_ATTRIBUTE =
+            ABILITIES.register("scoreboard_attribute", ScoreboardAttributeAbility::new);
+    public static final RegistrySupplier<Ability> PUNCH_COMMAND =
+            ABILITIES.register("punch_command", CommandOnPunchAbility::new);
 
     public static void init() {
 

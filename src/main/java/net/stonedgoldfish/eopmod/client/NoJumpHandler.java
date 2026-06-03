@@ -9,6 +9,7 @@ import net.stonedgoldfish.eopmod.EOPMod;
 import net.stonedgoldfish.eopmod.effect.EOPEffects;
 import net.stonedgoldfish.eopmod.power.ability.ChargeAbility;
 import net.stonedgoldfish.eopmod.power.ability.NoMovementAbility;
+import net.stonedgoldfish.eopmod.power.ability.SinkAbility;
 
 @Mod.EventBusSubscriber(modid = EOPMod.MOD_ID, value = Dist.CLIENT)
 public class NoJumpHandler {
@@ -33,6 +34,7 @@ public class NoJumpHandler {
         return player.hasEffect(EOPEffects.STUN.get())
                 || player.hasEffect(EOPEffects.SNARE.get())
                 || NoMovementAbility.isFrozen(player)
-                || ChargeAbility.isCharging(player);
+                || ChargeAbility.isCharging(player)
+                || SinkAbility.shouldBlockJump(player);
     }
 }

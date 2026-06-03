@@ -6,14 +6,18 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
+import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.RegistryObject;
 import net.stonedgoldfish.eopmod.effect.EOPEffects;
+import net.stonedgoldfish.eopmod.network.EOPNetwork;
+import net.stonedgoldfish.eopmod.network.SyncAttackDamagePacket;
 import net.stonedgoldfish.eopmod.power.ability.*;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -88,6 +92,19 @@ public class EOPForgeEvents {
 
     @SubscribeEvent
     public static void onLivingHurt(LivingHurtEvent event) {
+
+        if (event.getSource().getEntity() instanceof Player caster) {
+            boolean projectileHit =
+                    event.getSource().getDirectEntity() != null
+                            && event.getSource().getDirectEntity() != caster;
+
+            CommandOnPunchAbility.runCommands(
+                    caster,
+                    event.getEntity(),
+                    projectileHit
+            );
+        }
+
         if (!(event.getEntity() instanceof Player player)) {
             return;
         }
@@ -164,6 +181,32 @@ public class EOPForgeEvents {
         }
     }
 
+    private static int countEopPowers(net.minecraft.server.level.ServerPlayer player) {
+        var handler = net.threetag.palladium.power.PowerManager
+                .getPowerHandler(player)
+                .orElse(null);
+
+        if (handler == null) {
+            return 0;
+        }
+
+        int count = 0;
+
+        for (EOPPowerRegistry.EOPPower power : EOPPowerRegistry.getAll()) {
+            net.minecraft.resources.ResourceLocation id =
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(
+                            "eop",
+                            power.key()
+                    );
+
+            if (handler.getPowerHolders().containsKey(id)) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.phase != TickEvent.Phase.END) {
@@ -173,6 +216,20 @@ public class EOPForgeEvents {
         if (!(event.player instanceof ServerPlayer player)) {
             return;
         }
+
+        int currentAmount = countEopPowers(player);
+        int storedAmount = EOPPalladiumProperties.getPowerAmount(player);
+
+        if (currentAmount != storedAmount) {
+            EOPPalladiumProperties.setPowerAmount(player, currentAmount);
+        }
+
+        double attackDamage = player.getAttributeValue(Attributes.ATTACK_DAMAGE);
+
+        EOPNetwork.CHANNEL.send(
+                PacketDistributor.PLAYER.with(() -> player),
+                new SyncAttackDamagePacket(attackDamage)
+        );
 
         EOPPalladiumProperties.setClimbExtra(player, player.getTags().contains("EOP.Extra.Climb"));
         EOPPalladiumProperties.setNightVisionExtra(player, player.getTags().contains("EOP.Extra.Night.Vision"));

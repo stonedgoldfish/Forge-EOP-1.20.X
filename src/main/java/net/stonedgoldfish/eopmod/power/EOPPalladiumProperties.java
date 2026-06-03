@@ -16,6 +16,7 @@ public class EOPPalladiumProperties {
     private static final Map<String, PalladiumProperty<Integer>> LEVEL_PROPERTIES = new HashMap<>();
     private static final Map<String, PalladiumProperty<Integer>> SKILL_POINT_PROPERTIES = new HashMap<>();
     private static final Map<String, PalladiumProperty<Integer>> ENERGY_PROPERTIES = new HashMap<>();
+    public static final PalladiumProperty<Integer> POWER_AMOUNT = new IntegerProperty("eop_power_amount");
     public static final PalladiumProperty<Boolean> LIVING_CREATURE = new BooleanProperty("EOP.LivingCreature");
     private static final PalladiumProperty<Boolean> CLIMB_EXTRA = new BooleanProperty("eop_climb_extra");
     public static final PalladiumProperty<Boolean> NIGHT_VISION_EXTRA = new BooleanProperty("eop_night_vision_extra");
@@ -33,6 +34,7 @@ public class EOPPalladiumProperties {
     public static void init() {
         PalladiumEvents.REGISTER_PROPERTY.register(handler -> {
             if (handler.getEntity().getType() == EntityType.PLAYER) {
+                handler.register(POWER_AMOUNT, 0);
                 for (EOPPowerRegistry.EOPPower power : EOPPowerRegistry.getAll()) {
                     handler.register(getOrCreateXpProperty(power.key()), 0);
                     handler.register(getOrCreateLevelProperty(power.key()), 1);
@@ -58,6 +60,14 @@ public class EOPPalladiumProperties {
                 handler.register(EOPPalladiumProperties.LIVING_CREATURE, true);
             }
         });
+    }
+
+    public static int getPowerAmount(Entity entity) {
+        return POWER_AMOUNT.get(entity);
+    }
+
+    public static void setPowerAmount(Entity entity, int amount) {
+        POWER_AMOUNT.set(entity, Math.max(0, amount));
     }
 
     public static PalladiumProperty<Integer> getOrCreateEnergyProperty(String powerKey) {

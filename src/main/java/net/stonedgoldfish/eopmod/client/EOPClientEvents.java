@@ -10,7 +10,6 @@ import net.minecraft.client.sounds.WeighedSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
 import net.minecraftforge.client.event.MovementInputUpdateEvent;
 import net.minecraftforge.client.event.RenderBlockScreenEffectEvent;
 import net.minecraftforge.client.event.ViewportEvent;
@@ -30,6 +29,7 @@ import net.stonedgoldfish.eopmod.client.animation.EOPPlayerAnimation;
 import net.stonedgoldfish.eopmod.network.EOPNetwork;
 import net.stonedgoldfish.eopmod.network.ToggleCustomFlightPacket;
 import net.stonedgoldfish.eopmod.power.ability.IntangibilityAbility;
+import net.stonedgoldfish.eopmod.power.ability.LavaSwimmingAbility;
 import net.threetag.palladium.client.screen.power.PowersScreen;
 import net.threetag.palladium.event.PalladiumClientEvents;
 import net.stonedgoldfish.eopmod.power.EOPPalladiumProperties;
@@ -500,7 +500,7 @@ public class EOPClientEvents {
         double armor = player.getAttributeValue(Attributes.ARMOR);
         double armorToughness = player.getAttributeValue(Attributes.ARMOR_TOUGHNESS);
         double speed = player.getAttributeValue(Attributes.MOVEMENT_SPEED);
-        double attackDamage = player.getAttributeBaseValue(Attributes.ATTACK_DAMAGE);
+        double attackDamage = EOPClientStats.ATTACK_DAMAGE;
 
         float attributeScale = 0.70F;
 
@@ -728,6 +728,29 @@ public class EOPClientEvents {
 
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.disableBlend();
+    }
+
+    @SubscribeEvent
+    public static void onLavaFog(net.minecraftforge.client.event.ViewportEvent.RenderFog event) {
+        Minecraft minecraft = Minecraft.getInstance();
+
+        if (minecraft.player == null) {
+            return;
+        }
+
+        if (!minecraft.player.isEyeInFluid(net.minecraft.tags.FluidTags.LAVA)) {
+            return;
+        }
+
+        float fogDistance = LavaSwimmingAbility.getLavaFogDistance(minecraft.player);
+
+        if (fogDistance <= 0.0F) {
+            return;
+        }
+
+        event.setNearPlaneDistance(0.0F);
+        event.setFarPlaneDistance(fogDistance);
+        event.setCanceled(true);
     }
 
     @SubscribeEvent

@@ -10,6 +10,7 @@ import net.threetag.palladium.power.ability.AbilityInstance;
 import net.threetag.palladium.util.icon.ItemIcon;
 import net.threetag.palladium.util.property.BooleanProperty;
 import net.threetag.palladium.util.property.PalladiumProperty;
+import net.threetag.palladium.util.property.StringArrayProperty;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,11 +22,21 @@ public class NoCollisionAbility extends Ability {
             new BooleanProperty("projectile_phasing")
                     .configurable("If true, projectiles will pass through the player.");
 
-    private static final Map<UUID, Boolean> PHASING_ENTITIES = new HashMap<>();
+    public static final PalladiumProperty<String[]> PROJECTILE_BLACKLIST =
+            new StringArrayProperty("projectile_blacklist")
+                    .configurable("Projectile entity IDs that are NOT ignored by projectile phasing.");
+
+    private static final Map<UUID, PhasingData> PHASING_ENTITIES = new HashMap<>();
+
+    private record PhasingData(
+            boolean projectilePhasing,
+            String[] projectileBlacklist
+    ) {}
 
     public NoCollisionAbility() {
         this.withProperty(ICON, new ItemIcon(Items.ENDER_PEARL));
         this.withProperty(PROJECTILE_PHASING, true);
+        this.withProperty(PROJECTILE_BLACKLIST, new String[]{});
     }
 
     @Override
@@ -35,7 +46,13 @@ public class NoCollisionAbility extends Ability {
         }
 
         if (enabled) {
-            PHASING_ENTITIES.put(player.getUUID(), entry.getProperty(PROJECTILE_PHASING));
+            PHASING_ENTITIES.put(
+                    player.getUUID(),
+                    new PhasingData(
+                            entry.getProperty(PROJECTILE_PHASING),
+                            entry.getProperty(PROJECTILE_BLACKLIST)
+                    )
+            );
         } else {
             PHASING_ENTITIES.remove(player.getUUID());
         }
@@ -51,7 +68,38 @@ public class NoCollisionAbility extends Ability {
     }
 
     public static boolean isProjectilePhasing(Entity entity) {
-        return entity != null && PHASING_ENTITIES.getOrDefault(entity.getUUID(), false);
+        if (entity == null) {
+            return false;
+        }
+
+        PhasingData data = PHASING_ENTITIES.get(entity.getUUID());
+
+        return data != null && data.projectilePhasing();
+    }
+
+    public static boolean isProjectileBlacklisted(Entity phasedEntity, Entity projectile) {
+        if (phasedEntity == null || projectile == null) {
+            return false;
+        }
+
+        PhasingData data = PHASING_ENTITIES.get(phasedEntity.getUUID());
+
+        if (data == null) {
+            return false;
+        }
+
+        String projectileId =
+                net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE
+                        .getKey(projectile.getType())
+                        .toString();
+
+        for (String blacklisted : data.projectileBlacklist()) {
+            if (projectileId.equals(blacklisted)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override

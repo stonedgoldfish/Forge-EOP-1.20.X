@@ -54,5 +54,19 @@ public class EOPNetwork {
                 PlayArmorStandLoopingSoundPacket::decode,
                 PlayArmorStandLoopingSoundPacket::handle
         );
+        CHANNEL.registerMessage(
+                packetId++,
+                SyncAttackDamagePacket.class,
+                SyncAttackDamagePacket::encode,
+                SyncAttackDamagePacket::decode,
+                SyncAttackDamagePacket::handle
+        );
+        CHANNEL.registerMessage(
+                packetId++,
+                SyncSelectedPowerPacket.class,
+                SyncSelectedPowerPacket::encode,
+                SyncSelectedPowerPacket::decode,
+                SyncSelectedPowerPacket::handle
+        );
     }
 }
