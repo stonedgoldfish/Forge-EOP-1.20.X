@@ -40,7 +40,7 @@ public class WallClimbAbility extends Ability {
         this.withProperty(CLIMB_SPEED, 0.25F);
         this.withProperty(WALL_JUMP_POWER, 0.35F);
         this.withProperty(SIDEWAYS_STRENGTH, 0.35F);
-        this.withProperty(SIDEWAYS_SPEED, 0.12F);
+        this.withProperty(SIDEWAYS_SPEED, 0.13F);
     }
 
     private static final Map<UUID, Float> WALL_CLIMBERS = new HashMap<>();

@@ -43,7 +43,7 @@ public class WallJumpPacket {
             float jumpPower = WallClimbAbility.getWallJumpPower(player);
 
             Vec3 jumpMotion = look.scale(jumpPower)
-                    .add(0.0D, jumpPower * 0.15D, 0.0D);
+                    .add(0.0D, jumpPower * 0.16D, 0.0D);
 
             player.setDeltaMovement(jumpMotion);
             player.level().playSound(
