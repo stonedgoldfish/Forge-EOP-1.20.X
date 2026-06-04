@@ -38,22 +38,14 @@ public class WallJumpPacket {
                 return;
             }
 
-            Vec3 look = player.getLookAngle();
-            Vec3 forward = new Vec3(look.x, 0.0D, look.z);
-
-            if (forward.lengthSqr() < 0.001D) {
-                return;
-            }
-
-            forward = forward.normalize();
+            Vec3 look = player.getLookAngle().normalize();
 
             float jumpPower = WallClimbAbility.getWallJumpPower(player);
 
-            player.setDeltaMovement(
-                    forward.x * 0.8D,
-                    jumpPower,
-                    forward.z * 0.8D
-            );
+            Vec3 jumpMotion = look.scale(jumpPower)
+                    .add(0.0D, jumpPower * 0.15D, 0.0D);
+
+            player.setDeltaMovement(jumpMotion);
             player.level().playSound(
                     null,
                     player.getX(),

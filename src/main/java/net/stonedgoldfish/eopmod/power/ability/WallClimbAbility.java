@@ -12,6 +12,7 @@ import net.threetag.palladium.power.ability.Ability;
 import net.threetag.palladium.power.ability.AbilityInstance;
 import net.threetag.palladium.util.icon.ItemIcon;
 import net.threetag.palladium.util.property.FloatProperty;
+import net.threetag.palladium.util.property.PalladiumProperties;
 import net.threetag.palladium.util.property.PalladiumProperty;
 
 import java.util.*;
@@ -26,15 +27,26 @@ public class WallClimbAbility extends Ability {
             new FloatProperty("wall_jump_power")
                     .configurable("Vertical power applied when wall jumping.");
 
+    public static final PalladiumProperty<Float> SIDEWAYS_STRENGTH =
+            new FloatProperty("sideways_strength")
+                    .configurable("How much sideways movement blends into the climb direction.");
+
+    public static final PalladiumProperty<Float> SIDEWAYS_SPEED =
+            new FloatProperty("sideways_speed")
+                    .configurable("How fast the player moves sideways while climbing.");
+
     public WallClimbAbility() {
         this.withProperty(ICON, new ItemIcon(Items.LADDER));
         this.withProperty(CLIMB_SPEED, 0.25F);
         this.withProperty(WALL_JUMP_POWER, 0.35F);
+        this.withProperty(SIDEWAYS_STRENGTH, 0.35F);
+        this.withProperty(SIDEWAYS_SPEED, 0.12F);
     }
 
     private static final Map<UUID, Float> WALL_CLIMBERS = new HashMap<>();
     private static final Map<UUID, Integer> WALL_JUMP_COOLDOWN = new HashMap<>();
     private static final Map<UUID, Integer> LEDGE_ASSIST_TICKS = new HashMap<>();
+    private static final Map<UUID, Integer> LEDGE_GRAB_TICKS = new HashMap<>();
 
     @Override
     public void tick(LivingEntity entity, AbilityInstance entry, IPowerHolder holder, boolean enabled) {
@@ -46,7 +58,28 @@ public class WallClimbAbility extends Ability {
             return;
         }
 
-        if (!isTouchingClimbableWall(entity)) {
+        boolean touchingNormalWall = isTouchingClimbableWall(entity);
+        boolean touchingLedge = isTouchingOneBlockLedge(entity);
+
+        if (entity.isShiftKeyDown() && touchingLedge) {
+            LEDGE_GRAB_TICKS.put(entity.getUUID(), 10);
+        }
+
+        Integer grabTicks = LEDGE_GRAB_TICKS.get(entity.getUUID());
+
+        boolean ledgeGrabActive = grabTicks != null && grabTicks > 0;
+
+        boolean touchingWall = touchingNormalWall || ledgeGrabActive;
+
+        if (grabTicks != null) {
+            if (grabTicks <= 0) {
+                LEDGE_GRAB_TICKS.remove(entity.getUUID());
+            } else {
+                LEDGE_GRAB_TICKS.put(entity.getUUID(), grabTicks - 1);
+            }
+        }
+
+        if (!touchingWall) {
             WALL_CLIMBERS.remove(entity.getUUID());
 
             Integer ledgeTicks = LEDGE_ASSIST_TICKS.get(entity.getUUID());
@@ -107,14 +140,36 @@ public class WallClimbAbility extends Ability {
 
         double climbSpeed = entry.getProperty(CLIMB_SPEED);
 
-        Vec3 motion = entity.getDeltaMovement();
+        Vec3 look = entity.getLookAngle().normalize();
 
-        entity.setDeltaMovement(
-                motion.x,
-                climbSpeed,
-                motion.z
+        boolean pressingForward = PalladiumProperties.FORWARD_KEY_DOWN.get(entity);
+
+        double sidewaysStrength = entry.getProperty(SIDEWAYS_STRENGTH);
+        double sidewaysSpeed = entry.getProperty(SIDEWAYS_SPEED);
+
+        double verticalMotion = pressingForward
+                ? climbSpeed * Math.max(0.0D, 1.0D - sidewaysStrength)
+                : -climbSpeed * 0.45D;
+
+        Vec3 sidewaysMotion = new Vec3(
+                look.x,
+                0.0D,
+                look.z
         );
 
+        if (sidewaysMotion.lengthSqr() > 0.001D) {
+            sidewaysMotion = sidewaysMotion.normalize().scale(sidewaysSpeed);
+        } else {
+            sidewaysMotion = Vec3.ZERO;
+        }
+
+        Vec3 climbMotion = new Vec3(
+                sidewaysMotion.x,
+                verticalMotion,
+                sidewaysMotion.z
+        );
+
+        entity.setDeltaMovement(climbMotion);
         entity.fallDistance = 0.0F;
         entity.hurtMarked = true;
     }
@@ -124,6 +179,30 @@ public class WallClimbAbility extends Ability {
         WALL_CLIMBERS.remove(entity.getUUID());
         LEDGE_ASSIST_TICKS.remove(entity.getUUID());
         WALL_JUMP_COOLDOWN.remove(entity.getUUID());
+        LEDGE_GRAB_TICKS.remove(entity.getUUID());
+    }
+
+    private static boolean isTouchingOneBlockLedge(LivingEntity entity) {
+        Level level = entity.level();
+
+        double checkDistance = 0.45D;
+
+        for (Direction direction : Direction.Plane.HORIZONTAL) {
+            Vec3 checkPos = entity.getEyePosition().add(
+                    direction.getStepX() * checkDistance,
+                    0.0D,
+                    direction.getStepZ() * checkDistance
+            );
+
+            BlockPos eyeWall = BlockPos.containing(checkPos);
+            BlockPos aboveEyeWall = eyeWall.above();
+
+            if (isSolid(level, eyeWall) && !isSolid(level, aboveEyeWall)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static boolean canClimbLedge(LivingEntity entity) {
