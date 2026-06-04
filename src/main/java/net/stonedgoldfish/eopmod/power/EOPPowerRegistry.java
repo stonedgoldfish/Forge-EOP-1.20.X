@@ -26,7 +26,7 @@ public class EOPPowerRegistry {
     private static final Map<String, EOPPower> BY_KEY = new HashMap<>();
 
     static {
-        register("Astral_Energy_Manipulation", "beyonder", 5, true, true, false, false, false, 0xf7ff00, "Controller", "Zoner", "Melee/Ranged", "Easy");
+        register("Astral_Energy_Manipulation", "beyonder", 5, true, true, false, false, false, 0xf7ff00, "Controller", "Zoner", "Mixed", "Easy");
         register("Plane_Manipulation", "drifter", 2, true, false, false, false, false, 0xccffcc, "Controller", "Disrupter", "Ranged", "Easy");
         register("Diamond_Mimicry", "fortress", 5, false, false, false, false, false, 0x00EDE8, "Tank", "Defender", "Melee", "Easy");
         register("Hypervelocity", "speedster", 5, true, false, false, false, false, 0x5994FF, "Assassin", "Scout", "Melee", "Easy");

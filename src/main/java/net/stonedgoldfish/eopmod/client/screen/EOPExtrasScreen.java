@@ -243,13 +243,13 @@ public class EOPExtrasScreen extends Screen {
     }
 
     private void drawHoveredText(GuiGraphics guiGraphics, ExtraButton button, int panelX, int panelY) {
-        int titleBoxX = panelX + 146;
-        int titleBoxY = panelY + 340;
+        int titleBoxX = panelX + 144;
+        int titleBoxY = panelY + 355;
         int titleBoxWidth = 150;
 
-        int descriptionBoxX = titleBoxX + 28;
-        int descriptionBoxY = titleBoxY + 18;
-        int descriptionBoxWidth = 90;
+        int descriptionBoxX = titleBoxX + 34;
+        int descriptionBoxY = titleBoxY + 22;
+        int descriptionBoxWidth = 80;
 
         Component title = Component.translatable(button.titleKey());
         Component description = Component.translatable(button.descriptionKey());

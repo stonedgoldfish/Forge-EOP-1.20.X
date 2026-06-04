@@ -26,12 +26,17 @@ public class EOPWorldData extends SavedData {
             data.destructionMode = tag.getBoolean("DestructionMode");
         }
 
+        if (tag.contains("InfiniteEnergy")) {
+            data.infiniteEnergy = tag.getBoolean("InfiniteEnergy");
+        }
+
         return data;
     }
 
     @Override
     public CompoundTag save(CompoundTag tag) {
         tag.putBoolean("DestructionMode", destructionMode);
+        tag.putBoolean("InfiniteEnergy", infiniteEnergy);
         return tag;
     }
 

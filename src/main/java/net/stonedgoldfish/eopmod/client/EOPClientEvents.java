@@ -61,17 +61,47 @@ public class EOPClientEvents {
     private static final ResourceLocation XP_BAR_FILL =
             ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "textures/gui/ability_bars/power_gui/xp_bar_fill.png");
 
+    private static final ResourceLocation HEALTH_BAR_FILL =
+            ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "textures/gui/ability_bars/power_gui/health_bar_fill.png");
+
+    private static final ResourceLocation ATTACK_BAR_FILL =
+            ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "textures/gui/ability_bars/power_gui/attack_bar_fill.png");
+
+    private static final ResourceLocation ARMOR_BAR_FILL =
+            ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "textures/gui/ability_bars/power_gui/armor_bar_fill.png");
+
+    private static final ResourceLocation TOUGHNESS_BAR_FILL =
+            ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "textures/gui/ability_bars/power_gui/toughness_bar_fill.png");
+
+    private static final ResourceLocation SPEED_BAR_FILL =
+            ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "textures/gui/ability_bars/power_gui/speed_bar_fill.png");
+
+    private static final ResourceLocation HEALTH_ATTRIBUTE_ICON =
+            ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "textures/gui/ability_bars/power_gui/health_icon.png");
+
+    private static final ResourceLocation ATTACK_ATTRIBUTE_ICON =
+            ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "textures/gui/ability_bars/power_gui/attack_icon.png");
+
+    private static final ResourceLocation ARMOR_ATTRIBUTE_ICON =
+            ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "textures/gui/ability_bars/power_gui/armor_icon.png");
+
+    private static final ResourceLocation TOUGHNESS_ATTRIBUTE_ICON =
+            ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "textures/gui/ability_bars/power_gui/toughness_icon.png");
+
+    private static final ResourceLocation SPEED_ATTRIBUTE_ICON =
+            ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "textures/gui/ability_bars/power_gui/speed_icon.png");
+
     private static final ResourceLocation CLASS_ICON =
-            ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "textures/gui/ability_bars/power_gui/icon_class.png");
+            ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "textures/gui/ability_bars/power_gui/class_icon.png");
 
     private static final ResourceLocation SUBCLASS_ICON =
-            ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "textures/gui/ability_bars/power_gui/icon_subclass.png");
+            ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "textures/gui/ability_bars/power_gui/subclass_icon.png");
 
     private static final ResourceLocation COMBAT_ICON =
-            ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "textures/gui/ability_bars/power_gui/icon_combat.png");
+            ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "textures/gui/ability_bars/power_gui/combat_icon.png");
 
     private static final ResourceLocation DIFFICULTY_ICON =
-            ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "textures/gui/ability_bars/power_gui/icon_difficulty.png");
+            ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, "textures/gui/ability_bars/power_gui/difficulty_icon.png");
 
     private static boolean wasSprintFlying = false;
 
@@ -122,6 +152,44 @@ public class EOPClientEvents {
                 color,
                 true
         );
+    }
+
+    private static void drawFixedIconScaledText(
+            GuiGraphics guiGraphics,
+            ResourceLocation icon,
+            String text,
+            int x,
+            int y,
+            int iconSize,
+            int textOffset,
+            float textScale,
+            int color
+    ) {
+        guiGraphics.blit(
+                icon,
+                x,
+                y - 2,
+                0,
+                0,
+                iconSize,
+                iconSize,
+                iconSize,
+                iconSize
+        );
+
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().scale(textScale, textScale, 1.0F);
+
+        guiGraphics.drawString(
+                Minecraft.getInstance().font,
+                text,
+                (int) ((x + textOffset) / textScale),
+                (int) (y / textScale),
+                color,
+                true
+        );
+
+        guiGraphics.pose().popPose();
     }
 
     private static void renderPowerScreen(
@@ -190,7 +258,7 @@ public class EOPClientEvents {
         float progress = Math.min((float) xp / maxXp, 1.0F);
 
         int barX = x + 74;
-        int barY = y + 209;
+        int barY = y + 215;
         int barWidth = 45;
         int barHeight = 2;
 
@@ -222,15 +290,15 @@ public class EOPClientEvents {
                 barHeight
         );
 
-        int iconSize = 33;
+        int iconSize = 45;
 
         int iconX = barX + (barWidth / 2) - (iconSize / 2);
-        int iconY = barY - 61;
+        int iconY = barY - 77;
 
         guiGraphics.blit(
                 powerIcon,
                 iconX,
-                iconY,
+                iconY - 2,
                 0,
                 0,
                 iconSize,
@@ -239,7 +307,7 @@ public class EOPClientEvents {
                 iconSize
         );
 
-        int borderSize = 43;
+        int borderSize = 55;
         int borderX = iconX - 5;
         int borderY = iconY - 5;
 
@@ -255,10 +323,10 @@ public class EOPClientEvents {
                 borderSize
         );
 
-        float powerNameScale = 0.7F;
+        float powerNameScale = 0.9F;
 
         if (powerName.length() > 16) {
-            powerNameScale *= 0.85F;
+            powerNameScale *= 0.75F;
         }
 
         int powerNameColor = powerData != null
@@ -269,13 +337,13 @@ public class EOPClientEvents {
 
         int powerNameWidthScaled = (int) (powerNameWidth * powerNameScale);
 
-        int powerNameCenterX = iconX + 357;
+        int powerNameCenterX = iconX + 363;
 
         int powerNameX = (int) (
                 (powerNameCenterX - (powerNameWidthScaled / 2))
                         / powerNameScale
         );
-        int powerNameY = (int) ((iconY - 4) / powerNameScale);
+        int powerNameY = (int) ((iconY + 5) / powerNameScale);
 
         guiGraphics.pose().pushPose();
 
@@ -303,7 +371,7 @@ public class EOPClientEvents {
                         / skillPointScale
         );
 
-        int skillPointY = (int) ((powerNameY * powerNameScale + 15) / skillPointScale);
+        int skillPointY = (int) ((powerNameY * powerNameScale + 19) / skillPointScale);
 
         guiGraphics.pose().pushPose();
 
@@ -328,24 +396,51 @@ public class EOPClientEvents {
             String combatText = "Combat: " + powerData.combatStyle();
             String difficultyText = "Difficulty: " + powerData.difficulty();
 
-            float classificationScale = 0.55F;
+            int classificationBaseX = barX;
+            int classificationBaseY = barY + 27;
 
-            int classificationX = (int) ((powerNameCenterX - 18) / classificationScale);
-            int classificationY = (int) ((powerNameY * powerNameScale + 30) / classificationScale);
+            float classificationTitleScale = 0.69F;
+            float classificationTextScale = 0.65F;
+
+            int classificationX = (int) ((barX + 2) / classificationTitleScale);
+            int classificationY = (int) ((barY + 30) / classificationTitleScale);
 
             guiGraphics.pose().pushPose();
-            guiGraphics.pose().scale(classificationScale, classificationScale, 1.0F);
+            guiGraphics.pose().scale(classificationTitleScale, classificationTitleScale, 1.0F);
 
-            int smallIconSize = 8;
-            int textOffset = 12;
-
-            guiGraphics.drawString(Minecraft.getInstance().font, classificationTitle, classificationX, classificationY, 0x7FDBFF, true);
-            drawIconText(guiGraphics, CLASS_ICON, classText, classificationX - 45, classificationY + 12, smallIconSize, textOffset, 0xFFFFFFFF);
-            drawIconText(guiGraphics, SUBCLASS_ICON, subclassText, classificationX - 45, classificationY + 23, smallIconSize, textOffset, 0xFFFFFFFF);
-            drawIconText(guiGraphics, COMBAT_ICON, combatText, classificationX - 45, classificationY + 34, smallIconSize, textOffset, 0xFFFFFFFF);
-            drawIconText(guiGraphics, DIFFICULTY_ICON, difficultyText, classificationX - 45, classificationY + 45, smallIconSize, textOffset, 0xFFFFFFFF);
+            guiGraphics.drawString(
+                    Minecraft.getInstance().font,
+                    classificationTitle,
+                    (int) (classificationBaseX / classificationTitleScale),
+                    (int) (classificationBaseY / classificationTitleScale),
+                    0xFFFFFF,
+                    true
+            );
 
             guiGraphics.pose().popPose();
+
+            int classificationTextX = classificationBaseX - 10;
+            int classificationTextY = classificationBaseY + 18;
+
+            int smallIconSize = 8;
+            int textOffset = 9;
+            int lineSpacing = 13;
+
+            drawFixedIconScaledText(guiGraphics, CLASS_ICON, classText,
+                    classificationTextX, classificationTextY,
+                    smallIconSize, textOffset, classificationTextScale, 0xFFFFFFFF);
+
+            drawFixedIconScaledText(guiGraphics, SUBCLASS_ICON, subclassText,
+                    classificationTextX, classificationTextY + lineSpacing,
+                    smallIconSize, textOffset, classificationTextScale, 0xFFFFFFFF);
+
+            drawFixedIconScaledText(guiGraphics, COMBAT_ICON, combatText,
+                    classificationTextX, classificationTextY + lineSpacing * 2,
+                    smallIconSize, textOffset, classificationTextScale, 0xFFFFFFFF);
+
+            drawFixedIconScaledText(guiGraphics, DIFFICULTY_ICON, difficultyText,
+                    classificationTextX, classificationTextY + lineSpacing * 3,
+                    smallIconSize, textOffset, classificationTextScale, 0xFFFFFFFF);
 
             String descriptionTitle = "Description";
 
@@ -356,10 +451,10 @@ public class EOPClientEvents {
                 descriptionText = "No description available.";
             }
 
-            float descriptionScale = 0.55F;
+            float descriptionScale = 0.80F;
 
-            int descriptionX = (int) ((powerNameCenterX - 16) / descriptionScale);
-            int descriptionY = (int) ((classificationY * classificationScale + 37) / descriptionScale);
+            int descriptionX = (int) ((powerNameCenterX - 22) / descriptionScale);
+            int descriptionY = (int) ((classificationY * classificationTitleScale + 1) / descriptionScale);
 
             guiGraphics.pose().pushPose();
             guiGraphics.pose().scale(descriptionScale, descriptionScale, 1.0F);
@@ -369,7 +464,7 @@ public class EOPClientEvents {
                     descriptionTitle,
                     descriptionX,
                     descriptionY,
-                    0x7FDBFF,
+                    0xFFFFFF,
                     true
             );
 
@@ -382,9 +477,9 @@ public class EOPClientEvents {
             drawWrappedText(
                     guiGraphics,
                     descriptionText,
-                    (int) ((descriptionX - 47) / descriptionTextScale),
-                    (int) ((descriptionY + 12) / descriptionTextScale),
-                    (int) (160 / descriptionTextScale),
+                    (int) ((descriptionX + 25) / descriptionTextScale),
+                    (int) ((descriptionY + 16) / descriptionTextScale),
+                    (int) (110 / descriptionTextScale),
                     10,
                     0xFFFFFFFF
             );
@@ -397,14 +492,14 @@ public class EOPClientEvents {
         String levelLabel = "Level";
         String levelValue = String.valueOf(level);
 
-        float labelScale = 0.6F;
+        float labelScale = 0.8F;
         float numberScale = 1.1F;
 
         int labelWidth = Minecraft.getInstance().font.width(levelLabel);
         int valueWidth = Minecraft.getInstance().font.width(levelValue);
 
-        int labelY = barY - 21;
-        int valueY = labelY + 9;
+        int labelY = barY - 26;
+        int valueY = labelY + 11;
 
 // CENTERED POSITIONS
         int labelX = (int) (((barX + (barWidth / 2) - ((labelWidth * labelScale) / 2)) + 0.5) / labelScale);
@@ -421,7 +516,7 @@ public class EOPClientEvents {
                 levelLabel,
                 labelX,
                 (int) (labelY / labelScale),
-                0x69889a,
+                0xFFFFFF,
                 true
         );
 
@@ -468,166 +563,31 @@ public class EOPClientEvents {
 
         guiGraphics.pose().popPose();
 
-        String attributesLabel = "Attributes";
-
-        float attributesLabelScale = 0.6F;
-
-        int attributesLabelWidth = Minecraft.getInstance().font.width(attributesLabel);
-
-        int attributesLabelX = (int) (
-                (barX + (barWidth / 2) - ((attributesLabelWidth * attributesLabelScale) / 2))
-                        / attributesLabelScale
-        );
-
-        int attributesLabelY = (int) ((barY + 28) / attributesLabelScale);
-
-        guiGraphics.pose().pushPose();
-
-        guiGraphics.pose().scale(attributesLabelScale, attributesLabelScale, 1.0F);
-
-        guiGraphics.drawString(
-                Minecraft.getInstance().font,
-                attributesLabel,
-                attributesLabelX,
-                attributesLabelY,
-                0x69889a,
-                true
-        );
-
-        guiGraphics.pose().popPose();
+        int attributesCenterX = powerNameCenterX;
 
         double health = player.getAttributeValue(Attributes.MAX_HEALTH);
         double armor = player.getAttributeValue(Attributes.ARMOR);
         double armorToughness = player.getAttributeValue(Attributes.ARMOR_TOUGHNESS);
         double speed = player.getAttributeValue(Attributes.MOVEMENT_SPEED);
+        double displaySpeed = speed / 0.1D;
         double attackDamage = EOPClientStats.ATTACK_DAMAGE;
 
-        float attributeScale = 0.70F;
+        int attrX = attributesCenterX - 39;
+        int attrY = (int) (powerNameY * powerNameScale + 43);
 
-        int attrX = (int) (barX / attributeScale);
-        int attrY = (int) ((barY + 38) / attributeScale);
+        int lineHeight = 10;
 
-        int lineHeight = 15;
-
-        guiGraphics.pose().pushPose();
-
-        guiGraphics.pose().scale(attributeScale, attributeScale, 1.0F);
-
-        String valueColorExample;
-        int valueColor = 0xFFFFFF;
-
-        String healthLabel = "Health: ";
-        String healthValue = formatAttribute(health);
-
-        guiGraphics.drawString(
-                Minecraft.getInstance().font,
-                healthLabel,
-                attrX,
-                attrY,
-                0xf57d84,
-                true
-        );
-
-        guiGraphics.drawString(
-                Minecraft.getInstance().font,
-                healthValue,
-                attrX + Minecraft.getInstance().font.width(healthLabel),
-                attrY,
-                valueColor,
-                true
-        );
-
-        String attackLabel = "Attack: ";
-        String attackValue = formatAttribute(attackDamage);
-
-        guiGraphics.drawString(
-                Minecraft.getInstance().font,
-                attackLabel,
-                attrX,
-                attrY + lineHeight,
-                0x8ad28a,
-                true
-        );
-
-        guiGraphics.drawString(
-                Minecraft.getInstance().font,
-                attackValue,
-                attrX + Minecraft.getInstance().font.width(attackLabel),
-                attrY + lineHeight,
-                valueColor,
-                true
-        );
-
-        String armorLabel = "Armor: ";
-        String armorValue = formatAttribute(armor);
-
-        guiGraphics.drawString(
-                Minecraft.getInstance().font,
-                armorLabel,
-                attrX,
-                attrY + lineHeight * 2,
-                0x77b8da,
-                true
-        );
-
-        guiGraphics.drawString(
-                Minecraft.getInstance().font,
-                armorValue,
-                attrX + Minecraft.getInstance().font.width(armorLabel),
-                attrY + lineHeight * 2,
-                valueColor,
-                true
-        );
-
-        String toughnessLabel = "Toughness: ";
-        String toughnessValue = formatAttribute(armorToughness);
-
-        guiGraphics.drawString(
-                Minecraft.getInstance().font,
-                toughnessLabel,
-                attrX,
-                attrY + lineHeight * 3,
-                0x3384ae,
-                true
-        );
-
-        guiGraphics.drawString(
-                Minecraft.getInstance().font,
-                toughnessValue,
-                attrX + Minecraft.getInstance().font.width(toughnessLabel),
-                attrY + lineHeight * 3,
-                valueColor,
-                true
-        );
-
-        String speedLabel = "Speed: ";
-        String speedValue = formatAttribute(speed);
-
-        guiGraphics.drawString(
-                Minecraft.getInstance().font,
-                speedLabel,
-                attrX,
-                attrY + lineHeight * 4,
-                0xd6b578,
-                true
-        );
-
-        guiGraphics.drawString(
-                Minecraft.getInstance().font,
-                speedValue,
-                attrX + Minecraft.getInstance().font.width(speedLabel),
-                attrY + lineHeight * 4,
-                valueColor,
-                true
-        );
-
-        guiGraphics.pose().popPose();
+        drawAttributeBar(guiGraphics, "HP", health, 100.0D, attrX, attrY, 0xb50000, HEALTH_BAR_FILL, HEALTH_ATTRIBUTE_ICON);
+        drawAttributeBar(guiGraphics, "ATK", attackDamage, 40.0D, attrX, attrY + lineHeight, 0x8a4400, ATTACK_BAR_FILL, ATTACK_ATTRIBUTE_ICON);
+        drawAttributeBar(guiGraphics, "DEF", armor, 30.0D, attrX, attrY + lineHeight * 2, 0x6938cb, ARMOR_BAR_FILL, ARMOR_ATTRIBUTE_ICON);
+        drawAttributeBar(guiGraphics, "TGH", armorToughness, 20.0D, attrX, attrY + lineHeight * 3, 0x6938cb, TOUGHNESS_BAR_FILL, TOUGHNESS_ATTRIBUTE_ICON);
+        drawAttributeBar(guiGraphics, "SPD", displaySpeed, 10.0D, attrX, attrY + lineHeight * 4, 0x006e00, SPEED_BAR_FILL, SPEED_ATTRIBUTE_ICON);
     }
 
     private static void drawWrappedText(
             GuiGraphics guiGraphics,
             String text,
-            int x,
+            int centerX,
             int y,
             int maxWidth,
             int lineHeight,
@@ -636,10 +596,13 @@ public class EOPClientEvents {
         var font = Minecraft.getInstance().font;
 
         for (var line : font.split(Component.literal(text), maxWidth)) {
+
+            int lineWidth = font.width(line);
+
             guiGraphics.drawString(
                     font,
                     line,
-                    x,
+                    centerX - (lineWidth / 2),
                     y,
                     color,
                     true
@@ -649,12 +612,112 @@ public class EOPClientEvents {
         }
     }
 
+    private static void drawAttributeBar(
+            GuiGraphics guiGraphics,
+            String label,
+            double value,
+            double maxValue,
+            int x,
+            int y,
+            int labelColor,
+            ResourceLocation fillTexture,
+            ResourceLocation iconTexture
+    ) {
+        var font = Minecraft.getInstance().font;
+
+        int iconSize = 8;
+        int iconX = x - 10;
+        int iconY = y - 1;
+
+        guiGraphics.blit(
+                iconTexture,
+                iconX,
+                iconY - 1,
+                0,
+                0,
+                iconSize,
+                iconSize,
+                iconSize,
+                iconSize
+        );
+
+        float textScale = 0.65F;
+
+        int barX = x + 22;
+        int barY = y + 1;
+        int barWidth = 45;
+        int barHeight = 2;
+
+        float progress = (float) Math.min(value / maxValue, 1.0D);
+        int filledWidth = (int) (barWidth * progress);
+
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().scale(textScale, textScale, 1.0F);
+
+        guiGraphics.drawString(
+                font,
+                label,
+                (int) (x / textScale),
+                (int) (y / textScale),
+                labelColor,
+                true
+        );
+
+        guiGraphics.pose().popPose();
+
+        guiGraphics.blit(
+                XP_BAR_BACKGROUND,
+                barX,
+                barY,
+                0,
+                0,
+                barWidth,
+                barHeight,
+                barWidth,
+                barHeight
+        );
+
+        guiGraphics.blit(
+                fillTexture,
+                barX,
+                barY,
+                0,
+                0,
+                filledWidth,
+                barHeight,
+                barWidth,
+                barHeight
+        );
+
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().scale(textScale, textScale, 1.0F);
+
+        guiGraphics.drawString(
+                font,
+                formatAttributeDisplay(value),
+                (int) ((barX + barWidth + 4) / textScale),
+                (int) (y / textScale),
+                0xFFFFFFFF,
+                true
+        );
+
+        guiGraphics.pose().popPose();
+    }
+
     private static String formatAttribute(double value) {
-        if (value == (int) value) {
-            return String.valueOf((int) value);
+        if (Math.abs(value - Math.round(value)) < 0.001D) {
+            return String.valueOf((int) Math.round(value));
         }
 
         return String.format("%.2f", value);
+    }
+
+    private static String formatAttributeDisplay(double value) {
+        if (value > 1000.0D) {
+            return "MAX";
+        }
+
+        return formatAttribute(value);
     }
 
     private static float lunarCloakTintProgress = 0.0F;
