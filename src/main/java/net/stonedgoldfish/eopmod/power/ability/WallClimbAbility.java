@@ -1,7 +1,8 @@
 package net.stonedgoldfish.eopmod.power.ability;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
@@ -15,38 +16,38 @@ import net.threetag.palladium.util.property.FloatProperty;
 import net.threetag.palladium.util.property.PalladiumProperties;
 import net.threetag.palladium.util.property.PalladiumProperty;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class WallClimbAbility extends Ability {
 
     public static final PalladiumProperty<Float> CLIMB_SPEED =
             new FloatProperty("climb_speed")
-                    .configurable("Upward speed while climbing a wall.");
+                    .configurable("Vertical climb speed.");
 
     public static final PalladiumProperty<Float> WALL_JUMP_POWER =
             new FloatProperty("wall_jump_power")
-                    .configurable("Vertical power applied when wall jumping.");
+                    .configurable("Power applied when wall jumping.");
 
     public static final PalladiumProperty<Float> SIDEWAYS_STRENGTH =
             new FloatProperty("sideways_strength")
-                    .configurable("How much sideways movement blends into the climb direction.");
+                    .configurable("How much sideways movement blends with climbing.");
 
     public static final PalladiumProperty<Float> SIDEWAYS_SPEED =
             new FloatProperty("sideways_speed")
                     .configurable("How fast the player moves sideways while climbing.");
 
+    private static final Map<UUID, Float> WALL_CLIMBERS = new HashMap<>();
+    private static final Map<UUID, Integer> WALL_JUMP_COOLDOWN = new HashMap<>();
+
     public WallClimbAbility() {
         this.withProperty(ICON, new ItemIcon(Items.LADDER));
-        this.withProperty(CLIMB_SPEED, 0.25F);
-        this.withProperty(WALL_JUMP_POWER, 0.35F);
+        this.withProperty(CLIMB_SPEED, 0.08F);
+        this.withProperty(WALL_JUMP_POWER, 1.0F);
         this.withProperty(SIDEWAYS_STRENGTH, 0.35F);
         this.withProperty(SIDEWAYS_SPEED, 0.13F);
     }
-
-    private static final Map<UUID, Float> WALL_CLIMBERS = new HashMap<>();
-    private static final Map<UUID, Integer> WALL_JUMP_COOLDOWN = new HashMap<>();
-    private static final Map<UUID, Integer> LEDGE_ASSIST_TICKS = new HashMap<>();
-    private static final Map<UUID, Integer> LEDGE_GRAB_TICKS = new HashMap<>();
 
     @Override
     public void tick(LivingEntity entity, AbilityInstance entry, IPowerHolder holder, boolean enabled) {
@@ -54,190 +55,129 @@ public class WallClimbAbility extends Ability {
             return;
         }
 
-        if (!(entity instanceof Player)) {
+        if (!(entity instanceof Player player)) {
             return;
         }
 
-        boolean touchingNormalWall = isTouchingClimbableWall(entity);
-        boolean touchingLedge = isTouchingOneBlockLedge(entity);
-
-        if (entity.isShiftKeyDown() && touchingLedge) {
-            LEDGE_GRAB_TICKS.put(entity.getUUID(), 10);
-        }
-
-        Integer grabTicks = LEDGE_GRAB_TICKS.get(entity.getUUID());
-
-        boolean ledgeGrabActive = grabTicks != null && grabTicks > 0;
-
-        boolean touchingWall = touchingNormalWall || ledgeGrabActive;
-
-        if (grabTicks != null) {
-            if (grabTicks <= 0) {
-                LEDGE_GRAB_TICKS.remove(entity.getUUID());
-            } else {
-                LEDGE_GRAB_TICKS.put(entity.getUUID(), grabTicks - 1);
-            }
-        }
-
-        if (!touchingWall) {
-            WALL_CLIMBERS.remove(entity.getUUID());
-
-            Integer ledgeTicks = LEDGE_ASSIST_TICKS.get(entity.getUUID());
-
-            if (ledgeTicks != null && ledgeTicks > 0 && canClimbLedge(entity)) {
-                Vec3 forward = getFlatForward(entity);
-
-                entity.setDeltaMovement(
-                        forward.x * 0.14D,
-                        0.28D,
-                        forward.z * 0.14D
-                );
-
-                LEDGE_ASSIST_TICKS.put(entity.getUUID(), ledgeTicks - 1);
-
-                entity.fallDistance = 0.0F;
-                entity.hurtMarked = true;
-            } else {
-                LEDGE_ASSIST_TICKS.remove(entity.getUUID());
-            }
-
+        if (entity.onClimbable()) {
+            clearClimbing(entity);
             return;
         }
 
-        LEDGE_ASSIST_TICKS.put(entity.getUUID(), 5);
+        UUID uuid = entity.getUUID();
 
-        if (entity instanceof Player player) {
-            WALL_CLIMBERS.put(
-                    player.getUUID(),
-                    entry.getProperty(WALL_JUMP_POWER)
-            );
-        }
-
-        LEDGE_ASSIST_TICKS.put(entity.getUUID(), 5);
-
-        Integer cooldown = WALL_JUMP_COOLDOWN.get(entity.getUUID());
+        Integer cooldown = WALL_JUMP_COOLDOWN.get(uuid);
 
         if (cooldown != null) {
             if (cooldown <= 0) {
-                WALL_JUMP_COOLDOWN.remove(entity.getUUID());
+                WALL_JUMP_COOLDOWN.remove(uuid);
             } else {
-                WALL_JUMP_COOLDOWN.put(entity.getUUID(), cooldown - 1);
+                WALL_JUMP_COOLDOWN.put(uuid, cooldown - 1);
+                clearClimbing(entity);
                 return;
             }
         }
 
+        WallCheckResult wall = getWallCheck(entity);
+
+        boolean isClimbing = entity.getPersistentData().getBoolean("surfaceClimbing");
+        boolean midAir = !entity.onGround() && entity.fallDistance > 0.0F;
+
+        if (!isClimbing) {
+            if (!wall.hasTwoVerticalBlocks()
+                    && !(midAir && wall.hasOneVerticalBlock())) {
+                clearClimbing(entity);
+                return;
+            }
+
+            entity.getPersistentData().putBoolean("surfaceClimbing", true);
+        } else {
+            if (!wall.hasOneVerticalBlock()) {
+                clearClimbing(entity);
+
+                Vec3 motion = entity.getDeltaMovement();
+
+                entity.setDeltaMovement(
+                        motion.x,
+                        0.0D,
+                        motion.z
+                );
+
+                entity.fallDistance = 0.0F;
+                entity.hurtMarked = true;
+                syncMotion(entity);
+                return;
+            }
+        }
+
+        WALL_CLIMBERS.put(
+                player.getUUID(),
+                entry.getProperty(WALL_JUMP_POWER)
+        );
+
+        Vec3 motion = entity.getDeltaMovement();
+
         if (entity.isShiftKeyDown()) {
             entity.setDeltaMovement(
-                    0.0D,
-                    0.08D,
-                    0.0D
+                    motion.x * 0.2D,
+                    -0.02D,
+                    motion.z * 0.2D
             );
 
             entity.fallDistance = 0.0F;
             entity.hurtMarked = true;
+            syncMotion(entity);
             return;
         }
 
         double climbSpeed = entry.getProperty(CLIMB_SPEED);
-
-        Vec3 look = entity.getLookAngle().normalize();
-
-        boolean pressingForward = PalladiumProperties.FORWARD_KEY_DOWN.get(entity);
-
         double sidewaysStrength = entry.getProperty(SIDEWAYS_STRENGTH);
         double sidewaysSpeed = entry.getProperty(SIDEWAYS_SPEED);
+
+        boolean pressingForward = PalladiumProperties.FORWARD_KEY_DOWN.get(entity);
 
         double verticalMotion = pressingForward
                 ? climbSpeed * Math.max(0.0D, 1.0D - sidewaysStrength)
                 : -climbSpeed * 0.45D;
 
-        Vec3 sidewaysMotion = new Vec3(
-                look.x,
-                0.0D,
-                look.z
-        );
+        Vec3 sideways = Vec3.ZERO;
 
-        if (sidewaysMotion.lengthSqr() > 0.001D) {
-            sidewaysMotion = sidewaysMotion.normalize().scale(sidewaysSpeed);
-        } else {
-            sidewaysMotion = Vec3.ZERO;
+        if (pressingForward && wall.hasWallAtHead()) {
+            Vec3 look = entity.getLookAngle().normalize();
+            Vec3 flatLook = new Vec3(look.x, 0.0D, look.z);
+
+            if (flatLook.lengthSqr() > 0.001D) {
+                sideways = flatLook.normalize()
+                        .scale(sidewaysSpeed * sidewaysStrength);
+            }
         }
 
-        Vec3 climbMotion = new Vec3(
-                sidewaysMotion.x,
+        entity.setDeltaMovement(
+                sideways.x,
                 verticalMotion,
-                sidewaysMotion.z
+                sideways.z
         );
 
-        entity.setDeltaMovement(climbMotion);
         entity.fallDistance = 0.0F;
         entity.hurtMarked = true;
+        syncMotion(entity);
     }
 
     @Override
     public void lastTick(LivingEntity entity, AbilityInstance entry, IPowerHolder holder, boolean enabled) {
-        WALL_CLIMBERS.remove(entity.getUUID());
-        LEDGE_ASSIST_TICKS.remove(entity.getUUID());
+        clearClimbing(entity);
         WALL_JUMP_COOLDOWN.remove(entity.getUUID());
-        LEDGE_GRAB_TICKS.remove(entity.getUUID());
     }
 
-    private static boolean isTouchingOneBlockLedge(LivingEntity entity) {
-        Level level = entity.level();
-
-        double checkDistance = 0.45D;
-
-        for (Direction direction : Direction.Plane.HORIZONTAL) {
-            Vec3 checkPos = entity.getEyePosition().add(
-                    direction.getStepX() * checkDistance,
-                    0.0D,
-                    direction.getStepZ() * checkDistance
-            );
-
-            BlockPos eyeWall = BlockPos.containing(checkPos);
-            BlockPos aboveEyeWall = eyeWall.above();
-
-            if (isSolid(level, eyeWall) && !isSolid(level, aboveEyeWall)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private static boolean canClimbLedge(LivingEntity entity) {
-        Level level = entity.level();
-
-        double checkDistance = 0.45D;
-        Vec3 forward = getFlatForward(entity);
-
-        BlockPos frontFeet = BlockPos.containing(
-                entity.getX() + forward.x * checkDistance,
-                entity.getY(),
-                entity.getZ() + forward.z * checkDistance
-        );
-
-        BlockPos frontHead = frontFeet.above();
-        BlockPos frontAboveHead = frontHead.above();
-
-        return isSolid(level, frontFeet)
-                && !isSolid(level, frontHead)
-                && !isSolid(level, frontAboveHead);
-    }
-
-    private static Vec3 getFlatForward(LivingEntity entity) {
-        float yawRad = entity.getYRot() * ((float) Math.PI / 180.0F);
-
-        return new Vec3(
-                -Math.sin(yawRad),
-                0.0D,
-                Math.cos(yawRad)
-        ).normalize();
+    private static void clearClimbing(LivingEntity entity) {
+        WALL_CLIMBERS.remove(entity.getUUID());
+        entity.getPersistentData().remove("surfaceClimbing");
     }
 
     public static void startWallJumpCooldown(Player player) {
-        WALL_JUMP_COOLDOWN.put(player.getUUID(), 2);
+        WALL_JUMP_COOLDOWN.put(player.getUUID(), 6);
         WALL_CLIMBERS.remove(player.getUUID());
+        player.getPersistentData().remove("surfaceClimbing");
     }
 
     public static boolean isWallClimbing(Player player) {
@@ -245,40 +185,94 @@ public class WallClimbAbility extends Ability {
     }
 
     public static float getWallJumpPower(Player player) {
-        return WALL_CLIMBERS.getOrDefault(player.getUUID(), 0.35F);
+        return WALL_CLIMBERS.getOrDefault(player.getUUID(), 1.0F);
     }
 
-    private static boolean isTouchingClimbableWall(LivingEntity entity) {
+    private static WallCheckResult getWallCheck(LivingEntity entity) {
         Level level = entity.level();
 
-        double checkDistance = 0.35D;
+        var box = entity.getBoundingBox();
+        double inflate = 0.05D;
 
-        for (Direction direction : Direction.Plane.HORIZONTAL) {
+        int minY = (int) Math.floor(box.minY);
+        int maxY = (int) Math.floor(box.maxY);
+        int eyeY = (int) Math.floor(entity.getEyeY());
 
-            Vec3 checkPos = entity.position().add(
-                    direction.getStepX() * checkDistance,
-                    0.0D,
-                    direction.getStepZ() * checkDistance
+        double[][] checks = new double[][]{
+                {box.maxX + inflate, entity.getZ()},
+                {box.minX - inflate, entity.getZ()},
+                {entity.getX(), box.maxZ + inflate},
+                {entity.getX(), box.minZ - inflate}
+        };
+
+        boolean hasOneVerticalBlock = false;
+        boolean hasTwoVerticalBlocks = false;
+        boolean hasWallAtHead = false;
+
+        for (double[] check : checks) {
+            int consecutive = 0;
+
+            for (int y = minY; y <= maxY; y++) {
+                BlockPos pos = BlockPos.containing(
+                        check[0],
+                        y,
+                        check[1]
+                );
+
+                if (isSolid(level, pos)) {
+                    consecutive++;
+
+                    if (consecutive >= 1) {
+                        hasOneVerticalBlock = true;
+                    }
+
+                    if (consecutive >= 2) {
+                        hasTwoVerticalBlocks = true;
+                    }
+                } else {
+                    consecutive = 0;
+                }
+            }
+
+            BlockPos headPos = BlockPos.containing(
+                    check[0],
+                    eyeY,
+                    check[1]
             );
 
-            BlockPos feetWall = BlockPos.containing(checkPos);
-            BlockPos headWall = feetWall.above();
-
-            if (isSolid(level, feetWall) && isSolid(level, headWall)) {
-                return true;
+            if (isSolid(level, headPos)) {
+                hasWallAtHead = true;
             }
         }
 
-        return false;
+        return new WallCheckResult(
+                hasOneVerticalBlock,
+                hasTwoVerticalBlocks,
+                hasWallAtHead
+        );
     }
 
     private static boolean isSolid(Level level, BlockPos pos) {
-        return !level.getBlockState(pos).isAir()
-                && level.getBlockState(pos).isCollisionShapeFullBlock(level, pos);
+        var state = level.getBlockState(pos);
+
+        return !state.isAir()
+                && !state.getCollisionShape(level, pos).isEmpty();
     }
+
+    private static void syncMotion(LivingEntity entity) {
+        if (entity instanceof ServerPlayer player) {
+            player.connection.send(new ClientboundSetEntityMotionPacket(entity));
+        }
+    }
+
+    private record WallCheckResult(
+            boolean hasOneVerticalBlock,
+            boolean hasTwoVerticalBlocks,
+            boolean hasWallAtHead
+    ) {}
 
     @Override
     public String getDocumentationDescription() {
-        return "Moves the player upward when touching a wall at least two blocks tall.";
+        return "Allows the player to climb walls using bounding-box based surface detection.";
     }
 }
