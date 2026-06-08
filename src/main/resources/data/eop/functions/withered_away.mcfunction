@@ -1,1 +1,0 @@
-particle minecraft:ash ~ ~0.7 ~ 0.3 0.3 0.3 0.03 100 force

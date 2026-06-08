@@ -1,6 +1,0 @@
-{
-	"exhaustion": 0.1,
- 	"message_id": "info_overwhelm",
- 	"effects": "hurt",
-	"scaling": "never"
-}
