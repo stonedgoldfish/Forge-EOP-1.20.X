@@ -19,4 +19,6 @@ public class EOPEffects {
             MOB_EFFECTS.register("snare", SnareEffect::new);
     public static final RegistryObject<MobEffect> SILENCED =
             MOB_EFFECTS.register("silenced", SilencedEffect::new);
+    public static final RegistryObject<MobEffect> BLEED =
+            MOB_EFFECTS.register("bleed", BleedEffect::new);
 }

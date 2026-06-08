@@ -658,35 +658,35 @@ public class EOPForgeEvents {
 
     @SubscribeEvent
     public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
-        if (NoInteractionAbility.blocksBlocks(event.getEntity())) {
+        if (cannotInteract(event.getEntity())) {
             event.setCanceled(true);
         }
     }
 
     @SubscribeEvent
     public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
-        if (NoInteractionAbility.blocksItems(event.getEntity())) {
+        if (cannotInteract(event.getEntity())) {
             event.setCanceled(true);
         }
     }
 
     @SubscribeEvent
     public static void onRightClickEntity(PlayerInteractEvent.EntityInteract event) {
-        if (NoInteractionAbility.blocksEntities(event.getEntity())) {
+        if (cannotInteract(event.getEntity())) {
             event.setCanceled(true);
         }
     }
 
     @SubscribeEvent
     public static void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
-        if (NoInteractionAbility.blocksBlocks(event.getEntity())) {
+        if (cannotInteract(event.getEntity())) {
             event.setCanceled(true);
         }
     }
 
     @SubscribeEvent
     public static void onEntityAttack(AttackEntityEvent event) {
-        if (NoInteractionAbility.blocksEntities(event.getEntity())) {
+        if (cannotInteract(event.getEntity())) {
             event.setCanceled(true);
         }
     }
