@@ -23,6 +23,10 @@ public class EOPItems {
             ITEMS.register("argon_pegmatite", () ->
                     new BlockItem(EOPBlocks.ARGON_PEGMATITE.get(), new Item.Properties())
             );
+    public static final RegistryObject<Item> DEEPSLATE_ARGON_PEGMATITE =
+            ITEMS.register("deepslate_argon_pegmatite", () ->
+                    new BlockItem(EOPBlocks.DEEPSLATE_ARGON_PEGMATITE.get(), new Item.Properties())
+            );
     public static final RegistryObject<Item> ARGON_HELMET =
             ITEMS.register("argon_helmet", () ->
                     new ArgonArmorItem(EOPArmorMaterials.ARGON, ArmorItem.Type.HELMET, new Item.Properties())

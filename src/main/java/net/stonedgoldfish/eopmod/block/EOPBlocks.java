@@ -44,4 +44,11 @@ public class EOPBlocks {
                             UniformInt.of(3, 7)
                     )
             );
+    public static final RegistryObject<Block> DEEPSLATE_ARGON_PEGMATITE =
+            BLOCKS.register("deepslate_argon_pegmatite", () ->
+                    new Block(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE)
+                            .strength(4.5F, 3.0F)
+                            .requiresCorrectToolForDrops()
+                    )
+            );
 }
