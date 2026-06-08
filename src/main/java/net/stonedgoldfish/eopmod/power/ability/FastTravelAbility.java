@@ -20,6 +20,7 @@ import net.threetag.palladium.util.icon.ItemIcon;
 import net.threetag.palladium.util.property.BooleanProperty;
 import net.threetag.palladium.util.property.FloatProperty;
 import net.threetag.palladium.util.property.PalladiumProperty;
+import net.stonedgoldfish.eopmod.util.EOPTargeting;
 
 public class FastTravelAbility extends Ability {
 
@@ -175,24 +176,24 @@ public class FastTravelAbility extends Ability {
                 continue;
             }
 
+            if (!EOPTargeting.isFriendlyTarget(caster, living)) {
+                continue;
+            }
+
             if (living instanceof ServerPlayer player && !player.isShiftKeyDown()) {
                 continue;
             }
 
-            double offsetX = nearby.getX() - caster.getX();
-            double offsetY = nearby.getY() - caster.getY();
-            double offsetZ = nearby.getZ() - caster.getZ();
-
-            SavedLocation offsetTarget = new SavedLocation(
+            SavedLocation sameTarget = new SavedLocation(
                     target.dimension,
-                    target.x + offsetX,
-                    target.y + offsetY,
-                    target.z + offsetZ,
+                    target.x,
+                    target.y,
+                    target.z,
                     nearby.getYRot(),
                     nearby.getXRot()
             );
 
-            teleportEntity(nearby, targetLevel, offsetTarget);
+            teleportEntity(nearby, targetLevel, sameTarget);
         }
     }
 

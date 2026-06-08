@@ -79,8 +79,30 @@ public class ParticlePatternAbility extends Ability {
         double centerY = entity.getY() + entity.getBbHeight() * 0.5D + yOffset;
         double centerZ = entity.getZ();
 
-        if (pattern.equals("implosion")) {
-            spawnImplosionParticles(
+        switch (pattern) {
+            case "outwards_pulse" -> spawnOutwardsPulseParticles(
+                    serverLevel,
+                    centerX,
+                    centerY,
+                    centerZ,
+                    particle,
+                    amount,
+                    radius,
+                    speed
+            );
+
+            case "inwards_pulse" -> spawnInwardsPulseParticles(
+                    serverLevel,
+                    centerX,
+                    centerY,
+                    centerZ,
+                    particle,
+                    amount,
+                    radius,
+                    speed
+            );
+
+            case "implosion" -> spawnImplosionParticles(
                     serverLevel,
                     centerX,
                     centerY,
@@ -131,6 +153,78 @@ public class ParticlePatternAbility extends Ability {
             double x = centerX + Math.cos(angle) * distance;
             double y = centerY + height;
             double z = centerZ + Math.sin(angle) * distance;
+
+            double motionX = (centerX - x) * speed;
+            double motionY = (centerY - y) * speed;
+            double motionZ = (centerZ - z) * speed;
+
+            level.sendParticles(
+                    particle,
+                    x,
+                    y,
+                    z,
+                    0,
+                    motionX,
+                    motionY,
+                    motionZ,
+                    1.0D
+            );
+        }
+    }
+
+    private static void spawnOutwardsPulseParticles(
+            ServerLevel level,
+            double centerX,
+            double centerY,
+            double centerZ,
+            ParticleOptions particle,
+            int amount,
+            float radius,
+            float speed
+    ) {
+        for (int i = 0; i < amount; i++) {
+            double angle = level.random.nextDouble() * Math.PI * 2.0D;
+            double yOffset = (level.random.nextDouble() - 0.5D) * radius * 0.4D;
+
+            double x = centerX;
+            double y = centerY + yOffset;
+            double z = centerZ;
+
+            double motionX = Math.cos(angle) * speed;
+            double motionY = (level.random.nextDouble() - 0.5D) * speed * 0.3D;
+            double motionZ = Math.sin(angle) * speed;
+
+            level.sendParticles(
+                    particle,
+                    x,
+                    y,
+                    z,
+                    0,
+                    motionX,
+                    motionY,
+                    motionZ,
+                    1.0D
+            );
+        }
+    }
+
+    private static void spawnInwardsPulseParticles(
+            ServerLevel level,
+            double centerX,
+            double centerY,
+            double centerZ,
+            ParticleOptions particle,
+            int amount,
+            float radius,
+            float speed
+    ) {
+        for (int i = 0; i < amount; i++) {
+            double angle = level.random.nextDouble() * Math.PI * 2.0D;
+            double yOffset = (level.random.nextDouble() - 0.5D) * radius * 0.4D;
+
+            double x = centerX + Math.cos(angle) * radius;
+            double y = centerY + yOffset;
+            double z = centerZ + Math.sin(angle) * radius;
 
             double motionX = (centerX - x) * speed;
             double motionY = (centerY - y) * speed;

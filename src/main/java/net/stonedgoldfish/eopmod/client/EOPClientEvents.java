@@ -1054,15 +1054,24 @@ public class EOPClientEvents {
 
         Vec3 motion = Vec3.ZERO;
 
-        double speed = settings.speed();
+        double movementSpeed = player.getAttributeValue(Attributes.MOVEMENT_SPEED);
+
+        if (movementSpeed <= 0.0D) {
+            player.setDeltaMovement(Vec3.ZERO);
+            return;
+        }
+
+        double movementSpeedScale = Math.pow(movementSpeed / 0.1D, 0.4D);
+
+        double speed = settings.speed() * movementSpeedScale;
 
         if (settings.allowSprint() && player.isSprinting()) {
             speed *= settings.sprintMultiplier();
         }
 
         double verticalKeySpeed = player.isSprinting()
-                ? settings.speed() * 0.15D
-                : settings.speed() * 0.45D;
+                ? speed * 0.15D
+                : speed * 0.45D;
 
         double verticalInput = 0.0D;
 

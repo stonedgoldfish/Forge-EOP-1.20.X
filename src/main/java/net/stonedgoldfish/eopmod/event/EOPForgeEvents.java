@@ -3,11 +3,14 @@ package net.stonedgoldfish.eopmod.event;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
 import net.minecraftforge.event.entity.living.*;
@@ -16,6 +19,7 @@ import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.RegistryObject;
 import net.stonedgoldfish.eopmod.effect.EOPEffects;
+import net.stonedgoldfish.eopmod.item.*;
 import net.stonedgoldfish.eopmod.network.EOPNetwork;
 import net.stonedgoldfish.eopmod.network.SyncAttackDamagePacket;
 import net.stonedgoldfish.eopmod.power.ability.*;
@@ -266,6 +270,90 @@ public class EOPForgeEvents {
     }
 
     @SubscribeEvent
+    public static void onAnvilUpdate(AnvilUpdateEvent event) {
+        ItemStack left = event.getLeft();
+        ItemStack right = event.getRight();
+
+        if (!isArgonDecayItem(left)) {
+            return;
+        }
+
+        ItemStack output = left.copy();
+        CompoundTag tag = output.getOrCreateTag();
+
+        long maxDecayTime = 216000L;
+        long currentGameTime = event.getPlayer().level().getGameTime();
+
+        long leftRemaining = getRemainingDecayTime(left, currentGameTime, maxDecayTime);
+
+        if (right.getItem() == EOPItems.ARGON_CRYSTAL.get()) {
+            long repairAmount = 6000L;
+
+            long repairedRemaining = Math.min(maxDecayTime, leftRemaining + repairAmount);
+            applyRemainingDecayTime(tag, currentGameTime, maxDecayTime, repairedRemaining);
+
+            event.setOutput(output);
+            event.setCost(1);
+            event.setMaterialCost(1);
+            return;
+        }
+
+        if (right.getItem() == left.getItem()) {
+            long rightRemaining = getRemainingDecayTime(right, currentGameTime, maxDecayTime);
+
+            long bonusRepair = maxDecayTime / 20L; // 5% bonus, like vanilla-ish combining
+            long repairedRemaining = Math.min(maxDecayTime, leftRemaining + rightRemaining + bonusRepair);
+
+            applyRemainingDecayTime(tag, currentGameTime, maxDecayTime, repairedRemaining);
+
+            event.setOutput(output);
+            event.setCost(2);
+            event.setMaterialCost(1);
+        }
+    }
+    private static boolean isArgonDecayItem(ItemStack stack) {
+        return stack.getItem() instanceof ArgonArmorItem
+                || stack.getItem() instanceof ArgonSwordItem
+                || stack.getItem() instanceof ArgonPickaxeItem
+                || stack.getItem() instanceof ArgonAxeItem
+                || stack.getItem() instanceof ArgonShovelItem
+                || stack.getItem() instanceof ArgonHoeItem;
+    }
+
+    private static long getRemainingDecayTime(ItemStack stack, long currentGameTime, long maxDecayTime) {
+        CompoundTag tag = stack.getTag();
+
+        if (tag == null) {
+            return maxDecayTime;
+        }
+
+        long createdTime = tag.getLong("ArgonCreatedTime");
+        long decayTime = tag.getLong("ArgonDecayTime");
+
+        if (decayTime <= 0L) {
+            decayTime = maxDecayTime;
+        }
+
+        long age = currentGameTime - createdTime;
+
+        return Math.max(0L, decayTime - age);
+    }
+
+    private static void applyRemainingDecayTime(
+            CompoundTag tag,
+            long currentGameTime,
+            long maxDecayTime,
+            long remainingTime
+    ) {
+        long clampedRemaining = Math.min(maxDecayTime, Math.max(0L, remainingTime));
+
+        long newCreatedTime = currentGameTime - (maxDecayTime - clampedRemaining);
+
+        tag.putLong("ArgonCreatedTime", newCreatedTime);
+        tag.putLong("ArgonDecayTime", maxDecayTime);
+    }
+
+    @SubscribeEvent
     public static void onMilkBucketUse(PlayerInteractEvent.RightClickItem event) {
 
         if (event.getEntity().level().isClientSide()) {
@@ -286,6 +374,13 @@ public class EOPForgeEvents {
                 || player.hasEffect(EOPEffects.SNARE.get())
                 || player.hasEffect(EOPEffects.SILENCED.get())
                 || player.hasEffect(EOPEffects.LUNAR_CLOAK.get());
+    }
+
+    @SubscribeEvent
+    public static void onLivingVisibility(LivingEvent.LivingVisibilityEvent event) {
+        if (InvisibilityAbility.isInvisible(event.getEntity())) {
+            event.modifyVisibility(0.0D);
+        }
     }
 
     @SubscribeEvent

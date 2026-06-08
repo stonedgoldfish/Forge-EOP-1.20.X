@@ -1,8 +1,6 @@
 package net.stonedgoldfish.eopmod.power.ability;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
@@ -105,7 +103,6 @@ public class WallClimbAbility extends Ability {
 
                 entity.fallDistance = 0.0F;
                 entity.hurtMarked = true;
-                syncMotion(entity);
                 return;
             }
         }
@@ -119,14 +116,13 @@ public class WallClimbAbility extends Ability {
 
         if (entity.isShiftKeyDown()) {
             entity.setDeltaMovement(
-                    motion.x * 0.2D,
-                    -0.02D,
-                    motion.z * 0.2D
+                    motion.x * 0.05D,
+                    0.075D,
+                    motion.z * 0.05D
             );
 
             entity.fallDistance = 0.0F;
             entity.hurtMarked = true;
-            syncMotion(entity);
             return;
         }
 
@@ -160,7 +156,6 @@ public class WallClimbAbility extends Ability {
 
         entity.fallDistance = 0.0F;
         entity.hurtMarked = true;
-        syncMotion(entity);
     }
 
     @Override
@@ -257,12 +252,6 @@ public class WallClimbAbility extends Ability {
 
         return !state.isAir()
                 && !state.getCollisionShape(level, pos).isEmpty();
-    }
-
-    private static void syncMotion(LivingEntity entity) {
-        if (entity instanceof ServerPlayer player) {
-            player.connection.send(new ClientboundSetEntityMotionPacket(entity));
-        }
     }
 
     private record WallCheckResult(

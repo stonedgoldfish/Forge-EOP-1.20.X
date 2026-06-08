@@ -11,6 +11,9 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.stonedgoldfish.eopmod.block.EOPBlocks;
+import net.stonedgoldfish.eopmod.item.EOPCreativeModeTabs;
+import net.stonedgoldfish.eopmod.item.EOPItems;
 import net.threetag.palladiumcore.forge.PalladiumCoreForge;
 import org.slf4j.Logger;
 import net.stonedgoldfish.eopmod.power.ability.EOPAbilities;
@@ -35,6 +38,9 @@ public class EOPMod {
         PalladiumCoreForge.registerModEventBus(MOD_ID, modEventBus);
         EOPAbilities.ABILITIES.register();
         EOPConditions.CONDITIONS.register();
+        EOPCreativeModeTabs.register(modEventBus);
+        EOPBlocks.BLOCKS.register(modEventBus);
+        EOPItems.ITEMS.register(modEventBus);
         EOPPalladiumProperties.init();
         EOPNetwork.register();
         EOPEntities.ENTITIES.register(modEventBus);
@@ -57,7 +63,6 @@ public class EOPMod {
 
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
-
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call

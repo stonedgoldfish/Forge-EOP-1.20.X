@@ -68,6 +68,8 @@ public class EOPAbilities {
             ABILITIES.register("teleport", RaycastTeleportAbility::new);
     public static final RegistrySupplier<Ability> INTANGIBILITY =
             ABILITIES.register("intangibility", IntangibilityAbility::new);
+    public static final RegistrySupplier<Ability> INVISIBILITY =
+            ABILITIES.register("invisibility", InvisibilityAbility::new);
     public static final RegistrySupplier<Ability> RESET_COOLDOWN =
             ABILITIES.register("reset_cooldown", ResetCooldownAbility::new);
     public static final RegistrySupplier<Ability> PLAY_SOUND =
@@ -88,6 +90,16 @@ public class EOPAbilities {
             ABILITIES.register("punch_command", CommandOnPunchAbility::new);
     public static final RegistrySupplier<Ability> CLIMB =
             ABILITIES.register("wall_climb", WallClimbAbility::new);
+    public static final RegistrySupplier<Ability> FROST_WALK =
+            ABILITIES.register("frost_walk", FrostWalkAbility::new);
+    public static final RegistrySupplier<Ability> ENCHANTING =
+            ABILITIES.register("enchanting", EnchantingAbility::new);
+    public static final RegistrySupplier<Ability> BONEMEAL =
+            ABILITIES.register("bonemeal", AOEBonemealAbility::new);
+    public static final RegistrySupplier<Ability> WALL_CREATION =
+            ABILITIES.register("wall_creation", WallCreationAbility::new);
+    public static final RegistrySupplier<Ability> POCKET_DIM =
+            ABILITIES.register("pocket_dimension", PocketDimensionAbility::new);
 
     public static void init() {
 
