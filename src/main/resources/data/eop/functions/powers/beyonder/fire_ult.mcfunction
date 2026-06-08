@@ -1,0 +1,43 @@
+playsound minecraft:block.fire.extinguish master @a ~ ~ ~ 1 1
+particle minecraft:poof ~ ~ ~ 2 3 2 0 5 force
+particle minecraft:flame ~ ~ ~ 2 3 2 0 5 force
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-0.5 ~ ~-0.5 ~0.5 ~ ~0.5 minecraft:fire replace minecraft:air
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-0.5 ~ ~-0.5 ~0.5 ~ ~0.5 minecraft:fire replace minecraft:snow
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~0.5 ~ ~0.5 ~-0.5 ~ ~-0.5 minecraft:fire replace minecraft:snow_block
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:air replace minecraft:water
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:air replace minecraft:ice
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:air replace minecraft:packed_ice
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:smooth_stone replace minecraft:cobblestone
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:cracked_stone_bricks replace minecraft:stone_bricks
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:deepslate replace minecraft:cobbled_deepslate
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:cracked_deepslate_bricks replace minecraft:deepslate_bricks
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:cracked_deepslate_tiles replace minecraft:deepslate_tiles
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:smooth_sandstone replace minecraft:sandstone
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:smooth_red_sandstone replace minecraft:red_sandstone
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:cracked_nether_bricks replace minecraft:nether_bricks
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:smooth_basalt replace minecraft:basalt
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:cracked_polished_blackstone_bricks replace minecraft:polished_blackstone_bricks
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:smooth_quartz replace minecraft:quartz_block
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:terracotta replace minecraft:clay
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:glass replace minecraft:sand
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:glass replace minecraft:red_sand
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:sponge replace minecraft:wet_sponge
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:smooth_sandstone replace minecraft:sandstone
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:white_glazed_terracotta replace minecraft:white_terracotta
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:light_gray_glazed_terracotta replace minecraft:light_gray_terracotta
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:gray_glazed_terracotta replace minecraft:gray_terracotta
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:black_glazed_terracotta replace minecraft:black_terracotta
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:brown_glazed_terracotta replace minecraft:brown_terracotta
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:red_glazed_terracotta replace minecraft:red_terracotta
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:orange_glazed_terracotta replace minecraft:orange_terracotta
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:yellow_glazed_terracotta replace minecraft:yellow_terracotta
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:lime_glazed_terracotta replace minecraft:lime_terracotta
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:green_glazed_terracotta replace minecraft:green_terracotta
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:cyan_glazed_terracotta replace minecraft:cyan_terracotta
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:light_blue_glazed_terracotta replace minecraft:light_blue_terracotta
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:blue_glazed_terracotta replace minecraft:blue_terracotta
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:purple_glazed_terracotta replace minecraft:purple_terracotta
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:magenta_glazed_terracotta replace minecraft:magenta_terracotta
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:pink_glazed_terracotta replace minecraft:pink_terracotta
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:air replace minecraft:snow
+execute if score Gamerule EOP.Non.Destructive.Mode matches 0 run fill ~-2 ~-2 ~-2 ~2 ~2 ~2 minecraft:air replace minecraft:snow_block

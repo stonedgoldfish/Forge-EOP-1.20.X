@@ -1,0 +1,6 @@
+{
+	"exhaustion": 0.1,
+ 	"message_id": "mimic_beam",
+ 	"effects": "hurt",
+	"scaling": "never"
+}

@@ -1,0 +1,25 @@
+{
+    "type": "geckolib:default",
+    "model": "eop:geo/base/tentacle.geo.json",
+    "texture": "eop:textures/models/base/cracosas_grasp_text.png",
+    "animation_file": "eop:animations/cracosa.json",
+    "animation_controller": [
+        {
+            "name": "looping",
+            "transition_tick_time": 4,
+            "animation": "cracosa"
+        }
+    ],
+    "conditions": [
+        {
+            "type": "palladium:not",
+            "conditions": [
+                {
+                    "type": "palladium:ability_enabled",
+                    "power": "eop:base",
+                    "ability": "Extra.Render.Off"
+                }
+            ]
+        }
+    ]
+}

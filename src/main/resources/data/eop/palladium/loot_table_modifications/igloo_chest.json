@@ -1,0 +1,22 @@
+{
+    "target": "minecraft:chests/igloo_chest",
+    "add_pools": [
+        {
+            "name": "drop1",
+            "bonus_rolls": 0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "eop:frost_talisman",
+                    "conditions": [
+                        {
+                            "condition": "minecraft:random_chance",
+                            "chance": 0.05
+                        }
+                    ]
+                }
+            ],
+            "rolls": 1
+        }
+    ]
+}

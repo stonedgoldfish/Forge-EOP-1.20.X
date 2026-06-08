@@ -1,0 +1,7 @@
+{
+
+  "sound_type": "minecraft:moss",
+  "destroy_time": 3,
+  "explosion_resistance": 6,
+  "no_occlusion": false
+}

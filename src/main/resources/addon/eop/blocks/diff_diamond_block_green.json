@@ -1,0 +1,7 @@
+{
+
+  "sound_type": "minecraft:metal",
+  "destroy_time": 100000000000,
+  "explosion_resistance": 100000000000,
+  "no_occlusion": true
+}

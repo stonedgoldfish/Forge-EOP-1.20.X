@@ -1,0 +1,22 @@
+{
+    "target": "minecraft:chests/village/village_desert_house",
+    "add_pools": [
+        {
+            "name": "drop1",
+            "bonus_rolls": 0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "eop:cleansing_totem",
+                    "conditions": [
+                        {
+                            "condition": "minecraft:random_chance",
+                            "chance": 0.1
+                        }
+                    ]
+                }
+            ],
+            "rolls": 1
+        }
+    ]
+}

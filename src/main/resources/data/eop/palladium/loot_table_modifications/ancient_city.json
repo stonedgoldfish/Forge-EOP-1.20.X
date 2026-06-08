@@ -1,0 +1,56 @@
+{
+    "target": "minecraft:chests/ancient_city",
+    "add_pools": [
+        {
+            "name": "drop1",
+            "bonus_rolls": 0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "eop:erasure_totem",
+                    "conditions": [
+                        {
+                            "condition": "minecraft:random_chance",
+                            "chance": 0.01
+                        }
+                    ]
+                }
+            ],
+            "rolls": 1
+        },
+        {
+            "name": "drop2",
+            "bonus_rolls": 0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "eop:hogyoku",
+                    "conditions": [
+                        {
+                            "condition": "minecraft:random_chance",
+                            "chance": 0.01
+                        }
+                    ]
+                }
+            ],
+            "rolls": 1
+        },
+        {
+            "name": "drop3",
+            "bonus_rolls": 0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "eop:all_seeing_totem",
+                    "conditions": [
+                        {
+                            "condition": "minecraft:random_chance",
+                            "chance": 0.4
+                        }
+                    ]
+                }
+            ],
+            "rolls": 1
+        }
+    ]
+}

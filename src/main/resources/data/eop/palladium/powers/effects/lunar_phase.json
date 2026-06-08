@@ -1,0 +1,35 @@
+{
+    "name": "Lunar Phase",
+    "icon": "minecraft:lightning_rod",
+    "hidden": true,
+    "abilities": {
+        "Power.Remove": {
+            "type": "palladium:command",
+            "title": "null",
+            "bar_color": "light_gray",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": -1,
+            "gui_position": "null",
+            "description": "null",
+            "first_tick_commands": [
+                "superpower remove eop:effects/lunar_phase @s"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_effect",
+                                "effect": "eop:lunar_phase"
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+}

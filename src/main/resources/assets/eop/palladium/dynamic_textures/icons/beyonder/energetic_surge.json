@@ -1,0 +1,11 @@
+{
+    "base": "eop:textures/gui/energetic_surge_#X.png",
+	"variables": {
+        "X": {
+            "type": "palladium:ability_integer_property",
+            "power": "eop:beyonder",
+            "ability": "Dynamic.Icons",
+			"property": "value"
+        }
+    }
+}

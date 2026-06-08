@@ -1,0 +1,6 @@
+{
+	"exhaustion": 0.0,
+ 	"message_id": "world_slash_strong",
+ 	"effects": "hurt",
+	"scaling": "never"
+}

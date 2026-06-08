@@ -1,0 +1,22 @@
+{
+    "target": "minecraft:blocks/stone",
+    "add_pools": [
+        {
+            "name": "drop1",
+            "bonus_rolls": 0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "eop:stone_shard",
+                    "conditions": [
+                        {
+                            "condition": "minecraft:random_chance",
+                            "chance": 0.05
+                        }
+                    ]
+                }
+            ],
+            "rolls": 1
+        }
+    ]
+}

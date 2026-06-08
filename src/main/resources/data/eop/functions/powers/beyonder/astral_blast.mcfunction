@@ -1,0 +1,1 @@
+summon armor_stand ~ ~ ~ {Invisible:1,Invulnerable:1,DisabledSlots:63,Tags:["Astral.Blast"],Palladium:{Properties:{superpowers:["eop:models/astral_blast"]}}}

@@ -1,0 +1,158 @@
+{
+    "type": "palladium:compound",
+    "layers": [
+        {
+            "model": "eop:geo/guardian/big_diamond_golem.geo.json",
+            "type": "geckolib:default",
+			"first_person_conditions": false,
+            "texture": {
+                "base": "eop:textures/models/guardian/big_diamond_golem_text_#TYPE.png",
+                "transformers": [
+                    {
+                        "type": "palladium:alpha_mask",
+                        "mask": "eop:textures/alpha_mask/guardian/big_diamond_golem/big_diamond_golem_#TIMER.png"
+                    }
+                ],
+                "variables": {
+                    "TIMER": {
+                        "type": "palladium:animation_timer_ability",
+                        "power": "eop:fortress",
+                        "ability": "Big.Diamond.Golem"
+                    },
+                    "TYPE": {
+                        "type": "palladium:animation_timer_ability",
+                        "power": "eop:fortress",
+                        "ability": "Diamond.Type"
+                    }
+                },
+                "output": "eop:textures/models/guardian/big_diamond_golem_text_#TYPE_#TIMER_color"
+            },
+			"render_type": "cutout",
+			"conditions": [
+                {
+                    "type": "palladium:not",
+                    "conditions": [
+                        {
+                            "type": "palladium:ability_enabled",
+                            "power": "eop:fortress",
+                            "ability": "Big.Diamond.Golem.Smash"
+                        },
+						{
+                            "type": "palladium:ability_enabled",
+                            "power": "eop:fortress",
+                            "ability": "Spikes"
+                        }
+                    ]
+                }
+            ]
+        },
+		{
+            "model": "eop:geo/guardian/big_diamond_golem_arm.geo.json",
+            "type": "geckolib:default",
+			"third_person_conditions": false,
+            "texture": {
+                "base": "eop:textures/models/guardian/big_diamond_golem_text_#TYPE.png",
+                "variables": {
+                    "TYPE": {
+                        "type": "palladium:animation_timer_ability",
+                        "power": "eop:fortress",
+                        "ability": "Diamond.Type"
+                    }
+                },
+                "output": "eop:textures/models/guardian/big_diamond_golem_text_#TYPE"
+            },
+			"render_type": "cutout",
+			"conditions": {
+                "type": "palladium:and",
+                "conditions": [
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "eop:fortress",
+                        "ability": "Big.Diamond.Golem",
+                        "property": "value",
+                        "min": 50,
+                        "max": 68
+                    }
+                ]
+            }
+        },
+		{
+            "model": "eop:geo/guardian/big_diamond_golem_smash.geo.json",
+			"first_person_conditions": false,
+            "type": "geckolib:default",
+            "texture": {
+                "base": "eop:textures/models/guardian/big_diamond_golem_text_#TYPE.png",
+                "variables": {
+                    "TYPE": {
+                        "type": "palladium:animation_timer_ability",
+                        "power": "eop:fortress",
+                        "ability": "Diamond.Type"
+                    }
+                },
+                "output": "eop:textures/models/guardian/big_diamond_golem_text_#TYPE"
+            },
+			"render_type": "cutout",
+			"animation_file": "eop:animations/big_diamond_golem.json",
+            "animation_controller": [
+                {
+                    "name": "smash",
+                    "transition_tick_time": 0,
+                    "triggers": {
+                        "smash": "smash"
+                    }
+                }
+            ],
+			"conditions": [
+                {
+                    "type": "palladium:and",
+                    "conditions": [
+                        {
+                            "type": "palladium:ability_enabled",
+                            "power": "eop:fortress",
+                            "ability": "Big.Diamond.Golem.Smash"
+                        }
+                    ]
+                }
+            ]
+        },
+		{
+            "model": "eop:geo/guardian/big_diamond_golem_smash.geo.json",
+			"first_person_conditions": false,
+            "type": "geckolib:default",
+            "texture": {
+                "base": "eop:textures/models/guardian/big_diamond_golem_text_#TYPE.png",
+                "variables": {
+                    "TYPE": {
+                        "type": "palladium:animation_timer_ability",
+                        "power": "eop:fortress",
+                        "ability": "Diamond.Type"
+                    }
+                },
+                "output": "eop:textures/models/guardian/big_diamond_golem_text_#TYPE"
+            },
+			"render_type": "cutout",
+			"animation_file": "eop:animations/big_diamond_golem.json",
+            "animation_controller": [
+                {
+                    "name": "spikes",
+                    "transition_tick_time": 0,
+                    "triggers": {
+                        "spikes": "spikes"
+                    }
+                }
+            ],
+			"conditions": [
+                {
+                    "type": "palladium:and",
+                    "conditions": [
+                        {
+                            "type": "palladium:ability_enabled",
+                            "power": "eop:fortress",
+                            "ability": "Spikes"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "eop:block/dimension_bit"
+    }
+  }
+}

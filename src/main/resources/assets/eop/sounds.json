@@ -1,0 +1,52 @@
+{
+    "energy_blast": {
+        "category": "neutral",
+        "subtitle": "energy_blast",
+        "sounds": [
+            {
+                "name": "eop:energy_blast",
+                "stream": true
+            }
+        ]
+    },
+    "energy_transform": {
+        "category": "neutral",
+        "subtitle": "energy_transform",
+        "sounds": [
+            {
+                "name": "eop:energy_transform",
+                "stream": true
+            }
+        ]
+    },
+	"black_hole": {
+        "category": "neutral",
+        "subtitle": "black_hole",
+        "sounds": [
+            {
+                "name": "eop:black_hole",
+                "stream": true
+            }
+        ]
+    },
+	"laser_vision_start": {
+        "category": "neutral",
+        "subtitle": "laser_vision",
+        "sounds": [
+            {
+                "name": "eop:laser_vision_start",
+                "stream": true
+            }
+        ]
+    },
+	"laser_vision": {
+        "category": "neutral",
+        "subtitle": "laser_vision",
+        "sounds": [
+            {
+                "name": "eop:laser_vision",
+                "stream": true
+            }
+        ]
+    }
+}

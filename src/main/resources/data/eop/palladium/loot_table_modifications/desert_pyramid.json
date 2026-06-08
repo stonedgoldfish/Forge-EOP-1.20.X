@@ -1,0 +1,73 @@
+{
+    "target": "minecraft:chests/desert_pyramid",
+    "add_pools": [
+        {
+            "name": "drop1",
+            "bonus_rolls": 0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "eop:ancient_scroll",
+                    "conditions": [
+                        {
+                            "condition": "minecraft:random_chance",
+                            "chance": 0.01
+                        }
+                    ]
+                }
+            ],
+            "rolls": 1
+        },
+        {
+            "name": "drop2",
+            "bonus_rolls": 0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "eop:awakening_crystal_aem",
+                    "conditions": [
+                        {
+                            "condition": "minecraft:random_chance",
+                            "chance": 0.01
+                        }
+                    ]
+                }
+            ],
+            "rolls": 1
+        },
+        {
+            "name": "drop3",
+            "bonus_rolls": 0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "eop:skakdi_gem",
+                    "conditions": [
+                        {
+                            "condition": "minecraft:random_chance",
+                            "chance": 0.25
+                        }
+                    ]
+                }
+            ],
+            "rolls": 1
+        },
+        {
+            "name": "drop4",
+            "bonus_rolls": 0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "eop:awakening_crystal_gm",
+                    "conditions": [
+                        {
+                            "condition": "minecraft:random_chance",
+                            "chance": 0.01
+                        }
+                    ]
+                }
+            ],
+            "rolls": 1
+        }
+    ]
+}

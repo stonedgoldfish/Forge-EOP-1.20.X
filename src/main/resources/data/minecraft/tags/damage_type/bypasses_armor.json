@@ -1,0 +1,27 @@
+{
+    "replace": false,
+    "values": [
+        "eop:brain_hurt",
+        "eop:erasure",
+        "eop:ice",
+        "eop:radiation",
+        "eop:shock",
+        "eop:slime",
+        "eop:smith_crush",
+        "eop:spores",
+        "eop:suffocation",
+        "eop:warped_water",
+        "eop:collapse",
+        "eop:world_slash",
+        "eop:world_slash_strong",
+        "eop:slash_strong",
+        "eop:purple",
+        "eop:decay",
+        "eop:scream",
+        "eop:magala_corrupt_damage",
+		"eop:implode",
+        "eop:true_basic",
+		"eop:spirit_damage",
+		"eop:mirror"
+    ]
+}

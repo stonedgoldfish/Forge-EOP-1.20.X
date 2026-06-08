@@ -1,0 +1,337 @@
+{
+    "name": "Base",
+    "background": "minecraft:textures/block/gray_concrete_powder.png",
+    "icon": "eop:textures/gui/dna.png",
+    "persistent_data": true,
+    "hidden": true,
+    "abilities": {
+        "Base.Ability.Check": {
+            "type": "palladium:command",
+            "hidden": true,
+            "first_tick_commands": [
+                "scoreboard objectives add EOP.Base.Death deathCount",
+                "scoreboard players add @s EOP.Base.Death 0"
+            ],
+            "last_tick_commands": [],
+            "commands": []
+        },
+        "Base": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/dna.png",
+            "title": "Base System",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": -1,
+            "gui_position": [
+                0,
+                0
+            ],
+            "description": "Base System."
+        },
+        "Battlemode": {
+            "type": "palladium:gui_overlay",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "texture": "#eop:battlemode",
+            "texture_width": 16,
+            "texture_height": 16,
+            "translate": [
+                -42,
+                -30,
+                0
+            ],
+            "rotate": [
+                0,
+                0,
+                0
+            ],
+            "scale": [
+                1,
+                1,
+                1
+            ],
+            "alignment": "bottom_right",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Has.BM"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Ability.Disabled"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "DNA.Corrupted": {
+            "type": "palladium:gui_overlay",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "texture": "eop:textures/item/logo_corrupted.png",
+            "texture_width": 16,
+            "texture_height": 16,
+            "translate": [
+                -25,
+                10,
+                1
+            ],
+            "rotate": [
+                0,
+                0,
+                0
+            ],
+            "scale": [
+                2,
+                2,
+                2
+            ],
+            "alignment": "top_right",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Chimera.Corrupted"
+                    }
+                ]
+            }
+        },
+        "Night.Vision": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [],
+            "last_tick_commands": [
+                "effect clear @s night_vision"
+            ],
+            "commands": [
+                "effect give @s minecraft:night_vision 20 1 true"
+            ],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Night.Vision.On"
+                    }
+                ]
+            }
+        },
+        "AOE.Fire.Resistance": {
+            "type": "eop:aoe_commands",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "radius": 15,
+            "commands_on_targets": [],
+            "commands_on_allies": [
+                "effect give @s fire_resistance 2 3 true"
+            ],
+            "cone": false,
+            "cone_angle": 90,
+            "include_caster": false,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Fire.Resistance.On"
+                    },
+                    {
+                        "type": "palladium:interval",
+                        "active_ticks": 0,
+                        "disabled_ticks": 18
+                    }
+                ]
+            }
+        },
+        "Light.Bulb": {
+            "type": "palladium:render_layer",
+            "render_layer": "eop:base/light_bulb",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Light.On"
+                    }
+                ]
+            }
+        },
+        "Light.Light.Bulb": {
+            "type": "eop:area_light",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "light_level": 15,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Light.On"
+                    }
+                ]
+            }
+        },
+        "AOE.Slow.Fall": {
+            "type": "eop:aoe_commands",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "radius": 15,
+            "commands_on_targets": [],
+            "commands_on_allies": [
+                "effect give @s slow_falling 2 3 true"
+            ],
+            "cone": false,
+            "cone_angle": 90,
+            "include_caster": true,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Slow.Fall.On"
+                    },
+                    {
+                        "type": "palladium:interval",
+                        "active_ticks": 0,
+                        "disabled_ticks": 18
+                    }
+                ]
+            }
+        },
+        "Smelt": {
+            "type": "eop:smelt",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "ticks_per_item": 20,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Smelting.On"
+                    }
+                ]
+            }
+        },
+        "Smelt.Sound": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "last_tick_commands": [],
+            "commands": [
+                "playsound minecraft:entity.blaze.burn master @a ~ ~ ~ 1 1"
+            ],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Smelt.Anim",
+                        "property": "value",
+                        "min": 5,
+                        "max": 50
+                    }
+                ]
+            }
+        },
+        "Smelt.Anim": {
+            "type": "palladium:animation_timer",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "start_value": 0,
+            "max_value": 5,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:empty_slot",
+                                "slot": "mainhand"
+                            }
+                        ]
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Can.Smelt"
+                    }
+                ]
+            }
+        },
+        "Smelt.Animation": {
+            "type": "eop:trigger_animation",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "animation": "RIGHT_ARM_LIFT",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Can.Smelt"
+                    }
+                ]
+            }
+        },
+        "Smelt.Particle": {
+            "type": "palladium:render_layer",
+            "icon": "eop:textures/gui/active_sun.png",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": 0,
+            "render_layer": "eop:base/fire_smelt",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Smelt.Anim",
+                        "property": "value",
+                        "min": 5,
+                        "max": 50
+                    }
+                ]
+            }
+        },
+        "Fire.Light.Smelt": {
+            "type": "eop:area_light",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "light_level": 15,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Smelt.Anim",
+                        "property": "value",
+                        "min": 5,
+                        "max": 50
+                    }
+                ]
+            }
+        }
+    }
+}

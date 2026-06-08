@@ -1,0 +1,33 @@
+{
+    "name": "Test power",
+    "background": "minecraft:textures/block/gray_concrete_powder.png",
+    "icon": "eop:textures/gui/fungus.png",
+    "ability_bar_texture": "eop:textures/gui/ability_bars/eop_powers.png",
+    "persistent_data": true,
+    "abilities": {
+        "Fireball.Projectile": {
+            "type": "eop:palladium_property_modifier",
+            "icon": "minecraft:stone",
+            "title": "null",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": false,
+            "list_index": -1,
+            "gui_position": "null",
+            "description": "null",
+            "property_name": "eop_climb_extra",
+        "adjustment_type": "set",
+        "adjustment_amount": "true",
+            "conditions": {
+                "enabling": [                {
+                                    "type": "palladium:action",
+                                    "cooldown": 0,
+                                    "key_type": "key_bind",
+                                    "needs_empty_hand": false,
+                                    "allow_scrolling_when_crouching": true
+                                }],
+                "unlocking": []
+            }
+        }
+    }
+}

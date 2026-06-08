@@ -1,0 +1,12 @@
+{
+    "type": "palladium:lightning",
+    "spacing": 1,
+    "lifetime": 5,
+    "glow_color": {
+        "type": "palladium:integer_property",
+        "property": "EOP.Plasma.Secondary.Lightning.Color",
+        "fallback": 0
+    },
+    "amount": 15,
+    "thickness": 0.06
+}

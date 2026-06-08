@@ -1,0 +1,9 @@
+{
+    "base": "eop:textures/gui/ability_bars/battlemode_#X.png",
+    "variables": {
+        "X": {
+            "type": "palladium:objective_score",
+            "objective": "EOP.Battle.Mode"
+        }
+    }
+}

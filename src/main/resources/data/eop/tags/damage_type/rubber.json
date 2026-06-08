@@ -1,0 +1,12 @@
+{
+    "values": [
+    "minecraft:cramming",
+	"minecraft:cactus",
+	"minecraft:fall",
+	"minecraft:falling_anvil",
+	"minecraft:falling_block",
+	"minecraft:falling_stalactite",
+	"minecraft:fly_into_wall",
+	"minecraft:in_wall"
+  ]
+}

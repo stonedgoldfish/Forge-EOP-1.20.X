@@ -1,0 +1,25 @@
+{
+    "replace": false,
+    "values": [
+        "minecraft:pig",
+        "minecraft:cow",
+        "minecraft:sheep",
+        "minecraft:mooshroom",
+        "minecraft:goat",
+        "minecraft:wolf",
+        "minecraft:polar_bear",
+        "minecraft:panda",
+        "minecraft:shulker",
+        "minecraft:strider",
+        "minecraft:turtle",
+        "minecraft:glow_squid",
+        "minecraft:squid",
+        "minecraft:spider",
+        "minecraft:cave_spider",
+        "minecraft:dolphin",
+        "minecraft:hoglin",
+        "minecraft:zoglin",
+        "minecraft:phantom",
+		"minecraft:guardian"
+    ]
+}

@@ -1,0 +1,15 @@
+{
+    "replace": false,
+    "values": [
+        "minecraft:ravager",
+        "minecraft:sniffer",
+        "minecraft:camel",
+        "minecraft:iron_golem",
+		"minecraft:ghast",
+		"minecraft:warden",
+		"minecraft:wither",
+		"minecraft:elder_guardian",
+		"minecraft:magma_cube",
+		"minecraft:slime"
+    ]
+}

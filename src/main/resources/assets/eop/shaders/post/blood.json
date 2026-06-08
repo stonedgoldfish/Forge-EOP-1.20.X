@@ -1,0 +1,33 @@
+{
+  "targets": ["swap", "swap2"],
+  "passes": [
+    {
+      "name": "sobel",
+      "intarget": "minecraft:main",
+      "outtarget": "swap"
+    },
+
+    {
+      "name": "sobel",
+      "intarget": "swap",
+      "outtarget": "swap2"
+    },
+
+    {
+      "name": "color_convolve",
+      "intarget": "swap2",
+      "outtarget": "swap",
+      "uniforms": [
+        { "name": "RedMatrix",   "values": [ 2.20, 0.10, 0.10 ] },
+        { "name": "GreenMatrix", "values": [ 0.05, 0.20, 0.05 ] },
+        { "name": "BlueMatrix",  "values": [ 0.05, 0.05, 0.10 ] }
+      ]
+    },
+
+    {
+      "name": "blit",
+      "intarget": "swap",
+      "outtarget": "minecraft:main"
+    }
+  ]
+}

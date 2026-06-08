@@ -1,0 +1,16 @@
+{
+  "values": [
+	"minecraft:bedrock",
+	"minecraft:ancient_debris",
+	"minecraft:netherite_block",
+	"minecraft:enchanting_table",
+	"minecraft:respawn_anchor",
+	"minecraft:obsidian",
+	"minecraft:crying_obsidian",
+	"minecraft:reinforced_deepslate",
+	"minecraft:end_portal_frame",
+	"minecraft:barrier",
+	"eop:domain",
+	"eop:pocket_floor"
+  ]
+}

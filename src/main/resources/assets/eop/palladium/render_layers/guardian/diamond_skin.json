@@ -1,0 +1,34 @@
+{
+    "type": "palladium:compound",
+    "layers": [
+        {
+            "model": {
+                "normal": "eop:geo/guardian/diamond_skin.geo.json",
+                "slim": "eop:geo/guardian/diamond_skin_slim.geo.json"
+            },
+            "type": "geckolib:default",
+            "texture": {
+                "base": "eop:textures/models/guardian/diamond_skin_#TYPE.png",
+                "transformers": [
+                    {
+                        "type": "palladium:alpha_mask",
+                        "mask": "eop:textures/alpha_mask/guardian/diamond_skin/diamond_skin_#TIMER.png"
+                    }
+                ],
+                "variables": {
+                    "TIMER": {
+                        "type": "palladium:animation_timer_ability",
+                        "power": "eop:fortress",
+                        "ability": "Transform"
+                    },
+                    "TYPE": {
+                        "type": "palladium:animation_timer_ability",
+                        "power": "eop:fortress",
+                        "ability": "Diamond.Type"
+                    }
+                },
+                "output": "eop:textures/alpha_mask/guardian/diamond_skin/diamond_skin_#TIMER_#TYPE"
+            }
+        }
+    ]
+}

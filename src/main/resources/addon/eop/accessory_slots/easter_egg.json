@@ -1,0 +1,17 @@
+{
+    "icon": "eop:textures/gui/echoes.png",
+    "allows_multiple": false,
+    "menu_visibility": {
+        "type": "palladium:and",
+        "conditions": [
+            {
+                "type": "palladium:has_power",
+                "power": "eop:flame"
+            },
+            {
+                "type": "palladium:has_power",
+                "power": "eop:icicle"
+            }
+        ]
+    }
+}

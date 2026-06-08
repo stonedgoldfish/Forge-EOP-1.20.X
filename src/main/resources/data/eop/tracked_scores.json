@@ -1,0 +1,7 @@
+{
+    "objectives": [
+        "deaths",
+		"EOP.Battle.Mode",
+		"EOP.Base.Death"
+    ]
+}

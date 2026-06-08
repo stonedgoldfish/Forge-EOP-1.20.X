@@ -1,0 +1,8 @@
+{
+    "base": "eop:textures/gui/ability_bars/wheels/warper/eop_ability_wheel_#SELECTION.png",
+    "variables": {
+        "SELECTION": {
+            "type": "palladium:ability_wheel_selection"
+        }
+    }
+}

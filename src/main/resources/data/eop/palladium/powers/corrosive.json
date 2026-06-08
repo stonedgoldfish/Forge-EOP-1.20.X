@@ -1,0 +1,446 @@
+{
+    "name": "Erosion",
+    "background": "minecraft:textures/block/gray_concrete_powder.png",
+    "icon": "eop:textures/gui/corrosive.png",
+    "ability_bar_texture": "eop:textures/gui/ability_bars/eop_powers.png",
+    "persistent_data": true,
+    "abilities": {
+        "Corrosive": {
+            "type": "palladium:command",
+            "hidden": true,
+            "first_tick_commands": [
+                "tag @s add Corrosive",
+                "tag @s add EOP.No.BM",
+                "tag @s add EOP.NGP",
+                "tag @s add EOP.Has.Power"
+            ],
+            "last_tick_commands": [
+                "tag @s remove Corrosive",
+                "tag @s remove EOP.No.BM",
+                "tag @s remove EOP.NGP",
+                "tag @s remove EOP.Remove.DNA.Change",
+                "tag @s remove Mimic.Mob",
+                "tag @s remove EOP.Has.Power",
+                "scale reset @s"
+            ],
+            "commands": []
+        },
+        "Erosion": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/corrosive.png",
+            "title": "Erosion",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": -1,
+            "gui_position": [
+                0,
+                0
+            ],
+            "description": "You have obtained the power to erode matter"
+        },
+        "Power.Tag": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "tag @s add EOP.Has.Power"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Has.Power"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Mimic.Mob.Tag": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "tag @s add Mimic.Mob"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "Mimic"
+                    },
+                    {
+                        "type": "palladium:interval",
+                        "active_ticks": 0,
+                        "disabled_ticks": 15
+                    }
+                ]
+            }
+        },
+        "Revert.Delay": {
+            "type": "palladium:animation_timer",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "start_value": 0,
+            "max_value": 2
+        },
+        "Revert.Genetic.Manip": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "superpower remove eop:corrosive @s",
+                "tag @s remove Mimic.Mob"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Revert.Delay",
+                        "property": "value",
+                        "min": 2,
+                        "max": 2
+                    },
+                    {
+                        "type": "palladium:or",
+                        "conditions": [
+                            {
+                                "type": "palladium:and",
+                                "conditions": [
+                                    {
+                                        "type": "palladium:has_tag",
+                                        "tag": "EOP.Power.Erased"
+                                    },
+                                    {
+                                        "type": "palladium:has_tag",
+                                        "tag": "Mimic.Mob"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "palladium:and",
+                                "conditions": [
+                                    {
+                                        "type": "palladium:has_tag",
+                                        "tag": "EOP.Remove.DNA.Change"
+                                    },
+                                    {
+                                        "type": "palladium:has_tag",
+                                        "tag": "Mimic.Mob"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Get.DNA": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": 0,
+            "gui_position": "null",
+            "description": "null",
+            "first_tick_commands": [
+                "playsound minecraft:block.beacon.power_select master @a ~ ~ ~ 1 2",
+                "item replace entity @s weapon.mainhand with eop:dna_capsule{corrosive:\"eop_true\",display:{Name:'[\"\",{\"text\":\"Erosion\",\"color\":\"#6a6262\",\"italic\":false},{\"text\":\" DNA Capsule\",\"italic\":false}]'}}"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:action",
+                        "cooldown": 0,
+                        "key_type": "right_click",
+                        "needs_empty_hand": false,
+                        "allow_scrolling_when_crouching": true
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:item_in_slot",
+                        "item": {
+                            "item": "eop:empty_dna_capsule"
+                        },
+                        "slot": "mainhand"
+                    },
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "Mimic"
+                    }
+                ]
+            }
+        },
+        "Decay.Description": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/corrosive.png",
+            "title": "Decay",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": -1,
+            "gui_position": [
+                0,
+                -1
+            ],
+            "description": "Start a decaying process upon physical contact with an entity",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Erosion"
+                    }
+                ]
+            }
+        },
+        "Delete.Item": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": 3,
+            "first_tick_commands": [
+                "playsound minecraft:entity.wither.ambient master @a ~ ~ ~ 1 1.3",
+                "item replace entity @s weapon.mainhand with air"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Item.Erase.On"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:empty_slot",
+                                "slot": "mainhand"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Delete.Item.Timer",
+                        "property": "value",
+                        "min": 2,
+                        "max": 2
+                    }
+                ]
+            }
+        },
+        "Delete.Item.Timer": {
+            "type": "palladium:animation_timer",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": 3,
+            "start_value": 0,
+            "max_value": 2,
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Item.Erase.On"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:empty_slot",
+                                "slot": "mainhand"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Delete.Item.Particles": {
+            "type": "palladium:particles",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": 1,
+            "emitter": [
+                "eop:mainhand_basic"
+            ],
+            "particle_type": "minecraft:ash",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Item.Erase.On"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:empty_slot",
+                                "slot": "mainhand"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Decay": {
+            "type": "palladium:command",
+            "title": "Decay",
+            "description": "Start a decaying process upon physical contact with an entity",
+            "icon": "eop:textures/gui/corrosive.png",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "list_index": 0,
+            "first_tick_commands": [
+                "tag @s add EOP.Erode"
+            ],
+            "last_tick_commands": [
+                "tag @s remove EOP.Erode"
+            ],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:toggle",
+                        "cooldown": 200,
+                        "key_type": "key_bind"
+                    },
+                    {
+                        "type": "palladium:empty_slot",
+                        "slot": "mainhand"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.E.Awakened"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Power.Erased"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Destroy.Blocks": {
+            "type": "palladium:attribute_modifier",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "attribute": "palladium:destroy_speed",
+            "amount": 80000,
+            "operation": 1,
+            "uuid": "2ed8a7ea-ae7e-493e-9f04-835d54fb63ed",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Decay"
+                    },
+                    {
+                        "type": "palladium:empty_slot",
+                        "slot": "mainhand"
+                    }
+                ]
+            }
+        },
+        "Destroy.Blocks2": {
+            "type": "palladium:attribute_modifier",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "attribute": "palladium:destroy_speed",
+            "amount": 80000,
+            "operation": 1,
+            "uuid": "b1add17a-f4cb-4f99-86d8-0fb583e89c88",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Decay.Awakening"
+                    },
+                    {
+                        "type": "palladium:empty_slot",
+                        "slot": "mainhand"
+                    }
+                ]
+            }
+        },
+        "Decay.Awakening": {
+            "type": "palladium:command",
+            "title": "Decay",
+            "description": "Start a decaying process upon physical contact with an entity",
+            "icon": "eop:textures/gui/corrosive.png",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "gui_position": [
+                0,
+                -1
+            ],
+            "list_index": 0,
+            "first_tick_commands": [
+                "tag @s add EOP.Erode.Awakening"
+            ],
+            "last_tick_commands": [
+                "tag @s remove EOP.Erode.Awakening"
+            ],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:toggle",
+                        "cooldown": 0,
+                        "key_type": "key_bind"
+                    },
+                    {
+                        "type": "palladium:empty_slot",
+                        "slot": "mainhand"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Erosion"
+                    },
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.E.Awakened"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Power.Erased"
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+}

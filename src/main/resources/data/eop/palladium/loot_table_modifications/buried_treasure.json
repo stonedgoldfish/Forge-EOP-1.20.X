@@ -1,0 +1,73 @@
+{
+    "target": "minecraft:chests/buried_treasure",
+    "add_pools": [
+        {
+            "name": "drop1",
+            "bonus_rolls": 0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "eop:carcosas_grasp",
+                    "conditions": [
+                        {
+                            "condition": "minecraft:random_chance",
+                            "chance": 0.15
+                        }
+                    ]
+                }
+            ],
+            "rolls": 1
+        },
+        {
+            "name": "drop2",
+            "bonus_rolls": 0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "eop:awakening_crystal_re",
+                    "conditions": [
+                        {
+                            "condition": "minecraft:random_chance",
+                            "chance": 0.04
+                        }
+                    ]
+                }
+            ],
+            "rolls": 1
+        },
+		{
+            "name": "drop3",
+            "bonus_rolls": 0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "eop:shark_tooth",
+                    "conditions": [
+                        {
+                            "condition": "minecraft:random_chance",
+                            "chance": 0.25
+                        }
+                    ]
+                }
+            ],
+            "rolls": 1
+        },
+		{
+            "name": "drop4",
+            "bonus_rolls": 0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "eop:darkness_totem",
+                    "conditions": [
+                        {
+                            "condition": "minecraft:random_chance",
+                            "chance": 0.15
+                        }
+                    ]
+                }
+            ],
+            "rolls": 1
+        }
+    ]
+}

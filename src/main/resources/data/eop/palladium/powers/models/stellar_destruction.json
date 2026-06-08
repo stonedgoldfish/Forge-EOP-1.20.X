@@ -1,0 +1,60 @@
+{
+    "name": "Black Hole",
+    "background": "minecraft:textures/block/gray_concrete_powder.png",
+    "icon": "eop:textures/gui/fungus.png",
+    "persistent_data": true,
+    "abilities": {
+        "Screen.Shake": {
+            "type": "eop:screen_shake",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "intensity": 1,
+            "speed": 1,
+            "affect_others": true,
+            "range": 20,
+            "resistance_tags": [
+                "Beyonder"
+            ],
+            "end_burst": false,
+            "only_grounded_targets": false
+        },
+        "Commands": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "playsound minecraft:entity.generic.explode master @a ~ ~ ~ 2 1.3"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:interval",
+                        "active_ticks": 0,
+                        "disabled_ticks": 6
+                    }
+                ]
+            }
+        },
+        "Commands2": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "playsound minecraft:entity.firework_rocket.blast master @a ~ ~ ~ 2 0.7"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:interval",
+                        "active_ticks": 0,
+                        "disabled_ticks": 3
+                    }
+                ]
+            }
+        }
+    }
+}

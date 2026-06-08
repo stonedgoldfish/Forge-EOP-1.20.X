@@ -1,0 +1,62 @@
+{
+    "type": "palladium:compound",
+    "layers": [
+        {
+            "type": "geckolib:default",
+            "model": "eop:geo/beyonder/black_hole.geo.json",
+            "texture": {
+                "base": "eop:textures/models/beyonder/black_hole_#COLOR.png",
+                "variables": {
+                    "COLOR": {
+                        "type": "palladium:animation_timer_ability",
+                        "power": "eop:models/black_hole",
+                        "ability": "Color"
+                    }
+                },
+                "output": "eop:textures/models/beyonder/black_hole_#COLOR"
+            },
+            "render_type": "cutout",
+            "animation_file": "eop:animations/black_hole.json",
+            "animation_controller": [
+                {
+                    "name": "loop",
+                    "transition_tick_time": 0,
+                    "animation": "idle"
+                }
+            ],
+            "conditions": [
+                {
+                    "type": "palladium:ability_enabled",
+                    "power": "eop:models/black_hole",
+                    "ability": "Normal"
+                }
+            ]
+        },
+        {
+            "type": "geckolib:default",
+            "model": "eop:geo/beyonder/black_hole.geo.json",
+            "texture": "eop:textures/models/beyonder/black_hole_big.png",
+            "render_type": "cutout",
+            "animation_file": "eop:animations/black_hole.json",
+            "animation_controller": [
+                {
+                    "name": "loop",
+                    "transition_tick_time": 0,
+                    "animation": "idle_long"
+                }
+            ],
+            "conditions": [
+                {
+                    "type": "palladium:not",
+                    "conditions": [
+                        {
+                            "type": "palladium:ability_enabled",
+                            "power": "eop:models/black_hole",
+                            "ability": "Normal"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

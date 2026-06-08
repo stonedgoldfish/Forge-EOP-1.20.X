@@ -1,0 +1,112 @@
+{
+    "type": "palladium:compound",
+    "layers": [
+        {
+            "model": "eop:geo/guardian/diamond_golem.geo.json",
+			"first_person_conditions": false,
+            "type": "geckolib:default",
+            "texture": {
+                "base": "eop:textures/models/guardian/diamond_golem_text_#TYPE.png",
+                "transformers": [
+                    {
+                        "type": "palladium:alpha_mask",
+                        "mask": "eop:textures/alpha_mask/guardian/diamond_golem/diamond_golem_#TIMER.png"
+                    }
+                ],
+                "variables": {
+                    "TIMER": {
+                        "type": "palladium:animation_timer_ability",
+                        "power": "eop:fortress",
+                        "ability": "Diamond.Golem"
+                    },
+                    "TYPE": {
+                        "type": "palladium:animation_timer_ability",
+                        "power": "eop:fortress",
+                        "ability": "Diamond.Type"
+                    }
+                },
+                "output": "eop:textures/models/guardian/diamond_golem_text_#TIMER_#TYPE_color"
+            },
+			"render_type": "cutout",
+			"conditions": [
+                {
+                    "type": "palladium:not",
+                    "conditions": [
+                        {
+                            "type": "palladium:ability_enabled",
+                            "power": "eop:fortress",
+                            "ability": "Diamond.Golem.Smash"
+                        }
+                    ]
+                }
+            ]
+        },
+		{
+            "model": "eop:geo/guardian/diamond_golem_smash.geo.json",
+			"first_person_conditions": false,
+            "type": "geckolib:default",
+            "texture": {
+                "base": "eop:textures/models/guardian/diamond_golem_text_#TYPE.png",
+                "variables": {
+                    "TYPE": {
+                        "type": "palladium:animation_timer_ability",
+                        "power": "eop:fortress",
+                        "ability": "Diamond.Type"
+                    }
+                },
+                "output": "eop:textures/models/guardian/diamond_golem_text_#TYPE"
+            },
+			"render_type": "cutout",
+			"animation_file": "eop:animations/diamond_golem.json",
+            "animation_controller": [
+                {
+                    "name": "smash",
+                    "transition_tick_time": 0,
+                    "triggers": {
+                        "smash": "smash"
+                    }
+                }
+            ],
+			"conditions": [
+                {
+                    "type": "palladium:and",
+                    "conditions": [
+                        {
+                            "type": "palladium:ability_enabled",
+                            "power": "eop:fortress",
+                            "ability": "Diamond.Golem.Smash"
+                        }
+                    ]
+                }
+            ]
+        },
+		{
+            "model": "eop:geo/guardian/diamond_golem.geo.json",
+			"third_person_conditions": false,
+            "type": "geckolib:default",
+            "texture": {
+                "base": "eop:textures/models/guardian/diamond_golem_text_#TYPE.png",
+                "transformers": [
+                    {
+                        "type": "palladium:alpha_mask",
+                        "mask": "eop:textures/alpha_mask/guardian/diamond_golem/diamond_golem_#TIMER.png"
+                    }
+                ],
+                "variables": {
+                    "TIMER": {
+                        "type": "palladium:animation_timer_ability",
+                        "power": "eop:fortress",
+                        "ability": "Diamond.Golem"
+                    },
+                    "TYPE": {
+                        "type": "palladium:animation_timer_ability",
+                        "power": "eop:fortress",
+                        "ability": "Diamond.Type"
+                    }
+                },
+                "output": "eop:textures/alpha_mask/guardian/diamond_golem/diamond_golem_#TIMER_#TYPE"
+            },
+			"render_type": "cutout"
+        }
+    ]
+}

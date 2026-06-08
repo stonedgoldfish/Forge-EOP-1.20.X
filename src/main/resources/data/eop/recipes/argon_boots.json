@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "A A",
+    "A A"
+  ],
+  "key": {
+    "A": {
+      "item": "eop:argon_crystal"
+    }
+  },
+  "result": {
+    "item": "eop:argon_boots"
+  }
+}

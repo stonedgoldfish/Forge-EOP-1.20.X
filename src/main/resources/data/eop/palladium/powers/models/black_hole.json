@@ -1,0 +1,71 @@
+{
+    "name": "Black Hole",
+    "background": "minecraft:textures/block/gray_concrete_powder.png",
+    "icon": "eop:textures/gui/fungus.png",
+    "persistent_data": true,
+    "abilities": {
+        "Render": {
+            "type": "palladium:render_layer",
+            "render_layer": "eop:beyonder/black_hole"
+        },
+        "Particles": {
+            "type": "eop:particle_pattern",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "particle_pattern": "implosion",
+            "particle_type": "minecraft:poof",
+            "particle_amount": 10,
+            "particle_radius": 12,
+            "particle_speed": 0.15,
+            "particle_y_offset": 0.3
+        },
+        "Screen.Shake": {
+            "type": "eop:screen_shake",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "intensity": 2,
+            "speed": 1,
+            "affect_others": true,
+            "range": 15,
+            "resistance_tags": [
+                "Beyonder"
+            ],
+            "end_burst": true,
+            "only_grounded_targets": false
+        },
+        "Light.Aura": {
+            "type": "eop:area_light",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "light_level": 15
+        },
+        "Color": {
+            "type": "palladium:animation_timer",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "start_value": 0,
+            "max_value": 1,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "Moon"
+                    }
+                ]
+            }
+        },
+        "Normal": {
+            "type": "palladium:dummy",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "Normal"
+                    }
+                ]
+            }
+        }
+    }
+}

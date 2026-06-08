@@ -1,0 +1,50 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 32,
+				"texture_height": 32,
+				"visible_bounds_width": 3,
+				"visible_bounds_height": 3.5,
+				"visible_bounds_offset": [0, 1.25, 0]
+			},
+			"bones": [
+				{
+					"name": "armorRightArm",
+					"pivot": [-5, 22, 0],
+					"cubes": [
+						{"origin": [-14, 9.925, 3.975], "size": [4, 14.075, 4], "inflate": 0.45, "pivot": [-6, 0, 5.975], "rotation": [0, -90, 0], "uv": [0, 0], "mirror": true}
+					]
+				},
+				{
+					"name": "bone4",
+					"parent": "armorRightArm",
+					"pivot": [-6, 9.74481, 0.07396],
+					"rotation": [0, -90, 0],
+					"cubes": [
+						{"origin": [-7.725, 8.15, -1.725], "size": [3.45, 1.425, 3.45], "inflate": 0.45, "pivot": [-6.0144, 9.04178, -0.0125], "rotation": [-6, 0, 0], "uv": [16, 0], "mirror": true}
+					]
+				},
+				{
+					"name": "bone5",
+					"parent": "bone4",
+					"pivot": [-6, 7.67232, -0.1181],
+					"cubes": [
+						{"origin": [-7.375, 6.53387, -1.53176], "size": [2.75, 1.2, 2.75], "inflate": 0.45, "pivot": [-6.0144, 7.55065, -0.17551], "rotation": [-17.25, 0, 0], "uv": [16, 4], "mirror": true}
+					]
+				},
+				{
+					"name": "bone6",
+					"parent": "bone5",
+					"pivot": [-6.02065, 5.54445, -1.02148],
+					"cubes": [
+						{"origin": [-7.05, 5.11493, -1.56384], "size": [2.075, 1.025, 2.075], "inflate": 0.45, "pivot": [-6.02065, 6.31921, -0.55134], "rotation": [-31.25, 0, 0], "uv": [16, 7], "mirror": true},
+						{"origin": [-5.54085, 4.51454, -1.51384], "size": [1.275, 1.125, 1.875], "inflate": 0.45, "pivot": [-6.02065, 6.31921, -0.55134], "rotation": [-24.18844, 20.4143, 37.83103], "uv": [16, 10], "mirror": true}
+					]
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,13 @@
+{
+    "type": "palladium:compound",
+    "layers": [
+        {
+            "model": {
+                "normal": "eop:geo/guardian/diamond_blade.geo.json",
+                "slim": "eop:geo/guardian/diamond_blade_slim.geo.json"
+            },
+            "type": "geckolib:default",
+            "texture": "eop:textures/models/guardian/diamond_blade.png"
+        }
+    ]
+}

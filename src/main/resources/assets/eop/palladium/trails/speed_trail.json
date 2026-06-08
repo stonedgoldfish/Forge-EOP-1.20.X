@@ -1,0 +1,37 @@
+{
+    "type": "palladium:compound",
+    "trails": [
+        {
+            "type": "palladium:lightning",
+            "spacing": 2,
+            "lifetime": 5,
+            "glow_color": {
+                "type": "palladium:integer_property",
+                "property": "EOP.Speedster.Lightning.Color",
+                "fallback": 0
+            },
+			"core_color": "#ffffff",
+            "amount": 8,
+			"size": 0.1,
+			"normal_transparency": false,
+			"core_opacity": 1,
+			"glow_opacity": 0.8
+        },
+		{
+            "type": "palladium:lightning",
+            "spacing": 2,
+            "lifetime": 5,
+            "glow_color": {
+                "type": "palladium:integer_property",
+                "property": "EOP.Speedster.Secondary.Lightning.Color",
+                "fallback": 0
+            },
+			"core_color": "#ffffff",
+            "amount": 8,
+			"size": 0.1,
+			"normal_transparency": false,
+			"core_opacity": 1,
+			"glow_opacity": 0.8
+        }
+    ]
+}

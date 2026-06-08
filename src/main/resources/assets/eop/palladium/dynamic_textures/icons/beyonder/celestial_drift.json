@@ -1,0 +1,11 @@
+{
+    "base": "eop:textures/gui/celestial_drift_#X.png",
+	"variables": {
+        "X": {
+            "type": "palladium:ability_integer_property",
+            "power": "eop:beyonder",
+            "ability": "Dynamic.Icons",
+			"property": "value"
+        }
+    }
+}

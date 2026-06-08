@@ -1,0 +1,39 @@
+{
+  "targets": ["swap", "swap2"],
+  "passes": [
+    {
+      "name": "blur",
+      "intarget": "minecraft:main",
+      "outtarget": "swap",
+      "uniforms": [
+        { "name": "Radius", "values": [2.5] }
+      ]
+    },
+
+    {
+      "name": "blur",
+      "intarget": "swap",
+      "outtarget": "swap2",
+      "uniforms": [
+        { "name": "Radius", "values": [2.5] }
+      ]
+    },
+
+    {
+      "name": "color_convolve",
+      "intarget": "swap2",
+      "outtarget": "swap",
+      "uniforms": [
+        { "name": "RedMatrix",   "values": [ 1.6, 0.1, 0.1 ] },
+        { "name": "GreenMatrix", "values": [ 0.05, 0.25, 0.05 ] },
+        { "name": "BlueMatrix",  "values": [ 0.05, 0.05, 0.2 ] }
+      ]
+    },
+
+    {
+      "name": "blit",
+      "intarget": "swap",
+      "outtarget": "minecraft:main"
+    }
+  ]
+}

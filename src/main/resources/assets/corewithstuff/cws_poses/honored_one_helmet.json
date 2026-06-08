@@ -1,0 +1,16 @@
+{
+  "targetItem": "eop:honored_one_helmet",
+  "offset": [0.0, 0.0, 0.0],
+  "head": [8.9563, -2.7285, -6.7571],
+  "headOffset": [0.0, 0.0, 0.0],
+  "body": [0.0, 0.0, 0.0],
+  "bodyOffset": [0.0, 0.0, 0.0],
+  "leftArm": [0.0, 0.0, 0.0],
+  "leftArmOffset": [0.0, 0.0, 0.0],
+  "rightArm": [0.0, 0.0, 0.0],
+  "rightArmOffset": [0.0, 0.0, 0.0],
+  "leftLeg": [0.0, 0.0, 0.0],
+  "leftLegOffset": [0.0, 0.0, 0.0],
+  "rightLeg": [0.0, 0.0, 0.0],
+  "rightLegOffset": [0.0, 0.0, 0.0]
+}

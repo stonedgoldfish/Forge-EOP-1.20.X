@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AA ",
+    "AS ",
+    " S "
+  ],
+  "key": {
+    "A": {
+      "item": "eop:argon_crystal"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "eop:argon_axe"
+  }
+}

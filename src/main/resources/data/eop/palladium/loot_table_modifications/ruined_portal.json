@@ -1,0 +1,39 @@
+{
+    "target": "minecraft:chests/ruined_portal",
+    "add_pools": [
+        {
+            "name": "drop1",
+            "bonus_rolls": 0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "eop:fire_talisman",
+                    "conditions": [
+                        {
+                            "condition": "minecraft:random_chance",
+                            "chance": 0.2
+                        }
+                    ]
+                }
+            ],
+            "rolls": 1
+        },
+		{
+            "name": "drop2",
+            "bonus_rolls": 0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "eop:disorientation_totem",
+                    "conditions": [
+                        {
+                            "condition": "minecraft:random_chance",
+                            "chance": 0.3
+                        }
+                    ]
+                }
+            ],
+            "rolls": 1
+        }
+    ]
+}

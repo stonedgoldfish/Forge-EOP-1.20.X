@@ -1,0 +1,19 @@
+{
+    "type": "palladium:compound",
+    "layers": [
+        {
+            "model": "eop:geo/base/bulb.geo.json",
+            "type": "geckolib:default",
+			"render_type": "glow",
+            "texture": "eop:textures/models/base/light_bulb_yellow.png",
+			"animation_file": "eop:animations/light_source.json",
+            "animation_controller": [
+				{
+                    "name": "looping",
+                    "transition_tick_time": 4,
+                    "animation": "idle"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "eop:block/temporary_obsidian_0"
+    },
+    "age=1": {
+      "model": "eop:block/temporary_obsidian_1"
+    },
+    "age=2": {
+      "model": "eop:block/temporary_obsidian_2"
+    },
+    "age=3": {
+      "model": "eop:block/temporary_obsidian_3"
+    }
+  }
+}

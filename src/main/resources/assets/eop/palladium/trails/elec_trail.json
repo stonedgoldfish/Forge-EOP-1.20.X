@@ -1,0 +1,17 @@
+{
+    "type": "palladium:compound",
+    "trails": [
+        {
+            "type": "palladium:lightning",
+            "spacing": 2,
+            "lifetime": 15,
+            "glow_color": {
+                "type": "palladium:integer_property",
+                "property": "EOP.Spark.Lightning.Color",
+                "fallback": 0
+            },
+            "amount": 8,
+            "thickness": 0.02
+        }
+    ]
+}

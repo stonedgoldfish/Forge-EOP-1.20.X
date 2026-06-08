@@ -1,0 +1,24 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.stonedgoldfish.eopmod.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "eopmod.refmap.json",
+  "client": [
+    "CameraMixin",
+    "GameRendererMixin",
+    "LivingEntityRendererMixin",
+    "EntityRenderDispatcherMixin"
+  ],
+  "mixins": [
+    "EntityMixin",
+    "LivingEntityMixin",
+    "PlayerMixin",
+    "PlayerRendererMixin",
+    "ProjectileMixin",
+    "BlockStateBaseMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

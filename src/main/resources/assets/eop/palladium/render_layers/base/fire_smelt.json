@@ -1,0 +1,13 @@
+{
+    "type": "geckolib:default",
+    "model": "eop:geo/base/fire_smelt.geo.json",
+    "texture": "eop:textures/models/base/fire_0.png",
+	"animation_file": "eop:animations/fire.json",
+    "animation_controller": [
+        {
+            "name": "looping",
+            "transition_tick_time": 4,
+            "animation": "fire"
+        }
+    ]
+}

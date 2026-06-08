@@ -1,0 +1,573 @@
+{
+    "name": "Astral Energy Manipulation",
+    "background": "minecraft:textures/block/gray_concrete_powder.png",
+    "icon": "eop:textures/gui/beyonder.png",
+    "ability_bar_texture": "eop:textures/gui/ability_bars/eop_powers.png",
+	"gui_display_type": "tree",
+    "persistent_data": true,
+    "abilities": {
+        "Codename": {
+            "type": "palladium:command",
+            "hidden": true,
+            "first_tick_commands": [
+                "tag @s add Codename",
+                "tag @s add EOP.extra.ability1",
+				"tag @s add EOP.Has.BM",
+				"tag @s add EOP.NGP",
+                "tag @s add EOP.Has.Power"
+            ],
+            "last_tick_commands": [
+                "tag @s remove Codename",
+                "tag @s add EOP.extra.ability2",
+				"tag @s remove EOP.Has.BM",
+				"tag @s remove EOP.NGP",
+				"tag @s remove EOP.Remove.DNA.Change",
+                "tag @s remove Mimic.Mob",
+                "tag @s remove EOP.Has.Power"
+            ],
+            "commands": []
+        },
+        "Power.Name": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/beyonder.png",
+            "title": "Power Name",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": -1,
+            "gui_position": [
+                0,
+                -2
+            ],
+            "description": "Description"
+        },
+        "Power.Tag": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "tag @s add EOP.Has.Power"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Has.Power"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "BM.Tag": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "tag @s add EOP.Has.BM"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Has.BM"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+		"Mimic.Mob.Tag": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "tag @s add Mimic.Mob"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "Mimic"
+                    },
+                    {
+                        "type": "palladium:interval",
+                        "active_ticks": 0,
+                        "disabled_ticks": 15
+                    }
+                ]
+            }
+        },
+        "Revert.Delay": {
+            "type": "palladium:animation_timer",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "start_value": 0,
+            "max_value": 2
+        },
+        "Revert.Genetic.Manip": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "superpower remove eop:codename @s",
+                "tag @s remove Mimic.Mob"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Revert.Delay",
+                        "property": "value",
+                        "min": 2,
+                        "max": 2
+                    },
+                    {
+                        "type": "palladium:or",
+                        "conditions": [
+                            {
+                                "type": "palladium:and",
+                                "conditions": [
+                                    {
+                                        "type": "palladium:has_tag",
+                                        "tag": "EOP.Power.Erased"
+                                    },
+                                    {
+                                        "type": "palladium:has_tag",
+                                        "tag": "Mimic.Mob"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "palladium:and",
+                                "conditions": [
+                                    {
+                                        "type": "palladium:has_tag",
+                                        "tag": "EOP.Remove.DNA.Change"
+                                    },
+                                    {
+                                        "type": "palladium:has_tag",
+                                        "tag": "Mimic.Mob"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Get.DNA": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": 0,
+            "gui_position": "null",
+            "description": "null",
+            "first_tick_commands": [
+                "playsound minecraft:block.beacon.power_select master @a ~ ~ ~ 1 2",
+                "item replace entity @s weapon.mainhand with eop:dna_capsule{codename:\"eop_true\",display:{Name:'[\"\",{\"text\":\"Power Name\",\"color\":\"#f7ff00\",\"italic\":false},{\"text\":\" DNA Capsule\",\"italic\":false}]'}}"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:action",
+                        "cooldown": 0,
+                        "key_type": "right_click",
+                        "needs_empty_hand": false,
+                        "allow_scrolling_when_crouching": true
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:item_in_slot",
+                        "item": {
+                            "item": "eop:empty_dna_capsule"
+                        },
+                        "slot": "mainhand"
+                    },
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "Mimic"
+                    }
+                ]
+            }
+        },
+		"Left.Stat1": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 1 more damage point",
+            "gui_position": [
+                -1,
+                -1.25
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 1,
+            "operation": 0,
+            "uuid": "a2b22093-741d-4b8e-9df1-587dde2b94b0",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Power.Name"
+                    }
+                ]
+            }
+        },
+		"Left.Stat2": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 1 more damage point",
+            "gui_position": [
+                -1.5,
+                -0.4
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 1,
+            "operation": 0,
+            "uuid": "a2b22093-741d-4b8e-9df1-587dde2b94b0",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat1"
+                    }
+                ]
+            }
+        },
+		"Left.Stat3": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 1 more damage point",
+            "gui_position": [
+                -1,
+                0.25
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 1,
+            "operation": 0,
+            "uuid": "a2b22093-741d-4b8e-9df1-587dde2b94b0",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat2"
+                    }
+                ]
+            }
+        },
+		"Left.Stat4": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 1 more damage point",
+            "gui_position": [
+                -1,
+                1.1
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 1,
+            "operation": 0,
+            "uuid": "a2b22093-741d-4b8e-9df1-587dde2b94b0",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat3"
+                    }
+                ]
+            }
+        },
+		"Left.Stat5": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 1 more damage point",
+            "gui_position": [
+                -0.7,
+                2.1
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 1,
+            "operation": 0,
+            "uuid": "a2b22093-741d-4b8e-9df1-587dde2b94b0",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat4"
+                    }
+                ]
+            }
+        },
+		"Right.Stat1": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 1 more damage point",
+            "gui_position": [
+                1,
+                -1.25
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 1,
+            "operation": 0,
+            "uuid": "a2b22093-741d-4b8e-9df1-587dde2b94b0",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Astral.Energy.Manipulation"
+                    }
+                ]
+            }
+        },
+		"Right.Stat2": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 1 more damage point",
+            "gui_position": [
+                1.5,
+                -0.4
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 1,
+            "operation": 0,
+            "uuid": "a2b22093-741d-4b8e-9df1-587dde2b94b0",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat1"
+                    }
+                ]
+            }
+        },
+		"Right.Stat3": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 1 more damage point",
+            "gui_position": [
+                1,
+                0.25
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 1,
+            "operation": 0,
+            "uuid": "a2b22093-741d-4b8e-9df1-587dde2b94b0",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat2"
+                    }
+                ]
+            }
+        },
+		"Right.Stat4": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 1 more damage point",
+            "gui_position": [
+                1,
+                1.1
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 1,
+            "operation": 0,
+            "uuid": "a2b22093-741d-4b8e-9df1-587dde2b94b0",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat3"
+                    }
+                ]
+            }
+        },
+		"Right.Stat5": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 1 more damage point",
+            "gui_position": [
+                0.7,
+                2.1
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 1,
+            "operation": 0,
+            "uuid": "a2b22093-741d-4b8e-9df1-587dde2b94b0",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat4"
+                    }
+                ]
+            }
+        },
+        "Toxin.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/toxin.png",
+            "title": "Neurological Toxin",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": 0,
+            "gui_position": [
+                0,
+                -1.25
+            ],
+            "description": "Messes with auditory senses and gives nausea",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Power.Name"
+                    }
+                ]
+            }
+        },
+        "Endorphin.Overload.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/endorphins.png",
+            "title": "Endorphin Overload",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "gui_position": [
+                0,
+                -0.45
+            ],
+            "description": "Flood your system with huge amounts of endorphins to block your pain receptors",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Toxin.Unlock"
+                    }
+                ]
+            }
+        },
+        "Pain.Increase.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/pain.png",
+            "title": "Pain Intensifier",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": 2,
+            "gui_position": [
+                0,
+                0.3
+            ],
+            "description": "Release a gas that decreases pain tolerance drastically",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "ability": "Endorphin.Overload.Unlock"
+                    }
+                ]
+            }
+        },
+        "Sensory.Manipulation.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/sensory.png",
+            "title": "Sensory Manipulation",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": 2,
+            "gui_position": [
+                0,
+                1.2
+            ],
+            "description": "Control your target's senses to instill fear into them",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "ability": "Pain.Increase.Unlock"
+                    }
+                ]
+            }
+        },
+        "Brain.Overload.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/brain.png",
+            "title": "Brain Overload",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": 2,
+            "gui_position": [
+                0,
+                2.75
+            ],
+            "description": "Release a cloud that when inhaled, releases every single chemical in the brain in huge amounts, causing intense pain and confusion",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "ability": "Sensory.Manipulation.Unlock"
+                    }
+                ]
+            }
+        }
+    }
+}

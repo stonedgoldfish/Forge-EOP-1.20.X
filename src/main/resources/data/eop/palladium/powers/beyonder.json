@@ -1,0 +1,3178 @@
+{
+    "name": "Astral Energy Manipulation",
+    "background": "minecraft:textures/block/gray_concrete_powder.png",
+    "icon": "eop:textures/gui/beyonder.png",
+    "ability_bar_texture": "eop:textures/gui/ability_bars/eop_powers.png",
+    "gui_display_type": "tree",
+    "persistent_data": true,
+    "energy_bars": {
+        "test": {
+            "color": "#5733DB",
+            "max": 100,
+            "synced_value": {
+                "type": "palladium_property",
+                "property": "eop_beyonder_energy",
+                "fallback": 0
+            }
+        }
+    },
+    "abilities": {
+        "Beyonder": {
+            "type": "palladium:command",
+            "hidden": true,
+            "first_tick_commands": [
+                "tag @s add Beyonder",
+                "scoreboard objectives add Astral.Energy dummy",
+                "scoreboard players add @s Astral.Energy 0",
+                "tag @s add EOP.Extra.Smelting",
+                "tag @s add EOP.Extra.Night.Vision",
+                "tag @s add EOP.Extra.Fire.Resistance",
+                "tag @s add EOP.Extra.Light",
+                "tag @s add EOP.Extra.Smelting",
+                "tag @s add EOP.Extra.Slow.Fall",
+                "tag @s add EOP.Has.BM",
+                "execute unless entity @s[tag=EOP.Moon.Form] run tag @s add EOP.Sun.Form",
+                "tag @s add EOP.Has.Power"
+            ],
+            "last_tick_commands": [
+                "tag @s remove Beyonder",
+                "tag @s remove EOP.Extra.Smelting",
+                "tag @s remove EOP.Extra.Night.Vision",
+                "tag @s remove EOP.Extra.Fire.Resistance",
+                "tag @s remove EOP.Extra.Light",
+                "tag @s remove EOP.Extra.Smelting",
+                "tag @s remove EOP.Extra.Slow.Fall",
+                "tag @s remove EOP.Has.BM",
+                "tag @s remove EOP.Has.Power",
+                "tag @s remove EOP.Sun.Form",
+                "tag @s remove EOP.Moon.Form"
+            ],
+            "commands": []
+        },
+        "Astral.Energy.Manipulation": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/beyonder.png",
+            "title": "Astral Energy Manipulation",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": -1,
+            "gui_position": [
+                0,
+                -2
+            ],
+            "description": "You have obtained the power to absorb astral energy and manipulate it"
+        },
+        "Power.Tag": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "tag @s add EOP.Has.Power"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Has.Power"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "BM.Tag": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "tag @s add EOP.Has.BM"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Has.BM"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Left.Stat1": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 0.5 more damage points",
+            "gui_position": [
+                -1,
+                -1.25
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 0.5,
+            "operation": 0,
+            "uuid": "87f2bfb8-ebf7-48ca-9a5d-368a3ab8c913",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Astral.Energy.Manipulation"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_beyonder_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/beyonder.png",
+                        "description": {
+                            "text": "Astral Energy Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Left.Stat2": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/resistance.png",
+            "title": "Enhanced Armor",
+            "description": "Grants 3 more armor points",
+            "gui_position": [
+                -1.5,
+                -0.4
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.armor",
+            "amount": 3,
+            "operation": 0,
+            "uuid": "cb3993c6-cc15-4470-a1da-c61544ba6d28",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat1"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_beyonder_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/beyonder.png",
+                        "description": {
+                            "text": "Astral Energy Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Left.Stat3": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 1 more damage point",
+            "gui_position": [
+                -1,
+                0.25
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 1,
+            "operation": 0,
+            "uuid": "b036f298-6b3a-469a-bd4e-8f929452fd8e",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat2"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_beyonder_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/beyonder.png",
+                        "description": {
+                            "text": "Astral Energy Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Left.Stat4": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/resistance.png",
+            "title": "Enhanced Armor",
+            "description": "Grants 3 more armor points",
+            "gui_position": [
+                -1,
+                1.1
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.armor",
+            "amount": 3,
+            "operation": 0,
+            "uuid": "bedeb563-22a8-46e0-93fb-abf7b7e6fe89",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat3"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_beyonder_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/beyonder.png",
+                        "description": {
+                            "text": "Astral Energy Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Left.Stat5": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 1.5 more damage points",
+            "gui_position": [
+                -0.7,
+                2.1
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 1.5,
+            "operation": 0,
+            "uuid": "e8cf1286-251c-424a-8b0e-c3db7f9080c0",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat4"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_beyonder_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/beyonder.png",
+                        "description": {
+                            "text": "Astral Energy Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Right.Stat1": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 0.5 more damage points",
+            "gui_position": [
+                1,
+                -1.25
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 0.5,
+            "operation": 0,
+            "uuid": "31f1b86d-35c6-4a06-8741-cc8ed932bb9e",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Astral.Energy.Manipulation"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_beyonder_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/beyonder.png",
+                        "description": {
+                            "text": "Astral Energy Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Right.Stat2": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/speed.png",
+            "title": "Enhanced Speed",
+            "description": "Grants 5% more speed",
+            "gui_position": [
+                1.5,
+                -0.4
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.movement_speed",
+            "amount": 0.05,
+            "operation": 1,
+            "uuid": "c6726057-166e-4abe-b1bc-b4fc92c05ae0",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat1"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_beyonder_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/beyonder.png",
+                        "description": {
+                            "text": "Astral Energy Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Right.Stat3": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 1 more damage point",
+            "gui_position": [
+                1,
+                0.25
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 1,
+            "operation": 0,
+            "uuid": "4d7c0ab5-7aeb-481b-88cd-85648a6de2b3",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat2"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_beyonder_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/beyonder.png",
+                        "description": {
+                            "text": "Astral Energy Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Right.Stat4": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/speed.png",
+            "title": "Enhanced Speed",
+            "description": "Grants 5% more speed",
+            "gui_position": [
+                1,
+                1.1
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.movement_speed",
+            "amount": 0.05,
+            "operation": 1,
+            "uuid": "c81014cc-2088-4e3a-a3da-79bbd8069990",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat3"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_beyonder_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/beyonder.png",
+                        "description": {
+                            "text": "Astral Energy Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Right.Stat5": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 1.5 more damage points",
+            "gui_position": [
+                0.7,
+                2.1
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 1.5,
+            "operation": 0,
+            "uuid": "6973a8f4-48bf-4eef-9cca-7a6370bd62df",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat4"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_beyonder_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/beyonder.png",
+                        "description": {
+                            "text": "Astral Energy Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Energy.Regen": {
+            "type": "eop:energy_regen",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "amount": 1,
+            "interval": 10,
+            "max": 100,
+            "enabled_energy_drain": true,
+            "drain_amount": 0,
+            "drain_interval": 200,
+            "invert": false
+        },
+        "Dynamic.Icons": {
+            "type": "palladium:animation_timer",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "start_value": 0,
+            "max_value": 1,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Moon.Form"
+                    }
+                ]
+            }
+        },
+        "Secondary.Ability": {
+            "type": "palladium:dummy",
+            "gui_position": [
+                1.25,
+                -2
+            ],
+            "title": "Starflare",
+            "description": "description. §dBattlemode §fmust be enabled via keybind. §dRight Click §fto use this ability",
+            "icon": "#eop:icons/beyonder/starflare",
+            "hidden": false,
+            "hidden_in_bar": true
+        },
+        "Starflare": {
+            "type": "palladium:command",
+            "first_tick_commands": [
+                "playsound eop:energy_blast master @a ~ ~ ~ 1 1.7"
+            ],
+            "commands": [],
+            "title": "Starflare",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": 0,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "eop:action",
+                        "cooldown": 10,
+                        "energy": 2,
+                        "property": "eop_beyonder_energy",
+                        "key_type": "right_click"
+                    },
+                    {
+                        "type": "eop:power_selected",
+                        "power": "eop:beyonder"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:ability_enabled",
+                                "power": "null",
+                                "ability": "Eclipse.Ascension"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_effect",
+                                "effect": "eop:lunar_cloak"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Battle.Mode"
+                    }
+                ]
+            }
+        },
+        "Starflare.Projectile": {
+            "type": "palladium:projectile",
+            "icon": "minecraft:fire_charge",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": 1,
+            "entity_type": "eop:basic_projectile",
+            "entity_data": {
+                "Damage": 6,
+                "DamageType": "eop:basic",
+                "SetEntityOnFireSeconds": 4,
+                "IgnoreLiquids": true,
+                "CommandsOnBlockHit": [
+                    "particle eop:light_energy ~ ~ ~ 0.1 0.1 0.1 0.3 20"
+                ],
+                "CommandsForTargets": [],
+                "CommandsForTargetsRadius": 0,
+                "SpawnArmorStandOnBlockHit": false,
+                "SpawnArmorStandOnEntityHit": false,
+                "ArmorStandLifetime": 0,
+                "ArmorStandAOEDamage": 5,
+                "ArmorStandAOERadius": 10,
+                "ArmorStandAOEDamageType": "eop:basic",
+                "ArmorStandEnableDamage": true,
+                "ArmorStandDamageOnLastTick": false,
+                "ArmorStandKnockbackOnLastTick": 4,
+                "ArmorStandTargetCommandRadius": 10,
+                "ArmorStandPullStrength": 0.12,
+                "ArmorStandInvertPull": false,
+                "ArmorStandPower": "null",
+                "ArmorStandFirstTickCommands": [],
+                "ArmorStandCommands": [],
+                "ArmorStandLastTickCommands": [],
+                "ArmorStandTargetFirstTickCommands": [],
+                "ArmorStandTargetCommands": [],
+                "ArmorStandTargetLastTickCommands": [],
+                "ExplosionRadius": 3,
+                "ExplosionBlockInteraction": "BREAK",
+                "ExplosionCausesFire": true,
+                "Gravity": 0.02,
+                "Lifetime": 30,
+                "DieOnEntityHit": true,
+                "DieOnBlockHit": true,
+                "Appearances": [
+                    {
+                        "Type": "particles",
+                        "ParticleType": "eop:light_energy",
+                        "Spread": 0.1,
+                        "Amount": 15
+                    }
+                ]
+            },
+            "inaccuracy": 0,
+            "velocity": 2.5,
+            "swinging_arm": "main_arm",
+            "damage_from_player": false,
+            "ignore_player_movement": false,
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Starflare"
+                    },
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Sun.Form"
+                    }
+                ]
+            }
+        },
+        "Dark.Blast.Projectile": {
+            "type": "palladium:projectile",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "entity_type": "eop:basic_projectile",
+            "entity_data": {
+                "Damage": 3,
+                "DamageType": "eop:basic",
+                "SetEntityOnFireSeconds": 0,
+                "IgnoreLiquids": true,
+                "CommandsOnBlockHit": [
+                    "particle eop:dark_energy ~ ~ ~ 0.1 0.1 0.1 0.3 20"
+                ],
+                "CommandsForTargets": [
+                    "effect give @s[tag=!Beyonder,tag=!Infinity,tag=!EOP.Phasing] slowness 2 1 true"
+                ],
+                "CommandsForTargetsRadius": 5,
+                "SpawnArmorStandOnBlockHit": false,
+                "SpawnArmorStandOnEntityHit": false,
+                "ArmorStandLifetime": 0,
+                "ArmorStandAOEDamage": 5,
+                "ArmorStandAOERadius": 10,
+                "ArmorStandAOEDamageType": "eop:basic",
+                "ArmorStandEnableDamage": true,
+                "ArmorStandDamageOnLastTick": false,
+                "ArmorStandKnockbackOnLastTick": 4,
+                "ArmorStandTargetCommandRadius": 10,
+                "ArmorStandPullStrength": 0.12,
+                "ArmorStandInvertPull": false,
+                "ArmorStandPower": "null",
+                "ArmorStandFirstTickCommands": [],
+                "ArmorStandCommands": [],
+                "ArmorStandLastTickCommands": [],
+                "ArmorStandTargetFirstTickCommands": [],
+                "ArmorStandTargetCommands": [],
+                "ArmorStandTargetLastTickCommands": [],
+                "ExplosionRadius": 1,
+                "ExplosionBlockInteraction": "KEEP",
+                "Gravity": 0.02,
+                "Lifetime": 30,
+                "DieOnEntityHit": true,
+                "DieOnBlockHit": true,
+                "Appearances": [
+                    {
+                        "Type": "particles",
+                        "ParticleType": "eop:dark_energy",
+                        "Spread": 0.1,
+                        "Amount": 15
+                    }
+                ]
+            },
+            "inaccuracy": 0,
+            "velocity": 1.5,
+            "swinging_arm": "main_arm",
+            "damage_from_player": false,
+            "ignore_player_movement": false,
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Starflare"
+                    },
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Moon.Form"
+                    }
+                ]
+            }
+        },
+        "Astral.Shift.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "#eop:icons/beyonder/astral_shift",
+            "title": "Astral Shift",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": 0,
+            "gui_position": [
+                0,
+                -1.25
+            ],
+            "description": "description",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Astral.Energy.Manipulation"
+                    }
+                ]
+            }
+        },
+        "Astral.Shift": {
+            "type": "palladium:command",
+            "icon": "#eop:icons/beyonder/astral_shift",
+            "title": "Astral Shift",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "list_index": 0,
+            "first_tick_commands": [
+                "execute unless predicate eop:is_sneaking run execute unless entity @s[tag=EOP.Sun.Form] run playsound eop:energy_blast master @a ~ ~ ~ 1 2",
+                "execute unless predicate eop:is_sneaking run execute unless entity @s[tag=EOP.Sun.Form] run particle eop:light_energy ~ ~1 ~ 0.3 0.3 0.3 0.25 40",
+                "execute unless predicate eop:is_sneaking run tag @s add EOP.Sun.Form",
+                "execute unless predicate eop:is_sneaking run tag @s remove EOP.Moon.Form",
+                "execute if predicate eop:is_sneaking run execute unless entity @s[tag=EOP.Moon.Form] run playsound eop:energy_blast master @a ~ ~ ~ 1 1",
+                "execute if predicate eop:is_sneaking run execute unless entity @s[tag=EOP.Moon.Form] run particle eop:dark_energy ~ ~1 ~ 0.3 0.3 0.3 0.25 40",
+                "execute if predicate eop:is_sneaking run tag @s add EOP.Moon.Form",
+                "execute if predicate eop:is_sneaking run tag @s remove EOP.Sun.Form"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:action",
+                        "cooldown": 30,
+                        "key_type": "key_bind",
+                        "needs_empty_hand": false,
+                        "allow_scrolling_when_crouching": true
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Astral.Shift.Unlock"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_effect",
+                                "effect": "eop:lunar_cloak"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:ability_enabled",
+                                "power": "null",
+                                "ability": "Eclipse.Ascension"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Astral.Shift.Sun.Stats": {
+            "type": "palladium:attribute_modifier",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 4,
+            "operation": 0,
+            "uuid": "c6b5a958-b1c7-4eb0-b203-d4a303c3d473",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Sun.Form"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Eclipse.Ascension"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Fire.Immune": {
+            "type": "palladium:damage_immunity",
+            "hidden": true,
+            "damage_sources": [
+                "minecraft:is_fire",
+                "eop:tough_fire"
+            ],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:or",
+                        "conditions": [
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Eclipse.Ascension"
+                            },
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Sun.Form"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Fire.Extinguish": {
+            "type": "eop:extinguish_fire",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "play_effects": false,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:or",
+                        "conditions": [
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Eclipse.Ascension"
+                            },
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Sun.Form"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Effects.Immune.Mods": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [],
+            "last_tick_commands": [
+                "effect clear @s legendarysurvivaloverhaul:heat_immunity"
+            ],
+            "commands": [
+                "effect give @s legendarysurvivaloverhaul:heat_immunity 1 200 true"
+            ],
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:mod_loaded",
+                        "mod_id": "legendarysurvivaloverhaul"
+                    },
+                    {
+                        "type": "palladium:or",
+                        "conditions": [
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Eclipse.Ascension"
+                            },
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Sun.Form"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Astral.Shift.Moon.Stats": {
+            "type": "palladium:attribute_modifier",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.movement_speed",
+            "amount": 0.5,
+            "operation": 1,
+            "uuid": "806863b7-2702-4dd7-b185-4b756f65795b",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Moon.Form"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Eclipse.Ascension"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Astral.Shift.Moon.Healing": {
+            "type": "palladium:healing",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "frequency": 10,
+            "amount": 1,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Moon.Form"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Eclipse.Ascension"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Celestial.Drift.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "#eop:icons/beyonder/celestial_drift",
+            "title": "Celestial Drift",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "gui_position": [
+                0,
+                -0.45
+            ],
+            "description": "description",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Astral.Shift.Unlock"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_beyonder_skill_points",
+                        "score": 2,
+                        "icon": "eop:textures/gui/beyonder.png",
+                        "description": {
+                            "text": "Astral Energy Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Celestial.Drift": {
+            "type": "palladium:animation_timer",
+            "icon": "#eop:icons/beyonder/celestial_drift",
+            "title": "Celestial Drift",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "list_index": 1,
+            "start_value": 0,
+            "max_value": 10,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "eop:activation",
+                        "ticks": 10,
+                        "cooldown": 20,
+                        "energy": 5,
+                        "property": "eop_beyonder_energy",
+                        "toggle_mode": false,
+                        "key_type": "key_bind"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Celestial.Drift.Unlock"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:ability_enabled",
+                                "power": "null",
+                                "ability": "Eclipse.Ascension"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Dash.Particles": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [],
+            "last_tick_commands": [],
+            "commands": [
+                "execute if entity @s[tag=EOP.Sun.Form] run particle eop:light_energy ~ ~1 ~ 0 0 0 0.1 10",
+                "execute if entity @s[tag=EOP.Moon.Form] run particle eop:dark_energy ~ ~1 ~ 0 0 0 0.1 10"
+            ],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Celestial.Drift"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Celestial.Drift",
+                        "property": "value",
+                        "min": 1,
+                        "max": 7
+                    }
+                ]
+            }
+        },
+        "Dash.Day": {
+            "type": "eop:dash",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "strength": 2,
+            "add_pitch": false,
+            "sound": "eop:energy_blast",
+            "sound_volume": 1,
+            "sound_pitch": 1.25,
+            "particle": "eop:light_energy",
+            "particle_amount": 20,
+            "particle_speed": 0.08,
+            "particle_trail": true,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Celestial.Drift"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Celestial.Drift",
+                        "property": "value",
+                        "min": 1,
+                        "max": 1
+                    },
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Sun.Form"
+                    }
+                ]
+            }
+        },
+        "Dash.Night": {
+            "type": "eop:dash",
+            "icon": "eop:textures/gui/sun_ul.png",
+            "title": "Celestial Drift",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "list_index": 1,
+            "strength": 1,
+            "sound": "minecraft:entity.wither.ambient",
+            "sound_volume": 1,
+            "sound_pitch": 2,
+            "particle": "eop:dark_energy",
+            "particle_amount": 20,
+            "particle_speed": 0.08,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Celestial.Drift"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Celestial.Drift",
+                        "property": "value",
+                        "min": 1,
+                        "max": 1
+                    },
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Moon.Form"
+                    }
+                ]
+            }
+        },
+        "Dash.Damage.Sun": {
+            "type": "eop:aoe_damage",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "radius": 1,
+            "damage": 6,
+            "damage_type": "eop:basic",
+            "set_on_fire": 5,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Celestial.Drift"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Celestial.Drift",
+                        "property": "value",
+                        "min": 1,
+                        "max": 10
+                    },
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Sun.Form"
+                    }
+                ]
+            }
+        },
+        "Dash.Damage.Night": {
+            "type": "eop:aoe_damage",
+            "icon": "eop:textures/gui/sun_ul.png",
+            "title": "Celestial Drifts",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "list_index": 2,
+            "radius": 1,
+            "enable_damage": false,
+            "damage": 2,
+            "damage_type": "eop:basic",
+            "set_on_fire": 0,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Celestial.Drift"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Celestial.Drift",
+                        "property": "value",
+                        "min": 1,
+                        "max": 1
+                    },
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Moon.Form"
+                    }
+                ]
+            }
+        },
+        "Dash.Night.Commands": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "effect give @s eop:lunar_cloak 6 0 true"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Celestial.Drift"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Celestial.Drift",
+                        "property": "value",
+                        "min": 1,
+                        "max": 1
+                    },
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Moon.Form"
+                    }
+                ]
+            }
+        },
+        "Energetic.Surge.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "#eop:icons/beyonder/energetic_surge",
+            "title": "Energetic Surge",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": 2,
+            "gui_position": [
+                0,
+                0.3
+            ],
+            "description": "description",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "ability": "Celestial.Drift.Unlock"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_beyonder_skill_points",
+                        "score": 3,
+                        "icon": "eop:textures/gui/beyonder.png",
+                        "description": {
+                            "text": "Astral Energy Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Energetic.Surge": {
+            "type": "palladium:animation_timer",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "icon": "#eop:icons/beyonder/energetic_surge",
+            "title": "Energetic Surge",
+            "list_index": 2,
+            "start_value": 0,
+            "max_value": 10,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "eop:activation",
+                        "ticks": 10,
+                        "cooldown": 100,
+                        "energy": 15,
+                        "property": "eop_beyonder_energy",
+                        "toggle_mode": false,
+                        "key_type": "key_bind"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Celestial.Drift.Unlock"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:ability_enabled",
+                                "power": "null",
+                                "ability": "Eclipse.Ascension"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_effect",
+                                "effect": "eop:lunar_cloak"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Screen.Shake": {
+            "type": "eop:screen_shake",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "intensity": 2,
+            "speed": 1,
+            "affect_others": false,
+            "range": 15,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Energetic.Surge"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Energetic.Surge",
+                        "property": "value",
+                        "min": 0,
+                        "max": 11
+                    }
+                ]
+            }
+        },
+        "Energetic.Surge.Animation": {
+            "type": "eop:trigger_animation",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "animation": "RIGHT_ARM_SWIPE",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Energetic.Surge"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Energetic.Surge",
+                        "property": "value",
+                        "min": 1,
+                        "max": 1
+                    }
+                ]
+            }
+        },
+        "Energetic.Surge.Damage.Sun": {
+            "type": "eop:aoe_damage",
+            "icon": "eop:textures/gui/sun_ul.png",
+            "title": "Energetic Surge",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "list_index": 2,
+            "radius": 6,
+            "damage": 15,
+            "knockback": 2,
+            "damage_type": "eop:basic",
+            "set_on_fire": 6,
+            "cone": true,
+            "cone_angle": 60,
+            "enable_particles": true,
+            "particle_amount": 24,
+            "particle_type": "eop:light_energy",
+            "particle_speed": 0.75,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Energetic.Surge"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Energetic.Surge",
+                        "property": "value",
+                        "min": 8,
+                        "max": 8
+                    },
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Sun.Form"
+                    }
+                ]
+            }
+        },
+        "Energetic.Surge.Damage.Moon": {
+            "type": "eop:aoe_damage",
+            "icon": "eop:textures/gui/sun_ul.png",
+            "title": "Energetic Surge",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "list_index": 2,
+            "radius": 6,
+            "damage": 6,
+            "commands_on_target": [
+                "effect give @s minecraft:slowness 3 1 true",
+                "particle eop:dark_energy ~ ~1 ~ 0.3 0.3 0.3 0.2 30"
+            ],
+            "knockback": 2,
+            "damage_type": "eop:basic",
+            "set_on_fire": 0,
+            "cone": true,
+            "cone_angle": 160,
+            "enable_particles": true,
+            "particle_amount": 44,
+            "particle_type": "eop:dark_energy",
+            "particle_speed": 0.45,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Energetic.Surge"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Energetic.Surge",
+                        "property": "value",
+                        "min": 8,
+                        "max": 8
+                    },
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Moon.Form"
+                    }
+                ]
+            }
+        },
+        "Energetic.Surge.Commands": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "playsound minecraft:entity.evoker.cast_spell master @a ~ ~ ~ 1 1",
+                "playsound minecraft:entity.allay.hurt master @a ~ ~ ~ 1 0.5"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Energetic.Surge"
+                    }
+                ]
+            }
+        },
+        "Energetic.Surge.Commands2": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "playsound minecraft:entity.generic.explode master @a ~ ~ ~ 1 1",
+                "particle end_rod ~ ~1 ~ 0.3 0.3 0.3 0.4 50"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Energetic.Surge"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Energetic.Surge",
+                        "property": "value",
+                        "min": 7,
+                        "max": 8
+                    }
+                ]
+            }
+        },
+        "Gravitic.Collapse.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "#eop:icons/beyonder/gravitic_collapse",
+            "title": "Gravitic Collapse",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": 2,
+            "gui_position": [
+                0,
+                1.2
+            ],
+            "description": "description",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "ability": "Energetic.Surge.Unlock"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_beyonder_skill_points",
+                        "score": 4,
+                        "icon": "eop:textures/gui/beyonder.png",
+                        "description": {
+                            "text": "Astral Energy Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Gravitic.Collapse": {
+            "type": "palladium:animation_timer",
+            "icon": "#eop:icons/beyonder/gravitic_collapse",
+            "title": "Gravitic Collapse",
+            "bar_color": "light_gray",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "list_index": 3,
+            "start_value": 0,
+            "max_value": 10,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "eop:activation",
+                        "ticks": 10,
+                        "cooldown": 150,
+                        "energy": 20,
+                        "property": "eop_beyonder_energy",
+                        "toggle_mode": false,
+                        "key_type": "key_bind"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Gravitic.Collapse.Unlock"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:ability_enabled",
+                                "power": "null",
+                                "ability": "Eclipse.Ascension"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_effect",
+                                "effect": "eop:lunar_cloak"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Gravitic.Collapse.Commands": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "playsound minecraft:block.beacon.deactivate master @a ~ ~ ~ 1 0.5"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Gravitic.Collapse"
+                    }
+                ]
+            }
+        },
+        "Gravitic.Collapse.Animation": {
+            "type": "eop:trigger_animation",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "animation": "SHOOT",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Gravitic.Collapse"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Gravitic.Collapse",
+                        "property": "value",
+                        "min": 1,
+                        "max": 1
+                    }
+                ]
+            }
+        },
+        "Gravitic.Collapse.Summon.Sun": {
+            "type": "eop:spawn_armor_stand",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "range": 15,
+            "spawn_at_player": false,
+            "lifetime": 80,
+            "enable_damage": true,
+            "damage_on_last_tick": false,
+            "knockback_on_last_tick": 2.5,
+            "aoe_damage": 5,
+            "aoe_radius": 10,
+            "aoe_damage_type": "eop:basic",
+            "target_command_radius": 10,
+            "stand_first_tick_commands": [
+                "tag @s add Normal",
+                "playsound minecraft:block.beacon.activate master @a ~ ~ ~ 2 2",
+                "playsound minecraft:entity.warden.death master @a ~ ~ ~ 1 2",
+                "particle minecraft:end_rod ~ ~0.6 ~ 0 0 0 0.3 20"
+            ],
+            "stand_commands": [
+                "particle eop:light_energy ~ ~1 ~ 0.1 0.1 0.1 0.6 10"
+            ],
+            "stand_last_tick_commands": [
+                "playsound minecraft:entity.generic.explode master @a ~ ~ ~ 2 1",
+                "particle minecraft:explosion ~ ~0.6 ~ 3 1 3 0 40",
+                "particle minecraft:poof ~ ~0.6 ~ 0 0 0 0.7 160",
+                "particle minecraft:end_rod ~ ~0.6 ~ 0 0 0 0.7 140"
+            ],
+            "target_first_tick_commands": [],
+            "target_commands": [],
+            "target_last_tick_commands": [],
+            "stand_power": "eop:models/black_hole",
+            "pull_strength": 0.12,
+            "invert_pull": false,
+            "looping_sound": "eop:black_hole",
+            "looping_sound_volume": 2,
+            "looping_sound_pitch": 1,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Gravitic.Collapse"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Gravitic.Collapse",
+                        "property": "value",
+                        "min": 8,
+                        "max": 8
+                    },
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Sun.Form"
+                    }
+                ]
+            }
+        },
+        "Gravitic.Collapse.Summon.Moon": {
+            "type": "eop:spawn_armor_stand",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "range": 15,
+            "lifetime": 80,
+            "enable_damage": false,
+            "damage_on_last_tick": false,
+            "knockback_on_last_tick": 1,
+            "aoe_damage": 2,
+            "aoe_radius": 10,
+            "aoe_damage_type": "eop:basic",
+            "target_command_radius": 10,
+            "stand_first_tick_commands": [
+                "tag @s add Moon",
+                "tag @s add Normal",
+                "playsound minecraft:block.beacon.activate master @a ~ ~ ~ 2 2",
+                "playsound minecraft:entity.warden.death master @a ~ ~ ~ 1 2",
+                "particle minecraft:end_rod ~ ~0.6 ~ 0 0 0 0.3 20"
+            ],
+            "stand_commands": [
+                "particle eop:dark_energy ~ ~1 ~ 0.1 0.1 0.1 0.6 10"
+            ],
+            "stand_last_tick_commands": [
+                "playsound minecraft:entity.generic.explode master @a ~ ~ ~ 2 1",
+                "particle minecraft:explosion ~ ~0.6 ~ 3 1 3 0 40",
+                "particle minecraft:poof ~ ~0.6 ~ 0 0 0 0.7 160",
+                "particle minecraft:end_rod ~ ~0.6 ~ 0 0 0 0.7 140"
+            ],
+            "target_first_tick_commands": [],
+            "target_commands": [],
+            "target_last_tick_commands": [
+                "effect give @s eop:stun 4 4 true",
+                "effect give @s eop:darkness 4 4 true"
+            ],
+            "stand_power": "eop:models/black_hole",
+            "pull_strength": 0.5,
+            "invert_pull": false,
+            "looping_sound": "eop:black_hole",
+            "looping_sound_volume": 2,
+            "looping_sound_pitch": 1,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Gravitic.Collapse"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Gravitic.Collapse",
+                        "property": "value",
+                        "min": 8,
+                        "max": 8
+                    },
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Moon.Form"
+                    }
+                ]
+            }
+        },
+        "Screen.Shake2": {
+            "type": "eop:screen_shake",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "intensity": 2,
+            "speed": 1,
+            "affect_others": false,
+            "range": 15,
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Gravitic.Collapse"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Gravitic.Collapse",
+                        "property": "value",
+                        "min": 0,
+                        "max": 8
+                    }
+                ]
+            }
+        },
+        "Eclipse.Ascension.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/eclipse_ascension.png",
+            "title": "Eclipse Ascension",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": 2,
+            "gui_position": [
+                0,
+                2.75
+            ],
+            "description": "description",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "ability": "Gravitic.Collapse.Unlock"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_beyonder_skill_points",
+                        "score": 6,
+                        "icon": "eop:textures/gui/beyonder.png",
+                        "description": {
+                            "text": "Astral Energy Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Eclipse.Ascension": {
+            "type": "palladium:animation_timer",
+            "icon": "eop:textures/gui/eclipse_ascension.png",
+            "title": "Eclipse Ascension",
+            "bar_color": "light_gray",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "list_index": 4,
+            "start_value": 0,
+            "max_value": 40,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "eop:activation",
+                        "ticks": 1200,
+                        "cooldown": 1200,
+                        "energy": 0,
+                        "property": "eop_beyonder_energy",
+                        "toggle_mode": true,
+                        "key_type": "key_bind"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension.Unlock"
+                    },
+                    {
+                        "type": "palladium:or",
+                        "conditions": [
+                            {
+                                "type": "palladium:and",
+                                "conditions": [
+                                    {
+                                        "type": "palladium:not",
+                                        "conditions": [
+                                            {
+                                                "type": "palladium:has_tag",
+                                                "tag": "EOP.Silenced"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "palladium:not",
+                                        "conditions": [
+                                            {
+                                                "type": "palladium:ability_enabled",
+                                                "power": "null",
+                                                "ability": "Eclipse.Ascension"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "palladium:and",
+                                "conditions": [
+                                    {
+                                        "type": "palladium:ability_enabled",
+                                        "power": "null",
+                                        "ability": "Eclipse.Ascension"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_effect",
+                                "effect": "eop:lunar_cloak"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Eclipse.Ascension.Transform.Animation": {
+            "type": "palladium:animation_timer",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "start_value": 0,
+            "max_value": 17,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension"
+                    }
+                ]
+            }
+        },
+        "No.Move": {
+            "type": "eop:no_movement",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension",
+                        "property": "value",
+                        "min": 0,
+                        "max": 35
+                    }
+                ]
+            }
+        },
+        "Ult.Render": {
+            "type": "palladium:render_layer",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "render_layer": "eop:beyonder/celestial_body",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_effect",
+                                "effect": "minecraft:invisibility"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Remove.Layers": {
+            "type": "palladium:hide_body_part",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "body_parts": [
+                "right_arm_overlay",
+                "left_arm_overlay",
+                "right_leg_overlay",
+                "left_leg_overlay",
+                "head_overlay",
+                "chest_overlay",
+                "cape"
+            ],
+            "affects_first_person": true,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension"
+                    }
+                ]
+            }
+        },
+        "Light.Aura": {
+            "type": "eop:area_light",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "light_level": 15,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension",
+                        "property": "value",
+                        "min": 3,
+                        "max": 40
+                    }
+                ]
+            }
+        },
+        "Infinite.Air": {
+            "type": "eop:infinite_oxygen",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension",
+                        "property": "value",
+                        "min": 3,
+                        "max": 40
+                    }
+                ]
+            }
+        },
+        "IFrame": {
+            "type": "palladium:damage_immunity",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "damage_sources": [
+                "eop:phase_immune"
+            ],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension",
+                        "property": "value",
+                        "min": 1,
+                        "max": 29
+                    }
+                ]
+            }
+        },
+        "Eclipse.Ascension.Animation": {
+            "type": "eop:trigger_animation",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "animation": "TRANSFORM",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension",
+                        "property": "value",
+                        "min": 1,
+                        "max": 1
+                    }
+                ]
+            }
+        },
+        "Screen.Shake.Ult": {
+            "type": "eop:screen_shake",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "intensity": 3,
+            "speed": 1,
+            "affect_others": false,
+            "range": 15,
+            "resistance_tags": [],
+            "end_burst": false,
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension",
+                        "property": "value",
+                        "min": 11,
+                        "max": 18
+                    }
+                ]
+            }
+        },
+        "Eclipse.Ascension.Commands": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "playsound minecraft:entity.evoker.prepare_summon master @a ~ ~ ~ 1 2"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension"
+                    }
+                ]
+            }
+        },
+        "Eclipse.Ascension.Commands2": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "playsound eop:energy_transform master @a ~ ~ ~ 1 1",
+                "particle end_rod ~ ~1 ~ 0.3 0.3 0.3 0.4 50",
+                "particle poof ~ ~1 ~ 0.3 0.3 0.3 0.6 90"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension",
+                        "property": "value",
+                        "min": 11,
+                        "max": 11
+                    }
+                ]
+            }
+        },
+        "Eclipse.Ascension.AOE.Damage": {
+            "type": "eop:aoe_damage",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": 2,
+            "radius": 5,
+            "damage": 5,
+            "commands_on_target": [
+                "effect give @s minecraft:slowness 5 1 true"
+            ],
+            "knockback": 2,
+            "damage_type": "eop:basic",
+            "set_on_fire": 0,
+            "cone": false,
+            "cone_angle": 160,
+            "enable_particles": false,
+            "particle_amount": 44,
+            "particle_type": "eop:dark_energy",
+            "particle_speed": 0.45,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension",
+                        "property": "value",
+                        "min": 11,
+                        "max": 11
+                    }
+                ]
+            }
+        },
+        "Eclipse.Flight": {
+            "type": "eop:custom_flight",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "speed": 0.5,
+            "sprint_multiplier": 3,
+            "acceleration": 0.02,
+            "drag": 1.6,
+            "allow_sprint": true,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension",
+                        "property": "value",
+                        "min": 11,
+                        "max": 100
+                    }
+                ]
+            }
+        },
+        "Eclipse.Immune": {
+            "type": "palladium:damage_immunity",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": -1,
+            "gui_position": "null",
+            "description": "null",
+            "damage_sources": [
+                "eop:energy_immune",
+                "eop:space_oxygen"
+            ],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension",
+                        "property": "value",
+                        "min": 11,
+                        "max": 100
+                    }
+                ]
+            }
+        },
+        "Eclipse.Healing": {
+            "type": "palladium:healing",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "frequency": 20,
+            "amount": 1,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension",
+                        "property": "value",
+                        "min": 11,
+                        "max": 100
+                    }
+                ]
+            }
+        },
+        "Eclipse.Max.Hunger": {
+            "type": "eop:max_hunger",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension",
+                        "property": "value",
+                        "min": 11,
+                        "max": 100
+                    }
+                ]
+            }
+        },
+        "Eclipse.Stats": {
+            "type": "eop:multi_attribute_modifier",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "attributes": [
+                "minecraft:generic.attack_damage",
+                "minecraft:generic.movement_speed",
+                "minecraft:generic.armor",
+                "minecraft:generic.armor_toughness"
+            ],
+            "amounts": [
+                6,
+                0.3,
+                30,
+                20
+            ],
+            "operations": [
+                "addition",
+                "multiply_base",
+                "addition",
+                "addition"
+            ],
+            "modifier_uuids": [
+                "e3e4973c-9113-45b8-9608-328375595542",
+                "4028fe2f-eeaa-47a4-a881-3ddbe67dae38",
+                "fc58022e-189f-41d1-8ca2-07ea94cba248",
+                "696c30e8-d8c4-4dfd-a088-56e808cb9b5c"
+            ],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension",
+                        "property": "value",
+                        "min": 36,
+                        "max": 100
+                    }
+                ]
+            }
+        },
+        "Eclipse.Immunities": {
+            "type": "eop:immune_to_effect",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "effects": [
+                "minecraft:instant_damage",
+                "minecraft:nausea",
+                "minecraft:blindness",
+                "minecraft:hunger",
+                "minecraft:poison",
+                "minecraft:wither",
+                "minecraft:slowness",
+                "minecraft:darkness",
+                "minecraft:levitation",
+                "minecraft:weakness",
+                "alexscaves:irradiated",
+                "alexscaves:bubbled",
+                "alexsmobs:ender_flu",
+                "alexsmobs:debilitating_sting",
+                "alexsmobs:earthquake",
+                "alexsmobs:exsanguination",
+                "eop:shock",
+                "eop:shock_stronger",
+                "eop:freeze",
+                "eop:freeze_stronger",
+                "eop:boil",
+                "eop:boil_strong",
+                "eop:brain_overload",
+                "eop:auditory_deception",
+                "eop:sensory_deception",
+                "eop:auditory_deception_herobrine",
+                "eop:pain_intolerance",
+                "eop:power_erasure",
+                "eop:flash_blindness",
+                "eop:optic_blindness",
+                "eop:werewolf_infection",
+                "eop:vampire_infection"
+            ],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension",
+                        "property": "value",
+                        "min": 36,
+                        "max": 100
+                    }
+                ]
+            }
+        },
+        "Astral.Bolt": {
+            "type": "palladium:command",
+            "title": "Atral Bolt",
+            "icon": "eop:textures/gui/astral_bolt.png",
+            "list_index": 0,
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "playsound eop:energy_blast master @a ~ ~ ~ 1 1"
+            ],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "eop:action",
+                        "cooldown": 20,
+                        "energy": 0,
+                        "property": "eop_beyonder_energy",
+                        "key_type": "right_click"
+                    },
+                    {
+                        "type": "eop:power_selected",
+                        "power": "eop:beyonder"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension",
+                        "property": "value",
+                        "min": 11,
+                        "max": 100
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Battle.Mode"
+                    }
+                ]
+            }
+        },
+        "Astral.Bolt.Projectile": {
+            "type": "palladium:projectile",
+            "icon": "minecraft:fire_charge",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": 1,
+            "entity_type": "eop:basic_projectile",
+            "entity_data": {
+                "Damage": 15,
+                "DamageType": "eop:basic",
+                "SetEntityOnFireSeconds": 4,
+                "IgnoreLiquids": true,
+                "CommandsOnBlockHit": [
+                    "particle minecraft:end_rod ~ ~ ~ 0.1 0.1 0.1 0.3 20",
+                    "particle eop:astral_energy ~ ~ ~ 0.1 0.1 0.1 0.6 60"
+                ],
+                "CommandsForTargets": [
+                    "effect give @s[tag=!Beyonder,tag=!Infinity,tag=!EOP.Phasing] slowness 5 2 true"
+                ],
+                "CommandsForTargetsRadius": 0,
+                "SpawnArmorStandOnBlockHit": false,
+                "SpawnArmorStandOnEntityHit": false,
+                "ArmorStandLifetime": 0,
+                "ArmorStandAOEDamage": 5,
+                "ArmorStandAOERadius": 10,
+                "ArmorStandAOEDamageType": "eop:basic",
+                "ArmorStandEnableDamage": true,
+                "ArmorStandDamageOnLastTick": false,
+                "ArmorStandKnockbackOnLastTick": 4,
+                "ArmorStandTargetCommandRadius": 10,
+                "ArmorStandPullStrength": 0.12,
+                "ArmorStandInvertPull": false,
+                "ArmorStandPower": "null",
+                "ArmorStandFirstTickCommands": [],
+                "ArmorStandCommands": [],
+                "ArmorStandLastTickCommands": [],
+                "ArmorStandTargetFirstTickCommands": [],
+                "ArmorStandTargetCommands": [],
+                "ArmorStandTargetLastTickCommands": [],
+                "ExplosionRadius": 4,
+                "ExplosionBlockInteraction": "BREAK",
+                "ExplosionCausesFire": true,
+                "Gravity": 0,
+                "Lifetime": 100,
+                "DieOnEntityHit": true,
+                "DieOnBlockHit": true,
+                "Appearances": [
+                    {
+                        "Type": "particles",
+                        "ParticleType": "eop:astral_energy",
+                        "Spread": 0.2,
+                        "Amount": 30
+                    },
+                    {
+                        "Type": "particles",
+                        "ParticleType": "minecraft:end_rod",
+                        "Spread": 0.05,
+                        "Amount": 10
+                    }
+                ]
+            },
+            "inaccuracy": 0,
+            "velocity": 2.5,
+            "swinging_arm": "main_arm",
+            "damage_from_player": false,
+            "ignore_player_movement": false,
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Astral.Bolt"
+                    }
+                ]
+            }
+        },
+        "Solar.Rays": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/solar_rays.png",
+            "title": "Solar Rays",
+            "bar_color": "light_gray",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "list_index": 0,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "eop:held",
+                        "ticks": 100,
+                        "cooldown": 100,
+                        "energy": 0,
+                        "property": "eop_beyonder_energy",
+                        "key_type": "key_bind",
+                        "needs_empty_hand": false
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension",
+                        "property": "value",
+                        "min": 11,
+                        "max": 100
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Sound.Energy.Beam.Ult": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "playsound eop:laser_vision_start master @a ~ ~ ~ 1 1"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Solar.Rays"
+                    }
+                ]
+            }
+        },
+        "Sound.Energy.Beam.Ult.Cont": {
+            "type": "eop:play_sound",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "sound": "eop:laser_vision",
+            "volume": 2,
+            "pitch": 1,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Solar.Rays"
+                    }
+                ]
+            }
+        },
+        "Energy.Beam.Ult.Beam": {
+            "type": "palladium:energy_beam",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "energy_beam": "eop:astral_eye_beam",
+            "damage": 0,
+            "damage_type": "minecraft:on_fire",
+            "max_distance": 40,
+            "speed": 1,
+            "set_on_fire_seconds": 0,
+            "cause_fire": false,
+            "smelt_blocks": false,
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Solar.Rays"
+                    }
+                ]
+            }
+        },
+        "Energy.Beam.Ult.Beam.Raycast": {
+            "type": "eop:raycast_damage",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "damage": 10,
+            "damage_type": "eop:basic",
+            "range": 40,
+            "set_on_fire": 3,
+            "commands_on_target": [],
+            "commands_on_allies": [],
+            "commands_on_block_hit": [],
+            "cause_fire": true,
+            "create_explosion": false,
+            "explosion_causes_fire": true,
+            "explosion_radius": 2,
+            "explosion_drop_blocks": false,
+            "smelt_block": true,
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Solar.Rays"
+                    }
+                ]
+            }
+        },
+        "Cosmic.Shift": {
+            "type": "palladium:animation_timer",
+            "icon": "eop:textures/gui/cosmic_shift.png",
+            "title": "Cosmic Shift",
+            "bar_color": "light_gray",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "list_index": 1,
+            "start_value": 0,
+            "max_value": 2,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "eop:held",
+                        "ticks": 60,
+                        "cooldown": 200,
+                        "energy": 0,
+                        "property": "eop_beyonder_energy",
+                        "toggle_mode": true,
+                        "key_type": "key_bind"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension",
+                        "property": "value",
+                        "min": 11,
+                        "max": 100
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Cosmic.Shift.Third.Person": {
+            "type": "eop:trigger_animation",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "animation": "THIRD_PERSON",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Cosmic.Shift"
+                    }
+                ]
+            }
+        },
+        "Cosmic.Shift.Silent.Footsteps": {
+            "type": "eop:silent_steps",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Cosmic.Shift"
+                    }
+                ]
+            }
+        },
+        "IFrame.Cosmic.Shift": {
+            "type": "palladium:damage_immunity",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "damage_sources": [
+                "eop:phase_immune"
+            ],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Cosmic.Shift"
+                    }
+                ]
+            }
+        },
+        "Cosmic.Shift.Commands": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "playsound minecraft:entity.allay.hurt master @a ~ ~ ~ 1 0.5"
+            ],
+            "last_tick_commands": [
+                "playsound minecraft:entity.generic.explode master @a ~ ~ ~ 2 1",
+                "particle minecraft:explosion ~ ~0.6 ~ 3 1 3 0 40",
+                "particle eop:astral_energy ~ ~0.6 ~ 0 0 0 0.7 160"
+            ],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Cosmic.Shift"
+                    }
+                ]
+            }
+        },
+        "Cosmic.Shift.Particles": {
+            "type": "palladium:particles",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "emitter": [
+                "eop:body_particles"
+            ],
+            "particle_type": "eop:astral_energy",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Cosmic.Shift"
+                    }
+                ]
+            }
+        },
+        "Cosmic.Shift.Invis": {
+            "type": "eop:invisibility",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Cosmic.Shift"
+                    }
+                ]
+            }
+        },
+        "Cosmic.Shift.Motion": {
+            "type": "eop:forward_motion",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "strength": 0.1,
+            "stop_motion_on_end": true,
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Cosmic.Shift"
+                    }
+                ]
+            }
+        },
+        "Cosmic.Shift.AOE.Damage": {
+            "type": "eop:aoe_damage",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": 2,
+            "radius": 5,
+            "damage": 20,
+            "commands_on_target": [
+                "effect give @s eop:stun 5 1 true"
+            ],
+            "knockback": 2,
+            "damage_type": "eop:basic",
+            "set_on_fire": 0,
+            "cone": false,
+            "cone_angle": 160,
+            "enable_particles": true,
+            "particle_amount": 44,
+            "particle_type": "minecraft:end_rod",
+            "particle_speed": 0.45,
+            "create_explosion": true,
+            "explosion_radius": 5,
+            "explosion_drop_blocks": false,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:ability_enabled",
+                                "power": "null",
+                                "ability": "Cosmic.Shift"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Cosmic.Shift",
+                        "property": "value",
+                        "min": 1,
+                        "max": 1
+                    }
+                ]
+            }
+        },
+        "Gravitic.Collapse.Ult": {
+            "type": "palladium:animation_timer",
+            "icon": "eop:textures/gui/gravitic_collapse_1.png",
+            "title": "Gravitic Collapse",
+            "bar_color": "light_gray",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "list_index": 2,
+            "start_value": 0,
+            "max_value": 10,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "eop:held",
+                        "ticks": 158,
+                        "cooldown": 600,
+                        "energy": 0,
+                        "property": "eop_beyonder_energy",
+                        "toggle_mode": true,
+                        "key_type": "key_bind"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension",
+                        "property": "value",
+                        "min": 11,
+                        "max": 100
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Gravitic.Aim": {
+            "type": "palladium:aim",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "time": 10,
+            "arm": "main_arm",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Gravitic.Collapse.Ult"
+                    }
+                ]
+            }
+        },
+        "Gravitic.Collapse.Commands.Ult": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "playsound minecraft:block.beacon.deactivate master @a ~ ~ ~ 1 0.5"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Gravitic.Collapse.Ult"
+                    }
+                ]
+            }
+        },
+        "Gravitic.Collapse.Summon.Ult": {
+            "type": "eop:spawn_armor_stand",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "range": 5,
+            "spawn_at_player": false,
+            "follow_mouse": true,
+            "lifetime": 158,
+            "enable_damage": true,
+            "damage_on_last_tick": false,
+            "knockback_on_last_tick": 2.5,
+            "aoe_damage": 5,
+            "aoe_radius": 10,
+            "aoe_damage_type": "eop:basic",
+            "target_command_radius": 10,
+            "stand_first_tick_commands": [
+                "playsound minecraft:block.beacon.activate master @a ~ ~ ~ 2 2",
+                "playsound minecraft:entity.warden.death master @a ~ ~ ~ 1 2",
+                "particle minecraft:end_rod ~ ~0.6 ~ 0 0 0 0.3 20"
+            ],
+            "stand_commands": [
+                "particle eop:astral_energy ~ ~1 ~ 0.1 0.1 0.1 0.6 10"
+            ],
+            "stand_last_tick_commands": [
+                "playsound minecraft:entity.generic.explode master @a ~ ~ ~ 2 1",
+                "particle minecraft:explosion ~ ~0.6 ~ 3 1 3 0 40",
+                "particle minecraft:poof ~ ~0.6 ~ 0 0 0 0.7 160",
+                "particle minecraft:end_rod ~ ~0.6 ~ 0 0 0 0.7 140"
+            ],
+            "target_first_tick_commands": [],
+            "target_commands": [],
+            "target_last_tick_commands": [],
+            "stand_power": "eop:models/black_hole",
+            "pull_strength": 0.3,
+            "invert_pull": false,
+            "looping_sound": "eop:black_hole",
+            "looping_sound_volume": 2,
+            "looping_sound_pitch": 1,
+            "destroy_blocks": true,
+            "destroy_block_radius": 2,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Gravitic.Collapse.Ult"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Gravitic.Collapse.Ult",
+                        "property": "value",
+                        "min": 8,
+                        "max": 80
+                    }
+                ]
+            }
+        },
+        "Screen.Shake3": {
+            "type": "eop:screen_shake",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "intensity": 2,
+            "speed": 1,
+            "affect_others": false,
+            "range": 15,
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Gravitic.Collapse.Ult"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Gravitic.Collapse.Ult",
+                        "property": "value",
+                        "min": 0,
+                        "max": 8
+                    }
+                ]
+            }
+        },
+        "Stellar.Destruction": {
+            "type": "palladium:animation_timer",
+            "icon": "eop:textures/gui/stellar_destruction.png",
+            "title": "Stellar Destruction",
+            "bar_color": "light_gray",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "list_index": 3,
+            "start_value": 0,
+            "max_value": 15,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "eop:activation",
+                        "ticks": 30,
+                        "cooldown": 1200,
+                        "energy": 0,
+                        "property": "eop_beyonder_energy",
+                        "toggle_mode": false,
+                        "key_type": "key_bind"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension",
+                        "property": "value",
+                        "min": 11,
+                        "max": 100
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "No.Move2": {
+            "type": "eop:no_movement",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Stellar.Destruction"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Stellar.Destruction",
+                        "property": "value",
+                        "min": 0,
+                        "max": 14
+                    }
+                ]
+            }
+        },
+        "Stellar.Destruction.Animation": {
+            "type": "eop:trigger_animation",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "animation": "CREATE",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Stellar.Destruction"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Stellar.Destruction",
+                        "property": "value",
+                        "min": 1,
+                        "max": 1
+                    }
+                ]
+            }
+        },
+        "Stellar.Destruction.Commands": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "playsound minecraft:entity.evoker.prepare_attack master @a ~ ~ ~ 1 1"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Stellar.Destruction"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Stellar.Destruction",
+                        "property": "value",
+                        "min": 0,
+                        "max": 80
+                    }
+                ]
+            }
+        },
+        "Stellar.Destruction.Summon": {
+            "type": "eop:spawn_armor_stand",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "range": 5,
+            "spawn_at_player": true,
+            "follow_mouse": false,
+            "lifetime": 300,
+            "enable_damage": true,
+            "damage_on_last_tick": false,
+            "knockback_on_last_tick": 1.1,
+            "aoe_damage": 15,
+            "aoe_radius": 15,
+            "aoe_damage_type": "eop:basic",
+            "target_command_radius": 15,
+            "stand_first_tick_commands": [
+                "playsound minecraft:entity.generic.explode master @a ~ ~ ~ 2 0.8",
+                "particle eop:star ~ ~1 ~ 0.1 0.1 0.1 1 120"
+            ],
+            "stand_commands": [
+                "particle eop:star ~ ~1 ~ 7 4 7 0.02 30",
+                "particle explosion ~ ~1 ~ 7 4 7 0.02 1"
+            ],
+            "stand_last_tick_commands": [
+                "playsound minecraft:entity.wither.hurt master @a ~ ~ ~ 2 0.7",
+                "particle eop:star ~ ~1 ~ 7 4 7 1 220"
+            ],
+            "target_first_tick_commands": [],
+            "target_commands": [
+                "effect give @s slowness 3 2 true"
+            ],
+            "target_last_tick_commands": [
+                "effect give @s eop:stun 5 0 true"
+            ],
+            "stand_power": "eop:models/stellar_destruction",
+            "pull_strength": 0,
+            "invert_pull": false,
+            "looping_sound": "",
+            "looping_sound_volume": 2,
+            "looping_sound_pitch": 2,
+            "destroy_blocks": false,
+            "destroy_block_radius": 2,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Stellar.Destruction"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Stellar.Destruction",
+                        "property": "value",
+                        "min": 15,
+                        "max": 15
+                    }
+                ]
+            }
+        }
+    }
+}

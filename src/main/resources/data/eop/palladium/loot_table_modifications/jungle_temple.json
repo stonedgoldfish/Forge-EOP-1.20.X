@@ -1,0 +1,56 @@
+{
+    "target": "minecraft:chests/jungle_temple",
+    "add_pools": [
+        {
+            "name": "drop1",
+            "bonus_rolls": 0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "eop:narga_shard",
+                    "conditions": [
+                        {
+                            "condition": "minecraft:random_chance",
+                            "chance": 0.005
+                        }
+                    ]
+                }
+            ],
+            "rolls": 1
+        },
+		{
+            "name": "drop2",
+            "bonus_rolls": 0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "eop:kinetic_ruby",
+                    "conditions": [
+                        {
+                            "condition": "minecraft:random_chance",
+                            "chance": 0.15
+                        }
+                    ]
+                }
+            ],
+            "rolls": 1
+        },
+		{
+            "name": "drop3",
+            "bonus_rolls": 0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "eop:kings_relic",
+                    "conditions": [
+                        {
+                            "condition": "minecraft:random_chance",
+                            "chance": 0.25
+                        }
+                    ]
+                }
+            ],
+            "rolls": 1
+        }
+    ]
+}

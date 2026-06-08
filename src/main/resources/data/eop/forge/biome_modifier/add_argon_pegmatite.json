@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": "eop:argon_pegmatite",
+  "step": "underground_ores"
+}

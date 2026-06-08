@@ -1,0 +1,11 @@
+{
+    "base": "eop:textures/gui/gravitic_collapse_#X.png",
+	"variables": {
+        "X": {
+            "type": "palladium:ability_integer_property",
+            "power": "eop:beyonder",
+            "ability": "Dynamic.Icons",
+			"property": "value"
+        }
+    }
+}

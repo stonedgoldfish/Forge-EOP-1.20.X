@@ -1,0 +1,6 @@
+{
+    "type": "palladium:render_layer",
+    "render_layer": "eop:accessories/basketball",
+    "disable_rendering": false,
+    "slot": "palladium:face"
+}

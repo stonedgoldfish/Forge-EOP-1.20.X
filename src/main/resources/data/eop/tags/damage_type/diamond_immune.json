@@ -1,0 +1,16 @@
+{
+    "values": [
+        "minecraft:arrow",
+		"minecraft:cactus",
+		"minecraft:sweet_berry_bush",
+        "minecraft:trident",
+        "minecraft:in_fire",
+        "minecraft:on_fire",
+		"eop:basic_projectile",
+        "eop:boil",
+		"eop:ice",
+        "eop:marine_rain",
+        "eop:sandstorm",
+        "eop:shock"
+    ]
+}

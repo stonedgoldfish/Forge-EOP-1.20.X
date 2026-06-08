@@ -1,0 +1,25 @@
+{
+    "type": "geckolib:default",
+    "model": "eop:geo/base/cursed_worm.geo.json",
+    "texture": "eop:textures/models/base/cursed_worm.png",
+    "animation_file": "eop:animations/cursed_worm.json",
+    "animation_controller": [
+        {
+            "name": "looping",
+            "transition_tick_time": 4,
+            "animation": "idle"
+        }
+    ],
+    "conditions": [
+        {
+            "type": "palladium:not",
+            "conditions": [
+                {
+                    "type": "palladium:ability_enabled",
+                    "power": "eop:base",
+                    "ability": "Extra.Render.Off"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,68 @@
+[
+    {
+        "body_part": "head",
+        "glow_color": "#1100FF",
+        "core_color": "#C2C7F1",
+        "glow_opacity": 1,
+        "core_opacity": 0.25,
+        "size": [
+            2,
+            1
+        ],
+        "bloom": 1,
+        "offset": [
+            2,
+            3.6,
+            0
+        ],
+        "particles": [
+            {
+                "particle_type": "eop:astral_energy",
+                "amount": 10,
+                "motion": [
+                    1,
+                    1,
+                    1
+                ],
+                "motion_random": [
+                    1,
+                    1,
+                    1
+                ]
+            }
+        ]
+    },
+    {
+        "body_part": "head",
+        "glow_color": "#1100FF",
+        "core_color": "#C2C7F1",
+        "glow_opacity": 1,
+        "core_opacity": 0.25,
+        "size": [
+            2,
+            1
+        ],
+        "bloom": 1,
+        "offset": [
+            -2,
+            3.6,
+            0
+        ],
+        "particles": [
+            {
+                "particle_type": "eop:astral_energy",
+                "amount": 10,
+                "motion": [
+                    1,
+                    1,
+                    1
+                ],
+                "motion_random": [
+                    1,
+                    1,
+                    1
+                ]
+            }
+        ]
+    }
+]

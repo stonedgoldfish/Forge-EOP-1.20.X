@@ -1,0 +1,5 @@
+{
+  "type": "geckolib:default",
+  "model": "eop:geo/icicle/ice_wave.json",
+  "texture": "eop:textures/models/guardian/diamond_wave_1.png"
+}

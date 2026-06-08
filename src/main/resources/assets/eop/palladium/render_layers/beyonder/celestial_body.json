@@ -1,0 +1,54 @@
+{
+    "type": "palladium:compound",
+    "layers": [
+        {
+            "model": {
+                "normal": "eop:geo/beyonder/celestial_body.geo.json",
+                "slim": "eop:geo/beyonder/celestial_body_slim.geo.json"
+            },
+            "type": "geckolib:default",
+            "texture": {
+                "base": "eop:textures/models/beyonder/celestial_body.png",
+                "transformers": [
+                    {
+                        "type": "palladium:alpha_mask",
+                        "mask": "eop:textures/alpha_mask/beyonder/sun_energy_body/sun_energy_body_#TIMER.png"
+                    }
+                ],
+                "variables": {
+                    "TIMER": {
+                        "type": "palladium:animation_timer_ability",
+                        "power": "eop:beyonder",
+                        "ability": "Eclipse.Ascension.Transform.Animation"
+                    }
+                },
+                "output": "eop:textures/models/beyonder/celestial_body_#TIMER"
+            }
+        },
+		{
+            "model": {
+                "normal": "eop:geo/beyonder/celestial_body_aura.geo.json",
+                "slim": "eop:geo/beyonder/celestial_body_aura_slim.geo.json"
+            },
+            "type": "geckolib:default",
+			"render_type": "cutout",
+            "texture": {
+                "base": "eop:textures/models/beyonder/celestial_body_aura.png",
+                "transformers": [
+                    {
+                        "type": "palladium:alpha_mask",
+                        "mask": "eop:textures/alpha_mask/beyonder/sun_energy_body/sun_energy_body_#TIMER.png"
+                    }
+                ],
+                "variables": {
+                    "TIMER": {
+                        "type": "palladium:animation_timer_ability",
+                        "power": "eop:beyonder",
+                        "ability": "Eclipse.Ascension.Transform.Animation"
+                    }
+                },
+                "output": "eop:textures/models/beyonder/celestial_body_aura_#TIMER"
+            }
+        }
+    ]
+}

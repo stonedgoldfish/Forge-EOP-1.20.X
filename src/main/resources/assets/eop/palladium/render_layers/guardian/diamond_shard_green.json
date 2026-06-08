@@ -1,0 +1,5 @@
+{
+	"model_type": "palladium:basic",
+    "model_layer": "eop:diamond_shard#diamond",
+    "texture": "eop:textures/models/guardian/diamond_shard_text_1.png"
+}

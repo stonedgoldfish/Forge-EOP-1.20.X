@@ -1,0 +1,86 @@
+{
+    "target": "minecraft:entities/enderman",
+    "add_pools": [
+        {
+            "name": "drop1",
+            "bonus_rolls": 0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+					"name": "eop:evoluter",
+                    "functions": [
+                        {
+                            "count": {
+                                "type": "minecraft:uniform",
+                                "max": 1,
+                                "min": 1
+                            },
+                            "function": "minecraft:looting_enchant"
+                        }
+                    ],
+					"conditions": [
+                        {
+                            "condition": "minecraft:random_chance",
+                            "chance": 0.03
+                        }
+                    ]
+                }
+            ],
+            "rolls": 1
+        },
+		{
+            "name": "drop2",
+            "bonus_rolls": 0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+					"name": "eop:argon_crystal",
+                    "functions": [
+                        {
+                            "count": {
+                                "type": "minecraft:uniform",
+                                "max": 2,
+                                "min": 1
+                            },
+                            "function": "minecraft:looting_enchant"
+                        }
+                    ],
+					"conditions": [
+                        {
+                            "condition": "minecraft:random_chance",
+                            "chance": 0.03
+                        }
+                    ]
+                }
+            ],
+            "rolls": 1
+        },
+		{
+            "name": "drop3",
+            "bonus_rolls": 0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+					"name": "eop:entropic_essence",
+                    "functions": [
+                        {
+                            "count": {
+                                "type": "minecraft:uniform",
+                                "max": 2,
+                                "min": 1
+                            },
+                            "function": "minecraft:looting_enchant"
+                        }
+                    ],
+					"conditions": [
+                        {
+                            "condition": "minecraft:random_chance",
+                            "chance": 0.1
+                        }
+                    ]
+                }
+            ],
+            "rolls": 1
+        }
+    ]
+}
