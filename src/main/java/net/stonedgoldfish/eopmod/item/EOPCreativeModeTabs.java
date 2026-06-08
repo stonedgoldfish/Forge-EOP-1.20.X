@@ -19,6 +19,7 @@ public class EOPCreativeModeTabs {
                             .displayItems((parameters, output) -> {
                                 output.accept(EOPItems.ARGON_CRYSTAL.get());
                                 output.accept(EOPItems.ARGON_PEGMATITE.get());
+                                output.accept(EOPItems.DEEPSLATE_ARGON_PEGMATITE.get());
                                 output.accept(EOPItems.ARGON_HELMET.get());
                                 output.accept(EOPItems.ARGON_CHESTPLATE.get());
                                 output.accept(EOPItems.ARGON_LEGGINGS.get());

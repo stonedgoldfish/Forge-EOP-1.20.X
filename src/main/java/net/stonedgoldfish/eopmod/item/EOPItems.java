@@ -18,7 +18,6 @@ public class EOPItems {
             ITEMS.register("argon_crystal", () ->
                     new ArgonCrystalItem(new Item.Properties().stacksTo(1))
             );
-
     public static final RegistryObject<Item> ARGON_PEGMATITE =
             ITEMS.register("argon_pegmatite", () ->
                     new BlockItem(EOPBlocks.ARGON_PEGMATITE.get(), new Item.Properties())

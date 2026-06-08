@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "eop:argon_pegmatite"
+    "eop:argon_pegmatite",
+	"eop:deepslate_argon_pegmatite"
   ]
 }

@@ -16,6 +16,8 @@
   "effect.eop.lunar_cloak": "Lunar Cloak",
 
   "block.eop.argon_pegmatite": "Argon Pegmatite",
+  "block.eop.deepslate_argon_pegmatite": "Deepslate Argon Pegmatite",
+  
   "item.eop.argon_crystal": "Argon Crystal",
 
   "item.eop.power_randomizer": "Power Randomizer (No Weights)",
