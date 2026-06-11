@@ -514,7 +514,10 @@ public class EOPClientEvents {
                 0xFFFFFF,
                 true
         );
+
         guiGraphics.pose().popPose();
+
+        guiGraphics.pose().pushPose();
         guiGraphics.pose().scale(numberScale, numberScale, 1.0F);
 
         guiGraphics.drawString(
@@ -1026,7 +1029,7 @@ public class EOPClientEvents {
         var state = player.level().getBlockState(eyePos);
 
         return !state.isAir()
-                && state.getCollisionShape(player.level(), eyePos).isEmpty() == false;
+                && !state.getCollisionShape(player.level(), eyePos).isEmpty();
     }
 
     @SubscribeEvent

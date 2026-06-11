@@ -483,7 +483,7 @@
                 -2
             ],
             "title": "Starflare",
-            "description": "description. §dBattlemode §fmust be enabled via keybind. §dRight Click §fto use this ability",
+            "description": "Fire an astral bolt that damages enemies in its path. §dBattlemode §fmust be enabled via keybind. §dRight Click §fto use this ability",
             "icon": "#eop:icons/beyonder/starflare",
             "hidden": false,
             "hidden_in_bar": true
@@ -699,7 +699,7 @@
                 0,
                 -1.25
             ],
-            "description": "description",
+            "description": "Shift between Solar and Lunar states, altering your abilities and passive bonuses",
             "conditions": {
                 "unlocking": [
                     {
@@ -913,17 +913,17 @@
             "type": "palladium:healing",
             "hidden": true,
             "hidden_in_bar": true,
-            "frequency": 10,
+            "frequency": 20,
             "amount": 1,
             "conditions": {
                 "enabling": [
                     {
-                        "type": "palladium:has_tag",
-                        "tag": "EOP.Moon.Form"
-                    },
-                    {
-                        "type": "palladium:not",
+                        "type": "palladium:or",
                         "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Moon.Form"
+                            },
                             {
                                 "type": "palladium:ability_enabled",
                                 "ability": "Eclipse.Ascension"
@@ -943,7 +943,7 @@
                 0,
                 -0.45
             ],
-            "description": "description",
+            "description": "Dash through space in a chosen direction",
             "conditions": {
                 "unlocking": [
                     {
@@ -1218,7 +1218,7 @@
                 0,
                 0.3
             ],
-            "description": "description",
+            "description": "Releave a wave of astral energy around yourself",
             "conditions": {
                 "unlocking": [
                     {
@@ -1488,7 +1488,7 @@
                 0,
                 1.2
             ],
-            "description": "description",
+            "description": "Create a gravity well that pulls enemies toward its center",
             "conditions": {
                 "unlocking": [
                     {
@@ -1769,7 +1769,7 @@
                 0,
                 2.75
             ],
-            "description": "description",
+            "description": "Ascend into a celestial being, gaining flight, unlimited Astral Energy, and enhanced abilities",
             "conditions": {
                 "unlocking": [
                     {
@@ -2196,30 +2196,6 @@
                 "eop:energy_immune",
                 "eop:space_oxygen"
             ],
-            "conditions": {
-                "enabling": [
-                    {
-                        "type": "palladium:ability_enabled",
-                        "power": "null",
-                        "ability": "Eclipse.Ascension"
-                    },
-                    {
-                        "type": "palladium:ability_integer_property",
-                        "power": "null",
-                        "ability": "Eclipse.Ascension",
-                        "property": "value",
-                        "min": 11,
-                        "max": 100
-                    }
-                ]
-            }
-        },
-        "Eclipse.Healing": {
-            "type": "palladium:healing",
-            "hidden": true,
-            "hidden_in_bar": true,
-            "frequency": 20,
-            "amount": 1,
             "conditions": {
                 "enabling": [
                     {

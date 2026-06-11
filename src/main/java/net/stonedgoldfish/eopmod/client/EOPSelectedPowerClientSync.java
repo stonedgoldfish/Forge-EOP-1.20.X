@@ -1,6 +1,8 @@
 package net.stonedgoldfish.eopmod.client;
 
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -13,7 +15,7 @@ import net.threetag.palladium.client.screen.AbilityBarRenderer;
 public class EOPSelectedPowerClientSync {
 
     private static String lastSelectedPower = null;
-    private static int syncCooldown = 0;
+    private static int forceSyncTicks = 0;
 
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
@@ -21,8 +23,17 @@ public class EOPSelectedPowerClientSync {
             return;
         }
 
-        if (syncCooldown > 0) {
-            syncCooldown--;
+        Minecraft minecraft = Minecraft.getInstance();
+
+        if (minecraft.player == null || minecraft.level == null || minecraft.getConnection() == null) {
+            lastSelectedPower = null;
+            forceSyncTicks = 0;
+            return;
+        }
+
+        if (forceSyncTicks > 0) {
+            forceSyncTicks--;
+            lastSelectedPower = null;
         }
 
         if (AbilityBarRenderer.ABILITY_LISTS == null) {
@@ -42,18 +53,26 @@ public class EOPSelectedPowerClientSync {
 
         String selectedPower = selected.getPower().getId().toString();
 
-        boolean changed = !selectedPower.equals(lastSelectedPower);
-        boolean periodicResync = syncCooldown <= 0;
-
-        if (!changed && !periodicResync) {
+        if (selectedPower.equals(lastSelectedPower)) {
             return;
         }
 
         lastSelectedPower = selectedPower;
-        syncCooldown = 20;
 
         EOPNetwork.CHANNEL.sendToServer(
                 new SyncSelectedPowerPacket(selectedPower)
         );
+    }
+
+    @SubscribeEvent
+    public static void onPlayerRespawn(ClientPlayerNetworkEvent.Clone event) {
+        lastSelectedPower = null;
+        forceSyncTicks = 20;
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLoggingOut(ClientPlayerNetworkEvent.LoggingOut event) {
+        lastSelectedPower = null;
+        forceSyncTicks = 0;
     }
 }
