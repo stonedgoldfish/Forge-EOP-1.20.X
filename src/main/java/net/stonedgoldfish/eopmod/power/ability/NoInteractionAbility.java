@@ -16,17 +16,9 @@ import java.util.UUID;
 
 public class NoInteractionAbility extends Ability {
 
-    public static final PalladiumProperty<Boolean> BLOCKS =
-            new BooleanProperty("blocks")
-                    .configurable("Disable block interaction.");
-
-    public static final PalladiumProperty<Boolean> ITEMS =
-            new BooleanProperty("items")
-                    .configurable("Disable item interaction.");
-
-    public static final PalladiumProperty<Boolean> ENTITIES =
-            new BooleanProperty("entities")
-                    .configurable("Disable entity interaction.");
+    public static final PalladiumProperty<Boolean> BLOCKS = new BooleanProperty("blocks").configurable("Disable block interaction");
+    public static final PalladiumProperty<Boolean> ITEMS = new BooleanProperty("items").configurable("Disable item interaction");
+    public static final PalladiumProperty<Boolean> ENTITIES = new BooleanProperty("entities").configurable("Disable entity interaction");
 
     private static final Map<UUID, Settings> BLOCKED_PLAYERS = new HashMap<>();
 
@@ -97,6 +89,6 @@ public class NoInteractionAbility extends Ability {
 
     @Override
     public String getDocumentationDescription() {
-        return "Prevents the player from interacting with blocks, items, or entities, with configurable interaction categories.";
+        return "Prevents the player from interacting with blocks, items, or entities.";
     }
 }

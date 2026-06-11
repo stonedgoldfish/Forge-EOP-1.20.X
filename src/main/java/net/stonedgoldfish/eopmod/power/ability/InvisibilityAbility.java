@@ -8,15 +8,11 @@ import net.threetag.palladium.power.ability.AbilityInstance;
 import net.threetag.palladium.util.icon.ItemIcon;
 import net.threetag.palladium.util.property.BooleanProperty;
 import net.threetag.palladium.util.property.PalladiumProperty;
-
 import java.util.*;
 
 public class InvisibilityAbility extends Ability {
 
-    public static final PalladiumProperty<Boolean> CLEAR_MOB_TARGETS =
-            new BooleanProperty("clear_mob_targets")
-                    .configurable("If true, mobs will stop targeting the entity while invisible.");
-
+    public static final PalladiumProperty<Boolean> CLEAR_MOB_TARGETS = new BooleanProperty("clear_mob_targets").configurable("If true, mobs will stop targeting the entity while invisible");
     private static final Map<UUID, Boolean> INVISIBLE_ENTITIES = new HashMap<>();
 
     public InvisibilityAbility() {

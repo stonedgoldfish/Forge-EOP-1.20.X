@@ -126,13 +126,8 @@ public class ActionCondition extends KeyCondition {
 
     public static class Serializer extends ConditionSerializer {
 
-        public static final PalladiumProperty<Integer> ENERGY =
-                new IntegerProperty("energy")
-                        .configurable("Energy consumed when the action is activated.");
-
-        public static final PalladiumProperty<String> PROPERTY =
-                new StringProperty("property")
-                        .configurable("Name of the integer Palladium property used as the energy source.");
+        public static final PalladiumProperty<Integer> ENERGY = new IntegerProperty("energy").configurable("Energy consumed when the action is activated");
+        public static final PalladiumProperty<String> PROPERTY = new StringProperty("property").configurable("Name of the integer Palladium property used as the energy source");
 
         public Serializer() {
             this.withProperty(net.threetag.palladium.condition.ActionCondition.Serializer.COOLDOWN, 0);

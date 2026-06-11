@@ -16,33 +16,13 @@ import net.stonedgoldfish.eopmod.util.EOPGameRules;
 
 public class EnergyRegenAbility extends Ability {
 
-    public static final PalladiumProperty<Integer> AMOUNT =
-            new IntegerProperty("amount")
-                    .configurable("Energy gained each interval.");
-
-    public static final PalladiumProperty<Integer> INTERVAL =
-            new IntegerProperty("interval")
-                    .configurable("Ticks between energy gain.");
-
-    public static final PalladiumProperty<Boolean> ENABLE_DRAIN =
-            new BooleanProperty("enabled_energy_drain")
-                    .configurable("Enable passive energy drain.");
-
-    public static final PalladiumProperty<Integer> DRAIN_AMOUNT =
-            new IntegerProperty("drain_amount")
-                    .configurable("Energy lost each interval.");
-
-    public static final PalladiumProperty<Integer> DRAIN_INTERVAL =
-            new IntegerProperty("drain_interval")
-                    .configurable("Ticks between energy drain.");
-
-    public static final PalladiumProperty<Integer> MAX =
-            new IntegerProperty("max")
-                    .configurable("Maximum energy cap.");
-
-    public static final PalladiumProperty<Boolean> INVERT =
-            new BooleanProperty("invert")
-                    .configurable("If true, infiniteEnergy sets energy to 0 instead of max.");
+    public static final PalladiumProperty<Integer> AMOUNT = new IntegerProperty("amount").configurable("Energy gained each interval");
+    public static final PalladiumProperty<Integer> INTERVAL = new IntegerProperty("interval").configurable("Ticks between energy gain");
+    public static final PalladiumProperty<Boolean> ENABLE_DRAIN = new BooleanProperty("enabled_energy_drain").configurable("Enable passive energy drain");
+    public static final PalladiumProperty<Integer> DRAIN_AMOUNT = new IntegerProperty("drain_amount").configurable("Energy lost each interval");
+    public static final PalladiumProperty<Integer> DRAIN_INTERVAL = new IntegerProperty("drain_interval").configurable("Ticks between energy drain");
+    public static final PalladiumProperty<Integer> MAX = new IntegerProperty("max").configurable("Maximum energy cap");
+    public static final PalladiumProperty<Boolean> INVERT = new BooleanProperty("invert").configurable("If true, infiniteEnergy sets energy to 0 instead of max");
 
     public EnergyRegenAbility() {
         this.withProperty(ICON, new ItemIcon(Items.LIGHT_BLUE_DYE));
@@ -134,6 +114,6 @@ public class EnergyRegenAbility extends Ability {
 
     @Override
     public String getDocumentationDescription() {
-        return "Regenerates and optionally drains energy for a specific power with configurable rates and intervals.";
+        return "Regenerates and drains energy.";
     }
 }

@@ -384,7 +384,7 @@ public class EOPForgeEvents {
         if (right.getItem() == left.getItem()) {
             long rightRemaining = getRemainingDecayTime(right, currentGameTime, maxDecayTime);
 
-            long bonusRepair = maxDecayTime / 20L; // 5% bonus, like vanilla-ish combining
+            long bonusRepair = maxDecayTime / 20L;
             long repairedRemaining = Math.min(maxDecayTime, leftRemaining + rightRemaining + bonusRepair);
 
             applyRemainingDecayTime(tag, currentGameTime, maxDecayTime, repairedRemaining);

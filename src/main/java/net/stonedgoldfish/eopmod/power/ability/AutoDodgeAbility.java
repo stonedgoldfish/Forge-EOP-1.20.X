@@ -10,21 +10,14 @@ import net.threetag.palladium.power.ability.AbilityInstance;
 import net.threetag.palladium.util.icon.ItemIcon;
 import net.threetag.palladium.util.property.PalladiumProperty;
 import net.threetag.palladium.util.property.StringArrayProperty;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public class AutoDodgeAbility extends Ability {
 
-    public static final PalladiumProperty<String[]> COMMANDS =
-            new StringArrayProperty("commands")
-                    .configurable("Commands executed as the dodging entity when damage is dodged.");
-
-    public static final PalladiumProperty<String[]> PROJECTILE_BLACKLIST =
-            new StringArrayProperty("projectile_blacklist")
-                    .configurable("Projectile entity IDs that are NOT dodged.");
-
+    public static final PalladiumProperty<String[]> COMMANDS = new StringArrayProperty("commands").configurable("Commands executed as the dodging entity when damage is dodged");
+    public static final PalladiumProperty<String[]> PROJECTILE_BLACKLIST = new StringArrayProperty("projectile_blacklist").configurable("Projectiles that will not be ignored");
     private static final Map<UUID, DodgeData> DODGING_ENTITIES = new HashMap<>();
 
     private record DodgeData(
@@ -103,6 +96,6 @@ public class AutoDodgeAbility extends Ability {
 
     @Override
     public String getDocumentationDescription() {
-        return "Automatically dodges incoming attacks while active, optionally executing multiple commands per dodge.";
+        return "Automatically dodges incoming attacks while active";
     }
 }

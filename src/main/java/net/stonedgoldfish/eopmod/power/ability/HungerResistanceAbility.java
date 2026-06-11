@@ -9,16 +9,13 @@ import net.threetag.palladium.power.ability.AbilityInstance;
 import net.threetag.palladium.util.icon.ItemIcon;
 import net.threetag.palladium.util.property.FloatProperty;
 import net.threetag.palladium.util.property.PalladiumProperty;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public class HungerResistanceAbility extends Ability {
 
-    public static final PalladiumProperty<Float> RESISTANCE =
-            new FloatProperty("resistance")
-                    .configurable("Percentage of hunger loss prevented. 0.0 = none, 1.0 = all.");
+    public static final PalladiumProperty<Float> RESISTANCE = new FloatProperty("resistance").configurable("Percentage of hunger loss prevented");
 
     private static final Map<UUID, Integer> LAST_HUNGER = new HashMap<>();
 

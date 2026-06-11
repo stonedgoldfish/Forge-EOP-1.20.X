@@ -9,7 +9,6 @@ import net.threetag.palladium.power.IPowerHolder;
 import net.threetag.palladium.power.ability.Ability;
 import net.threetag.palladium.power.ability.AbilityInstance;
 import net.threetag.palladium.util.icon.ItemIcon;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -132,6 +131,6 @@ public class SinkAbility extends Ability {
 
     @Override
     public String getDocumentationDescription() {
-        return "Prevents sprinting and jumping while giving the player step assist.";
+        return "Sinks the player in water";
     }
 }

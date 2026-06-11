@@ -7,7 +7,6 @@ import net.threetag.palladium.power.IPowerHolder;
 import net.threetag.palladium.power.ability.Ability;
 import net.threetag.palladium.power.ability.AbilityInstance;
 import net.threetag.palladium.util.icon.ItemIcon;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;

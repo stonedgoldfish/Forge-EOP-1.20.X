@@ -21,8 +21,6 @@ public class EOPCommands {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         var root = Commands.literal("echoesofpower")
                 .requires(source -> source.hasPermission(2));
-
-        // POWER ADD/REMOVE COMMAND
         var powerCommand = Commands.literal("power");
         var entityArg = Commands.argument("entity", EntityArgument.player());
 
@@ -67,7 +65,6 @@ public class EOPCommands {
         powerCommand.then(entityArg);
         root.then(powerCommand);
 
-        // SKILL POINTS COMMAND
         var skillPoints = Commands.literal("skill_points");
         var skillEntityArg = Commands.argument("entity", EntityArgument.player());
 
@@ -103,8 +100,6 @@ public class EOPCommands {
 
         skillPoints.then(skillEntityArg);
         root.then(skillPoints);
-
-        // LEVEL COMMAND
         var level = Commands.literal("level");
         var levelEntityArg = Commands.argument("entity", EntityArgument.player());
 
@@ -146,7 +141,6 @@ public class EOPCommands {
         gamerule.then(
                 Commands.literal("destructionMode")
 
-                        // QUERY CURRENT VALUE
                         .executes(ctx -> {
 
                             boolean current = EOPGameRules.isDestructionMode(ctx.getSource().getServer());
@@ -161,7 +155,6 @@ public class EOPCommands {
                             return 1;
                         })
 
-                        // SET VALUE
                         .then(Commands.argument("value", BoolArgumentType.bool())
                                 .executes(ctx -> {
 

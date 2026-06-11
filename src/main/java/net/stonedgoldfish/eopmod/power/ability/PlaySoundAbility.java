@@ -14,27 +14,15 @@ import net.threetag.palladium.util.property.FloatProperty;
 import net.threetag.palladium.util.property.PalladiumProperty;
 import net.threetag.palladium.util.property.ResourceLocationProperty;
 import net.threetag.palladium.util.property.BooleanProperty;
-
 import java.util.HashMap;
 import java.util.Map;
 
 public class PlaySoundAbility extends Ability {
 
-    public static final PalladiumProperty<ResourceLocation> SOUND =
-            new ResourceLocationProperty("sound")
-                    .configurable("Sound ID that is played.");
-
-    public static final PalladiumProperty<Float> VOLUME =
-            new FloatProperty("volume")
-                    .configurable("Sound volume. Higher values also increase audible range.");
-
-    public static final PalladiumProperty<Float> PITCH =
-            new FloatProperty("pitch")
-                    .configurable("Sound pitch.");
-
-    public static final PalladiumProperty<Boolean> PLAY_SELF =
-            new BooleanProperty("play_self")
-                    .configurable("If true, only the caster hears the sound.");
+    public static final PalladiumProperty<ResourceLocation> SOUND = new ResourceLocationProperty("sound").configurable("Sound that is played");
+    public static final PalladiumProperty<Float> VOLUME = new FloatProperty("volume").configurable("Sound volume");
+    public static final PalladiumProperty<Float> PITCH = new FloatProperty("pitch").configurable("Sound pitch");
+    public static final PalladiumProperty<Boolean> PLAY_SELF = new BooleanProperty("play_self").configurable("If true, only the caster hears the sound");
 
     public PlaySoundAbility() {
         this.withProperty(ICON, new ItemIcon(Items.NOTE_BLOCK));

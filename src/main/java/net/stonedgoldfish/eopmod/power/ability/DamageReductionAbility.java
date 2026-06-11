@@ -16,10 +16,7 @@ import java.util.UUID;
 
 public class DamageReductionAbility extends Ability {
 
-    public static final PalladiumProperty<Float> REDUCTION =
-            new FloatProperty("reduction")
-                    .configurable("Incoming damage reduction percentage. 0-100.");
-
+    public static final PalladiumProperty<Float> REDUCTION = new FloatProperty("reduction").configurable("Incoming damage reduction percentage");
     private static final Map<UUID, Float> HIGHEST_REDUCTION = new HashMap<>();
 
     public DamageReductionAbility() {
@@ -53,6 +50,6 @@ public class DamageReductionAbility extends Ability {
 
     @Override
     public String getDocumentationDescription() {
-        return "Reduces incoming damage by a configurable percentage. Multiple instances do not stack; the highest value is used.";
+        return "Reduces incoming damage by a configurable percentage";
     }
 }

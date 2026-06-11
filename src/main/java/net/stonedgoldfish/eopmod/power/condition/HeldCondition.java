@@ -154,17 +154,9 @@ public class HeldCondition extends KeyCondition {
 
     public static class Serializer extends ConditionSerializer {
 
-        public static final PalladiumProperty<Integer> TICKS =
-                new IntegerProperty("ticks")
-                        .configurable("Maximum amount of ticks the ability can stay active while held.");
-
-        public static final PalladiumProperty<Integer> ENERGY =
-                new IntegerProperty("energy")
-                        .configurable("Energy consumed when the held ability starts.");
-
-        public static final PalladiumProperty<String> PROPERTY =
-                new StringProperty("property")
-                        .configurable("Name of the integer Palladium property used as the energy source.");
+        public static final PalladiumProperty<Integer> TICKS = new IntegerProperty("ticks").configurable("Maximum amount of ticks the ability can stay active while held");
+        public static final PalladiumProperty<Integer> ENERGY = new IntegerProperty("energy").configurable("Energy consumed when the held ability starts");
+        public static final PalladiumProperty<String> PROPERTY = new StringProperty("property").configurable("Name of the integer Palladium property used as the energy source");
 
         public Serializer() {
             this.withProperty(net.threetag.palladium.condition.ActionCondition.Serializer.COOLDOWN, 0);

@@ -24,21 +24,10 @@ import net.stonedgoldfish.eopmod.util.EOPTargeting;
 
 public class FastTravelAbility extends Ability {
 
-    public static final PalladiumProperty<Boolean> ONE_WAY =
-            new BooleanProperty("one_way")
-                    .configurable("If true, teleporting does not swap the saved location.");
-
-    public static final PalladiumProperty<Boolean> TELEPORT_NEARBY_ENTITIES =
-            new BooleanProperty("teleport_nearby_entities")
-                    .configurable("If true, nearby entities teleport with the caster.");
-
-    public static final PalladiumProperty<Float> NEARBY_RADIUS =
-            new FloatProperty("nearby_radius")
-                    .configurable("Radius for nearby entities teleported with the caster.");
-
-    public static final PalladiumProperty<Boolean> DIMENSIONAL_TELEPORT =
-            new BooleanProperty("dimensional_teleport")
-                    .configurable("If true, teleporting between dimensions is allowed.");
+    public static final PalladiumProperty<Boolean> ONE_WAY = new BooleanProperty("one_way").configurable("If true, teleporting does not swap the saved location");
+    public static final PalladiumProperty<Boolean> TELEPORT_NEARBY_ENTITIES = new BooleanProperty("teleport_nearby_entities").configurable("If true, nearby entities teleport with the caster");
+    public static final PalladiumProperty<Float> NEARBY_RADIUS = new FloatProperty("nearby_radius").configurable("Radius for nearby entities teleported with the caster");
+    public static final PalladiumProperty<Boolean> DIMENSIONAL_TELEPORT = new BooleanProperty("dimensional_teleport").configurable("If true, teleporting between dimensions is allowed");
 
     public FastTravelAbility() {
         this.withProperty(ICON, new ItemIcon(Items.ENDER_EYE));

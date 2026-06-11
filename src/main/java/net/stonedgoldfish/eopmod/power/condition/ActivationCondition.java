@@ -143,21 +143,10 @@ public class ActivationCondition extends KeyCondition {
 
     public static class Serializer extends ConditionSerializer {
 
-        public static final PalladiumProperty<Integer> TICKS =
-                new IntegerProperty("ticks")
-                        .configurable("The amount of ticks the ability will stay active for.");
-
-        public static final PalladiumProperty<Integer> ENERGY =
-                new IntegerProperty("energy")
-                        .configurable("Energy consumed when the activation starts.");
-
-        public static final PalladiumProperty<String> PROPERTY =
-                new StringProperty("property")
-                        .configurable("Name of the integer Palladium property used as the energy source.");
-
-        public static final PalladiumProperty<Boolean> TOGGLE_MODE =
-                new BooleanProperty("toggle_mode")
-                        .configurable("If true, pressing again while active disables the ability early.");
+        public static final PalladiumProperty<Integer> TICKS = new IntegerProperty("ticks").configurable("The amount of ticks the ability will stay active for");
+        public static final PalladiumProperty<Integer> ENERGY = new IntegerProperty("energy").configurable("Energy consumed when the activation starts");
+        public static final PalladiumProperty<String> PROPERTY = new StringProperty("property").configurable("Name of the integer Palladium property used as the energy source");
+        public static final PalladiumProperty<Boolean> TOGGLE_MODE = new BooleanProperty("toggle_mode").configurable("If true, pressing again while active disables the ability early");
 
         public Serializer() {
             this.withProperty(ActionCondition.Serializer.COOLDOWN, 0);

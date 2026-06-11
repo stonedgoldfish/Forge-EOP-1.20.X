@@ -20,7 +20,6 @@ import net.threetag.palladium.power.IPowerHolder;
 import net.threetag.palladium.power.ability.Ability;
 import net.threetag.palladium.power.ability.AbilityInstance;
 import net.threetag.palladium.util.icon.ItemIcon;
-
 import java.util.List;
 import java.util.function.Function;
 
@@ -335,6 +334,6 @@ public class PocketDimensionAbility extends Ability {
 
     @Override
     public String getDocumentationDescription() {
-        return "Teleports the player and nearby friendly living entities to and from a pocket dimension.";
+        return "Teleports the player to and from a pocket dimension.";
     }
 }

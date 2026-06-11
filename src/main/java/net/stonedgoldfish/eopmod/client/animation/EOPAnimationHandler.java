@@ -148,10 +148,6 @@ public class EOPAnimationHandler {
         }
     }
 
-    public static boolean isHolding() {
-        return holding;
-    }
-
     private static void tickOneShotAnimation() {
         previousProgress = progress;
 
@@ -410,7 +406,4 @@ public class EOPAnimationHandler {
         return phase;
     }
 
-    public static boolean isPlaying() {
-        return currentAnimation != EOPAnimationType.NONE;
-    }
 }

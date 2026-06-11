@@ -24,19 +24,10 @@ import java.util.*;
 
 public class WallCreationAbility extends Ability {
 
-    public static final PalladiumProperty<Float> RANGE =
-            new FloatProperty("range").configurable("Raycast range.");
-
-    public static final PalladiumProperty<Integer> SIZE =
-            new IntegerProperty("size").configurable("Square wall size.");
-
-    public static final PalladiumProperty<String> BLOCK =
-            new StringProperty("block").configurable("Block ID used for the wall.");
-
-    public static final PalladiumProperty<Integer> MAX_HEIGHT =
-            new IntegerProperty("max_height")
-                    .configurable("Maximum height each wall can reach.");
-
+    public static final PalladiumProperty<Float> RANGE = new FloatProperty("range").configurable("Raycast range");
+    public static final PalladiumProperty<Integer> SIZE = new IntegerProperty("size").configurable("Square wall size");
+    public static final PalladiumProperty<String> BLOCK = new StringProperty("block").configurable("Block used for the wall");
+    public static final PalladiumProperty<Integer> MAX_HEIGHT = new IntegerProperty("max_height").configurable("Maximum height each wall can reach");
     private static final Map<UUID, List<WallData>> ACTIVE_WALLS = new HashMap<>();
 
     private record WallData(
@@ -338,6 +329,6 @@ public class WallCreationAbility extends Ability {
 
     @Override
     public String getDocumentationDescription() {
-        return "Creates and extends multiple vertical square walls while active.";
+        return "Creates and extends multiple vertical walls";
     }
 }

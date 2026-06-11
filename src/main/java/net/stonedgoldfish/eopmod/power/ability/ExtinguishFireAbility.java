@@ -16,21 +16,10 @@ import net.threetag.palladium.util.property.StringProperty;
 
 public class ExtinguishFireAbility extends Ability {
 
-    public static final PalladiumProperty<Boolean> PLAY_EFFECTS =
-            new BooleanProperty("play_effects")
-                    .configurable("Whether an effect should play when fire is extinguished.");
-
-    public static final PalladiumProperty<String> SOUND =
-            new StringProperty("sound")
-                    .configurable("Sound played when fire is extinguished.");
-
-    public static final PalladiumProperty<Float> SOUND_VOLUME =
-            new FloatProperty("sound_volume")
-                    .configurable("Volume of the extinguish sound.");
-
-    public static final PalladiumProperty<Float> SOUND_PITCH =
-            new FloatProperty("sound_pitch")
-                    .configurable("Pitch of the extinguish sound.");
+    public static final PalladiumProperty<Boolean> PLAY_EFFECTS = new BooleanProperty("play_effects").configurable("Whether an effect should play when fire is extinguished");
+    public static final PalladiumProperty<String> SOUND = new StringProperty("sound").configurable("Sound played when fire is extinguished");
+    public static final PalladiumProperty<Float> SOUND_VOLUME = new FloatProperty("sound_volume").configurable("Volume of the extinguish sound");
+    public static final PalladiumProperty<Float> SOUND_PITCH = new FloatProperty("sound_pitch").configurable("Pitch of the extinguish sound");
 
     public ExtinguishFireAbility() {
         this.withProperty(ICON, new ItemIcon(Items.WATER_BUCKET));
@@ -123,6 +112,6 @@ public class ExtinguishFireAbility extends Ability {
 
     @Override
     public String getDocumentationDescription() {
-        return "Extinguishes the entity when they are on fire, with optional sound effects.";
+        return "Extinguishes the entity.";
     }
 }

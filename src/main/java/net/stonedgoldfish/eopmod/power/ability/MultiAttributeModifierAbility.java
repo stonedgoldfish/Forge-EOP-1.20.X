@@ -19,21 +19,10 @@ import java.util.UUID;
 
 public class MultiAttributeModifierAbility extends Ability {
 
-    public static final PalladiumProperty<String[]> ATTRIBUTES =
-            new StringArrayProperty("attributes")
-                    .configurable("Attributes to modify.");
-
-    public static final PalladiumProperty<String[]> AMOUNTS =
-            new StringArrayProperty("amounts")
-                    .configurable("Modifier amounts.");
-
-    public static final PalladiumProperty<String[]> OPERATIONS =
-            new StringArrayProperty("operations")
-                    .configurable("Operations: addition, multiply_base, multiply_total.");
-
-    public static final PalladiumProperty<String[]> MODIFIER_UUIDS =
-            new StringArrayProperty("modifier_uuids")
-                    .configurable("Unique UUID for each modifier.");
+    public static final PalladiumProperty<String[]> ATTRIBUTES = new StringArrayProperty("attributes").configurable("Attributes to modify");
+    public static final PalladiumProperty<String[]> AMOUNTS = new StringArrayProperty("amounts").configurable("Modifier amounts");
+    public static final PalladiumProperty<String[]> OPERATIONS = new StringArrayProperty("operations").configurable("Operations: addition, multiply_base, multiply_total");
+    public static final PalladiumProperty<String[]> MODIFIER_UUIDS = new StringArrayProperty("modifier_uuids").configurable("Unique UUID for each modifier");
 
     public MultiAttributeModifierAbility() {
         this.withProperty(ICON, new ItemIcon(Items.EXPERIENCE_BOTTLE));

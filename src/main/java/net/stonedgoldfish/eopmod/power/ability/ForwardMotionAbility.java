@@ -19,14 +19,8 @@ import java.util.UUID;
 
 public class ForwardMotionAbility extends Ability {
 
-    public static final PalladiumProperty<Float> MOTION_SCALE =
-            new FloatProperty("motion_scale")
-                    .configurable("How strongly the player is pushed in the direction they are facing.");
-
-    public static final PalladiumProperty<Boolean> STOP_MOTION_ON_END =
-            new BooleanProperty("stop_motion_on_end")
-                    .configurable("Sets the caster's motion to 0 when the ability ends.");
-
+    public static final PalladiumProperty<Float> MOTION_SCALE = new FloatProperty("motion_scale").configurable("How strongly the player is pushed in the direction they are facing");
+    public static final PalladiumProperty<Boolean> STOP_MOTION_ON_END = new BooleanProperty("stop_motion_on_end").configurable("Sets the caster's motion to 0 when the ability ends");
     private static final Set<UUID> NO_BOB_PLAYERS = new HashSet<>();
 
     public ForwardMotionAbility() {

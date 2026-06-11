@@ -31,90 +31,32 @@ import java.util.UUID;
 
 public class SpawnArmorStandAbility extends Ability {
 
-    public static final PalladiumProperty<Float> RANGE =
-            new FloatProperty("range").configurable("Maximum distance to spawn the armor stand.");
-
-    public static final PalladiumProperty<Boolean> SPAWN_BEHIND =
-            new BooleanProperty("spawn_behind")
-                    .configurable("If true, uses range to spawn the armor stand behind the player, ignoring pitch.");
-
-    public static final PalladiumProperty<Boolean> SPAWN_AT_PLAYER =
-            new BooleanProperty("spawn_at_player").configurable("If true, ignores raycast and spawns at the player's location.");
-
-    public static final PalladiumProperty<Boolean> FOLLOW_MOUSE =
-            new BooleanProperty("follow_mouse").configurable("If true, the armor stand follows the player's mouse/raycast position and dies on lastTick.");
-
-    public static final PalladiumProperty<Integer> LIFETIME =
-            new IntegerProperty("lifetime").configurable("Lifetime of the spawned armor stand in ticks. 0 = infinite.");
-
-    public static final PalladiumProperty<Float> AOE_DAMAGE =
-            new FloatProperty("aoe_damage").configurable("Damage dealt by the armor stand AOE.");
-
-    public static final PalladiumProperty<Float> AOE_RADIUS =
-            new FloatProperty("aoe_radius").configurable("Radius of the armor stand AOE.");
-
-    public static final PalladiumProperty<String> AOE_DAMAGE_TYPE =
-            new StringProperty("aoe_damage_type").configurable("Damage type used by the armor stand AOE.");
-
-    public static final PalladiumProperty<Boolean> ENABLE_DAMAGE =
-            new BooleanProperty("enable_damage").configurable("Whether the armor stand deals damage.");
-
-    public static final PalladiumProperty<Boolean> DAMAGE_ON_LAST_TICK =
-            new BooleanProperty("damage_on_last_tick").configurable("If true, AOE damage only happens when the armor stand expires.");
-
-    public static final PalladiumProperty<Float> KNOCKBACK_ON_LAST_TICK =
-            new FloatProperty("knockback_on_last_tick").configurable("Knockback strength applied when the armor stand expires. 0 disables it.");
-
-    public static final PalladiumProperty<Float> TARGET_COMMAND_RADIUS =
-            new FloatProperty("target_command_radius").configurable("Radius used for target command detection.");
-
-    public static final PalladiumProperty<Float> PULL_STRENGTH =
-            new FloatProperty("pull_strength").configurable("Pull strength toward the armor stand. 0 disables it.");
-
-    public static final PalladiumProperty<Boolean> INVERT_PULL =
-            new BooleanProperty("invert_pull").configurable("If true, pushes entities away instead of pulling them in.");
-
-    public static final PalladiumProperty<String> STAND_POWER =
-            new StringProperty("stand_power").configurable("Palladium power given to the spawned armor stand. Empty = none.");
-
-    public static final PalladiumProperty<String[]> STAND_FIRST_TICK_COMMANDS =
-            new StringArrayProperty("stand_first_tick_commands").configurable("Commands executed once when the armor stand spawns.");
-
-    public static final PalladiumProperty<String[]> STAND_COMMANDS =
-            new StringArrayProperty("stand_commands").configurable("Commands executed every tick by the armor stand.");
-
-    public static final PalladiumProperty<String[]> STAND_LAST_TICK_COMMANDS =
-            new StringArrayProperty("stand_last_tick_commands").configurable("Commands executed once before the armor stand is removed.");
-
-    public static final PalladiumProperty<String[]> TARGET_FIRST_TICK_COMMANDS =
-            new StringArrayProperty("target_first_tick_commands").configurable("Commands executed once as each valid target when first detected.");
-
-    public static final PalladiumProperty<String[]> TARGET_COMMANDS =
-            new StringArrayProperty("target_commands").configurable("Commands executed every tick as each valid target.");
-
-    public static final PalladiumProperty<String[]> TARGET_LAST_TICK_COMMANDS =
-            new StringArrayProperty("target_last_tick_commands").configurable("Commands executed once as each valid target when they leave the AOE.");
-
-    public static final PalladiumProperty<String> LOOPING_SOUND =
-            new StringProperty("looping_sound")
-                    .configurable("Sound played repeatedly from the armor stand. Empty = none.");
-
-    public static final PalladiumProperty<Float> LOOPING_SOUND_VOLUME =
-            new FloatProperty("looping_sound_volume")
-                    .configurable("Volume of the looping armor stand sound.");
-
-    public static final PalladiumProperty<Float> LOOPING_SOUND_PITCH =
-            new FloatProperty("looping_sound_pitch")
-                    .configurable("Pitch of the looping armor stand sound.");
-
-    public static final PalladiumProperty<Boolean> DESTROY_BLOCKS =
-            new BooleanProperty("destroy_blocks")
-                    .configurable("If true, destroys blocks around the armor stand when destructionMode is enabled.");
-
-    public static final PalladiumProperty<Float> DESTROY_BLOCK_RADIUS =
-            new FloatProperty("destroy_block_radius")
-                    .configurable("Radius around the armor stand where blocks are destroyed.");
-
+    public static final PalladiumProperty<Float> RANGE = new FloatProperty("range").configurable("Maximum distance to spawn the armor stand");
+    public static final PalladiumProperty<Boolean> SPAWN_BEHIND = new BooleanProperty("spawn_behind").configurable("If true, uses range to spawn the armor stand behind the player, ignoring pitch");
+    public static final PalladiumProperty<Boolean> SPAWN_AT_PLAYER = new BooleanProperty("spawn_at_player").configurable("If true, ignores raycast and spawns at the player's location");
+    public static final PalladiumProperty<Boolean> FOLLOW_MOUSE = new BooleanProperty("follow_mouse").configurable("If true, the armor stand follows the player's mouse position");
+    public static final PalladiumProperty<Integer> LIFETIME = new IntegerProperty("lifetime").configurable("Lifetime of the spawned armor stand in ticks");
+    public static final PalladiumProperty<Float> AOE_DAMAGE = new FloatProperty("aoe_damage").configurable("Damage dealt by the armor stand AOE");
+    public static final PalladiumProperty<Float> AOE_RADIUS = new FloatProperty("aoe_radius").configurable("Radius of the armor stand AOE");
+    public static final PalladiumProperty<String> AOE_DAMAGE_TYPE = new StringProperty("aoe_damage_type").configurable("Damage type used by the armor stand AOE");
+    public static final PalladiumProperty<Boolean> ENABLE_DAMAGE = new BooleanProperty("enable_damage").configurable("Whether the armor stand deals damage");
+    public static final PalladiumProperty<Boolean> DAMAGE_ON_LAST_TICK = new BooleanProperty("damage_on_last_tick").configurable("If true, AOE damage only happens when the armor stand expires");
+    public static final PalladiumProperty<Float> KNOCKBACK_ON_LAST_TICK = new FloatProperty("knockback_on_last_tick").configurable("Knockback strength applied when the armor stand expires");
+    public static final PalladiumProperty<Float> TARGET_COMMAND_RADIUS = new FloatProperty("target_command_radius").configurable("Radius used for target command detection");
+    public static final PalladiumProperty<Float> PULL_STRENGTH = new FloatProperty("pull_strength").configurable("Pull strength toward the armor stand");
+    public static final PalladiumProperty<Boolean> INVERT_PULL = new BooleanProperty("invert_pull").configurable("If true, pushes entities away instead of pulling them in");
+    public static final PalladiumProperty<String> STAND_POWER = new StringProperty("stand_power").configurable("Palladium power given to the spawned armor stand");
+    public static final PalladiumProperty<String[]> STAND_FIRST_TICK_COMMANDS = new StringArrayProperty("stand_first_tick_commands").configurable("Commands executed once when the armor stand spawns");
+    public static final PalladiumProperty<String[]> STAND_COMMANDS = new StringArrayProperty("stand_commands").configurable("Commands executed every tick by the armor stand");
+    public static final PalladiumProperty<String[]> STAND_LAST_TICK_COMMANDS = new StringArrayProperty("stand_last_tick_commands").configurable("Commands executed once before the armor stand is removed");
+    public static final PalladiumProperty<String[]> TARGET_FIRST_TICK_COMMANDS = new StringArrayProperty("target_first_tick_commands").configurable("Commands executed once as each valid target when first detected.");
+    public static final PalladiumProperty<String[]> TARGET_COMMANDS = new StringArrayProperty("target_commands").configurable("Commands executed every tick as each valid target");
+    public static final PalladiumProperty<String[]> TARGET_LAST_TICK_COMMANDS = new StringArrayProperty("target_last_tick_commands").configurable("Commands executed once as each valid target when they leave the AOE");
+    public static final PalladiumProperty<String> LOOPING_SOUND = new StringProperty("looping_sound").configurable("Sound played repeatedly from the armor stand");
+    public static final PalladiumProperty<Float> LOOPING_SOUND_VOLUME = new FloatProperty("looping_sound_volume").configurable("Volume of the looping armor stand sound");
+    public static final PalladiumProperty<Float> LOOPING_SOUND_PITCH = new FloatProperty("looping_sound_pitch").configurable("Pitch of the looping armor stand sound");
+    public static final PalladiumProperty<Boolean> DESTROY_BLOCKS = new BooleanProperty("destroy_blocks").configurable("If true, destroys blocks around the armor stand");
+    public static final PalladiumProperty<Float> DESTROY_BLOCK_RADIUS = new FloatProperty("destroy_block_radius").configurable("Radius around the armor stand where blocks are destroyed");
     private static final Map<UUID, ArmorStand> FOLLOWING_STANDS = new HashMap<>();
 
     public SpawnArmorStandAbility() {
@@ -374,6 +316,6 @@ public class SpawnArmorStandAbility extends Ability {
 
     @Override
     public String getDocumentationDescription() {
-        return "Spawns an invisible armor stand at a raycast location or at the player, with configurable AOE, commands, pull, power, lifetime, and last-tick effects.";
+        return "Spawns an invisible armor stand at a raycast location.";
     }
 }

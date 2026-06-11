@@ -17,21 +17,10 @@ import net.threetag.palladium.util.property.PalladiumProperty;
 
 public class IntangibilityAbility extends Ability {
 
-    public static final PalladiumProperty<Boolean> VERTICAL =
-            new BooleanProperty("vertical")
-                    .configurable("Makes the player vertically intangible as well.");
-
-    public static final PalladiumProperty<Float> INSIDE_BLOCK_VIEW_DISTANCE =
-            new FloatProperty("inside_block_view_distance")
-                    .configurable("How far the player can see while inside blocks. 0 disables block vision.");
-
-    public static final PalladiumProperty<TagKey<Block>> WHITELIST =
-            new BlockTagProperty("whitelist")
-                    .configurable("Tag which includes the blocks the player can phase through. Leave null for all blocks.");
-
-    public static final PalladiumProperty<TagKey<Block>> BLACKLIST =
-            new BlockTagProperty("blacklist")
-                    .configurable("Tag which prevents the player from phasing through blocks. Leave null for no blacklist.");
+    public static final PalladiumProperty<Boolean> VERTICAL = new BooleanProperty("vertical").configurable("Makes the player vertically intangible as well");
+    public static final PalladiumProperty<Float> INSIDE_BLOCK_VIEW_DISTANCE = new FloatProperty("inside_block_view_distance").configurable("How far the player can see while inside blocks");
+    public static final PalladiumProperty<TagKey<Block>> WHITELIST = new BlockTagProperty("whitelist").configurable("Tag which includes the blocks the player can phase through. Leave null for all blocks");
+    public static final PalladiumProperty<TagKey<Block>> BLACKLIST = new BlockTagProperty("blacklist").configurable("Tag which prevents the player from phasing through blocks. Leave null for no blacklist");
 
     public IntangibilityAbility() {
         this.withProperty(ICON, new ItemIcon(Items.ENDER_PEARL));

@@ -18,14 +18,8 @@ import java.util.UUID;
 
 public class CommandOnPunchAbility extends Ability {
 
-    public static final PalladiumProperty<String[]> COMMANDS =
-            new StringArrayProperty("commands")
-                    .configurable("Commands executed as the valid entity punched by the caster.");
-
-    public static final PalladiumProperty<Boolean> ALLOW_PROJECTILES =
-            new BooleanProperty("allow_projectiles")
-                    .configurable("If true, commands can trigger from projectile/ranged damage caused by the caster.");
-
+    public static final PalladiumProperty<String[]> COMMANDS = new StringArrayProperty("commands").configurable("Commands executed as the entity punched by the caster");
+    public static final PalladiumProperty<Boolean> ALLOW_PROJECTILES = new BooleanProperty("allow_projectiles").configurable("If true, commands can trigger from projectile/ranged damage caused by the caster");
     private static final Map<UUID, Settings> ACTIVE_PLAYERS = new HashMap<>();
 
     public record Settings(
@@ -112,6 +106,6 @@ public class CommandOnPunchAbility extends Ability {
 
     @Override
     public String getDocumentationDescription() {
-        return "Executes commands as a valid entity punched by the caster.";
+        return "Executes commands as the entity punched by the caster.";
     }
 }

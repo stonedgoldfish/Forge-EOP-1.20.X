@@ -22,9 +22,7 @@ import java.util.Map;
 
 public class EnchantingAbility extends Ability {
 
-    public static final PalladiumProperty<Boolean> CONSUME_BOOK =
-            new BooleanProperty("consume_book")
-                    .configurable("If true, the enchanted book is consumed when enchanting succeeds.");
+    public static final PalladiumProperty<Boolean> CONSUME_BOOK = new BooleanProperty("consume_book").configurable("If true, the enchanted book is consumed when enchanting succeeds");
 
     public EnchantingAbility() {
         this.withProperty(ICON, new ItemIcon(Items.ENCHANTED_BOOK));

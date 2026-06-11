@@ -20,17 +20,9 @@ import net.threetag.palladium.util.property.PalladiumProperty;
 
 public class RaycastTeleportAbility extends Ability {
 
-    public static final PalladiumProperty<Float> RANGE =
-            new FloatProperty("range")
-                    .configurable("Maximum teleport distance.");
-
-    public static final PalladiumProperty<Boolean> RANDOM_TELEPORT =
-            new BooleanProperty("random_teleport")
-                    .configurable("If true, ignores raycast and teleports to random coordinates nearby.");
-
-    public static final PalladiumProperty<Float> RANDOM_RADIUS =
-            new FloatProperty("random_radius")
-                    .configurable("Radius used for random teleport.");
+    public static final PalladiumProperty<Float> RANGE = new FloatProperty("range").configurable("Maximum teleport distance");
+    public static final PalladiumProperty<Boolean> RANDOM_TELEPORT = new BooleanProperty("random_teleport").configurable("If true, ignores raycast and teleports to random coordinates nearby");
+    public static final PalladiumProperty<Float> RANDOM_RADIUS = new FloatProperty("random_radius").configurable("Radius used for random teleport");
 
     public RaycastTeleportAbility() {
         this.withProperty(ICON, new ItemIcon(Items.ENDER_PEARL));
@@ -92,7 +84,6 @@ public class RaycastTeleportAbility extends Ability {
             Direction face = hit.getDirection();
 
             if (face == Direction.DOWN) {
-                // Hit the underside of a ceiling: teleport slightly below it
                 targetPos = hit.getLocation().add(0.0D, -entity.getBbHeight() - 0.15D, 0.0D);
             } else {
                 targetPos = hit.getLocation().add(

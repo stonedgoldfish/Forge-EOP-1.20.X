@@ -15,15 +15,11 @@ import net.threetag.palladium.power.ability.AbilityInstance;
 import net.threetag.palladium.util.icon.ItemIcon;
 import net.threetag.palladium.util.property.IntegerProperty;
 import net.threetag.palladium.util.property.PalladiumProperty;
-
 import java.util.Optional;
 
 public class SmeltAbility extends Ability {
 
-    public static final PalladiumProperty<Integer> TICKS_PER_ITEM =
-            new IntegerProperty("ticks_per_item")
-                    .configurable("Ticks required to smelt one item.");
-
+    public static final PalladiumProperty<Integer> TICKS_PER_ITEM = new IntegerProperty("ticks_per_item").configurable("Ticks required to smelt one item");
     private static final String SMELT_TAG = "EOP.Can.Smelt";
     private static final String PROGRESS_KEY = "autosmelt_progress";
     private static final String ITEM_KEY = "autosmelt_item";
@@ -51,7 +47,6 @@ public class SmeltAbility extends Ability {
             return;
         }
 
-        // Excludes weapons/tools/armor and other durability-based items
         if (item.isDamageableItem() || item.getMaxDamage() > 0) {
             clear(entity);
             return;
@@ -128,6 +123,6 @@ public class SmeltAbility extends Ability {
 
     @Override
     public String getDocumentationDescription() {
-        return "Slowly smelts the currently held item if it has a valid furnace recipe.";
+        return "Smelts the currently held item.";
     }
 }

@@ -15,26 +15,14 @@ import net.threetag.palladium.util.icon.ItemIcon;
 import net.threetag.palladium.util.property.BooleanProperty;
 import net.threetag.palladium.util.property.FloatProperty;
 import net.threetag.palladium.util.property.PalladiumProperty;
-
 import java.util.*;
 
 public class ChargeAbility extends Ability {
 
-    public static final PalladiumProperty<Float> ACCELERATION =
-            new FloatProperty("acceleration")
-                    .configurable("Speed gained every tick while charging.");
-
-    public static final PalladiumProperty<Float> MAX_SPEED =
-            new FloatProperty("max_speed")
-                    .configurable("Maximum charge speed.");
-
-    public static final PalladiumProperty<Boolean> STOP_MOTION_ON_END =
-            new BooleanProperty("stop_motion_on_end")
-                    .configurable("Sets motion to 0 when the charge ends.");
-
-    private static final UUID STEP_HEIGHT_UUID =
-            UUID.fromString("64e76d3d-b28d-45e8-b38a-846b6eb3c802");
-
+    public static final PalladiumProperty<Float> ACCELERATION = new FloatProperty("acceleration").configurable("Speed gained every tick while charging");
+    public static final PalladiumProperty<Float> MAX_SPEED = new FloatProperty("max_speed").configurable("Maximum charge speed");
+    public static final PalladiumProperty<Boolean> STOP_MOTION_ON_END = new BooleanProperty("stop_motion_on_end").configurable("Sets motion to 0 when the charge ends");
+    private static final UUID STEP_HEIGHT_UUID = UUID.fromString("64e76d3d-b28d-45e8-b38a-846b6eb3c802");
     private static final Map<UUID, Float> CURRENT_SPEED = new HashMap<>();
     private static final Set<UUID> NO_BOB_PLAYERS = new HashSet<>();
 

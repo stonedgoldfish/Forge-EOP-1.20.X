@@ -13,29 +13,16 @@ import net.threetag.palladium.util.icon.ItemIcon;
 import net.threetag.palladium.util.property.FloatProperty;
 import net.threetag.palladium.util.property.PalladiumProperties;
 import net.threetag.palladium.util.property.PalladiumProperty;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public class WallClimbAbility extends Ability {
 
-    public static final PalladiumProperty<Float> CLIMB_SPEED =
-            new FloatProperty("climb_speed")
-                    .configurable("Vertical climb speed.");
-
-    public static final PalladiumProperty<Float> WALL_JUMP_POWER =
-            new FloatProperty("wall_jump_power")
-                    .configurable("Power applied when wall jumping.");
-
-    public static final PalladiumProperty<Float> SIDEWAYS_STRENGTH =
-            new FloatProperty("sideways_strength")
-                    .configurable("How much sideways movement blends with climbing.");
-
-    public static final PalladiumProperty<Float> SIDEWAYS_SPEED =
-            new FloatProperty("sideways_speed")
-                    .configurable("How fast the player moves sideways while climbing.");
-
+    public static final PalladiumProperty<Float> CLIMB_SPEED = new FloatProperty("climb_speed").configurable("Vertical climb speed");
+    public static final PalladiumProperty<Float> WALL_JUMP_POWER = new FloatProperty("wall_jump_power").configurable("Power applied when wall jumping");
+    public static final PalladiumProperty<Float> SIDEWAYS_STRENGTH = new FloatProperty("sideways_strength").configurable("How much sideways movement blends with climbing");
+    public static final PalladiumProperty<Float> SIDEWAYS_SPEED = new FloatProperty("sideways_speed").configurable("How fast the player moves sideways while climbing");
     private static final Map<UUID, Float> WALL_CLIMBERS = new HashMap<>();
     private static final Map<UUID, Integer> WALL_JUMP_COOLDOWN = new HashMap<>();
 
@@ -262,6 +249,6 @@ public class WallClimbAbility extends Ability {
 
     @Override
     public String getDocumentationDescription() {
-        return "Allows the player to climb walls using bounding-box based surface detection.";
+        return "Allows the player to climb walls.";
     }
 }

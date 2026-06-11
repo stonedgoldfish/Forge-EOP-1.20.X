@@ -51,8 +51,6 @@ public class EOPFlightSound extends AbstractTickableSoundInstance {
             } else {
                 this.volume = 0.0F;
             }
-
-            // Fade in like Palladium
             if (this.time < 20) {
                 this.volume = 0.0F;
             } else if (this.time < 40) {

@@ -9,24 +9,14 @@ import net.threetag.palladium.power.IPowerHolder;
 import net.threetag.palladium.power.ability.Ability;
 import net.threetag.palladium.power.ability.AbilityInstance;
 import net.threetag.palladium.util.icon.ItemIcon;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
 public class NoMovementAbility extends Ability {
 
-    private static final UUID NO_MOVEMENT_MODIFIER_UUID =
-            UUID.fromString("0b12f4ce-9b7d-4d5c-9b78-2206d34c43ef");
-
-    private static final AttributeModifier NO_MOVEMENT_MODIFIER =
-            new AttributeModifier(
-                    NO_MOVEMENT_MODIFIER_UUID,
-                    "EOP no movement",
-                    -1000.0D,
-                    AttributeModifier.Operation.MULTIPLY_BASE
-            );
-
+    private static final UUID NO_MOVEMENT_MODIFIER_UUID = UUID.fromString("0b12f4ce-9b7d-4d5c-9b78-2206d34c43ef");
+    private static final AttributeModifier NO_MOVEMENT_MODIFIER = new AttributeModifier(NO_MOVEMENT_MODIFIER_UUID, "EOP no movement", -1000.0D, AttributeModifier.Operation.MULTIPLY_BASE);
     private static final Set<UUID> FROZEN_PLAYERS = new HashSet<>();
 
     public NoMovementAbility() {
@@ -83,6 +73,6 @@ public class NoMovementAbility extends Ability {
 
     @Override
     public String getDocumentationDescription() {
-        return "Prevents movement by heavily reducing movement speed and blocks jumping through the no jump handler.";
+        return "Prevents movement and jumping";
     }
 }

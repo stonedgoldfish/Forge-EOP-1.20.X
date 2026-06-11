@@ -17,19 +17,19 @@ import net.threetag.palladium.util.property.*;
 
 public class RaycastDamageAbility extends Ability {
 
-    public static final PalladiumProperty<Float> DAMAGE = new FloatProperty("damage").configurable("Amount of damage dealt to the hit entity.");
-    public static final PalladiumProperty<Float> RANGE = new FloatProperty("range").configurable("Maximum raycast distance.");
-    public static final PalladiumProperty<String> DAMAGE_TYPE = new StringProperty("damage_type").configurable("Damage type used by this ability. Example: minecraft:magic");
-    public static final PalladiumProperty<Integer> SET_ON_FIRE = new IntegerProperty("set_on_fire").configurable("Sets the hit target on fire for this many seconds. 0 disables it.");
-    public static final PalladiumProperty<String[]> COMMANDS_ON_TARGET = new StringArrayProperty("commands_on_target").configurable("Commands executed as the hit target.");
-    public static final PalladiumProperty<String[]> COMMANDS_ON_ALLIES = new StringArrayProperty("commands_on_allies").configurable("Commands executed as the first allied entity hit by the raycast.");
-    public static final PalladiumProperty<String[]> COMMANDS_ON_BLOCK_HIT = new StringArrayProperty("commands_on_block_hit").configurable("Commands executed at the block hit location.");
-    public static final PalladiumProperty<Boolean> CAUSE_FIRE = new BooleanProperty("cause_fire").configurable("If true, sets blocks on fire at the hit location. Requires destructionMode.");
-    public static final PalladiumProperty<Boolean> CREATE_EXPLOSION = new BooleanProperty("create_explosion").configurable("If true, creates an explosion effect.");
-    public static final PalladiumProperty<Boolean> EXPLOSION_CAUSES_FIRE = new BooleanProperty("explosion_causes_fire").configurable("If true, the explosion creates fire when destructionMode is enabled.");
-    public static final PalladiumProperty<Float> EXPLOSION_RADIUS = new FloatProperty("explosion_radius").configurable("Radius of the explosion.");
-    public static final PalladiumProperty<Boolean> EXPLOSION_DROP_BLOCKS = new BooleanProperty("explosion_drop_blocks").configurable("If true, destroyed explosion blocks will drop items.");
-    public static final PalladiumProperty<Boolean> SMELT_BLOCK = new BooleanProperty("smelt_block").configurable("If true, attempts to smelt the hit block using furnace recipes.");
+    public static final PalladiumProperty<Float> DAMAGE = new FloatProperty("damage").configurable("Amount of damage dealt to the hit entity");
+    public static final PalladiumProperty<Float> RANGE = new FloatProperty("range").configurable("Maximum raycast distance");
+    public static final PalladiumProperty<String> DAMAGE_TYPE = new StringProperty("damage_type").configurable("Damage type used by this ability");
+    public static final PalladiumProperty<Integer> SET_ON_FIRE = new IntegerProperty("set_on_fire").configurable("Sets the hit target on fire");
+    public static final PalladiumProperty<String[]> COMMANDS_ON_TARGET = new StringArrayProperty("commands_on_target").configurable("Commands executed as the hit target");
+    public static final PalladiumProperty<String[]> COMMANDS_ON_ALLIES = new StringArrayProperty("commands_on_allies").configurable("Commands executed as the first allied entity hit by the raycast");
+    public static final PalladiumProperty<String[]> COMMANDS_ON_BLOCK_HIT = new StringArrayProperty("commands_on_block_hit").configurable("Commands executed at the block hit location");
+    public static final PalladiumProperty<Boolean> CAUSE_FIRE = new BooleanProperty("cause_fire").configurable("If true, sets blocks on fire at the hit location");
+    public static final PalladiumProperty<Boolean> CREATE_EXPLOSION = new BooleanProperty("create_explosion").configurable("If true, creates an explosion effect");
+    public static final PalladiumProperty<Boolean> EXPLOSION_CAUSES_FIRE = new BooleanProperty("explosion_causes_fire").configurable("If true, the explosion creates fire");
+    public static final PalladiumProperty<Float> EXPLOSION_RADIUS = new FloatProperty("explosion_radius").configurable("Radius of the explosion");
+    public static final PalladiumProperty<Boolean> EXPLOSION_DROP_BLOCKS = new BooleanProperty("explosion_drop_blocks").configurable("If true, destroyed explosion blocks will drop items");
+    public static final PalladiumProperty<Boolean> SMELT_BLOCK = new BooleanProperty("smelt_block").configurable("If true, attempts to smelt the hit block");
     private static final java.util.Map<java.util.UUID, net.minecraft.core.BlockPos> LAST_SMELT_HIT = new java.util.HashMap<>();
 
     public RaycastDamageAbility() {
@@ -354,6 +354,6 @@ public class RaycastDamageAbility extends Ability {
 
     @Override
     public String getDocumentationDescription() {
-        return "Deals configurable raycast damage to the first valid living entity or block the user is looking at.";
+        return "Deals configurable raycast damage to the first entity or block the user is looking at.";
     }
 }

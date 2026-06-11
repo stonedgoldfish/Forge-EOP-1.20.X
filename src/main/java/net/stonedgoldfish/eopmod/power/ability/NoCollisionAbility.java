@@ -18,14 +18,8 @@ import java.util.UUID;
 
 public class NoCollisionAbility extends Ability {
 
-    public static final PalladiumProperty<Boolean> PROJECTILE_PHASING =
-            new BooleanProperty("projectile_phasing")
-                    .configurable("If true, projectiles will pass through the player.");
-
-    public static final PalladiumProperty<String[]> PROJECTILE_BLACKLIST =
-            new StringArrayProperty("projectile_blacklist")
-                    .configurable("Projectile entity IDs that are NOT ignored by projectile phasing.");
-
+    public static final PalladiumProperty<Boolean> PROJECTILE_PHASING = new BooleanProperty("projectile_phasing").configurable("If true, projectiles will pass through the player");
+    public static final PalladiumProperty<String[]> PROJECTILE_BLACKLIST = new StringArrayProperty("projectile_blacklist").configurable("Projectile entity IDs that are NOT ignored by projectile phasing");
     private static final Map<UUID, PhasingData> PHASING_ENTITIES = new HashMap<>();
 
     private record PhasingData(
@@ -104,6 +98,6 @@ public class NoCollisionAbility extends Ability {
 
     @Override
     public String getDocumentationDescription() {
-        return "Allows the player to phase through entities, with optional projectile phasing.";
+        return "Allows the player to phase through entities.";
     }
 }

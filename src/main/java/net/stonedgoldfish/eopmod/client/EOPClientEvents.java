@@ -265,7 +265,6 @@ public class EOPClientEvents {
 
         int filledWidth = (int) (barWidth * progress);
 
-        // Background texture
         guiGraphics.blit(
                 XP_BAR_BACKGROUND,
                 barX,
@@ -278,7 +277,6 @@ public class EOPClientEvents {
                 barHeight
         );
 
-// Filled texture, cropped by XP progress
         guiGraphics.blit(
                 XP_BAR_FILL,
                 barX,
@@ -502,14 +500,10 @@ public class EOPClientEvents {
         int labelY = barY - 26;
         int valueY = labelY + 11;
 
-// CENTERED POSITIONS
         int labelX = (int) (((barX + (barWidth / 2) - ((labelWidth * labelScale) / 2)) + 0.5) / labelScale);
-
         int valueX = (int) (((barX + (barWidth / 2) - ((valueWidth * numberScale) / 2)) + 0.5) / numberScale);
 
-// LEVEL LABEL
         guiGraphics.pose().pushPose();
-
         guiGraphics.pose().scale(labelScale, labelScale, 1.0F);
 
         guiGraphics.drawString(
@@ -520,12 +514,7 @@ public class EOPClientEvents {
                 0xFFFFFF,
                 true
         );
-
         guiGraphics.pose().popPose();
-
-// LEVEL NUMBER
-        guiGraphics.pose().pushPose();
-
         guiGraphics.pose().scale(numberScale, numberScale, 1.0F);
 
         guiGraphics.drawString(
@@ -1171,7 +1160,6 @@ public class EOPClientEvents {
             motion = motion.add(right.scale(speed * 0.7D));
         }
 
-        // Idle hovering
         Vec3 currentMotion = player.getDeltaMovement();
 
         boolean moving = minecraft.options.keyUp.isDown()
@@ -1206,10 +1194,7 @@ public class EOPClientEvents {
 
             dynamicDrag = Math.max(dynamicDrag, 0.65D);
 
-// Horizontal keeps your normal glide
             double horizontalDrag = dynamicDrag;
-
-// Vertical stops much faster
             double verticalDrag = 0.65D;
 
             player.setDeltaMovement(

@@ -19,12 +19,8 @@ import net.threetag.palladium.util.property.PalladiumProperty;
 
 public class FrostWalkAbility extends Ability {
 
-    public static final PalladiumProperty<Integer> LEVEL =
-            new IntegerProperty("level")
-                    .configurable("Frost walker level. Higher values create a larger ice radius.");
-    public static final PalladiumProperty<Boolean> LAVA_MODE =
-            new BooleanProperty("lava_mode")
-                    .configurable("If true, creates obsidian on lava instead of frosted ice on water.");
+    public static final PalladiumProperty<Integer> LEVEL = new IntegerProperty("level").configurable("Determines the ice radius.");
+    public static final PalladiumProperty<Boolean> LAVA_MODE = new BooleanProperty("lava_mode").configurable("If true, creates obsidian on lava instead of frosted ice on water.");
 
     public FrostWalkAbility() {
         this.withProperty(ICON, new ItemIcon(Items.BLUE_ICE));
@@ -133,6 +129,6 @@ public class FrostWalkAbility extends Ability {
 
     @Override
     public String getDocumentationDescription() {
-        return "Allows the entity to walk on water by creating temporary frosted ice like the vanilla Frost Walker enchantment.";
+        return "Allows the entity to walk on water like the Frost Walker enchantment.";
     }
 }

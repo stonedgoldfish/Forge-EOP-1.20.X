@@ -18,29 +18,12 @@ import net.threetag.palladium.util.property.StringProperty;
 
 public class ParticlePatternAbility extends Ability {
 
-    public static final PalladiumProperty<String> PARTICLE_PATTERN =
-            new StringProperty("particle_pattern")
-                    .configurable("Particle pattern. Currently supports: implosion.");
-
-    public static final PalladiumProperty<String> PARTICLE_TYPE =
-            new StringProperty("particle_type")
-                    .configurable("Particle type resource location. Example: minecraft:smoke");
-
-    public static final PalladiumProperty<Integer> PARTICLE_AMOUNT =
-            new IntegerProperty("particle_amount")
-                    .configurable("Particles spawned per tick.");
-
-    public static final PalladiumProperty<Float> PARTICLE_RADIUS =
-            new FloatProperty("particle_radius")
-                    .configurable("Particle effect radius.");
-
-    public static final PalladiumProperty<Float> PARTICLE_SPEED =
-            new FloatProperty("particle_speed")
-                    .configurable("Particle movement speed.");
-
-    public static final PalladiumProperty<Float> PARTICLE_Y_OFFSET =
-            new FloatProperty("particle_y_offset")
-                    .configurable("Vertical offset for the particle center.");
+    public static final PalladiumProperty<String> PARTICLE_PATTERN = new StringProperty("particle_pattern").configurable("Particle pattern. Currently supports: implosion, outward_pulse, inward_pulse");
+    public static final PalladiumProperty<String> PARTICLE_TYPE = new StringProperty("particle_type").configurable("Particle type resource location");
+    public static final PalladiumProperty<Integer> PARTICLE_AMOUNT = new IntegerProperty("particle_amount").configurable("Particles spawned per tick");
+    public static final PalladiumProperty<Float> PARTICLE_RADIUS = new FloatProperty("particle_radius").configurable("Particle effect radius");
+    public static final PalladiumProperty<Float> PARTICLE_SPEED = new FloatProperty("particle_speed").configurable("Particle movement speed");
+    public static final PalladiumProperty<Float> PARTICLE_Y_OFFSET = new FloatProperty("particle_y_offset").configurable("Vertical offset for the particle center");
 
     public ParticlePatternAbility() {
         this.withProperty(ICON, new ItemIcon(Items.FIREWORK_STAR));

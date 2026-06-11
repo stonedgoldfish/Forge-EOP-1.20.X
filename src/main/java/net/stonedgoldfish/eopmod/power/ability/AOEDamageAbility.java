@@ -13,109 +13,35 @@ import net.threetag.palladium.util.icon.ItemIcon;
 import net.threetag.palladium.util.property.*;
 import net.stonedgoldfish.eopmod.util.EOPGameRules;
 import net.minecraft.world.phys.Vec3;
-
 import java.util.List;
 
 public class AOEDamageAbility extends Ability {
 
-    public static final PalladiumProperty<Float> DAMAGE =
-            new FloatProperty("damage")
-                    .configurable("Amount of damage dealt to nearby entities.");
-
-    public static final PalladiumProperty<Boolean> ENABLE_DAMAGE =
-            new BooleanProperty("enable_damage")
-                    .configurable("Whether the ability deals damage.");
-
-    public static final PalladiumProperty<Float> KNOCKBACK =
-            new FloatProperty("knockback")
-                    .configurable("Knockback strength applied to damaged targets");
-
-    public static final PalladiumProperty<Float> RADIUS =
-            new FloatProperty("radius")
-                    .configurable("Radius around the user that entities will be damaged in.");
-
-    public static final PalladiumProperty<String[]> COMMANDS_ON_TARGET =
-            new StringArrayProperty("commands_on_target")
-                    .configurable("Commands executed as valid targets in range.");
-
-    public static final PalladiumProperty<Boolean> CONE =
-            new BooleanProperty("cone")
-                    .configurable("If true, only damages entities in front of the user.");
-
-    public static final PalladiumProperty<Float> CONE_ANGLE =
-            new FloatProperty("cone_angle")
-                    .configurable("Width of the cone in degrees.");
-
-    public static final PalladiumProperty<String> DAMAGE_TYPE =
-            new StringProperty("damage_type")
-                    .configurable("Damage type used by this ability. Example: minecraft:magic");
-
-    public static final PalladiumProperty<Integer> SET_ON_FIRE =
-            new IntegerProperty("set_on_fire")
-                    .configurable("Sets targets on fire for this many seconds. 0 disables it.");
-
-    public static final PalladiumProperty<Boolean> CREATE_EXPLOSION =
-            new BooleanProperty("create_explosion")
-                    .configurable("If true, creates an explosion effect");
-
-    public static final PalladiumProperty<Boolean> EXPLOSION_CAUSES_FIRE =
-            new BooleanProperty("explosion_causes_fire")
-                    .configurable("If true, the explosion creates fire when destructionMode is enabled.");
-
-    public static final PalladiumProperty<Float> EXPLOSION_RADIUS =
-            new FloatProperty("explosion_radius")
-                    .configurable("Radius of the explosion");
-
-    public static final PalladiumProperty<Boolean> EXPLOSION_DROP_BLOCKS =
-            new BooleanProperty("explosion_drop_blocks")
-                    .configurable("If true, destroyed explosion blocks will drop items");
-
-    public static final PalladiumProperty<Boolean> ENABLE_PARTICLES =
-            new BooleanProperty("enable_particles")
-                    .configurable("Whether this ability spawns outward burst particles.");
-    public static final PalladiumProperty<String> PARTICLE_TYPE =
-            new StringProperty("particle_type")
-                    .configurable("Particle ID to spawn. Example: minecraft:flame");
-
-    public static final PalladiumProperty<Float> PARTICLE_SPEED =
-            new FloatProperty("particle_speed")
-                    .configurable("Speed particles travel outward.");
-
-    public static final PalladiumProperty<Integer> PARTICLE_AMOUNT =
-            new IntegerProperty("particle_amount")
-                    .configurable("Base amount of particles spawned. Scales with radius.");
-
-    public static final PalladiumProperty<Boolean> CAUSE_FIRE =
-            new BooleanProperty("cause_fire")
-                    .configurable("Sets random blocks in the radius on fire. Requires destructionMode.");
-
-    public static final PalladiumProperty<Boolean> SMELT_BLOCKS =
-            new BooleanProperty("smelt_blocks")
-                    .configurable("Smelts random blocks in the radius. Requires destructionMode.");
-
-    public static final PalladiumProperty<Float> BLOCK_EFFECT_QUANTITY =
-            new FloatProperty("block_effect_quantity")
-                    .configurable("Chance per block to be affected. 0.4 = 40%.");
-
-    public static final PalladiumProperty<Boolean> LAUNCH_BLOCKS =
-            new BooleanProperty("launch_blocks")
-                    .configurable("If true, launches nearby blocks outward as falling blocks. Requires destructionMode.");
-
-    public static final PalladiumProperty<Integer> LAUNCHED_BLOCK_AMOUNT =
-            new IntegerProperty("launched_block_amount")
-                    .configurable("Maximum amount of blocks launched.");
-
-    public static final PalladiumProperty<Float> LAUNCHED_BLOCK_SIDEWAYS_STRENGTH =
-            new FloatProperty("launched_block_sideways_strength")
-                    .configurable("Sideways velocity strength of launched blocks.");
-
-    public static final PalladiumProperty<Float> LAUNCHED_BLOCK_UPWARD_STRENGTH =
-            new FloatProperty("launched_block_upward_strength")
-                    .configurable("Upward velocity strength of launched blocks.");
-
-    public static final PalladiumProperty<Boolean> STOP_MOTION_ON_FIRST_TARGET =
-            new BooleanProperty("stop_motion_on_first_target")
-                    .configurable("If true, sets the caster's motion to 0 when the first valid target is found.");
+    public static final PalladiumProperty<Float> DAMAGE = new FloatProperty("damage").configurable("Damage dealt");
+    public static final PalladiumProperty<Boolean> ENABLE_DAMAGE = new BooleanProperty("enable_damage").configurable("If true, enables damage");
+    public static final PalladiumProperty<Float> KNOCKBACK = new FloatProperty("knockback").configurable("Knockback applied to damaged targets");
+    public static final PalladiumProperty<Float> RADIUS = new FloatProperty("radius").configurable("Radius around the entity to affect");
+    public static final PalladiumProperty<String[]> COMMANDS_ON_TARGET = new StringArrayProperty("commands_on_target").configurable("Commands executed as valid targets in range");
+    public static final PalladiumProperty<Boolean> CONE = new BooleanProperty("cone").configurable("If true, affected area turns into a cone");
+    public static final PalladiumProperty<Float> CONE_ANGLE = new FloatProperty("cone_angle").configurable("Cone angle");
+    public static final PalladiumProperty<String> DAMAGE_TYPE = new StringProperty("damage_type").configurable("Damage type used. Example: minecraft:magic");
+    public static final PalladiumProperty<Integer> SET_ON_FIRE = new IntegerProperty("set_on_fire").configurable("Sets targets on fire");
+    public static final PalladiumProperty<Boolean> CREATE_EXPLOSION = new BooleanProperty("create_explosion").configurable("If true, creates an explosion effect");
+    public static final PalladiumProperty<Boolean> EXPLOSION_CAUSES_FIRE = new BooleanProperty("explosion_causes_fire").configurable("Explosion creates fire");
+    public static final PalladiumProperty<Float> EXPLOSION_RADIUS = new FloatProperty("explosion_radius").configurable("Radius of the explosion");
+    public static final PalladiumProperty<Boolean> EXPLOSION_DROP_BLOCKS = new BooleanProperty("explosion_drop_blocks").configurable("If true, destroyed explosion blocks will drop items");
+    public static final PalladiumProperty<Boolean> ENABLE_PARTICLES = new BooleanProperty("enable_particles").configurable("Whether this ability spawns outward burst particles");
+    public static final PalladiumProperty<String> PARTICLE_TYPE = new StringProperty("particle_type").configurable("Particle ID to spawn. Example: minecraft:flame");
+    public static final PalladiumProperty<Float> PARTICLE_SPEED = new FloatProperty("particle_speed").configurable("Speed particles travel outward");
+    public static final PalladiumProperty<Integer> PARTICLE_AMOUNT = new IntegerProperty("particle_amount").configurable("Base amount of particles spawned. Scales with radius");
+    public static final PalladiumProperty<Boolean> CAUSE_FIRE = new BooleanProperty("cause_fire").configurable("Sets random blocks in the radius on fire");
+    public static final PalladiumProperty<Boolean> SMELT_BLOCKS = new BooleanProperty("smelt_blocks").configurable("Smelts random blocks in the radius");
+    public static final PalladiumProperty<Float> BLOCK_EFFECT_QUANTITY = new FloatProperty("block_effect_quantity").configurable("Chance per block to be affected");
+    public static final PalladiumProperty<Boolean> LAUNCH_BLOCKS = new BooleanProperty("launch_blocks").configurable("If true, launches nearby blocks outward as falling blocks");
+    public static final PalladiumProperty<Integer> LAUNCHED_BLOCK_AMOUNT = new IntegerProperty("launched_block_amount").configurable("Maximum amount of blocks launched");
+    public static final PalladiumProperty<Float> LAUNCHED_BLOCK_SIDEWAYS_STRENGTH = new FloatProperty("launched_block_sideways_strength").configurable("Sideways velocity strength of launched blocks");
+    public static final PalladiumProperty<Float> LAUNCHED_BLOCK_UPWARD_STRENGTH = new FloatProperty("launched_block_upward_strength").configurable("Upward velocity strength of launched blocks");
+    public static final PalladiumProperty<Boolean> STOP_MOTION_ON_FIRST_TARGET = new BooleanProperty("stop_motion_on_first_target").configurable("If true, sets the caster's motion to 0 when the first target is found");
 
     public AOEDamageAbility() {
         this.withProperty(ICON, new ItemIcon(Items.TNT));
@@ -780,6 +706,6 @@ public class AOEDamageAbility extends Ability {
 
     @Override
     public String getDocumentationDescription() {
-        return "Deals configurable area damage to nearby living entities.";
+        return "Deals damage around the caster";
     }
 }

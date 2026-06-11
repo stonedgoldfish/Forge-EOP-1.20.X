@@ -16,10 +16,7 @@ import java.util.*;
 
 public class ImmuneToEffectAbility extends Ability {
 
-    public static final PalladiumProperty<String[]> EFFECTS =
-            new StringArrayProperty("effects")
-                    .configurable("The potion effects this ability makes the entity immune to. Example: [\"minecraft:poison\", \"minecraft:wither\"]");
-
+    public static final PalladiumProperty<String[]> EFFECTS = new StringArrayProperty("effects").configurable("Effects to grant immunity to");
     private static final Map<UUID, Set<ResourceLocation>> IMMUNITIES = new HashMap<>();
 
     public ImmuneToEffectAbility() {

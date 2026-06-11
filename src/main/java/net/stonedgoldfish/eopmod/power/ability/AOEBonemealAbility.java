@@ -14,9 +14,7 @@ import net.threetag.palladium.util.property.PalladiumProperty;
 
 public class AOEBonemealAbility extends Ability {
 
-    public static final PalladiumProperty<Float> RADIUS =
-            new FloatProperty("radius")
-                    .configurable("Radius around the caster to apply bonemeal.");
+    public static final PalladiumProperty<Float> RADIUS = new FloatProperty("radius").configurable("Radius to apply bonemeal");
 
     public AOEBonemealAbility() {
         this.withProperty(ICON, new ItemIcon(Items.BONE_MEAL));
@@ -69,6 +67,6 @@ public class AOEBonemealAbility extends Ability {
 
     @Override
     public String getDocumentationDescription() {
-        return "Applies bonemeal to blocks in a configurable radius around the caster.";
+        return "Applies bonemeal in a radius.";
     }
 }

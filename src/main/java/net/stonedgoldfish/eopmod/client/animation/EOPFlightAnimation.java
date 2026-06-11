@@ -190,10 +190,6 @@ public class EOPFlightAnimation extends PalladiumAnimation {
                 -24F * Mth.sin(bodyPitchRad)
         );
 
-        float normalHeadX = 0F;
-        float sprintHeadX = vertical * 3F;
-
-        float headX = Mth.lerp(sprintAnim, normalHeadX, sprintHeadX);
         float headZ = Mth.lerp(sprintAnim, 0F, strafe * -8F);
 
         float chestX = Mth.lerp(sprintAnim, 0F, 75F);

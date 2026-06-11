@@ -9,21 +9,14 @@ import net.threetag.palladium.power.ability.AbilityInstance;
 import net.threetag.palladium.util.icon.ItemIcon;
 import net.threetag.palladium.util.property.FloatProperty;
 import net.threetag.palladium.util.property.PalladiumProperty;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public class LavaSwimmingAbility extends Ability {
 
-    public static final PalladiumProperty<Float> LAVA_FOG_DISTANCE =
-            new FloatProperty("lava_fog_distance")
-                    .configurable("How far the player can see in lava.");
-
+    public static final PalladiumProperty<Float> LAVA_FOG_DISTANCE = new FloatProperty("lava_fog_distance").configurable("How far the player can see in lava");
     private static final Map<UUID, Float> ACTIVE = new HashMap<>();
-    public static void clearAll() {
-        ACTIVE.clear();
-    }
 
     public LavaSwimmingAbility() {
         this.withProperty(ICON, new ItemIcon(Items.LAVA_BUCKET));
@@ -67,6 +60,6 @@ public class LavaSwimmingAbility extends Ability {
 
     @Override
     public String getDocumentationDescription() {
-        return "Allows the player to swim through lava like water, with configurable lava fog distance.";
+        return "Allows the player to swim through lava like water.";
     }
 }

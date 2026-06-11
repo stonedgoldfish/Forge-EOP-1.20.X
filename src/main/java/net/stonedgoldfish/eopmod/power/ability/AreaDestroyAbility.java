@@ -20,44 +20,19 @@ import net.threetag.palladium.util.property.*;
 
 public class AreaDestroyAbility extends Ability {
 
-    public static final PalladiumProperty<Float> RADIUS =
-            new FloatProperty("radius").configurable("Destruction radius.");
-
-    public static final PalladiumProperty<Boolean> FRONT_ONLY =
-            new BooleanProperty("front_only").configurable("If true, only destroys blocks in front of the caster.");
-
-    public static final PalladiumProperty<Float> FRONT_ANGLE =
-            new FloatProperty("front_angle").configurable("Angle of the frontal destruction cone.");
-
-    public static final PalladiumProperty<Float> DESTRUCTION_AMOUNT =
-            new FloatProperty("destruction_amount").configurable("0.0-1.0. Higher means cleaner/more complete destruction.");
-
-    public static final PalladiumProperty<Float> MAX_BLOCK_HARDNESS =
-            new FloatProperty("max_block_hardness").configurable("Blocks harder than this will not be destroyed. Use -1 to ignore hardness.");
-
-    public static final PalladiumProperty<Boolean> DROP_BLOCKS =
-            new BooleanProperty("drop_blocks").configurable("If true, destroyed blocks drop items.");
-
-    public static final PalladiumProperty<Boolean> BREAK_BENEATH_CASTER =
-            new BooleanProperty("break_beneath_caster").configurable("If false, blocks beneath the caster are protected.");
-
-    public static final PalladiumProperty<String> PARTICLE =
-            new StringProperty("particle").configurable("Particle spawned in front of the caster when front_only is true. Empty disables particles.");
-
-    public static final PalladiumProperty<Integer> PARTICLE_AMOUNT =
-            new IntegerProperty("particle_amount").configurable("Particles spawned in front of the caster.");
-
-    public static final PalladiumProperty<Float> PARTICLE_SPEED =
-            new FloatProperty("particle_speed").configurable("Particle speed.");
-
-    public static final PalladiumProperty<String> SOUND =
-            new StringProperty("sound").configurable("Sound played when destruction happens. Empty disables sound.");
-
-    public static final PalladiumProperty<Float> SOUND_VOLUME =
-            new FloatProperty("sound_volume").configurable("Sound volume.");
-
-    public static final PalladiumProperty<Float> SOUND_PITCH =
-            new FloatProperty("sound_pitch").configurable("Sound pitch.");
+    public static final PalladiumProperty<Float> RADIUS = new FloatProperty("radius").configurable("Destruction radius");
+    public static final PalladiumProperty<Boolean> FRONT_ONLY = new BooleanProperty("front_only").configurable("If true, only destroys blocks in front of the caster");
+    public static final PalladiumProperty<Float> FRONT_ANGLE = new FloatProperty("front_angle").configurable("Angle of the frontal destruction cone");
+    public static final PalladiumProperty<Float> DESTRUCTION_AMOUNT = new FloatProperty("destruction_amount").configurable("Decides how clean the destruction is");
+    public static final PalladiumProperty<Float> MAX_BLOCK_HARDNESS = new FloatProperty("max_block_hardness").configurable("Will ignore blocks above the defined hardness");
+    public static final PalladiumProperty<Boolean> DROP_BLOCKS = new BooleanProperty("drop_blocks").configurable("If true, destroyed blocks drop items");
+    public static final PalladiumProperty<Boolean> BREAK_BENEATH_CASTER = new BooleanProperty("break_beneath_caster").configurable("If false, blocks beneath the caster are protected");
+    public static final PalladiumProperty<String> PARTICLE = new StringProperty("particle").configurable("Particle spawned in front of the caster when front_only is true");
+    public static final PalladiumProperty<Integer> PARTICLE_AMOUNT = new IntegerProperty("particle_amount").configurable("Particles spawned in front of the caster");
+    public static final PalladiumProperty<Float> PARTICLE_SPEED = new FloatProperty("particle_speed").configurable("Particle speed");
+    public static final PalladiumProperty<String> SOUND = new StringProperty("sound").configurable("Sound played when destruction happens");
+    public static final PalladiumProperty<Float> SOUND_VOLUME = new FloatProperty("sound_volume").configurable("Sound volume");
+    public static final PalladiumProperty<Float> SOUND_PITCH = new FloatProperty("sound_pitch").configurable("Sound pitch");
 
     public AreaDestroyAbility() {
         this.withProperty(ICON, new ItemIcon(Items.IRON_PICKAXE));
@@ -298,6 +273,6 @@ public class AreaDestroyAbility extends Ability {
 
     @Override
     public String getDocumentationDescription() {
-        return "Destroys blocks in a radius or frontal cone, with configurable randomness, hardness limit, sounds, optional front particles, and caster-foot protection.";
+        return "Destroys blocks in a radius.";
     }
 }

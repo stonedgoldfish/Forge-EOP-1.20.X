@@ -7,7 +7,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.phys.Vec3;
 import net.threetag.palladium.util.property.IntegerProperty;
 import net.threetag.palladium.power.IPowerHolder;
 import net.threetag.palladium.power.ability.Ability;
@@ -20,37 +19,14 @@ import net.threetag.palladium.util.property.BooleanProperty;
 
 public class DashAbility extends Ability {
 
-    public static final PalladiumProperty<Float> STRENGTH =
-            new FloatProperty("strength")
-                    .configurable("How strong the dash is.");
-
-    public static final PalladiumProperty<Boolean> ADD_PITCH =
-            new BooleanProperty("add_pitch")
-                    .configurable("If true, forward/no-input dashes follow the player's pitch.");
-
-    public static final PalladiumProperty<String> SOUND =
-            new StringProperty("sound")
-                    .configurable("Sound played when the dash activates.");
-
-    public static final PalladiumProperty<String> PARTICLE =
-            new StringProperty("particle")
-                    .configurable("Particle spawned when the dash activates.");
-
-    public static final PalladiumProperty<Float> SOUND_VOLUME =
-            new FloatProperty("sound_volume")
-                    .configurable("Volume of the dash activation sound.");
-
-    public static final PalladiumProperty<Float> SOUND_PITCH =
-            new FloatProperty("sound_pitch")
-                    .configurable("Pitch of the dash activation sound.");
-
-    public static final PalladiumProperty<Integer> PARTICLE_AMOUNT =
-            new IntegerProperty("particle_amount")
-                    .configurable("Amount of particles spawned when dashing.");
-
-    public static final PalladiumProperty<Float> PARTICLE_SPEED =
-            new FloatProperty("particle_speed")
-                    .configurable("Speed of the particles spawned when dashing.");
+    public static final PalladiumProperty<Float> STRENGTH = new FloatProperty("strength").configurable("How strong the dash is");
+    public static final PalladiumProperty<Boolean> ADD_PITCH = new BooleanProperty("add_pitch").configurable("If true, dashes follow the player's pitch");
+    public static final PalladiumProperty<String> SOUND = new StringProperty("sound").configurable("Sound played when the dash activates");
+    public static final PalladiumProperty<String> PARTICLE = new StringProperty("particle").configurable("Particle spawned when the dash activates");
+    public static final PalladiumProperty<Float> SOUND_VOLUME = new FloatProperty("sound_volume").configurable("Volume of the dash activation sound");
+    public static final PalladiumProperty<Float> SOUND_PITCH = new FloatProperty("sound_pitch").configurable("Pitch of the dash activation sound");
+    public static final PalladiumProperty<Integer> PARTICLE_AMOUNT = new IntegerProperty("particle_amount").configurable("Amount of particles spawned when dashing");
+    public static final PalladiumProperty<Float> PARTICLE_SPEED = new FloatProperty("particle_speed").configurable("Speed of the particles spawned when dashing");
 
     public DashAbility() {
         this.withProperty(ICON, new ItemIcon(Items.FEATHER));
@@ -152,6 +128,6 @@ public class DashAbility extends Ability {
 
     @Override
     public String getDocumentationDescription() {
-        return "Dashes the entity horizontally, with configurable activation sound and particles.";
+        return "Dashes the entity.";
     }
 }

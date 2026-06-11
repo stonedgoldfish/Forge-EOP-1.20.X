@@ -14,29 +14,15 @@ import net.threetag.palladium.power.ability.Ability;
 import net.threetag.palladium.power.ability.AbilityInstance;
 import net.threetag.palladium.util.icon.ItemIcon;
 import net.threetag.palladium.util.property.*;
-
 import java.util.UUID;
 
 public class ScoreboardAttributeAbility extends Ability {
 
-    public static final PalladiumProperty<String> ATTRIBUTE =
-            new StringProperty("attribute")
-                    .configurable("Attribute ID to modify. Example: minecraft:generic.attack_damage");
-
-    public static final PalladiumProperty<String> SCOREBOARD =
-            new StringProperty("scoreboard")
-                    .configurable("Scoreboard objective name used for scaling.");
-
-    public static final PalladiumProperty<Float> VALUE_PER_SCORE =
-            new FloatProperty("value_per_score")
-                    .configurable("Modifier value added per scoreboard point.");
-
-    public static final PalladiumProperty<String> OPERATION =
-            new StringProperty("operation")
-                    .configurable("Attribute operation: addition, multiply_base, or multiply_total.");
-
-    private static final UUID MODIFIER_UUID =
-            UUID.fromString("5f38e27a-bd2f-49e6-a52f-bb0f037a7d71");
+    public static final PalladiumProperty<String> ATTRIBUTE = new StringProperty("attribute").configurable("Attribute to modify");
+    public static final PalladiumProperty<String> SCOREBOARD = new StringProperty("scoreboard").configurable("Scoreboard objective name used for scaling");
+    public static final PalladiumProperty<Float> VALUE_PER_SCORE = new FloatProperty("value_per_score").configurable("Modifier value added per scoreboard point");
+    public static final PalladiumProperty<String> OPERATION = new StringProperty("operation").configurable("Attribute operation: addition, multiply_base, or multiply_total");
+    private static final UUID MODIFIER_UUID = UUID.fromString("5f38e27a-bd2f-49e6-a52f-bb0f037a7d71");
 
     public ScoreboardAttributeAbility() {
         this.withProperty(ICON, new ItemIcon(Items.COMMAND_BLOCK));

@@ -11,7 +11,6 @@ import net.threetag.palladium.util.property.BooleanProperty;
 import net.threetag.palladium.util.property.FloatProperty;
 import net.threetag.palladium.util.property.PalladiumProperty;
 import net.threetag.palladium.util.property.StringArrayProperty;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -21,37 +20,15 @@ import java.util.UUID;
 
 public class ScreenShakeAbility extends Ability {
 
-    public static final PalladiumProperty<Float> INTENSITY =
-            new FloatProperty("intensity")
-                    .configurable("How strong the screen shake is.");
-
-    public static final PalladiumProperty<Float> SPEED =
-            new FloatProperty("speed")
-                    .configurable("How fast the screen shake moves.");
-
-    public static final PalladiumProperty<Boolean> AFFECT_OTHERS =
-            new BooleanProperty("affect_others")
-                    .configurable("Whether this ability also shakes nearby players' screens.");
-
-    public static final PalladiumProperty<Float> RANGE =
-            new FloatProperty("range")
-                    .configurable("Range in blocks in which other players are affected.");
-
-    public static final PalladiumProperty<String[]> RESISTANCE_TAGS =
-            new StringArrayProperty("resistance_tags")
-                    .configurable("Entity tags that reduce incoming screen shake intensity.");
-
-    public static final PalladiumProperty<Boolean> END_BURST =
-            new BooleanProperty("end_burst")
-                    .configurable("When the ability ends, double the screen shake for 1 second and fade out.");
-
-    public static final PalladiumProperty<Boolean> ONLY_GROUNDED_TARGETS =
-            new BooleanProperty("only_grounded_targets")
-                    .configurable("If true, only players currently on the ground will be affected by screen shake.");
-
+    public static final PalladiumProperty<Float> INTENSITY = new FloatProperty("intensity").configurable("How strong the screen shake is");
+    public static final PalladiumProperty<Float> SPEED = new FloatProperty("speed").configurable("How fast the screen shake moves");
+    public static final PalladiumProperty<Boolean> AFFECT_OTHERS = new BooleanProperty("affect_others").configurable("Whether this ability also shakes nearby players' screens");
+    public static final PalladiumProperty<Float> RANGE = new FloatProperty("range").configurable("Range in blocks in which other players are affected");
+    public static final PalladiumProperty<String[]> RESISTANCE_TAGS = new StringArrayProperty("resistance_tags").configurable("Entity tags that reduce incoming screen shake intensity");
+    public static final PalladiumProperty<Boolean> END_BURST = new BooleanProperty("end_burst").configurable("When the ability ends, double the screen shake for 1 second and fade out");
+    public static final PalladiumProperty<Boolean> ONLY_GROUNDED_TARGETS = new BooleanProperty("only_grounded_targets").configurable("If true, only players currently on the ground will be affected by screen shake");
     private static final int SHAKE_TIMEOUT_TICKS = 5;
     private static final int END_BURST_DURATION_TICKS = 20;
-
     private static final Map<UUID, Map<ShakeSource, ShakeSettings>> SHAKING_PLAYERS = new HashMap<>();
     private static final Map<ShakeSource, Set<UUID>> PLAYERS_AFFECTED_BY_SOURCE = new HashMap<>();
 
@@ -324,6 +301,6 @@ public class ScreenShakeAbility extends Ability {
 
     @Override
     public String getDocumentationDescription() {
-        return "Shakes the player's screen while active, optionally affecting nearby players.";
+        return "Shakes the player's screen";
     }
 }

@@ -3,7 +3,6 @@ package net.stonedgoldfish.eopmod.power.ability;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.phys.AABB;
 import net.threetag.palladium.power.IPowerHolder;
 import net.threetag.palladium.power.ability.Ability;
 import net.threetag.palladium.power.ability.AbilityInstance;
@@ -18,20 +17,11 @@ import java.util.UUID;
 
 public class CustomFlightAbility extends Ability {
 
-    public static final PalladiumProperty<Float> SPEED =
-            new FloatProperty("speed").configurable("Base flight speed.");
-
-    public static final PalladiumProperty<Float> SPRINT_MULTIPLIER =
-            new FloatProperty("sprint_multiplier").configurable("Speed multiplier while sprint flying.");
-
-    public static final PalladiumProperty<Float> ACCELERATION =
-            new FloatProperty("acceleration").configurable("How quickly the player accelerates.");
-
-    public static final PalladiumProperty<Float> DRAG =
-            new FloatProperty("drag").configurable("How slowly the player loses momentum when not moving.");
-
-    public static final PalladiumProperty<Boolean> ALLOW_SPRINT =
-            new BooleanProperty("allow_sprint").configurable("Whether sprint flying is allowed.");
+    public static final PalladiumProperty<Float> SPEED = new FloatProperty("speed").configurable("Base flight speed");
+    public static final PalladiumProperty<Float> SPRINT_MULTIPLIER = new FloatProperty("sprint_multiplier").configurable("Speed multiplier while sprint flying");
+    public static final PalladiumProperty<Float> ACCELERATION = new FloatProperty("acceleration").configurable("How quickly the player accelerates");
+    public static final PalladiumProperty<Float> DRAG = new FloatProperty("drag").configurable("How slowly the player loses momentum when not moving");
+    public static final PalladiumProperty<Boolean> ALLOW_SPRINT = new BooleanProperty("allow_sprint").configurable("Whether sprint flying is allowed");
 
     public record FlightSettings(
             float speed,
@@ -163,6 +153,6 @@ public class CustomFlightAbility extends Ability {
 
     @Override
     public String getDocumentationDescription() {
-        return "Allows custom momentum-based flight with configurable speed, acceleration, drag, and sprint multiplier.";
+        return "Allows configurable flight.";
     }
 }

@@ -14,9 +14,7 @@ import net.threetag.palladium.util.property.StringProperty;
 
 public class TriggerAnimationAbility extends Ability {
 
-    public static final PalladiumProperty<String> ANIMATION =
-            new StringProperty("animation")
-                    .configurable("Animation from EOPAnimationType to play.");
+    public static final PalladiumProperty<String> ANIMATION = new StringProperty("animation").configurable("Animation from EOPAnimationType to play.");
 
     public TriggerAnimationAbility() {
         this.withProperty(ICON, new ItemIcon(Items.ARMOR_STAND));

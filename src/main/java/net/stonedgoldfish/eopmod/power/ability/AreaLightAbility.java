@@ -14,7 +14,6 @@ import net.threetag.palladium.power.ability.AbilityInstance;
 import net.threetag.palladium.util.icon.ItemIcon;
 import net.threetag.palladium.util.property.IntegerProperty;
 import net.threetag.palladium.util.property.PalladiumProperty;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -23,10 +22,7 @@ import java.util.UUID;
 
 public class AreaLightAbility extends Ability {
 
-    public static final PalladiumProperty<Integer> LIGHT_LEVEL =
-            new IntegerProperty("light_level")
-                    .configurable("Light level of the temporary light blocks. 0-15.");
-
+    public static final PalladiumProperty<Integer> LIGHT_LEVEL = new IntegerProperty("light_level").configurable("Light level of the temporary light blocks");
     private static final Map<String, Set<BlockPos>> PLACED_LIGHTS = new HashMap<>();
 
     public AreaLightAbility() {
@@ -140,6 +136,6 @@ public class AreaLightAbility extends Ability {
 
     @Override
     public String getDocumentationDescription() {
-        return "Temporarily places light blocks around the entity while active.";
+        return "Create a light aura.";
     }
 }

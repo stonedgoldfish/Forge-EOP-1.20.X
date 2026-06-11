@@ -20,29 +20,12 @@ import java.util.List;
 
 public class AOECommandAbility extends Ability {
 
-    public static final PalladiumProperty<Float> RADIUS =
-            new FloatProperty("radius")
-                    .configurable("Radius around the entity to affect.");
-
-    public static final PalladiumProperty<String[]> COMMANDS_ON_TARGETS =
-            new StringArrayProperty("commands_on_targets")
-                    .configurable("Commands to run as enemy/neutral targets.");
-
-    public static final PalladiumProperty<String[]> COMMANDS_ON_ALLIES =
-            new StringArrayProperty("commands_on_allies")
-                    .configurable("Commands to run as allies, team members, or pets.");
-
-    public static final PalladiumProperty<Boolean> CONE =
-            new BooleanProperty("cone")
-                    .configurable("If true, only entities inside a forward cone are affected.");
-
-    public static final PalladiumProperty<Float> CONE_ANGLE =
-            new FloatProperty("cone_angle")
-                    .configurable("Cone angle in degrees.");
-
-    public static final PalladiumProperty<Boolean> INCLUDE_CASTER =
-            new BooleanProperty("include_caster")
-                    .configurable("If true, commands_on_allies will also run on the caster.");
+    public static final PalladiumProperty<Float> RADIUS = new FloatProperty("radius").configurable("Radius around the entity to affect");
+    public static final PalladiumProperty<String[]> COMMANDS_ON_TARGETS = new StringArrayProperty("commands_on_targets").configurable("Commands to run as targets");
+    public static final PalladiumProperty<String[]> COMMANDS_ON_ALLIES = new StringArrayProperty("commands_on_allies").configurable("Commands to run as allies");
+    public static final PalladiumProperty<Boolean> CONE = new BooleanProperty("cone").configurable("If true, affected area turns into a cone");
+    public static final PalladiumProperty<Float> CONE_ANGLE = new FloatProperty("cone_angle").configurable("Cone angle");
+    public static final PalladiumProperty<Boolean> INCLUDE_CASTER = new BooleanProperty("include_caster").configurable("If true, commands_on_allies will also run on the caster");
 
     public AOECommandAbility() {
         this.withProperty(ICON, new ItemIcon(Items.COMMAND_BLOCK));
@@ -169,6 +152,6 @@ public class AOECommandAbility extends Ability {
 
     @Override
     public String getDocumentationDescription() {
-        return "Runs commands as nearby targets or allies, optionally inside a cone.";
+        return "Runs commands as nearby entities around the caster";
     }
 }
