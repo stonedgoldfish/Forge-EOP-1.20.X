@@ -1058,7 +1058,7 @@ public class EOPClientEvents {
 
         boolean jumpDown =
                 minecraft.options.keyJump.isDown()
-                        && !NoJumpHandler.isJumpBlocked(player);
+                        && !NoMovementInputHandler.isJumpBlocked(player);
 
         if (jumpDown && !wasJumpDown) {
             long now = System.currentTimeMillis();

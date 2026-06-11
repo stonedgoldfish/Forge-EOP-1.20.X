@@ -13,11 +13,16 @@ import net.threetag.palladium.client.screen.AbilityBarRenderer;
 public class EOPSelectedPowerClientSync {
 
     private static String lastSelectedPower = null;
+    private static int syncCooldown = 0;
 
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END) {
             return;
+        }
+
+        if (syncCooldown > 0) {
+            syncCooldown--;
         }
 
         if (AbilityBarRenderer.ABILITY_LISTS == null) {
@@ -37,11 +42,15 @@ public class EOPSelectedPowerClientSync {
 
         String selectedPower = selected.getPower().getId().toString();
 
-        if (selectedPower.equals(lastSelectedPower)) {
+        boolean changed = !selectedPower.equals(lastSelectedPower);
+        boolean periodicResync = syncCooldown <= 0;
+
+        if (!changed && !periodicResync) {
             return;
         }
 
         lastSelectedPower = selectedPower;
+        syncCooldown = 20;
 
         EOPNetwork.CHANNEL.sendToServer(
                 new SyncSelectedPowerPacket(selectedPower)

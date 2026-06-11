@@ -458,6 +458,62 @@
                 ]
             }
         },
+        "Starflare": {
+            "type": "palladium:command",
+            "first_tick_commands": [
+                "playsound eop:energy_blast master @a ~ ~ ~ 1 1.7"
+            ],
+            "commands": [],
+            "title": "Starflare",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "list_index": 0,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "eop:action",
+                        "cooldown": 10,
+                        "energy": 2,
+                        "property": "eop_beyonder_energy",
+                        "key_type": "key_bind"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:ability_enabled",
+                                "power": "null",
+                                "ability": "Eclipse.Ascension"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_effect",
+                                "effect": "eop:lunar_cloak"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Battle.Mode"
+                    }
+                ]
+            }
+        },
         "Ability2.Unlock": {
             "type": "palladium:dummy",
             "icon": "eop:textures/gui/image.png",
