@@ -29,9 +29,6 @@ public class NoInteractionAbility extends Ability {
                     .configurable("Disable entity interaction.");
 
     private static final Map<UUID, Settings> BLOCKED_PLAYERS = new HashMap<>();
-    public static void clearAll() {
-        BLOCKED_PLAYERS.clear();
-    }
 
     public record Settings(
             boolean blocks,

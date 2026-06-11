@@ -38,9 +38,6 @@ public class WallClimbAbility extends Ability {
 
     private static final Map<UUID, Float> WALL_CLIMBERS = new HashMap<>();
     private static final Map<UUID, Integer> WALL_JUMP_COOLDOWN = new HashMap<>();
-    public static void clearAll() {
-        WALL_CLIMBERS.clear();
-    }
 
     public WallClimbAbility() {
         this.withProperty(ICON, new ItemIcon(Items.LADDER));

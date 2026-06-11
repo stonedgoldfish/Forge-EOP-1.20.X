@@ -26,9 +26,6 @@ public class AutoDodgeAbility extends Ability {
                     .configurable("Projectile entity IDs that are NOT dodged.");
 
     private static final Map<UUID, DodgeData> DODGING_ENTITIES = new HashMap<>();
-    public static void clearAll() {
-        DODGING_ENTITIES.clear();
-    }
 
     private record DodgeData(
             String[] commands,

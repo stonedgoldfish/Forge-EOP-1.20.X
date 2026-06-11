@@ -21,9 +21,6 @@ public class ImmuneToEffectAbility extends Ability {
                     .configurable("The potion effects this ability makes the entity immune to. Example: [\"minecraft:poison\", \"minecraft:wither\"]");
 
     private static final Map<UUID, Set<ResourceLocation>> IMMUNITIES = new HashMap<>();
-    public static void clearAll() {
-        IMMUNITIES.clear();
-    }
 
     public ImmuneToEffectAbility() {
         this.withProperty(ICON, new ItemIcon(Items.MILK_BUCKET));
@@ -33,7 +30,23 @@ public class ImmuneToEffectAbility extends Ability {
     @Override
     public void firstTick(LivingEntity entity, AbilityInstance entry, IPowerHolder holder, boolean enabled) {
         if (!entity.level().isClientSide && enabled) {
-            addImmunities(entity, entry.getProperty(EFFECTS));
+            String[] effectIds = entry.getProperty(EFFECTS);
+
+            addImmunities(entity, effectIds);
+
+            if (effectIds != null) {
+                for (String effectId : effectIds) {
+                    ResourceLocation effectLocation = ResourceLocation.tryParse(effectId);
+
+                    if (effectLocation == null) {
+                        continue;
+                    }
+
+                    BuiltInRegistries.MOB_EFFECT
+                            .getOptional(effectLocation)
+                            .ifPresent(entity::removeEffect);
+                }
+            }
         }
     }
 

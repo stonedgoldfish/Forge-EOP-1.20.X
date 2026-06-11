@@ -4,6 +4,11 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 public class StunEffect extends MobEffect {
 
@@ -17,6 +22,7 @@ public class StunEffect extends MobEffect {
                 net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.MULTIPLY_TOTAL
         );
     }
+    private static final Set<UUID> STUNNED_MOBS = new HashSet<>();
 
     @Override
     public void applyEffectTick(LivingEntity entity, int amplifier) {
@@ -29,6 +35,11 @@ public class StunEffect extends MobEffect {
                 Math.min(entity.getDeltaMovement().y, 0.0D),
                 entity.getDeltaMovement().z
         );
+
+        if (entity instanceof Mob mob && !mob.isNoAi()) {
+            mob.setNoAi(true);
+            STUNNED_MOBS.add(mob.getUUID());
+        }
     }
 
     @Override
@@ -46,6 +57,11 @@ public class StunEffect extends MobEffect {
 
         if (entity instanceof ServerPlayer player) {
             player.removeTag("EOP.Silenced");
+        }
+
+        if (entity instanceof Mob mob
+                && STUNNED_MOBS.remove(mob.getUUID())) {
+            mob.setNoAi(false);
         }
     }
 }

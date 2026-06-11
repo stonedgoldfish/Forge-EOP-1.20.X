@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraft.world.entity.LivingEntity;
@@ -23,6 +24,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.network.PacketDistributor;
 import net.stonedgoldfish.eopmod.effect.EOPEffects;
+import net.minecraftforge.event.entity.living.LivingChangeTargetEvent;
 import net.stonedgoldfish.eopmod.item.*;
 import net.stonedgoldfish.eopmod.network.EOPNetwork;
 import net.stonedgoldfish.eopmod.network.SyncAttackDamagePacket;
@@ -52,11 +54,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraft.world.item.Items;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Mod.EventBusSubscriber(modid = EOPMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class EOPForgeEvents {
@@ -205,6 +203,38 @@ public class EOPForgeEvents {
 
         if (current == null || current != shouldBeLiving) {
             EOPPalladiumProperties.LIVING_CREATURE.set(entity, shouldBeLiving);
+        }
+
+        if (!InvisibilityAbility.shouldClearMobTargets(entity)) {
+            return;
+        }
+
+        List<Mob> mobs = entity.level().getEntitiesOfClass(
+                Mob.class,
+                entity.getBoundingBox().inflate(64)
+        );
+
+        for (Mob mob : mobs) {
+            if (mob.getTarget() == entity) {
+                mob.setTarget(null);
+            }
+
+            if (mob.getLastHurtByMob() == entity) {
+                mob.setLastHurtByMob(null);
+            }
+
+            if (mob.getLastHurtMob() == entity) {
+                mob.setLastHurtMob(null);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onLivingSetAttackTarget(LivingChangeTargetEvent event) {
+        LivingEntity target = event.getNewTarget();
+
+        if (target != null && InvisibilityAbility.shouldClearMobTargets(target)) {
+            event.setCanceled(true);
         }
     }
 
@@ -439,36 +469,12 @@ public class EOPForgeEvents {
     @SubscribeEvent
     public static void onServerStopping(ServerStoppingEvent event) {
         AreaLightAbility.removeAllLights(event.getServer());
-        NoInteractionAbility.clearAll();
-        AutoDodgeAbility.clearAll();
-        ChargeAbility.clearAll();
-        CommandOnPunchAbility.clearAll();
-        DamageReductionAbility.clearAll();
-        HungerResistanceAbility.clearAll();
-        ImmuneToEffectAbility.clearAll();
-        LavaSwimmingAbility.clearAll();
-        NoCollisionAbility.clearAll();
-        ScreenShakeAbility.clearAll();
-        WallClimbAbility.clearAll();
-        WallCreationAbility.clearAll();
     }
 
     @SubscribeEvent
     public static void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
         if (event.getEntity().level() instanceof ServerLevel level) {
             AreaLightAbility.removeLights(level, event.getEntity().getUUID());
-            NoInteractionAbility.clearAll();
-            AutoDodgeAbility.clearAll();
-            ChargeAbility.clearAll();
-            CommandOnPunchAbility.clearAll();
-            DamageReductionAbility.clearAll();
-            HungerResistanceAbility.clearAll();
-            ImmuneToEffectAbility.clearAll();
-            LavaSwimmingAbility.clearAll();
-            NoCollisionAbility.clearAll();
-            ScreenShakeAbility.clearAll();
-            WallClimbAbility.clearAll();
-            WallCreationAbility.clearAll();
         }
     }
     @SubscribeEvent

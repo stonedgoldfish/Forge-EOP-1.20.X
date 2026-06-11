@@ -21,9 +21,6 @@ public class DamageReductionAbility extends Ability {
                     .configurable("Incoming damage reduction percentage. 0-100.");
 
     private static final Map<UUID, Float> HIGHEST_REDUCTION = new HashMap<>();
-    public static void clearAll() {
-        HIGHEST_REDUCTION.clear();
-    }
 
     public DamageReductionAbility() {
         this.withProperty(ICON, new ItemIcon(Items.SHIELD));

@@ -27,9 +27,6 @@ public class NoCollisionAbility extends Ability {
                     .configurable("Projectile entity IDs that are NOT ignored by projectile phasing.");
 
     private static final Map<UUID, PhasingData> PHASING_ENTITIES = new HashMap<>();
-    public static void clearAll() {
-        PHASING_ENTITIES.clear();
-    }
 
     private record PhasingData(
             boolean projectilePhasing,

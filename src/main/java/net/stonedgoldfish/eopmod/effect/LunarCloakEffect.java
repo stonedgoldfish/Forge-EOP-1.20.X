@@ -24,6 +24,9 @@ public class LunarCloakEffect extends MobEffect {
             return;
         }
 
+        player.addTag("EOP.Phasing");
+        player.addTag("EOP.Ability.Disabled");
+
         player.getServer().getCommands().performPrefixedCommand(
                 player.createCommandSourceStack().withSuppressedOutput(),
                 "superpower add eop:mob_effects/lunar_cloak @s"
@@ -44,6 +47,8 @@ public class LunarCloakEffect extends MobEffect {
         super.removeAttributeModifiers(entity, attributeMap, amplifier);
 
         if (entity instanceof ServerPlayer player) {
+            player.removeTag("EOP.Phasing");
+            player.removeTag("EOP.Ability.Disabled");
             player.getServer().getCommands().performPrefixedCommand(
                     player.createCommandSourceStack().withSuppressedOutput(),
                     "superpower remove eop:mob_effects/lunar_cloak @s"

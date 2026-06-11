@@ -36,9 +36,6 @@ public class ChargeAbility extends Ability {
             UUID.fromString("64e76d3d-b28d-45e8-b38a-846b6eb3c802");
 
     private static final Map<UUID, Float> CURRENT_SPEED = new HashMap<>();
-    public static void clearAll() {
-        CURRENT_SPEED.clear();
-    }
     private static final Set<UUID> NO_BOB_PLAYERS = new HashSet<>();
 
     public ChargeAbility() {

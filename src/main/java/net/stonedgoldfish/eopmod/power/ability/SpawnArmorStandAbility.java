@@ -34,6 +34,10 @@ public class SpawnArmorStandAbility extends Ability {
     public static final PalladiumProperty<Float> RANGE =
             new FloatProperty("range").configurable("Maximum distance to spawn the armor stand.");
 
+    public static final PalladiumProperty<Boolean> SPAWN_BEHIND =
+            new BooleanProperty("spawn_behind")
+                    .configurable("If true, uses range to spawn the armor stand behind the player, ignoring pitch.");
+
     public static final PalladiumProperty<Boolean> SPAWN_AT_PLAYER =
             new BooleanProperty("spawn_at_player").configurable("If true, ignores raycast and spawns at the player's location.");
 
@@ -117,6 +121,7 @@ public class SpawnArmorStandAbility extends Ability {
         this.withProperty(ICON, new ItemIcon(Items.ARMOR_STAND));
 
         this.withProperty(RANGE, 5.0F);
+        this.withProperty(SPAWN_BEHIND, false);
         this.withProperty(SPAWN_AT_PLAYER, false);
         this.withProperty(FOLLOW_MOUSE, false);
         this.withProperty(LIFETIME, 100);
@@ -164,6 +169,8 @@ public class SpawnArmorStandAbility extends Ability {
 
         if (entry.getProperty(SPAWN_AT_PLAYER)) {
             spawnPos = entity.position();
+        } else if (entry.getProperty(SPAWN_BEHIND)) {
+            spawnPos = getBehindPosition(entity, range);
         } else {
             spawnPos = raycastSpawnPosition(entity, range);
         }
@@ -292,6 +299,20 @@ public class SpawnArmorStandAbility extends Ability {
         }
 
         return end;
+    }
+
+    private static Vec3 getBehindPosition(LivingEntity entity, float range) {
+        float yawRad = (float) Math.toRadians(entity.getYRot());
+
+        Vec3 forward = new Vec3(
+                -Math.sin(yawRad),
+                0.0D,
+                Math.cos(yawRad)
+        ).normalize();
+
+        Vec3 behind = forward.scale(-range);
+
+        return entity.position().add(behind);
     }
 
     private static Vec3 raycastFollowMousePosition(LivingEntity entity, float range) {

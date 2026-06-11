@@ -24,13 +24,9 @@
             "hidden": true,
             "hidden_in_bar": true,
             "first_tick_commands": [
-                "tag @s add EOP.Phasing",
-                "tag @s add EOP.Ability.Disabled",
                 "playsound minecraft:entity.evoker.cast_spell master @a ~ ~ ~ 1 2"
             ],
             "last_tick_commands": [
-                "tag @s remove EOP.Phasing",
-                "tag @s remove EOP.Ability.Disabled",
                 "playsound minecraft:entity.evoker.cast_spell master @a ~ ~ ~ 1 2"
             ],
             "commands": []
@@ -113,7 +109,8 @@
         "Invisibility": {
             "type": "eop:invisibility",
             "hidden": true,
-            "hidden_in_bar": true
+            "hidden_in_bar": true,
+            "clear_mob_targets": false
         },
         "Intangibility": {
             "type": "eop:intangibility",
@@ -150,41 +147,12 @@
             "gui_position": "null",
             "description": "null",
             "damage_sources": [
-                "eop:phase_immune",
-                "eop:phase_immune_alexscaves",
-                "eop:phase_immune_alexsmobs",
+                "eop:wraith_immune",
+                "eop:wraith_immune_alexscaves",
+                "eop:wraith_immune_alexsmobs",
                 "eop:tacz_guns",
                 "eop:scorched_guns"
             ]
-        },
-        "Power.Remove": {
-            "type": "palladium:command",
-            "title": "null",
-            "bar_color": "light_gray",
-            "hidden": true,
-            "hidden_in_bar": true,
-            "list_index": -1,
-            "gui_position": "null",
-            "description": "null",
-            "first_tick_commands": [
-                "tag @s remove EOP.Phasing",
-                "superpower remove eop:effects/lunar_cloak @s"
-            ],
-            "last_tick_commands": [],
-            "commands": [],
-            "conditions": {
-                "enabling": [
-                    {
-                        "type": "palladium:not",
-                        "conditions": [
-                            {
-                                "type": "palladium:has_effect",
-                                "effect": "eop:lunar_cloak"
-                            }
-                        ]
-                    }
-                ]
-            }
         }
     }
 }

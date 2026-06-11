@@ -16,16 +16,20 @@ public class BleedEffect extends MobEffect {
     @Override
     public void applyEffectTick(LivingEntity entity, int amplifier) {
 
-        if (entity.tickCount % 40 == 0) {
-            float damage = 1.0F + amplifier;
+        int interval = Math.max(1, 40 >> amplifier);
+
+        if (entity.getEffect(EOPEffects.BLEED.get()) != null
+                && entity.getEffect(EOPEffects.BLEED.get()).getDuration() % interval == 0) {
 
             entity.hurt(
                     EOPDamageTypes.bleed(entity.level()),
-                    damage
+                    1.0F
             );
         }
 
-        if (entity.level() instanceof ServerLevel serverLevel) {
+        if (entity.tickCount % 5 == 0
+                && entity.level() instanceof ServerLevel serverLevel) {
+
             serverLevel.sendParticles(
                     EOPParticles.FALLING_BLOOD.get(),
                     entity.getX(),
@@ -42,6 +46,6 @@ public class BleedEffect extends MobEffect {
 
     @Override
     public boolean isDurationEffectTick(int duration, int amplifier) {
-        return duration % 5 == 0;
+        return true;
     }
 }

@@ -27,9 +27,6 @@ public class CommandOnPunchAbility extends Ability {
                     .configurable("If true, commands can trigger from projectile/ranged damage caused by the caster.");
 
     private static final Map<UUID, Settings> ACTIVE_PLAYERS = new HashMap<>();
-    public static void clearAll() {
-        ACTIVE_PLAYERS.clear();
-    }
 
     public record Settings(
             String[] commands,

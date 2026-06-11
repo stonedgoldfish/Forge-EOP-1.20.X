@@ -14,17 +14,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Gui.class)
 public class GuiMixin {
 
-    private static final ResourceLocation BLEED_FULL =
-            ResourceLocation.fromNamespaceAndPath("eop", "textures/gui/sprites/blood_full.png");
-
-    private static final ResourceLocation BLEED_HALF =
-            ResourceLocation.fromNamespaceAndPath("eop", "textures/gui/sprites/blood_half.png");
-
-    private static final ResourceLocation BLEED_FULL_HARDCORE =
-            ResourceLocation.fromNamespaceAndPath("eop", "textures/gui/sprites/bleed_full_hardcore.png");
-
-    private static final ResourceLocation BLEED_HALF_HARDCORE =
-            ResourceLocation.fromNamespaceAndPath("eop", "textures/gui/sprites/bleed_half_hardcore.png");
+    private static final ResourceLocation BLEED_HEARTS =
+            ResourceLocation.fromNamespaceAndPath("eop", "textures/gui/sprites/icons.png");
 
     @Inject(
             method = "renderHeart",
@@ -54,24 +45,32 @@ public class GuiMixin {
 
         boolean hardcore = yOffset == 45;
 
-        ResourceLocation texture;
+        int u;
 
         if (hardcore) {
-            texture = halfHeart ? BLEED_HALF_HARDCORE : BLEED_FULL_HARDCORE;
+            if (renderHighlight) {
+                u = halfHeart ? 63 : 54;
+            } else {
+                u = halfHeart ? 45 : 36;
+            }
         } else {
-            texture = halfHeart ? BLEED_HALF : BLEED_FULL;
+            if (renderHighlight) {
+                u = halfHeart ? 27 : 18;
+            } else {
+                u = halfHeart ? 9 : 0;
+            }
         }
 
         guiGraphics.blit(
-                texture,
+                BLEED_HEARTS,
                 x,
                 y,
+                u,
                 0,
-                0,
                 9,
                 9,
-                9,
-                9
+                256,
+                256
         );
 
         ci.cancel();
