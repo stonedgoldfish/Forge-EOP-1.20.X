@@ -374,6 +374,10 @@ public class EOPAnimationHandler {
                  DASH_RIGHT,
                  DASH_BACK -> 0.35F;
 
+            case AUTO_DODGE_1,
+                 AUTO_DODGE_2,
+                 AUTO_DODGE_3 -> 0.45F;
+
             default -> 0.30F;
         };
     }
@@ -389,6 +393,10 @@ public class EOPAnimationHandler {
                  DASH_LEFT,
                  DASH_RIGHT,
                  DASH_BACK -> 0.12F;
+
+            case AUTO_DODGE_1,
+                 AUTO_DODGE_2,
+                 AUTO_DODGE_3 -> 0.18F;
 
             default -> 0.10F;
         };

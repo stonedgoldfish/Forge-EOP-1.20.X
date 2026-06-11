@@ -100,6 +100,8 @@ public class EOPAbilities {
             ABILITIES.register("wall_creation", WallCreationAbility::new);
     public static final RegistrySupplier<Ability> POCKET_DIM =
             ABILITIES.register("pocket_dimension", PocketDimensionAbility::new);
+    public static final RegistrySupplier<Ability> AUTO_DODGE =
+            ABILITIES.register("auto_dodge", AutoDodgeAbility::new);
 
     public static void init() {
 

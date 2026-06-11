@@ -37,24 +37,6 @@
         "minecraft:unattributed_fireball",
         "minecraft:wither",
         "minecraft:wither_skull",
-		"eop:basic",
-        "eop:true_basic",
-		"eop:basic_projectile",
-        "eop:blood",
-        "eop:boil",
-        "eop:fuga",
-        "eop:ice",
-        "eop:marine_rain",
-        "eop:mimic_beam",
-        "eop:radiation",
-        "eop:sandstorm",
-        "eop:shock",
-        "eop:spores",
-        "eop:suffocation",
-        "eop:supernova",
-        "eop:tremor",
-        "eop:warped_water",
-        "eop:slash",
-        "eop:slash_strong"
+		"eop:basic"
     ]
 }

@@ -21,6 +21,9 @@ public class LavaSwimmingAbility extends Ability {
                     .configurable("How far the player can see in lava.");
 
     private static final Map<UUID, Float> ACTIVE = new HashMap<>();
+    public static void clearAll() {
+        ACTIVE.clear();
+    }
 
     public LavaSwimmingAbility() {
         this.withProperty(ICON, new ItemIcon(Items.LAVA_BUCKET));

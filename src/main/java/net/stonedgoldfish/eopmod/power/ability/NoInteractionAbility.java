@@ -29,6 +29,9 @@ public class NoInteractionAbility extends Ability {
                     .configurable("Disable entity interaction.");
 
     private static final Map<UUID, Settings> BLOCKED_PLAYERS = new HashMap<>();
+    public static void clearAll() {
+        BLOCKED_PLAYERS.clear();
+    }
 
     public record Settings(
             boolean blocks,
@@ -46,6 +49,10 @@ public class NoInteractionAbility extends Ability {
 
     @Override
     public void tick(LivingEntity entity, AbilityInstance entry, IPowerHolder holder, boolean enabled) {
+        if (entity.level().isClientSide) {
+            return;
+        }
+
         if (!(entity instanceof Player player)) {
             return;
         }

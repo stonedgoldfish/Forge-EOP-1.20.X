@@ -51,6 +51,22 @@ public class EOPPlayerAnimation extends PalladiumAnimation {
                 }
             }
 
+            case AUTO_DODGE_1 -> {
+                if (!firstPerson) {
+                    AutoDodgeAnimation.animateBack(builder, anim);
+                }
+            }
+            case AUTO_DODGE_2 -> {
+                if (!firstPerson) {
+                    AutoDodgeAnimation.animateLeft(builder, anim);
+                }
+            }
+            case AUTO_DODGE_3 -> {
+                if (!firstPerson) {
+                    AutoDodgeAnimation.animateRight(builder, anim);
+                }
+            }
+
             case RIGHT_ARM_SWIPE -> {
                 if (firstPerson) {
                     RightArmSwipeAnimation.animateFirstPerson(builder, anim);

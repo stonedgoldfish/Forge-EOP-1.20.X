@@ -4,7 +4,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tags.FluidTags;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraft.world.entity.LivingEntity;
+import net.stonedgoldfish.eopmod.client.animation.EOPAnimationType;
+import net.stonedgoldfish.eopmod.network.DodgePacket;
+import net.stonedgoldfish.eopmod.power.ability.AutoDodgeAbility;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -17,7 +22,6 @@ import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.registries.RegistryObject;
 import net.stonedgoldfish.eopmod.effect.EOPEffects;
 import net.stonedgoldfish.eopmod.item.*;
 import net.stonedgoldfish.eopmod.network.EOPNetwork;
@@ -30,11 +34,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -48,10 +50,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
-import java.util.function.Supplier;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -92,6 +91,60 @@ public class EOPForgeEvents {
         }
 
         return false;
+    }
+
+    private static EOPAnimationType getRandomDodgeAnimation(LivingEntity living) {
+        int choice = living.getRandom().nextInt(3);
+
+        return switch (choice) {
+            case 0 -> EOPAnimationType.AUTO_DODGE_1;
+            case 1 -> EOPAnimationType.AUTO_DODGE_2;
+            default -> EOPAnimationType.AUTO_DODGE_3;
+        };
+    }
+
+    @SubscribeEvent
+    public static void onLivingAttack(LivingAttackEvent event) {
+        LivingEntity living = event.getEntity();
+
+        if (!AutoDodgeAbility.canDodge(living)) {
+            return;
+        }
+
+        if (event.getSource().getDirectEntity() instanceof Projectile projectile
+                && AutoDodgeAbility.isProjectileBlacklisted(living, projectile)) {
+            return;
+        }
+
+        event.setCanceled(true);
+
+        if (living instanceof ServerPlayer player) {
+            EOPNetwork.CHANNEL.send(
+                    PacketDistributor.PLAYER.with(() -> player),
+                    new DodgePacket(getRandomDodgeAnimation(living))
+            );
+        }
+
+        living.invulnerableTime = 0;
+        living.hurtTime = 0;
+        living.hurtDuration = 0;
+
+        for (String command : AutoDodgeAbility.getCommands(living)) {
+            if (command == null || command.isBlank()) {
+                continue;
+            }
+
+            if (living.level().getServer() == null) {
+                continue;
+            }
+
+            living.level().getServer().getCommands().performPrefixedCommand(
+                    living.createCommandSourceStack()
+                            .withPermission(4)
+                            .withSuppressedOutput(),
+                    command
+            );
+        }
     }
 
     @SubscribeEvent
@@ -386,12 +439,36 @@ public class EOPForgeEvents {
     @SubscribeEvent
     public static void onServerStopping(ServerStoppingEvent event) {
         AreaLightAbility.removeAllLights(event.getServer());
+        NoInteractionAbility.clearAll();
+        AutoDodgeAbility.clearAll();
+        ChargeAbility.clearAll();
+        CommandOnPunchAbility.clearAll();
+        DamageReductionAbility.clearAll();
+        HungerResistanceAbility.clearAll();
+        ImmuneToEffectAbility.clearAll();
+        LavaSwimmingAbility.clearAll();
+        NoCollisionAbility.clearAll();
+        ScreenShakeAbility.clearAll();
+        WallClimbAbility.clearAll();
+        WallCreationAbility.clearAll();
     }
 
     @SubscribeEvent
     public static void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
         if (event.getEntity().level() instanceof ServerLevel level) {
             AreaLightAbility.removeLights(level, event.getEntity().getUUID());
+            NoInteractionAbility.clearAll();
+            AutoDodgeAbility.clearAll();
+            ChargeAbility.clearAll();
+            CommandOnPunchAbility.clearAll();
+            DamageReductionAbility.clearAll();
+            HungerResistanceAbility.clearAll();
+            ImmuneToEffectAbility.clearAll();
+            LavaSwimmingAbility.clearAll();
+            NoCollisionAbility.clearAll();
+            ScreenShakeAbility.clearAll();
+            WallClimbAbility.clearAll();
+            WallCreationAbility.clearAll();
         }
     }
     @SubscribeEvent

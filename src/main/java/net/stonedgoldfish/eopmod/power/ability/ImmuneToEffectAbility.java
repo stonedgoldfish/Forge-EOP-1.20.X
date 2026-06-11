@@ -21,6 +21,9 @@ public class ImmuneToEffectAbility extends Ability {
                     .configurable("The potion effects this ability makes the entity immune to. Example: [\"minecraft:poison\", \"minecraft:wither\"]");
 
     private static final Map<UUID, Set<ResourceLocation>> IMMUNITIES = new HashMap<>();
+    public static void clearAll() {
+        IMMUNITIES.clear();
+    }
 
     public ImmuneToEffectAbility() {
         this.withProperty(ICON, new ItemIcon(Items.MILK_BUCKET));

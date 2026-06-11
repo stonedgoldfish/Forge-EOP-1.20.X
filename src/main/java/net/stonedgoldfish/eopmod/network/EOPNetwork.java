@@ -75,5 +75,12 @@ public class EOPNetwork {
                 WallJumpPacket::decode,
                 WallJumpPacket::handle
         );
+        CHANNEL.registerMessage(
+                packetId++,
+                DodgePacket.class,
+                DodgePacket::encode,
+                DodgePacket::decode,
+                DodgePacket::handle
+        );
     }
 }

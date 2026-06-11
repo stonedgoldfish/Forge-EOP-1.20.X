@@ -38,6 +38,9 @@ public class WallCreationAbility extends Ability {
                     .configurable("Maximum height each wall can reach.");
 
     private static final Map<UUID, List<WallData>> ACTIVE_WALLS = new HashMap<>();
+    public static void clearAll() {
+        ACTIVE_WALLS.clear();
+    }
 
     private record WallData(
             BlockPos baseCenter,

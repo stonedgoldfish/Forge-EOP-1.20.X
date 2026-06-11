@@ -21,6 +21,9 @@ public class HungerResistanceAbility extends Ability {
                     .configurable("Percentage of hunger loss prevented. 0.0 = none, 1.0 = all.");
 
     private static final Map<UUID, Integer> LAST_HUNGER = new HashMap<>();
+    public static void clearAll() {
+        LAST_HUNGER.clear();
+    }
 
     public HungerResistanceAbility() {
         this.withProperty(ICON, new ItemIcon(Items.GOLDEN_CARROT));

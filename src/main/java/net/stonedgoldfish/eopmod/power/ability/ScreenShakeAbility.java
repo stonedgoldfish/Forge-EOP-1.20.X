@@ -54,6 +54,9 @@ public class ScreenShakeAbility extends Ability {
 
     private static final Map<UUID, Map<ShakeSource, ShakeSettings>> SHAKING_PLAYERS = new HashMap<>();
     private static final Map<ShakeSource, Set<UUID>> PLAYERS_AFFECTED_BY_SOURCE = new HashMap<>();
+    public static void clearAll() {
+        SHAKING_PLAYERS.clear();
+    }
 
     public record ShakeSource(UUID entityUUID, int abilityInstanceID) {}
 

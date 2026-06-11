@@ -8,6 +8,10 @@ public enum EOPAnimationType {
     DASH_RIGHT(EOPAnimationPlaybackType.ONE_SHOT),
     DASH_BACK(EOPAnimationPlaybackType.ONE_SHOT),
 
+    AUTO_DODGE_1(EOPAnimationPlaybackType.ONE_SHOT),
+    AUTO_DODGE_2(EOPAnimationPlaybackType.ONE_SHOT),
+    AUTO_DODGE_3(EOPAnimationPlaybackType.ONE_SHOT),
+
     RIGHT_ARM_SWIPE(EOPAnimationPlaybackType.ONE_SHOT),
     SHOOT(EOPAnimationPlaybackType.ONE_SHOT),
 

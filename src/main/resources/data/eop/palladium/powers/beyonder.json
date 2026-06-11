@@ -1998,7 +1998,11 @@
             "hidden": true,
             "hidden_in_bar": true,
             "damage_sources": [
-                "eop:phase_immune"
+                "eop:phase_immune",
+                "eop:phase_immune_alexscaves",
+                "eop:phase_immune_alexsmobs",
+                "eop:tacz_guns",
+                "eop:scorched_guns"
             ],
             "conditions": {
                 "enabling": [
@@ -2323,22 +2327,7 @@
                 "alexsmobs:debilitating_sting",
                 "alexsmobs:earthquake",
                 "alexsmobs:exsanguination",
-                "eop:shock",
-                "eop:shock_stronger",
-                "eop:freeze",
-                "eop:freeze_stronger",
-                "eop:boil",
-                "eop:boil_strong",
-                "eop:brain_overload",
-                "eop:auditory_deception",
-                "eop:sensory_deception",
-                "eop:auditory_deception_herobrine",
-                "eop:pain_intolerance",
-                "eop:power_erasure",
-                "eop:flash_blindness",
-                "eop:optic_blindness",
-                "eop:werewolf_infection",
-                "eop:vampire_infection"
+                "eop:bleed"
             ],
             "conditions": {
                 "enabling": [
@@ -2699,7 +2688,11 @@
             "hidden": true,
             "hidden_in_bar": true,
             "damage_sources": [
-                "eop:phase_immune"
+                "eop:phase_immune",
+                "eop:phase_immune_alexscaves",
+                "eop:phase_immune_alexsmobs",
+                "eop:tacz_guns",
+                "eop:scorched_guns"
             ],
             "conditions": {
                 "enabling": [

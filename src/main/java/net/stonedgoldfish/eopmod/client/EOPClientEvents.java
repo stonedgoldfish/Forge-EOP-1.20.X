@@ -28,6 +28,7 @@ import net.stonedgoldfish.eopmod.client.animation.EOPFlightAnimation;
 import net.stonedgoldfish.eopmod.client.animation.EOPPlayerAnimation;
 import net.stonedgoldfish.eopmod.network.EOPNetwork;
 import net.stonedgoldfish.eopmod.network.ToggleCustomFlightPacket;
+import net.stonedgoldfish.eopmod.power.ability.AutoDodgeAbility;
 import net.stonedgoldfish.eopmod.power.ability.IntangibilityAbility;
 import net.stonedgoldfish.eopmod.power.ability.LavaSwimmingAbility;
 import net.threetag.palladium.client.screen.power.PowersScreen;
@@ -729,6 +730,69 @@ public class EOPClientEvents {
                     "textures/gui/hud/lunar_cloak/lunar_cloak_overlay_" + i + ".png"
             );
         }
+    }
+
+    private static final ResourceLocation AUTO_DODGE_OVERLAY =
+            ResourceLocation.fromNamespaceAndPath(
+                    EOPMod.MOD_ID,
+                    "textures/gui/hud/auto_dodge/auto_dodge_overlay.png"
+            );
+
+    private static float autoDodgeOverlayProgress = 0.0F;
+
+    @SubscribeEvent
+    public static void onRenderAutoDodgeOverlay(RenderGuiOverlayEvent.Pre event) {
+        if (event.getOverlay() != VanillaGuiOverlay.HOTBAR.type()) {
+            return;
+        }
+
+        Minecraft minecraft = Minecraft.getInstance();
+
+        boolean active = minecraft.player != null
+                && AutoDodgeAbility.canDodge(minecraft.player);
+
+        float fadeInSpeed = 0.05F;
+        float fadeOutSpeed = 0.08F;
+
+        float maxOpacity = 0.3F;
+
+        if (active) {
+            autoDodgeOverlayProgress += (maxOpacity - autoDodgeOverlayProgress) * fadeInSpeed;
+        } else {
+            autoDodgeOverlayProgress += (0.0F - autoDodgeOverlayProgress) * fadeOutSpeed;
+        }
+
+        if (autoDodgeOverlayProgress <= 0.01F) {
+            return;
+        }
+
+        int screenWidth = minecraft.getWindow().getGuiScaledWidth();
+        int screenHeight = minecraft.getWindow().getGuiScaledHeight();
+
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(
+                1.0F,
+                1.0F,
+                1.0F,
+                autoDodgeOverlayProgress
+        );
+
+        event.getGuiGraphics().blit(
+                AUTO_DODGE_OVERLAY,
+                0,
+                0,
+                0,
+                0,
+                screenWidth,
+                screenHeight,
+                screenWidth,
+                screenHeight
+        );
+
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.disableBlend();
     }
 
     @SubscribeEvent
