@@ -1,0 +1,1182 @@
+{
+    "name": "Plane Manipulation",
+    "background": "minecraft:textures/block/gray_concrete_powder.png",
+    "icon": "eop:textures/gui/drifter.png",
+    "ability_bar_texture": "eop:textures/gui/ability_bars/eop_powers.png",
+    "gui_display_type": "tree",
+    "persistent_data": true,
+    "energy_bars": {
+        "void_energy": {
+            "color": "#DEECD7",
+            "max": 100,
+            "synced_value": {
+                "type": "palladium_property",
+                "property": "eop_drifter_energy",
+                "fallback": 0
+            }
+        }
+    },
+    "abilities": {
+        "Drifter": {
+            "type": "palladium:command",
+            "hidden": true,
+            "first_tick_commands": [
+                "tag @s add Drifter",
+                "tag @s add EOP.Extra.Night.Vision",
+                "tag @s add EOP.Extra.Entity.Sense",
+                "tag @s add EOP.Extra.Slow.Fall",
+                "tag @s add EOP.Has.BM",
+                "tag @s add EOP.Has.Power"
+            ],
+            "last_tick_commands": [
+                "tag @s remove Drifter",
+                "tag @s remove EOP.Extra.Night.Vision",
+                "tag @s remove EOP.Extra.Entity.Sense",
+                "tag @s remove EOP.Extra.Slow.Fall",
+                "tag @s remove EOP.Has.BM",
+                "tag @s remove EOP.Has.Power"
+            ],
+            "commands": []
+        },
+        "Plane.Manipulation": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/drifter.png",
+            "title": "Plane Manipulation",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": -1,
+            "gui_position": [
+                0,
+                -2
+            ],
+            "description": "You have obtained the power to tap into the Rift Plane, enabling you to disrupt the space-time continuum to some extent"
+        },
+        "Power.Tag": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "tag @s add EOP.Has.Power"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Has.Power"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "BM.Tag": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "tag @s add EOP.Has.BM"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Has.BM"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Left.Stat1": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 0.5 more damage points",
+            "gui_position": [
+                -1,
+                -1.25
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 0.5,
+            "operation": 0,
+            "uuid": "5feff156-eba1-42c0-907f-5f866f8bf418",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Plane.Manipulation"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_drifter_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/drifter.png",
+                        "description": {
+                            "text": "Plane Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Left.Stat2": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/resistance.png",
+            "title": "Enhanced Armor",
+            "description": "Grants 3 more armor points",
+            "gui_position": [
+                -1.5,
+                -0.4
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.armor",
+            "amount": 3,
+            "operation": 0,
+            "uuid": "cf93fa38-9691-4aed-8a2e-2585ea9ce16d",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat1"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_drifter_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/drifter.png",
+                        "description": {
+                            "text": "Plane Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Left.Stat3": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 1 more damage point",
+            "gui_position": [
+                -1,
+                0.25
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 1,
+            "operation": 0,
+            "uuid": "888bc6ec-4528-4505-b999-a40c5b511131",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat2"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_drifter_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/drifter.png",
+                        "description": {
+                            "text": "Plane Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Left.Stat4": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/resistance.png",
+            "title": "Enhanced Armor",
+            "description": "Grants 3 more armor points",
+            "gui_position": [
+                -1,
+                1.1
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.armor",
+            "amount": 3,
+            "operation": 0,
+            "uuid": "928faa0d-a5b7-49a1-9a3a-cc218bcc5222",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat3"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_drifter_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/drifter.png",
+                        "description": {
+                            "text": "Plane Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Left.Stat5": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 1.5 more damage points",
+            "gui_position": [
+                -0.7,
+                2.1
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 1.5,
+            "operation": 0,
+            "uuid": "dd1c4209-7c3f-40cb-b2d2-bedb588d1588",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat4"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_drifter_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/drifter.png",
+                        "description": {
+                            "text": "Plane Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Right.Stat1": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 0.5 more damage points",
+            "gui_position": [
+                1,
+                -1.25
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 0.5,
+            "operation": 0,
+            "uuid": "3a7427f7-ef9f-4311-8fff-26cc29de21ce",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Plane.Manipulation"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_drifter_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/drifter.png",
+                        "description": {
+                            "text": "Plane Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Right.Stat2": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/speed.png",
+            "title": "Enhanced Speed",
+            "description": "Grants 5% more speed",
+            "gui_position": [
+                1.5,
+                -0.4
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.movement_speed",
+            "amount": 0.05,
+            "operation": 1,
+            "uuid": "113d4f96-4438-4908-b7e3-f4ce6bce6972",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat1"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_drifter_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/drifter.png",
+                        "description": {
+                            "text": "Plane Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Right.Stat3": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 1 more damage point",
+            "gui_position": [
+                1,
+                0.25
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 1,
+            "operation": 0,
+            "uuid": "83951f41-1f09-4298-af0d-3d09494b978a",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat2"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_drifter_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/drifter.png",
+                        "description": {
+                            "text": "Plane Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Right.Stat4": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/speed.png",
+            "title": "Enhanced Speed",
+            "description": "Grants 5% more speed",
+            "gui_position": [
+                1,
+                1.1
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.movement_speed",
+            "amount": 0.05,
+            "operation": 1,
+            "uuid": "24f6966b-51d4-4363-a17b-c99ce1a12f03",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat3"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_drifter_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/drifter.png",
+                        "description": {
+                            "text": "Plane Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Right.Stat5": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 1.5 more damage points",
+            "gui_position": [
+                0.7,
+                2.1
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 1.5,
+            "operation": 0,
+            "uuid": "cff27229-41c2-4099-b867-c0c916831d25",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat4"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_drifter_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/drifter.png",
+                        "description": {
+                            "text": "Plane Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Energy.Regen": {
+            "type": "eop:energy_regen",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "amount": 1,
+            "interval": 7,
+            "max": 100,
+            "enabled_energy_drain": true,
+            "drain_amount": 0,
+            "drain_interval": 200,
+            "invert": false
+        },
+        "Energy.Regen2": {
+            "type": "eop:energy_regen",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "amount": 1,
+            "interval": 2,
+            "max": 100,
+            "enabled_energy_drain": true,
+            "drain_amount": 0,
+            "drain_interval": 200,
+            "invert": false,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:dimension",
+                        "dimension": "eop:pocket_dimension"
+                    }
+                ]
+            }
+        },
+        "Ally.Healing": {
+            "type": "eop:aoe_commands",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "radius": 30,
+            "commands_on_targets": [],
+            "commands_on_allies": [
+                "effect give @s regeneration 2 1 true"
+            ],
+            "cone": false,
+            "cone_angle": 90,
+            "include_caster": true,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:dimension",
+                        "dimension": "eop:pocket_dimension"
+                    },
+                    {
+                        "type": "palladium:interval",
+                        "active_ticks": 0,
+                        "disabled_ticks": 18
+                    }
+                ]
+            }
+        },
+        "Secondary.Ability": {
+            "type": "palladium:dummy",
+            "gui_position": [
+                1.25,
+                -2
+            ],
+            "title": "Rift Plane",
+            "description": "Enter the Rift Plane, becoming intangible. §dBattlemode §fmust be enabled via keybind. §dRight Click §fto use this ability",
+            "icon": "eop:textures/gui/image.png",
+            "hidden": false,
+            "hidden_in_bar": true
+        },
+        "Rift.Plane": {
+            "type": "palladium:command",
+            "title": "Rift Plane",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "playsound minecraft:entity.evoker.cast_spell master @a ~ ~ ~ 1 2"
+            ],
+            "last_tick_commands": [
+                "playsound minecraft:entity.evoker.cast_spell master @a ~ ~ ~ 1 2",
+                "effect clear @s eop:plane_shift",
+                "tag @s remove Ability.Being.Used"
+            ],
+            "commands": [
+                "effect give @s eop:plane_shift infinite 0 true",
+                "tag @s add Ability.Being.Used"
+            ],
+            "list_index": 0,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "eop:toggle",
+                        "cooldown": 20,
+                        "ticks": 0,
+                        "energy": 2,
+                        "consume_energy_repeatedly": true,
+                        "energy_interval": 20,
+                        "property": "eop_drifter_energy",
+                        "toggle_mode": true,
+                        "key_type": "right_click"
+                    },
+                    {
+                        "type": "eop:power_selected",
+                        "power": "eop:drifter"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Battle.Mode"
+                    }
+                ]
+            }
+        },
+        "Pocket.Dimension.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/pocket_dimension.png",
+            "title": "Pocket Dimension",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": 0,
+            "gui_position": [
+                0,
+                -1.25
+            ],
+            "description": "Access your own pocket dimension",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Plane.Manipulation"
+                    }
+                ]
+            }
+        },
+        "Pocket.Dimension.Animation": {
+            "type": "palladium:animation_timer",
+            "icon": "eop:textures/gui/pocket_dimension.png",
+            "title": "Pocket Dimension",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "list_index": 0,
+            "gui_position": [
+                -0.5,
+                -0.75
+            ],
+            "description": "Access your own pocket dimension",
+            "start_value": 0,
+            "max_value": 40,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:activation",
+                        "cooldown": 100,
+                        "ticks": 40,
+                        "key_type": "key_bind"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Pocket.Dimension.Unlock"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Screen.Shake": {
+            "type": "eop:screen_shake",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "intensity": 1,
+            "speed": 1,
+            "affect_others": false,
+            "range": 15,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Pocket.Dimension.Animation"
+                    }
+                ]
+            }
+        },
+        "Pocket.Dimension.Part": {
+            "type": "palladium:command",
+            "title": "null",
+            "bar_color": "light_gray",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": -1,
+            "gui_position": "null",
+            "description": "null",
+            "first_tick_commands": [
+                "playsound minecraft:block.portal.trigger master @a ~ ~ ~ 1 1.5"
+            ],
+            "last_tick_commands": [],
+            "commands": [
+                "particle eop:void_energy ~ ~1 ~ 0.5 0.5 0.5 0.02 2 force"
+            ],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Pocket.Dimension.Animation"
+                    }
+                ]
+            }
+        },
+        "Pocket.Dimension.Part2": {
+            "type": "palladium:command",
+            "title": "null",
+            "bar_color": "light_gray",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": -1,
+            "gui_position": "null",
+            "description": "null",
+            "first_tick_commands": [
+                "particle eop:void_energy ~ ~1 ~ 0.5 0.7 0.5 0.02 200 force"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "ability": "Pocket.Dimension.Animation",
+                        "property": "value",
+                        "min": 39,
+                        "max": 39
+                    }
+                ]
+            }
+        },
+        "Pocket.Dimension": {
+            "type": "eop:pocket_dimension",
+            "icon": "eop:textures/gui/pocket.png",
+            "title": "Pocket Dimension",
+            "bar_color": "light_blue",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "ability": "Pocket.Dimension.Animation",
+                        "property": "value",
+                        "min": 40,
+                        "max": 40
+                    }
+                ]
+            }
+        },
+        "Rift.Carver.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/rift_carver.png",
+            "title": "Rift Carver",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "gui_position": [
+                0,
+                -0.45
+            ],
+            "description": "description",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Pocket.Dimension.Unlock"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_drifter_skill_points",
+                        "score": 2,
+                        "icon": "eop:textures/gui/drifter.png",
+                        "description": {
+                            "text": "Plane Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Rift.Carver": {
+            "type": "palladium:command",
+            "icon": "eop:textures/gui/rift_carver.png",
+            "title": "Rift Carver",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "list_index": 1,
+            "first_tick_commands": [
+                "scoreboard objectives add Dimensional.Slash dummy",
+                "scoreboard players add @s Dimensional.Slash 1",
+                "execute if score @s Dimensional.Slash matches 3.. run scoreboard players set @s Dimensional.Slash 1",
+                "playsound minecraft:entity.allay.death master @a ~ ~ ~ 1 1.7"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "eop:action",
+                        "cooldown": 20,
+                        "energy": 5,
+                        "property": "eop_drifter_energy",
+                        "key_type": "key_bind"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_effect",
+                                "effect": "eop:plane_shift"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Rift.Carver.Projectile": {
+            "type": "palladium:projectile",
+            "icon": "minecraft:fire_charge",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": 1,
+            "entity_type": "eop:dimensional_slash",
+            "entity_data": {
+                "Damage": 4,
+                "DamageType": "eop:basic",
+                "SetEntityOnFireSeconds": 0,
+                "IgnoreLiquids": true,
+                "CommandsOnBlockHit": [
+                    "particle end_rod ~ ~ ~ 0.1 0.1 0.1 0.3 40",
+                    "playsound minecraft:entity.vex.death master @a ~ ~ ~ 1 1.7"
+                ],
+                "CommandsForTargets": [],
+                "CommandsForTargetsRadius": 2,
+                "ExplosionRadius": 0,
+                "ExplosionBlockInteraction": "BREAK",
+                "ExplosionCausesFire": true,
+                "Gravity": 0,
+                "Lifetime": 100,
+                "DieOnEntityHit": false,
+                "DieOnBlockHit": true
+            },
+            "inaccuracy": 0,
+            "velocity": 2,
+            "swinging_arm": "main_arm",
+            "damage_from_player": false,
+            "ignore_player_movement": false,
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Rift.Carver"
+                    },
+                    {
+                        "type": "palladium:objective_score",
+                        "objective": "Dimensional.Slash",
+                        "min_score": 1,
+                        "max_score": 1
+                    }
+                ]
+            }
+        },
+        "Rift.Carver.Projectile2": {
+            "type": "palladium:projectile",
+            "icon": "minecraft:fire_charge",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": 1,
+            "entity_type": "eop:dimensional_slash_2",
+            "entity_data": {
+                "Damage": 4,
+                "DamageType": "eop:basic",
+                "SetEntityOnFireSeconds": 0,
+                "IgnoreLiquids": true,
+                "CommandsOnBlockHit": [
+                    "particle end_rod ~ ~ ~ 0.1 0.1 0.1 0.3 40",
+                    "playsound minecraft:entity.vex.death master @a ~ ~ ~ 1 1.7"
+                ],
+                "CommandsForTargets": [],
+                "CommandsForTargetsRadius": 2,
+                "ExplosionRadius": 0,
+                "ExplosionBlockInteraction": "BREAK",
+                "ExplosionCausesFire": true,
+                "Gravity": 0,
+                "Lifetime": 100,
+                "DieOnEntityHit": false,
+                "DieOnBlockHit": true
+            },
+            "inaccuracy": 0,
+            "velocity": 2,
+            "swinging_arm": "main_arm",
+            "damage_from_player": false,
+            "ignore_player_movement": false,
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Rift.Carver"
+                    },
+                    {
+                        "type": "palladium:objective_score",
+                        "objective": "Dimensional.Slash",
+                        "min_score": 2,
+                        "max_score": 2
+                    }
+                ]
+            }
+        },
+        "Plane.Distortion.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/plane_distortion.png",
+            "title": "Plane Distortion",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": 2,
+            "gui_position": [
+                0,
+                0.3
+            ],
+            "description": "description",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "ability": "Rift.Carver.Unlock"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_drifter_skill_points",
+                        "score": 3,
+                        "icon": "eop:textures/gui/drifter.png",
+                        "description": {
+                            "text": "Plane Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Plane.Distortion": {
+            "type": "palladium:animation_timer",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "icon": "eop:textures/gui/plane_distortion.png",
+            "title": "Plane Distortion",
+            "list_index": 2,
+            "start_value": 0,
+            "max_value": 15,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "eop:activation",
+                        "ticks": 20,
+                        "cooldown": 300,
+                        "energy": 10,
+                        "property": "eop_drifter_energy",
+                        "toggle_mode": false,
+                        "key_type": "key_bind"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Plane.Distortion.Unlock"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_effect",
+                                "effect": "eop:plane_shift"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Plane.Distortion.Commands": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "playsound minecraft:entity.evoker.prepare_attack master @a ~ ~ ~ 1 1"
+            ],
+            "last_tick_commands": [
+                "playsound minecraft:entity.wither.death master @a ~ ~ ~ 1 1"
+            ],
+            "commands": [],
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Plane.Distortion"
+                    }
+                ]
+            }
+        },
+        "Plane.Distortion.Effects": {
+            "type": "eop:aoe_commands",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "radius": 15,
+            "commands_on_targets": [
+                "effect give @s eop:distorted 10 2 true",
+                "effect give @s slowness 10 2 true"
+            ],
+            "commands_on_allies": [
+                "effect give @s speed 10 2 true",
+                "effect give @s resistance 10 1 true"
+            ],
+            "cone": false,
+            "cone_angle": 90,
+            "include_caster": true,
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Plane.Distortion"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Plane.Distortion",
+                        "property": "value",
+                        "min": 15,
+                        "max": 15
+                    }
+                ]
+            }
+        },
+        "Void.Fracture.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/void_fracture.png",
+            "title": "Void Fracture",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": 2,
+            "gui_position": [
+                0,
+                1.2
+            ],
+            "description": "description",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "ability": "Plane.Distortion.Unlock"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_drifter_skill_points",
+                        "score": 4,
+                        "icon": "eop:textures/gui/drifter.png",
+                        "description": {
+                            "text": "Plane Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Void.Fracture": {
+            "type": "palladium:animation_timer",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "icon": "eop:textures/gui/void_fracture.png",
+            "title": "Void Fracture",
+            "list_index": 3,
+            "start_value": 0,
+            "max_value": 15,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "eop:activation",
+                        "ticks": 20,
+                        "cooldown": 300,
+                        "energy": 15,
+                        "property": "eop_drifter_energy",
+                        "toggle_mode": false,
+                        "key_type": "key_bind"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Void.Fracture.Unlock"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_effect",
+                                "effect": "eop:plane_shift"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Void.Fracture.Commands": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "playsound minecraft:entity.evoker.prepare_attack master @a ~ ~ ~ 1 1"
+            ],
+            "last_tick_commands": [
+                "playsound minecraft:entity.wither.death master @a ~ ~ ~ 1 1"
+            ],
+            "commands": [],
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Void.Fracture"
+                    }
+                ]
+            }
+        },
+        "Void.Fracture.Effects": {
+            "type": "eop:aoe_commands",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "radius": 15,
+            "commands_on_targets": [
+                "tag @s[tag=EOP.Premature.Explosion] add Plane.Explode"
+            ],
+            "commands_on_allies": [],
+            "cone": false,
+            "cone_angle": 90,
+            "include_caster": false,
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Void.Fracture"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Void.Fracture",
+                        "property": "value",
+                        "min": 15,
+                        "max": 15
+                    }
+                ]
+            }
+        },
+        "Ability5.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/image.png",
+            "title": "Ability Name",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": 2,
+            "gui_position": [
+                0,
+                2.75
+            ],
+            "description": "description",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "ability": "Void.Fracture.Unlock"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_drifter_skill_points",
+                        "score": 6,
+                        "icon": "eop:textures/gui/drifter.png",
+                        "description": {
+                            "text": "Plane Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

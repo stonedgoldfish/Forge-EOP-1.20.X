@@ -1,0 +1,119 @@
+{
+    "name": "Plane Shift",
+    "background": "minecraft:textures/block/gray_concrete_powder.png",
+    "icon": "eop:textures/gui/fungus.png",
+    "persistent_data": true,
+    "abilities": {
+        "Silent.Footsteps": {
+            "type": "eop:silent_steps",
+            "hidden": true,
+            "hidden_in_bar": true
+        },
+        "No.Collision": {
+            "type": "eop:no_collision",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "projectile_phasing": true,
+            "projectile_blacklist": []
+        },
+        "Temp.Resistance": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [],
+            "last_tick_commands": [],
+            "commands": [
+                "effect give @s legendarysurvivaloverhaul:temperature_immunity 1 0 true"
+            ],
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:mod_loaded",
+                        "mod_id": "legendarysurvivaloverhaul"
+                    }
+                ]
+            }
+        },
+        "Temp.Resistance2": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [],
+            "last_tick_commands": [],
+            "commands": [
+                "effect give @s toughasnails:climate_clemency 1 0 true"
+            ],
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:mod_loaded",
+                        "mod_id": "toughasnails"
+                    }
+                ]
+            }
+        },
+        "Effects.Immune.Mods": {
+            "type": "eop:immune_to_effect",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "effects": [
+                "alexscaves:irradiated",
+                "alexscaves:bubbled",
+                "alexsmobs:ender_flu",
+                "alexsmobs:debilitating_sting",
+                "alexsmobs:earthquake",
+                "alexsmobs:exsanguination"
+            ]
+        },
+        "Shader": {
+            "type": "palladium:shader_effect",
+            "icon": "minecraft:blaze_rod",
+            "title": "null",
+            "bar_color": "light_gray",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": -1,
+            "gui_position": "null",
+            "description": "null",
+            "shader": "minecraft:shaders/post/deconverge.json"
+        },
+        "Trail": {
+            "type": "palladium:trail",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "trail": "eop:rift"
+        },
+        "Intangibility": {
+            "type": "eop:intangibility",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "vertical": true,
+            "inside_block_view_distance": 16,
+            "blacklist": "eop:prevents_intangibility_stronger"
+        },
+        "Skulk": {
+            "type": "palladium:sculk_immunity",
+            "icon": "minecraft:sculk",
+            "hidden": true,
+            "hidden_in_bar": true
+        },
+        "Damage.Immunity": {
+            "type": "palladium:damage_immunity",
+            "icon": "minecraft:potion",
+            "title": "null",
+            "bar_color": "light_gray",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": -1,
+            "gui_position": "null",
+            "description": "null",
+            "damage_sources": [
+                "eop:wraith_immune",
+                "eop:wraith_immune_alexscaves",
+                "eop:wraith_immune_alexsmobs",
+                "eop:tacz_guns",
+                "eop:scorched_guns"
+            ]
+        }
+    }
+}

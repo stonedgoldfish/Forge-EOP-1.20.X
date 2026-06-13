@@ -1,0 +1,5 @@
+{
+	"model_type": "palladium:basic",
+    "model_layer": "eop:dimensional_slash#drifter",
+    "texture": "eop:textures/models/drifter/dimensional_slash.png"
+}
