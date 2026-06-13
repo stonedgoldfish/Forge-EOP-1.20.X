@@ -9,7 +9,8 @@
     "GameRendererMixin",
     "LivingEntityRendererMixin",
     "EntityRenderDispatcherMixin",
-    "GuiMixin"
+    "GuiMixin",
+    "MouseHandlerMixin"
   ],
   "mixins": [
     "EntityMixin",

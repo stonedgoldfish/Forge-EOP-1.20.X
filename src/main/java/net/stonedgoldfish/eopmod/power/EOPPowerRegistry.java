@@ -1,7 +1,6 @@
 package net.stonedgoldfish.eopmod.power;
 
 import net.minecraft.util.RandomSource;
-
 import java.util.*;
 
 public class EOPPowerRegistry {

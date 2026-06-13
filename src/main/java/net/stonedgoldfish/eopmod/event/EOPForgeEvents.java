@@ -4,15 +4,19 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraft.world.entity.LivingEntity;
 import net.stonedgoldfish.eopmod.client.animation.EOPAnimationType;
 import net.stonedgoldfish.eopmod.network.DodgePacket;
+import net.stonedgoldfish.eopmod.particle.EOPParticles;
 import net.stonedgoldfish.eopmod.power.ability.AutoDodgeAbility;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -35,7 +39,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
@@ -80,12 +83,95 @@ public class EOPForgeEvents {
         }
     }
 
+    @SubscribeEvent
+    public static void onFracturedHurt(LivingHurtEvent event) {
+        LivingEntity entity = event.getEntity();
+
+        if (entity.level().isClientSide) {
+            return;
+        }
+
+        if (!entity.hasEffect(EOPEffects.FRACTURED.get())) {
+            return;
+        }
+
+        entity.removeEffect(EOPEffects.FRACTURED.get());
+
+        entity.hurt(
+                entity.damageSources().explosion(null, null),
+                12.0F
+        );
+
+        entity.addEffect(new MobEffectInstance(
+                EOPEffects.SILENCED.get(),
+                100,
+                0,
+                false,
+                false,
+                true
+        ));
+
+        entity.addEffect(new MobEffectInstance(
+                MobEffects.MOVEMENT_SLOWDOWN,
+                100,
+                2,
+                false,
+                false,
+                true
+        ));
+
+        if (entity.level() instanceof ServerLevel serverLevel) {
+            double x = entity.getX();
+            double y = entity.getY() + entity.getBbHeight() * 0.8D;
+            double z = entity.getZ();
+
+            serverLevel.sendParticles(
+                    EOPParticles.VOID_ENERGY.get(),
+                    x,
+                    y,
+                    z,
+                    200,
+                    0.0D,
+                    0.0D,
+                    0.0D,
+                    0.45D
+            );
+        }
+        entity.level().playSound(
+                null,
+                entity.getX(),
+                entity.getY(),
+                entity.getZ(),
+                SoundEvents.GENERIC_EXPLODE,
+                SoundSource.PLAYERS,
+                1.5F,
+                1.2F
+        );
+
+        entity.level().playSound(
+                null,
+                entity.getX(),
+                entity.getY(),
+                entity.getZ(),
+                SoundEvents.GLASS_BREAK,
+                SoundSource.PLAYERS,
+                2.0F,
+                0.5F
+        );
+    }
+
     private static boolean isNaturallyImmune(LivingEntity entity, MobEffect effect) {
 
-        if (entity.getType() == EntityType.IRON_GOLEM) { // MUST CHANGE LATER
-            return effect == EOPEffects.STUN.get()
-                    || effect == EOPEffects.SNARE.get()
-                    || effect == EOPEffects.SILENCED.get();
+        if (entity.getMobType() == MobType.UNDEAD) {
+            return effect == EOPEffects.BLEED.get();
+        }
+
+        if (entity.getType() == EntityType.IRON_GOLEM) {
+            return effect == EOPEffects.BLEED.get();
+        }
+
+        if (entity.getType() == EntityType.SNOW_GOLEM) {
+            return effect == EOPEffects.BLEED.get();
         }
 
         return false;

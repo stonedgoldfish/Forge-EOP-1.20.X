@@ -185,6 +185,24 @@
                 ]
             }
         },
+        "Entity.Sense": {
+            "type": "palladium:entity_glow",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "mode": "others",
+            "color": "#B0F192",
+            "distance": 50,
+            "property_key": "EOP.LivingCreature",
+            "property_value": "true",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Entity.Sense.On"
+                    }
+                ]
+            }
+        },
         "AOE.Slow.Fall": {
             "type": "eop:aoe_commands",
             "hidden": true,

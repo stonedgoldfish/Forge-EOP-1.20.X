@@ -5,9 +5,7 @@ import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.stonedgoldfish.eopmod.EOPMod;
-import net.stonedgoldfish.eopmod.particle.FallingBloodParticle;
-import net.stonedgoldfish.eopmod.particle.EOPParticles;
-import net.stonedgoldfish.eopmod.particle.LandingBloodParticle;
+import net.stonedgoldfish.eopmod.particle.*;
 
 @Mod.EventBusSubscriber(
         modid = EOPMod.MOD_ID,
@@ -25,6 +23,30 @@ public class EOPParticleEvents {
         event.registerSpriteSet(
                 EOPParticles.LANDING_BLOOD.get(),
                 LandingBloodParticle.Provider::new
+        );
+        event.registerSpriteSet(
+                EOPParticles.VOID_ENERGY.get(),
+                VoidEnergyParticle.Provider::new
+        );
+        event.registerSpriteSet(
+                EOPParticles.LIGHT_ENERGY.get(),
+                VoidEnergyParticle.Provider::new
+        );
+        event.registerSpriteSet(
+                EOPParticles.DARK_ENERGY.get(),
+                VoidEnergyParticle.Provider::new
+        );
+        event.registerSpriteSet(
+                EOPParticles.ASTRAL_ENERGY.get(),
+                VoidEnergyParticle.Provider::new
+        );
+        event.registerSpriteSet(
+                EOPParticles.STAR.get(),
+                VoidEnergyParticle.Provider::new
+        );
+        event.registerSpriteSet(
+                EOPParticles.GLITCH.get(),
+                GlitchParticle.Provider::new
         );
     }
 }

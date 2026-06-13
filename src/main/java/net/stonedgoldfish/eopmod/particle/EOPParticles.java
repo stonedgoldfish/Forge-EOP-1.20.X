@@ -23,4 +23,28 @@ public class EOPParticles {
             PARTICLES.register("landing_blood", () ->
                     new SimpleParticleType(false)
             );
+    public static final RegistryObject<SimpleParticleType> VOID_ENERGY =
+            PARTICLES.register("void_energy", () ->
+                    new SimpleParticleType(false)
+            );
+    public static final RegistryObject<SimpleParticleType> DARK_ENERGY =
+            PARTICLES.register("dark_energy", () ->
+                    new SimpleParticleType(false)
+            );
+    public static final RegistryObject<SimpleParticleType> LIGHT_ENERGY =
+            PARTICLES.register("light_energy", () ->
+                    new SimpleParticleType(false)
+            );
+    public static final RegistryObject<SimpleParticleType> ASTRAL_ENERGY =
+            PARTICLES.register("astral_energy", () ->
+                    new SimpleParticleType(false)
+            );
+    public static final RegistryObject<SimpleParticleType> STAR =
+            PARTICLES.register("star", () ->
+                    new SimpleParticleType(false)
+            );
+    public static final RegistryObject<SimpleParticleType> GLITCH =
+            PARTICLES.register("glitch", () ->
+                    new SimpleParticleType(false)
+            );
 }

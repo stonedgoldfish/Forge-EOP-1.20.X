@@ -16,6 +16,8 @@ public class EOPConditions {
             CONDITIONS.register("action", ActionCondition.Serializer::new);
     public static final RegistrySupplier<ConditionSerializer> HELD =
             CONDITIONS.register("held", HeldCondition.Serializer::new);
+    public static final RegistrySupplier<ConditionSerializer> TOGGLE =
+            CONDITIONS.register("toggle", ToggleCondition.Serializer::new);
     public static final RegistrySupplier<ConditionSerializer> POWER_SELECTED =
             CONDITIONS.register("power_selected", PowerSelectedCondition.Serializer::new);
 }

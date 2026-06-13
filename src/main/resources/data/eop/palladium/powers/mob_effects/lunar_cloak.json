@@ -16,11 +16,8 @@
             "projectile_phasing": true,
             "projectile_blacklist": []
         },
-        "Rift": {
+        "Sound": {
             "type": "palladium:command",
-            "icon": "eop:textures/gui/rift_phasing.png",
-            "title": "Rift Plane",
-            "bar_color": "light_gray",
             "hidden": true,
             "hidden_in_bar": true,
             "first_tick_commands": [

@@ -6,7 +6,7 @@
     "gui_display_type": "tree",
     "persistent_data": true,
     "energy_bars": {
-        "test": {
+        "astral_energy": {
             "color": "#5733DB",
             "max": 100,
             "synced_value": {
@@ -490,13 +490,14 @@
         },
         "Starflare": {
             "type": "palladium:command",
-            "first_tick_commands": [
-                "playsound eop:energy_blast master @a ~ ~ ~ 1 1.7"
-            ],
-            "commands": [],
             "title": "Starflare",
             "hidden": true,
             "hidden_in_bar": true,
+            "first_tick_commands": [
+                "playsound eop:energy_blast master @a ~ ~ ~ 1 1.7"
+            ],
+            "last_tick_commands":[],
+            "commands": [],
             "list_index": 0,
             "conditions": {
                 "enabling": [

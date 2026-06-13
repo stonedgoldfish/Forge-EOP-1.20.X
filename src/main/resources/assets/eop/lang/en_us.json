@@ -1,6 +1,7 @@
 {
   "key.categories.eop": "Echoes of Power",
   "key.eop.battle_mode": "Battlemode",
+  "key.eop.extras_panel": "Utility Panel",
 
   "palladium.tailoring_recipe.category.eop.suits": "Echoes of Power Suits",
 
@@ -14,6 +15,10 @@
   "effect.eop.bleed": "Bleed",
   "effect.eop.silenced": "Silenced",
   "effect.eop.lunar_cloak": "Lunar Cloak",
+  "effect.eop.plane_shift": "Plane Shift",
+  "effect.eop.distorted": "Distorted",
+  "effect.eop.fractured": "Fractured",
+  "effect.eop.disoriented": "Disoriented",
 
   "block.eop.argon_pegmatite": "Argon Pegmatite",
   "block.eop.deepslate_argon_pegmatite": "Deepslate Argon Pegmatite",

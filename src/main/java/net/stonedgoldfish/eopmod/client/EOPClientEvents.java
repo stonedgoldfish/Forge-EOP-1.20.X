@@ -123,38 +123,6 @@ public class EOPClientEvents {
         });
     }
 
-    private static void drawIconText(
-            GuiGraphics guiGraphics,
-            ResourceLocation icon,
-            String text,
-            int x,
-            int y,
-            int iconSize,
-            int textOffset,
-            int color
-    ) {
-        guiGraphics.blit(
-                icon,
-                x,
-                y,
-                0,
-                0,
-                iconSize,
-                iconSize,
-                iconSize,
-                iconSize
-        );
-
-        guiGraphics.drawString(
-                Minecraft.getInstance().font,
-                text,
-                x + textOffset,
-                y,
-                color,
-                true
-        );
-    }
-
     private static void drawFixedIconScaledText(
             GuiGraphics guiGraphics,
             ResourceLocation icon,
@@ -391,7 +359,7 @@ public class EOPClientEvents {
             String classificationTitle = "Classification";
 
             String classText = "Class: " + powerData.powerClass();
-            String subclassText = "Subclass: " + powerData.subclass();
+            String subclassText = "Sub: " + powerData.subclass();
             String combatText = "Combat: " + powerData.combatStyle();
             String difficultyText = "Difficulty: " + powerData.difficulty();
 
@@ -401,7 +369,6 @@ public class EOPClientEvents {
             float classificationTitleScale = 0.69F;
             float classificationTextScale = 0.65F;
 
-            int classificationX = (int) ((barX + 2) / classificationTitleScale);
             int classificationY = (int) ((barY + 30) / classificationTitleScale);
 
             guiGraphics.pose().pushPose();

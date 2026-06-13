@@ -16,15 +16,15 @@ import net.threetag.palladium.util.context.DataContext;
 import net.threetag.palladium.util.context.DataContextType;
 import net.threetag.palladium.util.property.*;
 
-public class HeldCondition extends KeyCondition {
+public class ToggleCondition extends KeyCondition {
 
     private final int ticks;
     private final int energy;
-    private final boolean consumeEnergyRepeatedly;
     private final int energyInterval;
+    private final boolean consumeEnergyRepeatedly;
     private final String energyProperty;
 
-    public HeldCondition(
+    public ToggleCondition(
             int ticks,
             int cooldown,
             int energy,
@@ -38,8 +38,8 @@ public class HeldCondition extends KeyCondition {
 
         this.ticks = ticks;
         this.energy = energy;
-        this.consumeEnergyRepeatedly = consumeEnergyRepeatedly;
         this.energyInterval = energyInterval;
+        this.consumeEnergyRepeatedly = consumeEnergyRepeatedly;
         this.energyProperty = energyProperty;
     }
 
@@ -48,16 +48,12 @@ public class HeldCondition extends KeyCondition {
         LivingEntity entity = context.getLivingEntity();
         AbilityInstance entry = context.get(DataContextType.ABILITY);
 
-        if (entity == null || entry == null) {
-            return false;
-        }
-
-        if (!entry.keyPressed) {
+        if (entity == null || entry == null || !entry.keyPressed) {
             return false;
         }
 
         if (this.ticks > 0 && entry.activationTimer <= 0) {
-            stopHeld(entity, entry);
+            stopToggle(entity, entry);
             return false;
         }
 
@@ -72,7 +68,7 @@ public class HeldCondition extends KeyCondition {
             if (elapsed > 0 && elapsed % this.energyInterval == 0) {
                 if (!consumeEnergy(entity)) {
                     sendNotEnoughEnergy(entity);
-                    stopHeld(entity, entry);
+                    stopToggle(entity, entry);
                     return false;
                 }
             }
@@ -88,7 +84,12 @@ public class HeldCondition extends KeyCondition {
             Power power,
             IPowerHolder holder
     ) {
-        if (entry.cooldown > 0 || entry.keyPressed) {
+        if (entry.cooldown > 0) {
+            return;
+        }
+
+        if (entry.keyPressed) {
+            stopToggle(entity, entry);
             return;
         }
 
@@ -112,14 +113,10 @@ public class HeldCondition extends KeyCondition {
             Power power,
             IPowerHolder holder
     ) {
-        if (!entry.keyPressed) {
-            return;
-        }
-
-        stopHeld(entity, entry);
+        // Do nothing. Toggle only changes on key press.
     }
 
-    private void stopHeld(LivingEntity entity, AbilityInstance entry) {
+    private void stopToggle(LivingEntity entity, AbilityInstance entry) {
         entry.keyPressed = false;
         entry.activationTimer = 0;
 
@@ -176,31 +173,31 @@ public class HeldCondition extends KeyCondition {
 
     @Override
     public AbilityConfiguration.KeyPressType getKeyPressType() {
-        return AbilityConfiguration.KeyPressType.HOLD;
+        return AbilityConfiguration.KeyPressType.TOGGLE;
     }
 
     @Override
     public ConditionSerializer getSerializer() {
-        return EOPConditions.HELD.get();
+        return EOPConditions.TOGGLE.get();
     }
 
     public static class Serializer extends ConditionSerializer {
 
         public static final PalladiumProperty<Integer> TICKS =
                 new IntegerProperty("ticks")
-                        .configurable("Maximum amount of ticks the ability can stay active while held");
+                        .configurable("Maximum amount of ticks the ability can stay active after toggled on");
 
         public static final PalladiumProperty<Integer> ENERGY =
                 new IntegerProperty("energy")
-                        .configurable("Energy consumed by the held ability");
-
-        public static final PalladiumProperty<Boolean> CONSUME_ENERGY_REPEATEDLY =
-                new BooleanProperty("consume_energy_repeatedly")
-                        .configurable("If true, consumes energy every energy_interval ticks while held. If false, only consumes once on activation.");
+                        .configurable("Energy consumed by the toggle ability");
 
         public static final PalladiumProperty<Integer> ENERGY_INTERVAL =
                 new IntegerProperty("energy_interval")
-                        .configurable("If above 0, consumes energy every X ticks while held. 0 = only consumes on activation.");
+                        .configurable("If repeated energy is enabled, consumes energy every X ticks while toggled on");
+
+        public static final PalladiumProperty<Boolean> CONSUME_ENERGY_REPEATEDLY =
+                new BooleanProperty("consume_energy_repeatedly")
+                        .configurable("If true, consumes energy every energy_interval ticks while toggled on. If false, only consumes once on activation.");
 
         public static final PalladiumProperty<String> PROPERTY =
                 new StringProperty("property")
@@ -210,8 +207,8 @@ public class HeldCondition extends KeyCondition {
             this.withProperty(net.threetag.palladium.condition.ActionCondition.Serializer.COOLDOWN, 0);
             this.withProperty(TICKS, 60);
             this.withProperty(ENERGY, 0);
+            this.withProperty(ENERGY_INTERVAL, 20);
             this.withProperty(CONSUME_ENERGY_REPEATEDLY, false);
-            this.withProperty(ENERGY_INTERVAL, 0);
             this.withProperty(PROPERTY, "");
             this.withProperty(KeyCondition.KEY_TYPE_WITHOUT_SCROLLING, AbilityConfiguration.KeyType.KEY_BIND);
             this.withProperty(KeyCondition.NEEDS_EMPTY_HAND, false);
@@ -219,7 +216,7 @@ public class HeldCondition extends KeyCondition {
 
         @Override
         public Condition make(JsonObject json) {
-            return new HeldCondition(
+            return new ToggleCondition(
                     this.getProperty(json, TICKS),
                     this.getProperty(json, net.threetag.palladium.condition.ActionCondition.Serializer.COOLDOWN),
                     this.getProperty(json, ENERGY),
@@ -238,7 +235,7 @@ public class HeldCondition extends KeyCondition {
 
         @Override
         public String getDocumentationDescription() {
-            return "Allows an ability to stay active while holding a key and optionally consumes energy on activation or repeatedly every few ticks.";
+            return "Toggles an ability on/off with a key press, with optional duration, cooldown, and repeated energy consumption.";
         }
     }
 }
