@@ -5,6 +5,8 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.stonedgoldfish.eopmod.client.animation.anim.*;
 import net.threetag.palladium.client.model.animation.PalladiumAnimation;
 
+import static net.stonedgoldfish.eopmod.client.animation.EOPAnimationHandler.phase;
+
 public class EOPPlayerAnimation extends PalladiumAnimation {
 
     public EOPPlayerAnimation(int priority) {
@@ -100,6 +102,24 @@ public class EOPPlayerAnimation extends PalladiumAnimation {
                             EOPAnimationHandler.getPhase(),
                             anim
                     );
+                }
+            }
+
+            case CREATE2 -> {
+                if (!firstPerson) {
+                    Create2Animation.animate(
+                            builder,
+                            EOPAnimationHandler.getPhase(),
+                            anim
+                    );
+                }
+            }
+
+            case IN_OUT_SWIPE_BOTH_ARMS -> {
+                if (firstPerson) {
+                    InOutSwipeBothArmsAnimation.animateFirstPerson(builder, phase, anim);
+                } else {
+                    InOutSwipeBothArmsAnimation.animate(builder, phase, anim);
                 }
             }
 

@@ -1,0 +1,22 @@
+{
+    "name": "Black Hole",
+    "background": "minecraft:textures/block/gray_concrete_powder.png",
+    "icon": "eop:textures/gui/fungus.png",
+    "persistent_data": true,
+    "abilities": {
+        "Screen.Shake": {
+            "type": "eop:screen_shake",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "intensity": 1,
+            "speed": 1,
+            "affect_others": true,
+            "range": 15,
+            "resistance_tags": [
+                "Drifter"
+            ],
+            "end_burst": true,
+            "only_grounded_targets": false
+        }
+    }
+}

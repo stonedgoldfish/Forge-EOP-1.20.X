@@ -17,7 +17,7 @@ public class EOPAnimationHandler {
     private static boolean cameraWasChanged = false;
 
     private static EOPAnimationType currentAnimation = EOPAnimationType.NONE;
-    private static Phase phase = Phase.NONE;
+    public static Phase phase = Phase.NONE;
 
     private static float progress = 0.0F;
     private static float previousProgress = 0.0F;
@@ -65,6 +65,15 @@ public class EOPAnimationHandler {
                     -1.0D,
                     0.21D,
                     2.0D,
+                    0.30F,
+                    0.40F,
+                    0.10F
+            );
+
+            case CREATE2 -> new EOPCameraTransition.CameraProfile(
+                    0.0D,
+                    0.25D,
+                    3.5D,
                     0.30F,
                     0.40F,
                     0.10F
@@ -236,6 +245,7 @@ public class EOPAnimationHandler {
         return switch (type) {
             case TRANSFORM,
                  CREATE,
+                 CREATE2,
                  THIRD_PERSON -> true;
 
             default -> false;
@@ -300,6 +310,8 @@ public class EOPAnimationHandler {
         return switch (type) {
             case TRANSFORM -> 10;
             case CREATE -> 12;
+            case CREATE2 -> 16;
+            case IN_OUT_SWIPE_BOTH_ARMS -> 15;
             default -> 10;
         };
     }
@@ -307,7 +319,9 @@ public class EOPAnimationHandler {
     private static int getPhaseTwoDuration(EOPAnimationType type) {
         return switch (type) {
             case TRANSFORM -> 6;
-            case CREATE -> 8;
+            case CREATE,
+                 IN_OUT_SWIPE_BOTH_ARMS -> 8;
+            case CREATE2 -> 8;
             default -> 5;
         };
     }
@@ -315,7 +329,9 @@ public class EOPAnimationHandler {
     private static int getReturnDuration(EOPAnimationType type) {
         return switch (type) {
             case TRANSFORM -> 15;
-            case CREATE -> 10;
+            case CREATE,
+                 IN_OUT_SWIPE_BOTH_ARMS -> 10;
+            case CREATE2 -> 17;
             default -> 5;
         };
     }
@@ -323,7 +339,9 @@ public class EOPAnimationHandler {
     private static float getPhaseOneSpeed(EOPAnimationType type) {
         return switch (type) {
             case TRANSFORM -> 1.0F;
-            case CREATE -> 1.0F;
+            case CREATE,
+                 IN_OUT_SWIPE_BOTH_ARMS-> 1.0F;
+            case CREATE2 -> 0.8F;
             default -> 1.0F;
         };
     }
@@ -331,7 +349,9 @@ public class EOPAnimationHandler {
     private static float getPhaseTwoSpeed(EOPAnimationType type) {
         return switch (type) {
             case TRANSFORM -> 1.0F;
-            case CREATE -> 2.0F;
+            case CREATE,
+                 CREATE2,
+                 IN_OUT_SWIPE_BOTH_ARMS-> 2.0F;
             default -> 1.0F;
         };
     }
@@ -339,7 +359,9 @@ public class EOPAnimationHandler {
     private static float getReturnSpeedTwoPhase(EOPAnimationType type) {
         return switch (type) {
             case TRANSFORM -> 1.0F;
-            case CREATE -> 1.0F;
+            case CREATE,
+                 CREATE2,
+                 IN_OUT_SWIPE_BOTH_ARMS-> 1.0F;
             default -> 1.0F;
         };
     }

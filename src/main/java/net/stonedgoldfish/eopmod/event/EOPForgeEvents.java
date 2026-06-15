@@ -2,6 +2,7 @@ package net.stonedgoldfish.eopmod.event;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
@@ -135,6 +136,14 @@ public class EOPForgeEvents {
                     0.0D,
                     0.0D,
                     0.45D
+            );
+
+            serverLevel.sendParticles(
+                    ParticleTypes.END_ROD,
+                    x, y, z,
+                    120,
+                    0.0D, 0.0D, 0.0D,
+                    1.0D
             );
         }
         entity.level().playSound(

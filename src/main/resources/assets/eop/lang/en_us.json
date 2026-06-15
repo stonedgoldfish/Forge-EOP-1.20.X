@@ -19,6 +19,8 @@
   "effect.eop.distorted": "Distorted",
   "effect.eop.fractured": "Fractured",
   "effect.eop.disoriented": "Disoriented",
+  
+  "block.eop.dimension_bit": "Dimension Bit",
 
   "block.eop.argon_pegmatite": "Argon Pegmatite",
   "block.eop.deepslate_argon_pegmatite": "Deepslate Argon Pegmatite",

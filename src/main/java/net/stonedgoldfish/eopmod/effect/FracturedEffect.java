@@ -1,5 +1,6 @@
 package net.stonedgoldfish.eopmod.effect;
 
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -40,7 +41,7 @@ public class FracturedEffect extends MobEffect {
 
             entity.addEffect(new net.minecraft.world.effect.MobEffectInstance(
                     net.minecraft.world.effect.MobEffects.WEAKNESS,
-                    200,
+                    300,
                     2,
                     false,
                     false,
@@ -49,7 +50,7 @@ public class FracturedEffect extends MobEffect {
 
             entity.addEffect(new net.minecraft.world.effect.MobEffectInstance(
                     net.minecraft.world.effect.MobEffects.DIG_SLOWDOWN,
-                    200,
+                    300,
                     2,
                     false,
                     false,
@@ -58,7 +59,7 @@ public class FracturedEffect extends MobEffect {
 
             entity.addEffect(new net.minecraft.world.effect.MobEffectInstance(
                     net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN,
-                    200,
+                    300,
                     2,
                     false,
                     false,
@@ -75,6 +76,14 @@ public class FracturedEffect extends MobEffect {
                     120,
                     0.0D, 0.0D, 0.0D,
                     0.45D
+            );
+
+            serverLevel.sendParticles(
+                    ParticleTypes.END_ROD,
+                    x, y, z,
+                    120 + amplifier * 30,
+                    0.0D, 0.0D, 0.0D,
+                    1.0D
             );
 
             entity.level().playSound(

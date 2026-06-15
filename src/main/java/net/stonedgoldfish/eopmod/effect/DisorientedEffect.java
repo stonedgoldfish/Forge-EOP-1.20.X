@@ -3,6 +3,7 @@ package net.stonedgoldfish.eopmod.effect;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 
@@ -48,6 +49,13 @@ public class DisorientedEffect extends MobEffect {
     }
 
     private static void distortMobMovement(LivingEntity entity, int amplifier) {
+        if (entity instanceof Mob mob) {
+            mob.setTarget(null);
+            mob.setLastHurtByMob(null);
+            mob.setLastHurtMob(null);
+            mob.getNavigation().stop();
+        }
+
         int interval = Math.max(5, 30 - amplifier * 4);
 
         if (entity.tickCount % interval != 0) {
@@ -59,7 +67,7 @@ public class DisorientedEffect extends MobEffect {
         entity.setYRot(random.nextFloat() * 360.0F);
         entity.setYHeadRot(entity.getYRot());
 
-        double strength = 0.75D + amplifier * 0.3D;
+        double strength = 0.95D + amplifier * 0.3D;
 
         double x = (random.nextDouble() - 0.5D) * strength;
         double z = (random.nextDouble() - 0.5D) * strength;

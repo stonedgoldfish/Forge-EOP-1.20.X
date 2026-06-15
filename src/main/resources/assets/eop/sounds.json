@@ -48,5 +48,35 @@
                 "stream": true
             }
         ]
+    },
+	"static": {
+        "category": "neutral",
+        "subtitle": "static",
+        "sounds": [
+            {
+                "name": "eop:static",
+                "stream": true
+            }
+        ]
+    },
+	"static_low": {
+        "category": "neutral",
+        "subtitle": "static_low",
+        "sounds": [
+            {
+                "name": "eop:static_low",
+                "stream": true
+            }
+        ]
+    },
+	"void": {
+        "category": "neutral",
+        "subtitle": "void",
+        "sounds": [
+            {
+                "name": "eop:void",
+                "stream": true
+            }
+        ]
     }
 }

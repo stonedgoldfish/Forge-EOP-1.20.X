@@ -438,12 +438,23 @@
                 ]
             }
         },
+        "Effect.Immunities": {
+            "type": "eop:immune_to_effect",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "effects": [
+                "minecraft:blindness",
+                "minecraft:darkness",
+                "eop:distorted",
+                "eop:fractured"
+            ]
+        },
         "Energy.Regen": {
             "type": "eop:energy_regen",
             "hidden": true,
             "hidden_in_bar": true,
             "amount": 1,
-            "interval": 7,
+            "interval": 25,
             "max": 100,
             "enabled_energy_drain": true,
             "drain_amount": 0,
@@ -455,7 +466,7 @@
             "hidden": true,
             "hidden_in_bar": true,
             "amount": 1,
-            "interval": 2,
+            "interval": 5,
             "max": 100,
             "enabled_energy_drain": true,
             "drain_amount": 0,
@@ -584,7 +595,7 @@
                 ]
             }
         },
-        "Pocket.Dimension.Animation": {
+        "Pocket.Dimension": {
             "type": "palladium:animation_timer",
             "icon": "eop:textures/gui/pocket_dimension.png",
             "title": "Pocket Dimension",
@@ -625,6 +636,24 @@
                 ]
             }
         },
+        "Teleport.Slow": {
+            "type": "palladium:attribute_modifier",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.movement_speed",
+            "amount": -0.5,
+            "operation": 1,
+            "uuid": "606562de-2c03-4d40-862c-b8aecf26801b",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Pocket.Dimension"
+                    }
+                ]
+            }
+        },
         "Screen.Shake": {
             "type": "eop:screen_shake",
             "hidden": true,
@@ -638,7 +667,7 @@
                     {
                         "type": "palladium:ability_enabled",
                         "power": "null",
-                        "ability": "Pocket.Dimension.Animation"
+                        "ability": "Pocket.Dimension"
                     }
                 ]
             }
@@ -664,7 +693,7 @@
                     {
                         "type": "palladium:ability_enabled",
                         "power": "null",
-                        "ability": "Pocket.Dimension.Animation"
+                        "ability": "Pocket.Dimension"
                     }
                 ]
             }
@@ -687,7 +716,7 @@
                 "enabling": [
                     {
                         "type": "palladium:ability_integer_property",
-                        "ability": "Pocket.Dimension.Animation",
+                        "ability": "Pocket.Dimension",
                         "property": "value",
                         "min": 39,
                         "max": 39
@@ -695,7 +724,7 @@
                 ]
             }
         },
-        "Pocket.Dimension": {
+        "Pocket.Dimension.Teleport": {
             "type": "eop:pocket_dimension",
             "icon": "eop:textures/gui/pocket.png",
             "title": "Pocket Dimension",
@@ -706,10 +735,15 @@
                 "enabling": [
                     {
                         "type": "palladium:ability_integer_property",
-                        "ability": "Pocket.Dimension.Animation",
+                        "ability": "Pocket.Dimension",
                         "property": "value",
                         "min": 40,
                         "max": 40
+                    },
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Pocket.Dimension"
                     }
                 ]
             }
@@ -763,7 +797,7 @@
                 "enabling": [
                     {
                         "type": "eop:action",
-                        "cooldown": 20,
+                        "cooldown": 30,
                         "energy": 5,
                         "property": "eop_drifter_energy",
                         "key_type": "key_bind"
@@ -799,7 +833,7 @@
             "list_index": 1,
             "entity_type": "eop:dimensional_slash",
             "entity_data": {
-                "Damage": 4,
+                "Damage": 3,
                 "DamageType": "eop:basic",
                 "SetEntityOnFireSeconds": 0,
                 "IgnoreLiquids": true,
@@ -845,7 +879,7 @@
             "list_index": 1,
             "entity_type": "eop:dimensional_slash_2",
             "entity_data": {
-                "Damage": 4,
+                "Damage": 3,
                 "DamageType": "eop:basic",
                 "SetEntityOnFireSeconds": 0,
                 "IgnoreLiquids": true,
@@ -922,7 +956,7 @@
             "title": "Plane Distortion",
             "list_index": 2,
             "start_value": 0,
-            "max_value": 15,
+            "max_value": 19,
             "conditions": {
                 "enabling": [
                     {
@@ -962,15 +996,83 @@
                 ]
             }
         },
+        "Plane.Distortion.Animation": {
+            "type": "eop:trigger_animation",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "animation": "IN_OUT_SWIPE_BOTH_ARMS",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Plane.Distortion"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Plane.Distortion",
+                        "property": "value",
+                        "min": 1,
+                        "max": 1
+                    }
+                ]
+            }
+        },
         "Plane.Distortion.Commands": {
             "type": "palladium:command",
             "hidden": true,
             "hidden_in_bar": true,
             "first_tick_commands": [
-                "playsound minecraft:entity.evoker.prepare_attack master @a ~ ~ ~ 1 1"
+                "playsound minecraft:entity.evoker.prepare_attack master @a ~ ~ ~ 1 2"
             ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Plane.Distortion"
+                    }
+                ]
+            }
+        },
+        "Screen.Shake2": {
+            "type": "eop:screen_shake",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "intensity": 1,
+            "speed": 1,
+            "affect_others": false,
+            "range": 15,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Plane.Distortion"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Plane.Distortion",
+                        "property": "value",
+                        "min": 12,
+                        "max": 19
+                    }
+                ]
+            }
+        },
+        "Plane.Distortion.Commands2": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [],
             "last_tick_commands": [
-                "playsound minecraft:entity.wither.death master @a ~ ~ ~ 1 1"
+                "playsound minecraft:entity.wither.death master @a ~ ~ ~ 1 2",
+                "particle eop:void_energy ~ ~1 ~ 0 0 0 1 260",
+                "particle end_rod ~ ~1 ~ 0 0 0 0.6 160"
             ],
             "commands": [],
             "conditions": {
@@ -979,6 +1081,14 @@
                         "type": "palladium:ability_enabled",
                         "power": "null",
                         "ability": "Plane.Distortion"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Plane.Distortion",
+                        "property": "value",
+                        "min": 12,
+                        "max": 12
                     }
                 ]
             }
@@ -1096,16 +1206,37 @@
                 ]
             }
         },
+        "Void.Fracture.Animation": {
+            "type": "eop:trigger_animation",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "animation": "RIGHT_ARM_SWIPE",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Void.Fracture"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Void.Fracture",
+                        "property": "value",
+                        "min": 1,
+                        "max": 1
+                    }
+                ]
+            }
+        },
         "Void.Fracture.Commands": {
             "type": "palladium:command",
             "hidden": true,
             "hidden_in_bar": true,
             "first_tick_commands": [
-                "playsound minecraft:entity.evoker.prepare_attack master @a ~ ~ ~ 1 1"
+                "playsound eop:energy_transform master @a ~ ~ ~ 1 2"
             ],
-            "last_tick_commands": [
-                "playsound minecraft:entity.wither.death master @a ~ ~ ~ 1 1"
-            ],
+            "last_tick_commands": [],
             "commands": [],
             "conditions": {
                 "unlocking": [
@@ -1113,6 +1244,42 @@
                         "type": "palladium:ability_enabled",
                         "power": "null",
                         "ability": "Void.Fracture"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Void.Fracture",
+                        "property": "value",
+                        "min": 3,
+                        "max": 3
+                    }
+                ]
+            }
+        },
+        "Fracture.Particles": {
+            "type": "eop:particle_pattern",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "particle_pattern": "outwards_pulse",
+            "particle_type": "minecraft:poof",
+            "particle_amount": 10,
+            "particle_radius": 12,
+            "particle_speed": 0.15,
+            "particle_y_offset": 0.3,
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Void.Fracture"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Void.Fracture",
+                        "property": "value",
+                        "min": 3,
+                        "max": 3
                     }
                 ]
             }
@@ -1147,10 +1314,10 @@
                 ]
             }
         },
-        "Ability5.Unlock": {
+        "Dimensional.Severance.Unlock": {
             "type": "palladium:dummy",
             "icon": "eop:textures/gui/image.png",
-            "title": "Ability Name",
+            "title": "Dimensional Severance",
             "bar_color": "light_gray",
             "hidden": false,
             "hidden_in_bar": true,
@@ -1174,6 +1341,218 @@
                         "description": {
                             "text": "Plane Manipulation Skill Point"
                         }
+                    }
+                ]
+            }
+        },
+        "Dimensional.Severance": {
+            "type": "palladium:animation_timer",
+            "icon": "eop:textures/gui/image.png",
+            "title": "Dimensional Severance",
+            "bar_color": "light_gray",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "list_index": 4,
+            "start_value": 0,
+            "max_value": 20,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "eop:activation",
+                        "ticks": 20,
+                        "cooldown": 150,
+                        "energy": 20,
+                        "property": "eop_drifter_energy",
+                        "toggle_mode": false,
+                        "key_type": "key_bind"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Dimensional.Severance.Unlock"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_effect",
+                                "effect": "eop:plane_shift"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "IFrame": {
+            "type": "palladium:damage_immunity",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "damage_sources": [
+                "eop:phase_immune",
+                "eop:phase_immune_alexscaves",
+                "eop:phase_immune_alexsmobs",
+                "eop:tacz_guns",
+                "eop:scorched_guns"
+            ],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Dimensional.Severance"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Dimensional.Severance",
+                        "property": "value",
+                        "min": 1,
+                        "max": 29
+                    }
+                ]
+            }
+        },
+        "No.Move": {
+            "type": "eop:no_movement",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Dimensional.Severance"
+                    }
+                ]
+            }
+        },
+        "Dimensional.Severance.Commands": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "playsound minecraft:entity.evoker.prepare_attack master @a ~ ~ ~ 1 2"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Dimensional.Severance"
+                    }
+                ]
+            }
+        },
+        "Dimensional.Severance.Commands2": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "playsound eop:energy_blast master @a ~ ~ ~ 1 1.6"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Dimensional.Severance"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Dimensional.Severance",
+                        "property": "value",
+                        "min": 18,
+                        "max": 18
+                    }
+                ]
+            }
+        },
+        "Dimensional.Severance.Animation": {
+            "type": "eop:trigger_animation",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "animation": "CREATE2",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Dimensional.Severance"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Dimensional.Severance",
+                        "property": "value",
+                        "min": 1,
+                        "max": 1
+                    }
+                ]
+            }
+        },
+        "Dimensional.Severance.Summon": {
+            "type": "eop:spawn_armor_stand",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "range": 25,
+            "spawn_at_player": false,
+            "lifetime": 200,
+            "enable_damage": false,
+            "damage_on_last_tick": false,
+            "knockback_on_last_tick": 2.5,
+            "aoe_damage": 5,
+            "aoe_radius": 17,
+            "aoe_damage_type": "eop:basic",
+            "target_command_radius": 10,
+            "stand_first_tick_commands": [],
+            "stand_commands": [],
+            "stand_last_tick_commands": [
+                "playsound minecraft:entity.generic.explode master @a ~ ~ ~ 1 0.7"
+            ],
+            "target_first_tick_commands": [],
+            "target_commands": [
+                "effect give @s slowness 1 4 true",
+                "effect give @s eop:fractured 1 0 true"
+            ],
+            "target_last_tick_commands": [
+                "tag @s[tag=EOP.Premature.Explosion] add Plane.Explode"
+            ],
+            "stand_power": "eop:models/dimensional_severance",
+            "pull_strength": 0,
+            "invert_pull": false,
+            "looping_sound": "eop:void",
+            "looping_sound_volume": 2,
+            "looping_sound_pitch": 1,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Dimensional.Severance"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Dimensional.Severance",
+                        "property": "value",
+                        "min": 18,
+                        "max": 18
                     }
                 ]
             }

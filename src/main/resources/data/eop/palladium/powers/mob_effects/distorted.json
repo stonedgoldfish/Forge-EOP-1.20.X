@@ -5,16 +5,13 @@
     "persistent_data": true,
     "abilities": {
         "Shader": {
-            "type": "palladium:shader_effect",
-            "icon": "minecraft:blaze_rod",
-            "title": "null",
-            "bar_color": "light_gray",
+            "type": "eop:play_sound",
             "hidden": true,
             "hidden_in_bar": true,
-            "list_index": -1,
-            "gui_position": "null",
-            "description": "null",
-            "shader": "minecraft:shaders/post/deconverge.json"
+            "sound": "eop:static_low",
+            "volume": 1,
+            "pitch": 1,
+            "play_self": true
         }
     }
 }

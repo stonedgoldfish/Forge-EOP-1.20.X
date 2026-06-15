@@ -18,7 +18,7 @@ import net.threetag.palladium.util.property.StringProperty;
 
 public class ParticlePatternAbility extends Ability {
 
-    public static final PalladiumProperty<String> PARTICLE_PATTERN = new StringProperty("particle_pattern").configurable("Particle pattern. Currently supports: implosion, outward_pulse, inward_pulse");
+    public static final PalladiumProperty<String> PARTICLE_PATTERN = new StringProperty("particle_pattern").configurable("Particle pattern. Currently supports: implosion, outwards_pulse, inwards_pulse");
     public static final PalladiumProperty<String> PARTICLE_TYPE = new StringProperty("particle_type").configurable("Particle type resource location");
     public static final PalladiumProperty<Integer> PARTICLE_AMOUNT = new IntegerProperty("particle_amount").configurable("Particles spawned per tick");
     public static final PalladiumProperty<Float> PARTICLE_RADIUS = new FloatProperty("particle_radius").configurable("Particle effect radius");
