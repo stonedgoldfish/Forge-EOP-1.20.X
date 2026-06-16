@@ -8,29 +8,40 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.stonedgoldfish.eopmod.EOPMod;
-import net.minecraft.world.entity.LivingEntity;
 import net.threetag.palladium.power.ability.AbilityInstance;
 import net.threetag.palladium.power.ability.AbilityReference;
 import org.joml.Matrix4f;
+
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = EOPMod.MOD_ID, value = Dist.CLIENT)
 public class DimensionalSeveranceHandler {
 
-    private static final Map<UUID, Integer> BUBBLE_AGE = new HashMap<>();
+    private record BubbleRenderState(double x, double y, double z, UUID uuid, int renderAge) {}
+
+    private static final Map<UUID, Float> BUBBLE_SCALE = new HashMap<>();
+    private static final Map<UUID, BubbleRenderState> BUBBLE_LAST_STATE = new HashMap<>();
+    private static final Map<UUID, Integer> BUBBLE_RENDER_AGE = new HashMap<>();
+
+    private static final float GROW_SPEED = 0.018F;
+    private static final float SHRINK_SPEED = 0.015F;
+
     private static final ResourceLocation BUBBLE_TEXTURE =
             ResourceLocation.fromNamespaceAndPath(
                     EOPMod.MOD_ID,
                     "textures/entity/render/dimensional_severance.png"
             );
+
     private static final ResourceLocation SPLATTER_TEXTURE =
             ResourceLocation.fromNamespaceAndPath(
                     EOPMod.MOD_ID,
@@ -45,29 +56,95 @@ public class DimensionalSeveranceHandler {
 
         Minecraft minecraft = Minecraft.getInstance();
 
-        if (minecraft.level == null) {
+        if (minecraft.level == null || minecraft.player == null) {
+            BUBBLE_SCALE.clear();
+            BUBBLE_LAST_STATE.clear();
             return;
         }
 
         PoseStack poseStack = event.getPoseStack();
+        float partialTick = event.getPartialTick();
 
-        if (minecraft.player == null) {
-            return;
-        }
+        HashSet<UUID> seenThisFrame = new HashSet<>();
 
         for (LivingEntity entity : minecraft.level.getEntitiesOfClass(
                 LivingEntity.class,
                 minecraft.player.getBoundingBox().inflate(128.0D)
         )) {
-            if (!hasBubbleAbility(entity)) {
-                BUBBLE_AGE.remove(entity.getUUID());
+            UUID uuid = entity.getUUID();
+            seenThisFrame.add(uuid);
+
+            boolean active = entity.isAlive() && hasBubbleAbility(entity);
+
+            float currentScale = BUBBLE_SCALE.getOrDefault(uuid, 0.0F);
+
+            if (active) {
+                currentScale = Math.min(currentScale + GROW_SPEED, 1.0F);
+            } else {
+                currentScale = Math.max(currentScale - SHRINK_SPEED, 0.0F);
+            }
+
+            if (currentScale <= 0.001F) {
+                BUBBLE_SCALE.remove(uuid);
+                BUBBLE_LAST_STATE.remove(uuid);
                 continue;
             }
 
-            BUBBLE_AGE.putIfAbsent(entity.getUUID(), 0);
-            BUBBLE_AGE.put(entity.getUUID(), BUBBLE_AGE.get(entity.getUUID()) + 1);
+            BUBBLE_SCALE.put(uuid, currentScale);
 
-            renderBubble(entity, poseStack, event.getPartialTick(), BUBBLE_AGE.get(entity.getUUID()));
+            double x = entity.xOld + (entity.getX() - entity.xOld) * partialTick;
+            double y = entity.yOld + (entity.getY() - entity.yOld) * partialTick + entity.getBbHeight() * 0.5D;
+            double z = entity.zOld + (entity.getZ() - entity.zOld) * partialTick;
+
+            int renderAge = BUBBLE_RENDER_AGE.getOrDefault(uuid, 0) + 1;
+            BUBBLE_RENDER_AGE.put(uuid, renderAge);
+
+            BubbleRenderState state = new BubbleRenderState(
+                    x,
+                    y,
+                    z,
+                    uuid,
+                    renderAge
+            );
+
+            BUBBLE_LAST_STATE.put(uuid, state);
+
+            renderBubbleAt(state, poseStack, partialTick, currentScale);
+        }
+
+        for (UUID uuid : new HashSet<>(BUBBLE_SCALE.keySet())) {
+            if (seenThisFrame.contains(uuid)) {
+                continue;
+            }
+
+            BubbleRenderState state = BUBBLE_LAST_STATE.get(uuid);
+
+            if (state == null) {
+                BUBBLE_SCALE.remove(uuid);
+                continue;
+            }
+
+            float currentScale = Math.max(BUBBLE_SCALE.getOrDefault(uuid, 0.0F) - SHRINK_SPEED, 0.0F);
+
+            if (currentScale <= 0.001F) {
+                BUBBLE_SCALE.remove(uuid);
+                BUBBLE_LAST_STATE.remove(uuid);
+                continue;
+            }
+
+            BUBBLE_SCALE.put(uuid, currentScale);
+
+            int renderAge = BUBBLE_RENDER_AGE.getOrDefault(uuid, state.renderAge()) + 1;
+            BUBBLE_RENDER_AGE.put(uuid, renderAge);
+
+            state = new BubbleRenderState(
+                    state.x(),
+                    state.y(),
+                    state.z(),
+                    state.uuid(),
+                    renderAge
+            );
+            renderBubbleAt(state, poseStack, partialTick, currentScale);
         }
     }
 
@@ -82,16 +159,17 @@ public class DimensionalSeveranceHandler {
         return ability != null && ability.isEnabled();
     }
 
-    private static void renderBubble(LivingEntity entity, PoseStack poseStack, float partialTick, int bubbleAge) {
+    private static void renderBubbleAt(
+            BubbleRenderState state,
+            PoseStack poseStack,
+            float partialTick,
+            float scaleProgress
+    ) {
         Minecraft minecraft = Minecraft.getInstance();
 
         double camX = minecraft.gameRenderer.getMainCamera().getPosition().x;
         double camY = minecraft.gameRenderer.getMainCamera().getPosition().y;
         double camZ = minecraft.gameRenderer.getMainCamera().getPosition().z;
-
-        double x = entity.xOld + (entity.getX() - entity.xOld) * partialTick;
-        double y = entity.yOld + (entity.getY() - entity.yOld) * partialTick + entity.getBbHeight() * 0.5D;
-        double z = entity.zOld + (entity.getZ() - entity.zOld) * partialTick;
 
         MultiBufferSource.BufferSource buffer =
                 minecraft.renderBuffers().bufferSource();
@@ -99,25 +177,23 @@ public class DimensionalSeveranceHandler {
         poseStack.pushPose();
 
         poseStack.translate(
-                x - camX,
-                y - camY,
-                z - camZ
+                state.x() - camX,
+                state.y() - camY,
+                state.z() - camZ
         );
 
-        float spin = (entity.tickCount + partialTick) * 8.0F;
+        float spin = (state.renderAge() + partialTick) * 4.0F;
 
         poseStack.mulPose(Axis.YP.rotationDegrees(spin));
-        float appearTime = 60.0F;
-        float appearProgress = Mth.clamp((bubbleAge + partialTick) / appearTime, 0.0F, 1.0F);
 
-        float popScale = 1.0F + (1.0F - appearProgress) * 0.35F;
-        float scale = easeOutBack(appearProgress) * popScale;
-
+        float scale = easeOutBack(scaleProgress);
         poseStack.scale(scale, scale, scale);
 
-        renderSphere(poseStack, buffer, 15.8F, 0.05F);
-        renderSplatters(poseStack, buffer, entity.getUUID(), 15.81F, 0.85F);
-        renderSplatters(poseStack, buffer, entity.getUUID(), 15.61F, 0.85F);
+        float bubbleRadius = 15.8F;
+
+        renderSphere(poseStack, buffer, bubbleRadius, 0.05F);
+        renderSplatters(poseStack, buffer, state.uuid(), bubbleRadius + 0.03F, 0.85F);
+        renderSplatters(poseStack, buffer, state.uuid(), bubbleRadius - 0.17F, 0.85F);
 
         poseStack.popPose();
 
@@ -139,11 +215,9 @@ public class DimensionalSeveranceHandler {
             float phi = (float) Math.acos(2.0D * random.nextDouble() - 1.0D);
             float theta = (float) (2.0D * Math.PI * random.nextDouble());
 
-            float splatterRadius = radius + 0.03F;
-
-            float x = splatterRadius * Mth.sin(phi) * Mth.cos(theta);
-            float y = splatterRadius * Mth.cos(phi);
-            float z = splatterRadius * Mth.sin(phi) * Mth.sin(theta);
+            float x = radius * Mth.sin(phi) * Mth.cos(theta);
+            float y = radius * Mth.cos(phi);
+            float z = radius * Mth.sin(phi) * Mth.sin(theta);
 
             float size = 1.5F;
             float rotation = 30.0F;
@@ -195,7 +269,7 @@ public class DimensionalSeveranceHandler {
             float size,
             float alpha
     ) {
-        var vertexConsumer = buffer.getBuffer(RenderType.entityTranslucent(SPLATTER_TEXTURE));
+        var vertexConsumer = buffer.getBuffer(RenderType.entityTranslucentEmissive(SPLATTER_TEXTURE));
         Matrix4f matrix = poseStack.last().pose();
 
         int a = (int) (alpha * 255.0F);
@@ -247,7 +321,7 @@ public class DimensionalSeveranceHandler {
             float radius,
             float alpha
     ) {
-        var vertexConsumer = buffer.getBuffer(RenderType.entityTranslucent(BUBBLE_TEXTURE));
+        var vertexConsumer = buffer.getBuffer(RenderType.entityTranslucentEmissive(BUBBLE_TEXTURE));
         Matrix4f matrix = poseStack.last().pose();
 
         int a = (int) (alpha * 255.0F);

@@ -15,10 +15,13 @@ import net.threetag.palladium.util.property.FloatProperty;
 import net.threetag.palladium.util.property.IntegerProperty;
 import net.threetag.palladium.util.property.PalladiumProperty;
 import net.threetag.palladium.util.property.StringProperty;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ParticlePatternAbility extends Ability {
 
-    public static final PalladiumProperty<String> PARTICLE_PATTERN = new StringProperty("particle_pattern").configurable("Particle pattern. Currently supports: implosion, outwards_pulse, inwards_pulse");
+    public static final PalladiumProperty<String> PARTICLE_PATTERN = new StringProperty("particle_pattern").configurable("Particle pattern. Currently supports: implosion, outwards_pulse, inwards_pulse, sphere_outwards_pulse, sphere_inwards_pulse");
     public static final PalladiumProperty<String> PARTICLE_TYPE = new StringProperty("particle_type").configurable("Particle type resource location");
     public static final PalladiumProperty<Integer> PARTICLE_AMOUNT = new IntegerProperty("particle_amount").configurable("Particles spawned per tick");
     public static final PalladiumProperty<Float> PARTICLE_RADIUS = new FloatProperty("particle_radius").configurable("Particle effect radius");
@@ -35,16 +38,27 @@ public class ParticlePatternAbility extends Ability {
         this.withProperty(PARTICLE_SPEED, 0.08F);
         this.withProperty(PARTICLE_Y_OFFSET, 1.0F);
     }
+    private static final Map<UUID, Integer> ACTIVATION_START_TICKS = new ConcurrentHashMap<>();
 
     @Override
     public void tick(LivingEntity entity, AbilityInstance entry, IPowerHolder holder, boolean enabled) {
-        if (entity.level().isClientSide || !enabled) {
+        if (entity.level().isClientSide) {
+            return;
+        }
+
+        UUID entityId = entity.getUUID();
+
+        if (!enabled) {
+            ACTIVATION_START_TICKS.remove(entityId);
             return;
         }
 
         if (!(entity.level() instanceof ServerLevel serverLevel)) {
             return;
         }
+
+        int activationTick = ACTIVATION_START_TICKS.computeIfAbsent(entityId, id -> entity.tickCount);
+        int abilityTicks = entity.tickCount - activationTick;
 
         String pattern = entry.getProperty(PARTICLE_PATTERN);
         ParticleOptions particle = getParticle(entry.getProperty(PARTICLE_TYPE));
@@ -63,26 +77,42 @@ public class ParticlePatternAbility extends Ability {
         double centerZ = entity.getZ();
 
         switch (pattern) {
-            case "outwards_pulse" -> spawnOutwardsPulseParticles(
-                    serverLevel,
-                    centerX,
-                    centerY,
-                    centerZ,
-                    particle,
-                    amount,
-                    radius,
-                    speed
+            case "outwards_pulse" -> spawnPulseRingParticles(
+                    serverLevel, abilityTicks,
+                    centerX, centerY, centerZ,
+                    particle, amount, radius, speed,
+                    false
             );
 
-            case "inwards_pulse" -> spawnInwardsPulseParticles(
+            case "inwards_pulse" -> spawnPulseRingParticles(
+                    serverLevel, abilityTicks,
+                    centerX, centerY, centerZ,
+                    particle, amount, radius, speed,
+                    true
+            );
+
+            case "sphere_outwards_pulse" -> spawnPulseSphereParticles(
                     serverLevel,
+                    abilityTicks,
                     centerX,
                     centerY,
                     centerZ,
                     particle,
                     amount,
                     radius,
-                    speed
+                    false
+            );
+
+            case "sphere_inwards_pulse" -> spawnPulseSphereParticles(
+                    serverLevel,
+                    abilityTicks,
+                    centerX,
+                    centerY,
+                    centerZ,
+                    particle,
+                    amount,
+                    radius,
+                    true
             );
 
             case "implosion" -> spawnImplosionParticles(
@@ -155,74 +185,100 @@ public class ParticlePatternAbility extends Ability {
         }
     }
 
-    private static void spawnOutwardsPulseParticles(
+    private static void spawnPulseRingParticles(
             ServerLevel level,
+            int abilityTicks,
             double centerX,
             double centerY,
             double centerZ,
             ParticleOptions particle,
             int amount,
-            float radius,
-            float speed
+            float maxRadius,
+            float speed,
+            boolean inward
     ) {
-        for (int i = 0; i < amount; i++) {
-            double angle = level.random.nextDouble() * Math.PI * 2.0D;
-            double yOffset = (level.random.nextDouble() - 0.5D) * radius * 0.4D;
+        int pulseLength = 20;
 
-            double x = centerX;
-            double y = centerY + yOffset;
-            double z = centerZ;
+        double progress = (abilityTicks % pulseLength) / (double) pulseLength;
 
-            double motionX = Math.cos(angle) * speed;
-            double motionY = (level.random.nextDouble() - 0.5D) * speed * 0.3D;
-            double motionZ = Math.sin(angle) * speed;
+        double ringRadius = inward
+                ? maxRadius * (1.0D - progress)
+                : maxRadius * progress;
+
+        int ringAmount = Math.min(
+                amount * 8,
+                Math.max(amount, (int) Math.ceil(ringRadius * Math.PI * 2.0D * amount))
+        );
+
+        for (int i = 0; i < ringAmount; i++) {
+            double angle = (Math.PI * 2.0D * i) / ringAmount;
+
+            double x = centerX + Math.cos(angle) * ringRadius;
+            double y = centerY;
+            double z = centerZ + Math.sin(angle) * ringRadius;
 
             level.sendParticles(
                     particle,
                     x,
                     y,
                     z,
-                    0,
-                    motionX,
-                    motionY,
-                    motionZ,
-                    1.0D
+                    1,
+                    0.0D,
+                    0.0D,
+                    0.0D,
+                    0.0D
             );
         }
     }
 
-    private static void spawnInwardsPulseParticles(
+    private static void spawnPulseSphereParticles(
             ServerLevel level,
+            int abilityTicks,
             double centerX,
             double centerY,
             double centerZ,
             ParticleOptions particle,
             int amount,
-            float radius,
-            float speed
+            float maxRadius,
+            boolean inward
     ) {
-        for (int i = 0; i < amount; i++) {
-            double angle = level.random.nextDouble() * Math.PI * 2.0D;
-            double yOffset = (level.random.nextDouble() - 0.5D) * radius * 0.4D;
+        int pulseLength = 20;
 
-            double x = centerX + Math.cos(angle) * radius;
-            double y = centerY + yOffset;
-            double z = centerZ + Math.sin(angle) * radius;
+        double progress = (abilityTicks % pulseLength) / (double) pulseLength;
 
-            double motionX = (centerX - x) * speed;
-            double motionY = (centerY - y) * speed;
-            double motionZ = (centerZ - z) * speed;
+        double sphereRadius = inward
+                ? maxRadius * (1.0D - progress)
+                : maxRadius * progress;
+
+        int sphereAmount = Math.max(
+                amount,
+                (int) Math.ceil(4.0D * Math.PI * sphereRadius * sphereRadius * amount)
+        );
+
+        sphereAmount = Math.min(sphereAmount, amount * 20);
+
+        double goldenAngle = Math.PI * (3.0D - Math.sqrt(5.0D));
+
+        for (int i = 0; i < sphereAmount; i++) {
+            double yNormalized = 1.0D - (i / (double) (sphereAmount - 1)) * 2.0D;
+            double horizontalRadius = Math.sqrt(1.0D - yNormalized * yNormalized);
+
+            double theta = goldenAngle * i;
+
+            double x = centerX + Math.cos(theta) * horizontalRadius * sphereRadius;
+            double y = centerY + yNormalized * sphereRadius;
+            double z = centerZ + Math.sin(theta) * horizontalRadius * sphereRadius;
 
             level.sendParticles(
                     particle,
                     x,
                     y,
                     z,
-                    0,
-                    motionX,
-                    motionY,
-                    motionZ,
-                    1.0D
+                    1,
+                    0.0D,
+                    0.0D,
+                    0.0D,
+                    0.0D
             );
         }
     }

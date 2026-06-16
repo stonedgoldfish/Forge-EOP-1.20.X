@@ -73,7 +73,7 @@ public class EOPAnimationHandler {
             case CREATE2 -> new EOPCameraTransition.CameraProfile(
                     0.0D,
                     0.25D,
-                    3.5D,
+                    8.0D,
                     0.30F,
                     0.40F,
                     0.10F
