@@ -449,6 +449,30 @@
                 ]
             }
         },
+        "No.Click": {
+            "type": "eop:no_click",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "left_click": true,
+            "right_click": true,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension",
+                        "property": "value",
+                        "min": 0,
+                        "max": 30
+                    }
+                ]
+            }
+        },
         "Energy.Regen": {
             "type": "eop:energy_regen",
             "hidden": true,
@@ -496,7 +520,7 @@
             "first_tick_commands": [
                 "playsound eop:energy_blast master @a ~ ~ ~ 1 1.7"
             ],
-            "last_tick_commands":[],
+            "last_tick_commands": [],
             "commands": [],
             "list_index": 0,
             "conditions": {
@@ -3126,6 +3150,34 @@
             "looping_sound_pitch": 2,
             "destroy_blocks": false,
             "destroy_block_radius": 2,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Stellar.Destruction"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Stellar.Destruction",
+                        "property": "value",
+                        "min": 15,
+                        "max": 15
+                    }
+                ]
+            }
+        },
+        "Particles.Ult": {
+            "type": "eop:particle_pattern",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "particle_pattern": "sphere_outwards_pulse",
+            "particle_type": "eop:star",
+            "particle_amount": 3,
+            "particle_radius": 15,
+            "particle_speed": 0.15,
+            "particle_y_offset": 0.3,
             "conditions": {
                 "enabling": [
                     {

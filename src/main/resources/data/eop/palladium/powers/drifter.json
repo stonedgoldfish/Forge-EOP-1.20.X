@@ -134,18 +134,18 @@
         },
         "Left.Stat2": {
             "type": "palladium:attribute_modifier",
-            "icon": "minecraft:textures/mob_effect/resistance.png",
-            "title": "Enhanced Armor",
-            "description": "Grants 3 more armor points",
+            "icon": "minecraft:textures/mob_effect/speed.png",
+            "title": "Enhanced Speed",
+            "description": "Grants 5% more speed",
             "gui_position": [
                 -1.5,
                 -0.4
             ],
             "hidden": false,
             "hidden_in_bar": true,
-            "attribute": "minecraft:generic.armor",
-            "amount": 3,
-            "operation": 0,
+            "attribute": "minecraft:generic.movement_speed",
+            "amount": 0.05,
+            "operation": 1,
             "uuid": "cf93fa38-9691-4aed-8a2e-2585ea9ce16d",
             "conditions": {
                 "unlocking": [
@@ -202,18 +202,18 @@
         },
         "Left.Stat4": {
             "type": "palladium:attribute_modifier",
-            "icon": "minecraft:textures/mob_effect/resistance.png",
-            "title": "Enhanced Armor",
-            "description": "Grants 3 more armor points",
+            "icon": "minecraft:textures/mob_effect/speed.png",
+            "title": "Enhanced Speed",
+            "description": "Grants 5% more speed",
             "gui_position": [
                 -1,
                 1.1
             ],
             "hidden": false,
             "hidden_in_bar": true,
-            "attribute": "minecraft:generic.armor",
-            "amount": 3,
-            "operation": 0,
+            "attribute": "minecraft:generic.movement_speed",
+            "amount": 0.05,
+            "operation": 1,
             "uuid": "928faa0d-a5b7-49a1-9a3a-cc218bcc5222",
             "conditions": {
                 "unlocking": [
@@ -236,17 +236,17 @@
         },
         "Left.Stat5": {
             "type": "palladium:attribute_modifier",
-            "icon": "minecraft:textures/mob_effect/strength.png",
-            "title": "Enhanced Strength",
-            "description": "Grants 1.5 more damage points",
+            "icon": "minecraft:textures/mob_effect/resistance.png",
+            "title": "Enhanced Armor",
+            "description": "Grants 3 more armor points",
             "gui_position": [
                 -0.7,
                 2.1
             ],
             "hidden": false,
             "hidden_in_bar": true,
-            "attribute": "minecraft:generic.attack_damage",
-            "amount": 1.5,
+            "attribute": "minecraft:generic.armor",
+            "amount": 3,
             "operation": 0,
             "uuid": "dd1c4209-7c3f-40cb-b2d2-bedb588d1588",
             "conditions": {
@@ -406,17 +406,17 @@
         },
         "Right.Stat5": {
             "type": "palladium:attribute_modifier",
-            "icon": "minecraft:textures/mob_effect/strength.png",
-            "title": "Enhanced Strength",
-            "description": "Grants 1.5 more damage points",
+            "icon": "minecraft:textures/mob_effect/resistance.png",
+            "title": "Enhanced Armor",
+            "description": "Grants 3 more armor points",
             "gui_position": [
                 0.7,
                 2.1
             ],
             "hidden": false,
             "hidden_in_bar": true,
-            "attribute": "minecraft:generic.attack_damage",
-            "amount": 1.5,
+            "attribute": "minecraft:generic.armor",
+            "amount": 3,
             "operation": 0,
             "uuid": "cff27229-41c2-4099-b867-c0c916831d25",
             "conditions": {
@@ -434,6 +434,22 @@
                         "description": {
                             "text": "Plane Manipulation Skill Point"
                         }
+                    }
+                ]
+            }
+        },
+        "No.Click": {
+            "type": "eop:no_click",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "left_click": true,
+            "right_click": true,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Dimensional.Severance"
                     }
                 ]
             }
@@ -515,7 +531,7 @@
             ],
             "title": "Rift Plane",
             "description": "Enter the Rift Plane, becoming intangible. §dBattlemode §fmust be enabled via keybind. §dRight Click §fto use this ability",
-            "icon": "eop:textures/gui/image.png",
+            "icon": "eop:textures/gui/rift_plane.png",
             "hidden": false,
             "hidden_in_bar": true
         },
@@ -996,6 +1012,20 @@
                 ]
             }
         },
+        "Plane.Distortion.Offhand": {
+            "type": "palladium:show_both_arms",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Plane.Distortion"
+                    }
+                ]
+            }
+        },
         "Plane.Distortion.Animation": {
             "type": "eop:trigger_animation",
             "hidden": true,
@@ -1289,7 +1319,7 @@
             "particle_pattern": "outwards_pulse",
             "particle_type": "eop:void_energy",
             "particle_amount": 10,
-            "particle_radius": 12,
+            "particle_radius": 17,
             "particle_speed": 0.25,
             "particle_y_offset": 0.3,
             "conditions": {
@@ -1342,7 +1372,7 @@
         },
         "Dimensional.Severance.Unlock": {
             "type": "palladium:dummy",
-            "icon": "eop:textures/gui/image.png",
+            "icon": "eop:textures/gui/dimensional_severance.png",
             "title": "Dimensional Severance",
             "bar_color": "light_gray",
             "hidden": false,
@@ -1373,7 +1403,7 @@
         },
         "Dimensional.Severance": {
             "type": "palladium:animation_timer",
-            "icon": "eop:textures/gui/image.png",
+            "icon": "eop:textures/gui/dimensional_severance.png",
             "title": "Dimensional Severance",
             "bar_color": "light_gray",
             "hidden": true,
@@ -1536,9 +1566,9 @@
             "type": "eop:spawn_armor_stand",
             "hidden": true,
             "hidden_in_bar": true,
-            "range": 25,
-            "spawn_at_player": false,
-            "lifetime": 200,
+            "range": 1,
+            "spawn_at_player": true,
+            "lifetime": 600,
             "enable_damage": false,
             "damage_on_last_tick": false,
             "knockback_on_last_tick": 0,
@@ -1546,10 +1576,12 @@
             "aoe_radius": 17,
             "aoe_damage_type": "eop:basic",
             "target_command_radius": 17,
-            "stand_first_tick_commands": [],
+            "stand_first_tick_commands": [
+                "playsound eop:cracks master @a ~ ~ ~ 2 1"
+            ],
             "stand_commands": [],
             "stand_last_tick_commands": [
-                "playsound minecraft:entity.generic.explode master @a ~ ~ ~ 1 0.7"
+                "playsound minecraft:entity.generic.explode master @a ~ ~ ~ 2 0.7"
             ],
             "target_first_tick_commands": [],
             "target_commands": [
@@ -1579,6 +1611,34 @@
                         "property": "value",
                         "min": 18,
                         "max": 18
+                    }
+                ]
+            }
+        },
+        "Particles.Ult": {
+            "type": "eop:particle_pattern",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "particle_pattern": "sphere_outwards_pulse",
+            "particle_type": "eop:void_energy",
+            "particle_amount": 10,
+            "particle_radius": 15,
+            "particle_speed": 0.15,
+            "particle_y_offset": 0.3,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Dimensional.Severance"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Dimensional.Severance",
+                        "property": "value",
+                        "min": 15,
+                        "max": 20
                     }
                 ]
             }

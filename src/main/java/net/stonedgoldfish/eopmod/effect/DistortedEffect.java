@@ -96,22 +96,26 @@ public class DistortedEffect extends MobEffect {
 
             if (entity.level() instanceof ServerLevel serverLevel) {
                 double x = entity.getX();
-                double y = entity.getY() + entity.getBbHeight() * 0.8D;
+                double y = entity.getY() + entity.getBbHeight() * 0.2D;
                 double z = entity.getZ();
 
                 serverLevel.sendParticles(
                         EOPParticles.VOID_ENERGY.get(),
                         x, y, z,
-                        60 + amplifier * 20,
-                        0.0D, 0.0D, 0.0D,
+                        40 + amplifier * 20,
+                        entity.getBbWidth() * 0.4D,
+                        entity.getBbHeight() * 0.6D,
+                        entity.getBbWidth() * 0.4D,
                         0.45D
                 );
 
                 serverLevel.sendParticles(
                         ParticleTypes.END_ROD,
                         x, y, z,
-                        120 + amplifier * 30,
-                        0.0D, 0.0D, 0.0D,
+                        30 + amplifier * 30,
+                        entity.getBbWidth() * 0.4D,
+                        entity.getBbHeight() * 0.6D,
+                        entity.getBbWidth() * 0.4D,
                         1.0D
                 );
 

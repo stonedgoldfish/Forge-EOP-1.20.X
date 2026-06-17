@@ -142,7 +142,9 @@ public class EOPForgeEvents {
                     ParticleTypes.END_ROD,
                     x, y, z,
                     120,
-                    0.0D, 0.0D, 0.0D,
+                    0.0D,
+                    0.0D,
+                    0.0D,
                     1.0D
             );
         }

@@ -33,7 +33,7 @@ public class BleedEffect extends MobEffect {
             serverLevel.sendParticles(
                     EOPParticles.FALLING_BLOOD.get(),
                     entity.getX(),
-                    entity.getY() + entity.getBbHeight() * 0.6D,
+                    entity.getY() + entity.getBbHeight() * 0.2D,
                     entity.getZ(),
                     5,
                     entity.getBbWidth() * 0.35D,

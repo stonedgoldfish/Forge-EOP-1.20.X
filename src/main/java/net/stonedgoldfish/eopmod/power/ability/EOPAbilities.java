@@ -102,6 +102,8 @@ public class EOPAbilities {
             ABILITIES.register("pocket_dimension", PocketDimensionAbility::new);
     public static final RegistrySupplier<Ability> AUTO_DODGE =
             ABILITIES.register("auto_dodge", AutoDodgeAbility::new);
+    public static final RegistrySupplier<Ability> NO_CLICK =
+            ABILITIES.register("no_click", NoClickAbility::new);
 
     public static void init() {
 

@@ -9,38 +9,35 @@ import net.threetag.palladium.power.ability.AbilityInstance;
 import net.threetag.palladium.util.icon.ItemIcon;
 import net.threetag.palladium.util.property.BooleanProperty;
 import net.threetag.palladium.util.property.PalladiumProperty;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class NoInteractionAbility extends Ability {
+public class NoClickAbility extends Ability {
 
-    public static final PalladiumProperty<Boolean> BLOCKS = new BooleanProperty("blocks").configurable("Disable block interaction");
-    public static final PalladiumProperty<Boolean> ITEMS = new BooleanProperty("items").configurable("Disable item interaction");
-    public static final PalladiumProperty<Boolean> ENTITIES = new BooleanProperty("entities").configurable("Disable entity interaction");
+    public static final PalladiumProperty<Boolean> LEFT_CLICK =
+            new BooleanProperty("left_click").configurable("Disable left click");
+
+    public static final PalladiumProperty<Boolean> RIGHT_CLICK =
+            new BooleanProperty("right_click").configurable("Disable right click");
 
     private static final Map<UUID, Settings> BLOCKED_PLAYERS = new HashMap<>();
 
     public record Settings(
-            boolean blocks,
-            boolean items,
-            boolean entities
+            boolean leftClick,
+            boolean rightClick
     ) {}
 
-    public NoInteractionAbility() {
+    public NoClickAbility() {
         this.withProperty(ICON, new ItemIcon(Items.BARRIER));
 
-        this.withProperty(BLOCKS, true);
-        this.withProperty(ITEMS, true);
-        this.withProperty(ENTITIES, true);
+        this.withProperty(LEFT_CLICK, true);
+        this.withProperty(RIGHT_CLICK, true);
     }
 
     @Override
     public void tick(LivingEntity entity, AbilityInstance entry, IPowerHolder holder, boolean enabled) {
-        if (entity.level().isClientSide) {
-            return;
-        }
-
         if (!(entity instanceof Player player)) {
             return;
         }
@@ -49,9 +46,8 @@ public class NoInteractionAbility extends Ability {
             BLOCKED_PLAYERS.put(
                     player.getUUID(),
                     new Settings(
-                            entry.getProperty(BLOCKS),
-                            entry.getProperty(ITEMS),
-                            entry.getProperty(ENTITIES)
+                            entry.getProperty(LEFT_CLICK),
+                            entry.getProperty(RIGHT_CLICK)
                     )
             );
         } else {
@@ -66,28 +62,22 @@ public class NoInteractionAbility extends Ability {
         }
     }
 
-    public static boolean blocksBlocks(Player player) {
+    public static boolean blocksLeftClick(Player player) {
         Settings settings = BLOCKED_PLAYERS.get(player.getUUID());
-        return settings != null && settings.blocks();
+        return settings != null && settings.leftClick();
     }
 
-    public static boolean blocksItems(Player player) {
+    public static boolean blocksRightClick(Player player) {
         Settings settings = BLOCKED_PLAYERS.get(player.getUUID());
-        return settings != null && settings.items();
-    }
-
-    public static boolean blocksEntities(Player player) {
-        Settings settings = BLOCKED_PLAYERS.get(player.getUUID());
-        return settings != null && settings.entities();
+        return settings != null && settings.rightClick();
     }
 
     public static boolean isBlocked(Player player) {
-        Settings settings = BLOCKED_PLAYERS.get(player.getUUID());
-        return settings != null;
+        return BLOCKED_PLAYERS.containsKey(player.getUUID());
     }
 
     @Override
     public String getDocumentationDescription() {
-        return "Prevents the player from interacting with blocks, items, or entities.";
+        return "Prevents the player from left clicking, right clicking, or both.";
     }
 }

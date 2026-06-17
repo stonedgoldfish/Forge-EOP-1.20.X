@@ -73,7 +73,7 @@ public class FracturedEffect extends MobEffect {
             serverLevel.sendParticles(
                     EOPParticles.VOID_ENERGY.get(),
                     x, y, z,
-                    120,
+                    40,
                     0.0D, 0.0D, 0.0D,
                     0.45D
             );
@@ -81,7 +81,7 @@ public class FracturedEffect extends MobEffect {
             serverLevel.sendParticles(
                     ParticleTypes.END_ROD,
                     x, y, z,
-                    120 + amplifier * 30,
+                    30,
                     0.0D, 0.0D, 0.0D,
                     1.0D
             );
@@ -115,10 +115,10 @@ public class FracturedEffect extends MobEffect {
             return;
         }
 
-        int particleCount = 25;
+        int particleCount = 2;
 
         double x = entity.getX();
-        double y = entity.getY() + entity.getBbHeight() * 0.8D;
+        double y = entity.getY() + entity.getBbHeight() * 0.2D;
         double z = entity.getZ();
 
         serverLevel.sendParticles(
@@ -126,9 +126,9 @@ public class FracturedEffect extends MobEffect {
                 x,
                 y,
                 z,
-                particleCount,
+                particleCount + 5,
                 entity.getBbWidth() * 0.4D,
-                entity.getBbHeight() * 0.4D,
+                entity.getBbHeight() * 0.6D,
                 entity.getBbWidth() * 0.4D,
                 0.3D
         );
@@ -138,9 +138,9 @@ public class FracturedEffect extends MobEffect {
                 x,
                 y,
                 z,
-                particleCount - 10,
+                particleCount,
                 entity.getBbWidth() * 0.4D,
-                entity.getBbHeight() * 0.4D,
+                entity.getBbHeight() * 0.6D,
                 entity.getBbWidth() * 0.4D,
                 0.02D
         );

@@ -78,5 +78,15 @@
                 "stream": true
             }
         ]
+    },
+	"cracks": {
+        "category": "neutral",
+        "subtitle": "cracks",
+        "sounds": [
+            {
+                "name": "eop:cracks",
+                "stream": true
+            }
+        ]
     }
 }

@@ -9,6 +9,7 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
@@ -24,8 +25,12 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.stonedgoldfish.eopmod.effect.EOPEffects;
+import net.stonedgoldfish.eopmod.particle.EOPParticles;
 import net.stonedgoldfish.eopmod.util.EOPGameRules;
 import net.stonedgoldfish.eopmod.util.EOPTargeting;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 
 public class DimensionalSlash2Projectile extends ThrowableProjectile {
@@ -49,6 +54,9 @@ public class DimensionalSlash2Projectile extends ThrowableProjectile {
     private String[] commandsOnBlockHit = new String[]{};
     private String[] commandsForTargets = new String[]{};
     private float commandsForTargetsRadius = 0.0F;
+
+    private final Set<UUID> hitTargets = new HashSet<>();
+    private boolean alreadyHit = false;
 
     public DimensionalSlash2Projectile(EntityType<? extends DimensionalSlash2Projectile> type, Level level) {
         super(type, level);
@@ -162,7 +170,9 @@ public class DimensionalSlash2Projectile extends ThrowableProjectile {
                 continue;
             }
 
-            this.onHitEntity(new EntityHitResult(target));
+            if (!this.hitTargets.contains(target.getUUID())) {
+                this.onHitEntity(new EntityHitResult(target));
+            }
             return;
         }
     }
@@ -180,27 +190,45 @@ public class DimensionalSlash2Projectile extends ThrowableProjectile {
             return;
         }
 
+        if (this.alreadyHit && this.dieOnEntityHit) {
+            return;
+        }
+
         Entity hitEntity = result.getEntity();
         Entity owner = this.getOwner();
 
-        if (owner instanceof LivingEntity caster) {
-            LivingEntity target = null;
+        if (!(owner instanceof LivingEntity caster)) {
+            return;
+        }
 
-            if (hitEntity instanceof EnderDragonPart dragonPart) {
-                target = dragonPart.getParent();
-            } else if (hitEntity instanceof LivingEntity living) {
-                target = living;
-            }
+        LivingEntity target = null;
 
-            if (target != null && EOPTargeting.isValidTarget(caster, target)) {
-                target.hurt(createDamageSource(caster), this.damage);
+        if (hitEntity instanceof EnderDragonPart dragonPart) {
+            target = dragonPart.getParent();
+        } else if (hitEntity instanceof LivingEntity living) {
+            target = living;
+        }
 
-                tryApplyDistortion(target);
+        if (target == null) {
+            return;
+        }
 
-                if (this.setEntityOnFireSeconds > 0) {
-                    target.setSecondsOnFire(this.setEntityOnFireSeconds);
-                }
-            }
+        if (!EOPTargeting.isValidTarget(caster, target)) {
+            return;
+        }
+
+        if (!this.hitTargets.add(target.getUUID())) {
+            return;
+        }
+
+        this.alreadyHit = true;
+
+        target.hurt(createDamageSource(caster), this.damage);
+
+        tryApplyDistortion(target);
+
+        if (this.setEntityOnFireSeconds > 0) {
+            target.setSecondsOnFire(this.setEntityOnFireSeconds);
         }
 
         createFilteredExplosion();
@@ -521,6 +549,7 @@ public class DimensionalSlash2Projectile extends ThrowableProjectile {
                     false,
                     true
             ));
+            spawnDistortionBurst(target);
             return;
         }
 
@@ -547,6 +576,26 @@ public class DimensionalSlash2Projectile extends ThrowableProjectile {
                 false,
                 true
         ));
+        spawnDistortionBurst(target);
+    }
+
+    private void spawnDistortionBurst(LivingEntity target) {
+        if (!(this.level() instanceof ServerLevel serverLevel)) {
+            return;
+        }
+
+        serverLevel.sendParticles(
+                EOPParticles.VOID_ENERGY.get(),
+                target.getX(),
+                target.getY() + target.getBbHeight() * 0.5D,
+                target.getZ(),
+                68,
+                target.getBbWidth() * 0.45D,
+                target.getBbHeight() * 0.35D,
+                target.getBbWidth() * 0.45D,
+                0.78D
+        );
+
     }
 
     @Override

@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "eop:argon_helmet",
+    "eop:argon_chestplate",
+    "eop:argon_leggings",
+    "eop:argon_boots"
+  ]
+}

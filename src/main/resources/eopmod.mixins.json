@@ -10,7 +10,9 @@
     "LivingEntityRendererMixin",
     "EntityRenderDispatcherMixin",
     "GuiMixin",
-    "MouseHandlerMixin"
+    "MouseHandlerMixin",
+    "ClientLevelMixin",
+    "LevelRendererMixin"
   ],
   "mixins": [
     "EntityMixin",

@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ParticlePatternAbility extends Ability {
 
-    public static final PalladiumProperty<String> PARTICLE_PATTERN = new StringProperty("particle_pattern").configurable("Particle pattern. Currently supports: implosion, outwards_pulse, inwards_pulse, sphere_outwards_pulse, sphere_inwards_pulse");
+    public static final PalladiumProperty<String> PARTICLE_PATTERN = new StringProperty("particle_pattern").configurable("Particle pattern. Currently supports: implosion, outwards_pulse, inwards_pulse, sphere_outwards_pulse, sphere_inwards_pulse, random_explosion, random_swirls");
     public static final PalladiumProperty<String> PARTICLE_TYPE = new StringProperty("particle_type").configurable("Particle type resource location");
     public static final PalladiumProperty<Integer> PARTICLE_AMOUNT = new IntegerProperty("particle_amount").configurable("Particles spawned per tick");
     public static final PalladiumProperty<Float> PARTICLE_RADIUS = new FloatProperty("particle_radius").configurable("Particle effect radius");
@@ -38,7 +38,8 @@ public class ParticlePatternAbility extends Ability {
         this.withProperty(PARTICLE_SPEED, 0.08F);
         this.withProperty(PARTICLE_Y_OFFSET, 1.0F);
     }
-    private static final Map<UUID, Integer> ACTIVATION_START_TICKS = new ConcurrentHashMap<>();
+    private static final Map<ActivationKey, Integer> ACTIVATION_START_TICKS = new ConcurrentHashMap<>();
+    private record ActivationKey(UUID entityId, int abilityInstanceId) {}
 
     @Override
     public void tick(LivingEntity entity, AbilityInstance entry, IPowerHolder holder, boolean enabled) {
@@ -46,10 +47,13 @@ public class ParticlePatternAbility extends Ability {
             return;
         }
 
-        UUID entityId = entity.getUUID();
+        ActivationKey activationKey = new ActivationKey(
+                entity.getUUID(),
+                System.identityHashCode(entry)
+        );
 
         if (!enabled) {
-            ACTIVATION_START_TICKS.remove(entityId);
+            ACTIVATION_START_TICKS.remove(activationKey);
             return;
         }
 
@@ -57,7 +61,10 @@ public class ParticlePatternAbility extends Ability {
             return;
         }
 
-        int activationTick = ACTIVATION_START_TICKS.computeIfAbsent(entityId, id -> entity.tickCount);
+        int activationTick = ACTIVATION_START_TICKS.computeIfAbsent(
+                activationKey,
+                key -> entity.tickCount
+        );
         int abilityTicks = entity.tickCount - activationTick;
 
         String pattern = entry.getProperty(PARTICLE_PATTERN);
@@ -117,6 +124,29 @@ public class ParticlePatternAbility extends Ability {
 
             case "implosion" -> spawnImplosionParticles(
                     serverLevel,
+                    centerX,
+                    centerY,
+                    centerZ,
+                    particle,
+                    amount,
+                    radius,
+                    speed
+            );
+
+            case "random_explosion" -> spawnRandomExplosionParticles(
+                    serverLevel,
+                    abilityTicks,
+                    centerX,
+                    centerY,
+                    centerZ,
+                    particle,
+                    amount,
+                    radius
+            );
+
+            case "random_swirls" -> spawnRandomSwirlParticles(
+                    serverLevel,
+                    abilityTicks,
                     centerX,
                     centerY,
                     centerZ,
@@ -281,6 +311,151 @@ public class ParticlePatternAbility extends Ability {
                     0.0D
             );
         }
+    }
+
+    private static void spawnRandomExplosionParticles(
+            ServerLevel level,
+            int abilityTicks,
+            double centerX,
+            double centerY,
+            double centerZ,
+            ParticleOptions particle,
+            int amount,
+            float radius
+    ) {
+        int explosionInterval = 15;
+        int explosionLifetime = 7;
+
+        int localTick = abilityTicks % explosionInterval;
+
+        if (localTick != 0) {
+            return;
+        }
+
+        int explosionsPerInterval = Math.max(1, amount / 2);
+
+        for (int explosion = 0; explosion < explosionsPerInterval; explosion++) {
+            double angle = level.random.nextDouble() * Math.PI * 2.0D;
+            double distance = level.random.nextDouble() * radius;
+            double height = (level.random.nextDouble() - 0.5D) * radius;
+
+            double explosionX = centerX + Math.cos(angle) * distance;
+            double explosionY = centerY + height;
+            double explosionZ = centerZ + Math.sin(angle) * distance;
+
+            spawnSingleOutwardSpherePulse(
+                    level,
+                    explosionX,
+                    explosionY,
+                    explosionZ,
+                    particle,
+                    amount,
+                    radius * 0.25F,
+                    explosionLifetime
+            );
+        }
+    }
+
+    private static void spawnSingleOutwardSpherePulse(
+            ServerLevel level,
+            double centerX,
+            double centerY,
+            double centerZ,
+            ParticleOptions particle,
+            int amount,
+            float explosionRadius,
+            int lifetime
+    ) {
+        int sphereAmount = Math.max(amount * 4, 24);
+
+        double goldenAngle = Math.PI * (3.0D - Math.sqrt(5.0D));
+
+        for (int i = 0; i < sphereAmount; i++) {
+            double yNormalized = 1.0D - (i / (double) (sphereAmount - 1)) * 2.0D;
+            double horizontalRadius = Math.sqrt(1.0D - yNormalized * yNormalized);
+
+            double theta = goldenAngle * i;
+
+            double directionX = Math.cos(theta) * horizontalRadius;
+            double directionY = yNormalized;
+            double directionZ = Math.sin(theta) * horizontalRadius;
+
+            double motionX = directionX * explosionRadius / lifetime;
+            double motionY = directionY * explosionRadius / lifetime;
+            double motionZ = directionZ * explosionRadius / lifetime;
+
+            level.sendParticles(
+                    particle,
+                    centerX,
+                    centerY,
+                    centerZ,
+                    0,
+                    motionX,
+                    motionY,
+                    motionZ,
+                    1.0D
+            );
+        }
+    }
+
+    private static void spawnRandomSwirlParticles(
+            ServerLevel level,
+            int abilityTicks,
+            double centerX,
+            double centerY,
+            double centerZ,
+            ParticleOptions particle,
+            int amount,
+            float radius,
+            float speed
+    ) {
+        int swirlCount = Math.max(1, amount / 2);
+        int pointsPerSwirl = 3;
+
+        double time = abilityTicks * speed;
+
+        for (int swirl = 0; swirl < swirlCount; swirl++) {
+            double seed = swirl * 12.9898D;
+
+            double baseAngle = time + seed;
+            double verticalOffset = Math.sin(time * 0.7D + seed) * radius * 0.45D;
+
+            double swirlCenterDistance = radius * (0.25D + 0.65D * pseudoRandom(seed));
+            double swirlCenterAngle = seed + time * 0.35D;
+
+            double swirlCenterX = centerX + Math.cos(swirlCenterAngle) * swirlCenterDistance;
+            double swirlCenterY = centerY + verticalOffset;
+            double swirlCenterZ = centerZ + Math.sin(swirlCenterAngle) * swirlCenterDistance;
+
+            double swirlSize = radius * (0.04D + 0.08D * pseudoRandom(seed + 4.0D));
+
+            for (int i = 0; i < pointsPerSwirl; i++) {
+                double progress = i / (double) pointsPerSwirl;
+
+                double angle = baseAngle + progress * Math.PI * 2.0D;
+                double lineOffset = (progress - 0.5D) * swirlSize * 2.5D;
+
+                double x = swirlCenterX + Math.cos(angle) * swirlSize + Math.cos(swirlCenterAngle) * lineOffset;
+                double y = swirlCenterY + Math.sin(progress * Math.PI * 2.0D + time) * swirlSize * 0.5D;
+                double z = swirlCenterZ + Math.sin(angle) * swirlSize + Math.sin(swirlCenterAngle) * lineOffset;
+
+                level.sendParticles(
+                        particle,
+                        x,
+                        y,
+                        z,
+                        1,
+                        0.0D,
+                        0.0D,
+                        0.0D,
+                        0.0D
+                );
+            }
+        }
+    }
+
+    private static double pseudoRandom(double seed) {
+        return Math.abs(Math.sin(seed * 43758.5453123D)) % 1.0D;
     }
 
     @Override
