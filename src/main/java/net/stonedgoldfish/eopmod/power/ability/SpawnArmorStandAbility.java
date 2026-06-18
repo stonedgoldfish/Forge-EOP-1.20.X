@@ -1,8 +1,6 @@
 package net.stonedgoldfish.eopmod.power.ability;
 
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.Items;
@@ -13,7 +11,10 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.network.PacketDistributor;
 import net.stonedgoldfish.eopmod.event.EOPForgeEvents;
+import net.stonedgoldfish.eopmod.network.EOPNetwork;
+import net.stonedgoldfish.eopmod.network.SyncArmorStandBillboardPacket;
 import net.stonedgoldfish.eopmod.util.EOPArmorStandSpawner;
 import net.threetag.palladium.power.IPowerHolder;
 import net.threetag.palladium.power.ability.Ability;
@@ -57,6 +58,7 @@ public class SpawnArmorStandAbility extends Ability {
     public static final PalladiumProperty<Float> LOOPING_SOUND_PITCH = new FloatProperty("looping_sound_pitch").configurable("Pitch of the looping armor stand sound");
     public static final PalladiumProperty<Boolean> DESTROY_BLOCKS = new BooleanProperty("destroy_blocks").configurable("If true, destroys blocks around the armor stand");
     public static final PalladiumProperty<Float> DESTROY_BLOCK_RADIUS = new FloatProperty("destroy_block_radius").configurable("Radius around the armor stand where blocks are destroyed");
+    public static final PalladiumProperty<String> BILLBOARD = new StringProperty("billboard").configurable("Billboard renderer ID");
     private static final Map<UUID, ArmorStand> FOLLOWING_STANDS = new HashMap<>();
 
     public SpawnArmorStandAbility() {
@@ -97,6 +99,8 @@ public class SpawnArmorStandAbility extends Ability {
         this.withProperty(DESTROY_BLOCKS, false);
         this.withProperty(DESTROY_BLOCK_RADIUS, 0.0F);
 
+        this.withProperty(BILLBOARD, "");
+
     }
 
     @Override
@@ -127,6 +131,18 @@ public class SpawnArmorStandAbility extends Ability {
                 spawnPos,
                 entity.getYRot()
         );
+
+        String billboard = entry.getProperty(BILLBOARD);
+
+        if (billboard != null && !billboard.isEmpty()) {
+            EOPNetwork.CHANNEL.send(
+                    PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> armorStand),
+                    new SyncArmorStandBillboardPacket(
+                            armorStand.getId(),
+                            billboard
+                    )
+            );
+        }
 
         EOPArmorStandSpawner.applyCommonData(
                 armorStand,

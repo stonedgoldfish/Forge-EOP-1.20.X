@@ -26,11 +26,13 @@ public class EOPPowerRegistry {
 
     static {
         register("Astral_Energy_Manipulation", "beyonder", 5, true, true, false, false, false, 0xf7ff00, "Controller", "Zoner", "Mixed", "Easy");
-        register("Plane_Manipulation", "drifter", 2, true, false, false, false, false, 0xccffcc, "Controller", "Disrupter", "Ranged", "Easy");
-        register("Diamond_Mimicry", "fortress", 5, false, false, false, false, false, 0x00EDE8, "Tank", "Defender", "Melee", "Easy");
-        register("Hypervelocity", "speedster", 5, true, false, false, false, false, 0x5994FF, "Assassin", "Scout", "Melee", "Easy");
+        register("Plane_Manipulation", "drifter", 5, true, false, false, false, false, 0xccffcc, "Controller", "Disrupter", "Ranged", "Easy");
+        register("Diamond_Mimicry", "fortress", 10, false, false, false, false, false, 0x00EDE8, "Tank", "Defender", "Melee", "Easy");
+        register("Hypervelocity", "speedster", 10, true, false, false, false, false, 0x5994FF, "Assassin", "Scout", "Melee", "Easy");
         register("Neogenesis", "mender", 10, true, false, false, false, false, 0xFA82FF, "Support", "Healer", "Melee", "Easy");
         register("Hydrokinesis", "marine", 10, true, false, false, false, true, 0x534FFF, "Support", "Adaptable", "Melee/Ranged", "Easy");
+        register("Spatial_Manipulation", "honored_one", 2, true, true, false, false, false, 0x534FFF, "GG", "GG", "Melee/Ranged", "Medium");
+        register("Excision", "king", 2, false, true, false, false, false, 0x5b0000, "GG", "GG", "Melee/Ranged", "Medium");
     }
 
     private static void register(

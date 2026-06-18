@@ -4,7 +4,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.network.PacketDistributor;
+import net.stonedgoldfish.eopmod.network.EOPNetwork;
+import net.stonedgoldfish.eopmod.network.FakeLaunchedBlockPacket;
 import net.stonedgoldfish.eopmod.util.EOPTargeting;
 import net.threetag.palladium.power.IPowerHolder;
 import net.threetag.palladium.power.ability.Ability;
@@ -236,11 +240,35 @@ public class AOEDamageAbility extends Ability {
             }
 
             var state = level.getBlockState(pos);
+            Block block = state.getBlock();
 
+            if (block instanceof net.minecraft.world.level.block.LadderBlock
+                    || block instanceof net.minecraft.world.level.block.BasePressurePlateBlock
+                    || block instanceof net.minecraft.world.level.block.ButtonBlock
+                    || block instanceof net.minecraft.world.level.block.LeverBlock) {
+                continue;
+            }
+            if (!state.isSolidRender(level, pos)) {
+                continue;
+            }
+            if (state.getMenuProvider(level, pos) != null) {
+                continue;
+            }
+            if (state.hasBlockEntity()) {
+                continue;
+            }
+            if (!state.getFluidState().isEmpty()) {
+                continue;
+            }
+            if (state.getShape(level, pos).isEmpty()) {
+                continue;
+            }
+            if (state.getShape(level, pos).bounds().getSize() < 1.0D) {
+                continue;
+            }
             if (state.isAir()) {
                 continue;
             }
-
             if (state.getDestroySpeed(level, pos) < 0.0F) {
                 continue;
             }
@@ -287,22 +315,17 @@ public class AOEDamageAbility extends Ability {
             Vec3 motion = direction.scale(sidewaysStrength)
                     .add(0.0D, upwardStrength, 0.0D);
 
-            String command = "summon falling_block "
-                    + (pos.getX() + 0.5D) + " "
-                    + (pos.getY() + 1.05D) + " "
-                    + (pos.getZ() + 0.5D)
-                    + " {BlockState:{Name:\""
-                    + blockId
-                    + "\"},Time:1,DropItem:0b,CancelDrop:1b,Motion:["
-                    + motion.x + "d,"
-                    + motion.y + "d,"
-                    + motion.z + "d]}";
 
-            level.getServer().getCommands().performPrefixedCommand(
-                    entity.createCommandSourceStack()
-                            .withSuppressedOutput()
-                            .withPermission(4),
-                    command
+            Vec3 spawnPos = new Vec3(
+                    pos.getX() + 0.5D,
+                    pos.getY() + 1.05D,
+                    pos.getZ() + 0.5D
+            );
+
+
+            EOPNetwork.CHANNEL.send(
+                    PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity),
+                    new FakeLaunchedBlockPacket(state, spawnPos, motion)
             );
 
             launched++;

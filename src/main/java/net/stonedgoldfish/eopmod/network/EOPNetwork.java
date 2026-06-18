@@ -82,5 +82,19 @@ public class EOPNetwork {
                 DodgePacket::decode,
                 DodgePacket::handle
         );
+        CHANNEL.registerMessage(
+                packetId++,
+                FakeLaunchedBlockPacket.class,
+                FakeLaunchedBlockPacket::encode,
+                FakeLaunchedBlockPacket::decode,
+                FakeLaunchedBlockPacket::handle
+        );
+        CHANNEL.registerMessage(
+                packetId++,
+                SyncArmorStandBillboardPacket.class,
+                SyncArmorStandBillboardPacket::encode,
+                SyncArmorStandBillboardPacket::decode,
+                SyncArmorStandBillboardPacket::handle
+        );
     }
 }

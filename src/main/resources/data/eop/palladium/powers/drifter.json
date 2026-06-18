@@ -1597,6 +1597,7 @@
             "looping_sound": "eop:void",
             "looping_sound_volume": 2,
             "looping_sound_pitch": 1,
+            "billboard": "",
             "conditions": {
                 "enabling": [
                     {
