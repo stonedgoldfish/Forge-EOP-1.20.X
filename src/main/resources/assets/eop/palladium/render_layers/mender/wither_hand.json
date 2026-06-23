@@ -1,0 +1,29 @@
+{
+    "type": "palladium:compound",
+    "layers": [
+        {
+            "model": {
+                "normal": "eop:geo/mender/wither_hand.geo.json",
+                "slim": "eop:geo/mender/wither_hand_slim.geo.json"
+            },
+            "type": "geckolib:default",
+            "texture": {
+                "base": "eop:textures/models/mender/wither_hand_text.png",
+                "transformers": [
+                    {
+                        "type": "palladium:alpha_mask",
+                        "mask": "eop:textures/alpha_mask/mender/wither_hand/wither_hand_#TIMER.png"
+                    }
+                ],
+                "variables": {
+                    "TIMER": {
+                        "type": "palladium:animation_timer_ability",
+                        "power": "eop:mender",
+                        "ability": "Wither.Hand.Animation"
+                    }
+                },
+                "output": "eop:textures/alpha_mask/mender/wither_hand/wither_hand_#TIMER"
+            }
+        }
+    ]
+}

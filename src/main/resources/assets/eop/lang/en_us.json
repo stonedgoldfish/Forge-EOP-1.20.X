@@ -19,6 +19,10 @@
   "effect.eop.distorted": "Distorted",
   "effect.eop.fractured": "Fractured",
   "effect.eop.disoriented": "Disoriented",
+  "effect.eop.cellular_regeneration": "Cellular Regeneration",
+  "effect.eop.cellular_immortality": "Cellular Immortality",
+  "effect.eop.cellular_enhancement": "Cellular Enhancement",
+  "effect.eop.miotic_detonation": "Miotic Detonation",
   
   "block.eop.dimension_bit": "Dimension Bit",
 

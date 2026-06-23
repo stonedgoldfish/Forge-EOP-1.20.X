@@ -20,7 +20,7 @@ public class CommandOnPunchAbility extends Ability {
 
     public static final PalladiumProperty<String[]> COMMANDS = new StringArrayProperty("commands").configurable("Commands executed as the entity punched by the caster");
     public static final PalladiumProperty<Boolean> ALLOW_PROJECTILES = new BooleanProperty("allow_projectiles").configurable("If true, commands can trigger from projectile/ranged damage caused by the caster");
-    private static final Map<UUID, Settings> ACTIVE_PLAYERS = new HashMap<>();
+    private static final Map<UUID, Map<AbilityInstance, Settings>> ACTIVE_PLAYERS = new HashMap<>();
 
     public record Settings(
             String[] commands,
@@ -43,38 +43,56 @@ public class CommandOnPunchAbility extends Ability {
             return;
         }
 
+        Map<AbilityInstance, Settings> settingsMap = ACTIVE_PLAYERS.computeIfAbsent(
+                player.getUUID(),
+                uuid -> new HashMap<>()
+        );
+
         if (enabled) {
-            ACTIVE_PLAYERS.put(
-                    player.getUUID(),
+            settingsMap.put(
+                    entry,
                     new Settings(
                             entry.getProperty(COMMANDS),
                             entry.getProperty(ALLOW_PROJECTILES)
                     )
             );
         } else {
-            ACTIVE_PLAYERS.remove(player.getUUID());
+            settingsMap.remove(entry);
+
+            if (settingsMap.isEmpty()) {
+                ACTIVE_PLAYERS.remove(player.getUUID());
+            }
         }
     }
 
     @Override
     public void lastTick(LivingEntity entity, AbilityInstance entry, IPowerHolder holder, boolean enabled) {
-        if (entity instanceof Player player) {
+        if (!(entity instanceof Player player)) {
+            return;
+        }
+
+        Map<AbilityInstance, Settings> settingsMap = ACTIVE_PLAYERS.get(player.getUUID());
+
+        if (settingsMap == null) {
+            return;
+        }
+
+        settingsMap.remove(entry);
+
+        if (settingsMap.isEmpty()) {
             ACTIVE_PLAYERS.remove(player.getUUID());
         }
     }
 
     public static boolean hasCommands(Player player) {
-        return ACTIVE_PLAYERS.containsKey(player.getUUID());
+        Map<AbilityInstance, Settings> settingsMap = ACTIVE_PLAYERS.get(player.getUUID());
+        return settingsMap != null && !settingsMap.isEmpty();
     }
 
     public static void runCommands(Player caster, LivingEntity target, boolean projectileHit) {
-        Settings settings = ACTIVE_PLAYERS.get(caster.getUUID());
+        Map<AbilityInstance, Settings> settingsMap = ACTIVE_PLAYERS.get(caster.getUUID());
 
-        if (settings == null || settings.commands() == null || settings.commands().length == 0) {
-            return;
-        }
-
-        if (projectileHit && !settings.allowProjectiles()) {
+        if (settingsMap == null || settingsMap.isEmpty()) {
             return;
         }
 
@@ -86,21 +104,31 @@ public class CommandOnPunchAbility extends Ability {
             return;
         }
 
-        for (String command : settings.commands()) {
-            if (command == null || command.isBlank()) {
+        for (Settings settings : settingsMap.values()) {
+            if (settings == null || settings.commands() == null || settings.commands().length == 0) {
                 continue;
             }
 
-            String cleanedCommand = command.startsWith("/")
-                    ? command.substring(1)
-                    : command;
+            if (projectileHit && !settings.allowProjectiles()) {
+                continue;
+            }
 
-            target.getServer().getCommands().performPrefixedCommand(
-                    target.createCommandSourceStack()
-                            .withSuppressedOutput()
-                            .withPermission(2),
-                    cleanedCommand
-            );
+            for (String command : settings.commands()) {
+                if (command == null || command.isBlank()) {
+                    continue;
+                }
+
+                String cleanedCommand = command.startsWith("/")
+                        ? command.substring(1)
+                        : command;
+
+                target.getServer().getCommands().performPrefixedCommand(
+                        target.createCommandSourceStack()
+                                .withSuppressedOutput()
+                                .withPermission(2),
+                        cleanedCommand
+                );
+            }
         }
     }
 

@@ -29,11 +29,11 @@ public class ArmorStandBillboardRenderer {
     static {
         register("lapse_blue", new BillboardType(
                 "textures/entity/projectile/blue.png",
-                "textures/entity/projectile/red.png",
-                5,
                 5,
                 2,
-                1,
+                true,
+                10,
+                2.0F,
                 3.5F,
                 1.8F
         ));
@@ -56,7 +56,9 @@ public class ArmorStandBillboardRenderer {
         BillboardType type = BILLBOARDS.get(active.id);
 
         if (type != null && active.lastPos != null) {
-            EXPIRING_BILLBOARDS.add(new ExpiringBillboard(type, active.lastPos));
+            if (type.fadeOnExpire()) {
+                EXPIRING_BILLBOARDS.add(new ExpiringBillboard(type, active.lastPos));
+            }
         }
     }
 
@@ -92,7 +94,9 @@ public class ArmorStandBillboardRenderer {
             BillboardType type = BILLBOARDS.get(active.id);
 
             if (type != null && active.lastPos != null) {
-                EXPIRING_BILLBOARDS.add(new ExpiringBillboard(type, active.lastPos));
+                if (type.fadeOnExpire()) {
+                    EXPIRING_BILLBOARDS.add(new ExpiringBillboard(type, active.lastPos));
+                }
             }
 
             activeIterator.remove();
@@ -105,9 +109,7 @@ public class ArmorStandBillboardRenderer {
 
             billboard.age++;
 
-            int frame = billboard.age / billboard.type.expireTicksPerFrame();
-
-            if (frame >= billboard.type.expireFrameCount()) {
+            if (billboard.age >= billboard.type.expireTime()) {
                 expireIterator.remove();
             }
         }
@@ -158,26 +160,32 @@ public class ArmorStandBillboardRenderer {
                     type.getTexture(),
                     frame,
                     type.frameCount(),
-                    type.size()
+                    type.size(),
+                    255
             );
         }
 
         for (ExpiringBillboard billboard : EXPIRING_BILLBOARDS) {
-            int frame = billboard.age / billboard.type.expireTicksPerFrame();
+            float progress = billboard.age / (float) billboard.type.expireTime();
 
-            if (frame >= billboard.type.expireFrameCount()) {
-                continue;
-            }
+            float size = billboard.type.size()
+                    * (1.0F + progress * (billboard.type.expireScale() - 1.0F));
+
+            int alpha = (int) ((1.0F - progress) * 255.0F);
+
+            int frame = (billboard.age / billboard.type.ticksPerFrame())
+                    % billboard.type.frameCount();
 
             renderBillboard(
                     poseStack,
                     buffer,
                     camera,
                     billboard.pos,
-                    billboard.type.getExpireTexture(),
+                    billboard.type.getTexture(),
                     frame,
-                    billboard.type.expireFrameCount(),
-                    billboard.type.size()
+                    billboard.type.frameCount(),
+                    size,
+                    alpha
             );
         }
 
@@ -192,7 +200,8 @@ public class ArmorStandBillboardRenderer {
             ResourceLocation texture,
             int frame,
             int frameCount,
-            float size
+            float size,
+            int alpha
     ) {
         Minecraft minecraft = Minecraft.getInstance();
 
@@ -217,7 +226,7 @@ public class ArmorStandBillboardRenderer {
         int fullBright = LightTexture.FULL_BRIGHT;
 
         vertexConsumer.vertex(matrix, -0.5F, -0.5F, 0.0F)
-                .color(255, 255, 255, 255)
+                .color(255, 255, 255, alpha)
                 .uv(0.0F, vMax)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
                 .uv2(fullBright)
@@ -225,7 +234,7 @@ public class ArmorStandBillboardRenderer {
                 .endVertex();
 
         vertexConsumer.vertex(matrix, 0.5F, -0.5F, 0.0F)
-                .color(255, 255, 255, 255)
+                .color(255, 255, 255, alpha)
                 .uv(1.0F, vMax)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
                 .uv2(fullBright)
@@ -233,7 +242,7 @@ public class ArmorStandBillboardRenderer {
                 .endVertex();
 
         vertexConsumer.vertex(matrix, 0.5F, 0.5F, 0.0F)
-                .color(255, 255, 255, 255)
+                .color(255, 255, 255, alpha)
                 .uv(1.0F, vMin)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
                 .uv2(fullBright)
@@ -241,7 +250,7 @@ public class ArmorStandBillboardRenderer {
                 .endVertex();
 
         vertexConsumer.vertex(matrix, -0.5F, 0.5F, 0.0F)
-                .color(255, 255, 255, 255)
+                .color(255, 255, 255, alpha)
                 .uv(0.0F, vMin)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
                 .uv2(fullBright)
@@ -253,20 +262,16 @@ public class ArmorStandBillboardRenderer {
 
     private record BillboardType(
             String texture,
-            String expireTexture,
             int frameCount,
-            int expireFrameCount,
             int ticksPerFrame,
-            int expireTicksPerFrame,
+            boolean fadeOnExpire,
+            int expireTime,
+            float expireScale,
             float size,
             float heightOffset
     ) {
         ResourceLocation getTexture() {
             return ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, texture);
-        }
-
-        ResourceLocation getExpireTexture() {
-            return ResourceLocation.fromNamespaceAndPath(EOPMod.MOD_ID, expireTexture);
         }
     }
 

@@ -565,10 +565,6 @@
                         "property": "eop_drifter_energy",
                         "toggle_mode": true,
                         "key_type": "right_click"
-                    },
-                    {
-                        "type": "eop:power_selected",
-                        "power": "eop:drifter"
                     }
                 ],
                 "unlocking": [
@@ -580,6 +576,10 @@
                                 "tag": "EOP.Silenced"
                             }
                         ]
+                    },
+                    {
+                        "type": "eop:power_selected",
+                        "power": "eop:drifter"
                     },
                     {
                         "type": "palladium:has_tag",
@@ -618,11 +618,6 @@
             "hidden": true,
             "hidden_in_bar": false,
             "list_index": 0,
-            "gui_position": [
-                -0.5,
-                -0.75
-            ],
-            "description": "Access your own pocket dimension",
             "start_value": 0,
             "max_value": 40,
             "conditions": {

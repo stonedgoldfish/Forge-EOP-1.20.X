@@ -43,6 +43,8 @@ import net.stonedgoldfish.eopmod.power.EOPPowerRegistry;
 import net.stonedgoldfish.eopmod.power.EOPPowerConstants;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.network.chat.Component;
+import net.threetag.palladiumcore.registry.client.BlockEntityRendererRegistry;
+
 @Mod.EventBusSubscriber(modid = EOPMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 
 public class EOPClientEvents {

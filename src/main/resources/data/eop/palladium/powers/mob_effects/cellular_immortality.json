@@ -1,0 +1,71 @@
+{
+    "name": "Cellular Reconstruction",
+    "background": "minecraft:textures/block/gray_concrete_powder.png",
+    "icon": "eop:textures/gui/void.png",
+    "hidden": true,
+    "abilities": {
+        "Heal": {
+            "type": "palladium:healing",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "frequency": 2,
+            "amount": 4
+        },
+        "Heal.Particles": {
+            "type": "palladium:command",
+            "title": "null",
+            "bar_color": "light_gray",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": -1,
+            "gui_position": "null",
+            "description": "null",
+            "first_tick_commands": [],
+            "last_tick_commands": [],
+            "commands": [
+                "particle poof ~ ~ ~ 0.4 1 0.4 0 10 force",
+                "playsound minecraft:block.fire.extinguish master @a ~ ~ ~ 1 2",
+                "tag @s remove EOP.Chimera.Corrupted"
+            ],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:interval",
+                        "active_ticks": 0,
+                        "disabled_ticks": 2
+                    }
+                ]
+            }
+        },
+        "Heal.Particles2": {
+            "type": "palladium:command",
+            "title": "null",
+            "bar_color": "light_gray",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": -1,
+            "gui_position": "null",
+            "description": "null",
+            "first_tick_commands": [],
+            "last_tick_commands": [],
+            "commands": [
+                "bodydamage @s heal ALL 1"
+            ],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:interval",
+                        "active_ticks": 0,
+                        "disabled_ticks": 2
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:mod_loaded",
+                        "mod_id": "legendarysurvivaloverhaul"
+                    }
+                ]
+            }
+        }
+    }
+}

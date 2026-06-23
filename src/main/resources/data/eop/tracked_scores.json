@@ -2,6 +2,8 @@
     "objectives": [
         "deaths",
 		"EOP.Battle.Mode",
-		"EOP.Base.Death"
+		"EOP.Base.Death",
+        "EOP.Bone.Type",
+        "EOP.Claw.Type"
     ]
 }

@@ -38,9 +38,10 @@ public class DistortedEffect extends MobEffect {
         }
 
         entity.addTag("EOP.Premature.Explosion");
+        String selector = entity.getStringUUID();
         entity.getServer().getCommands().performPrefixedCommand(
-                entity.createCommandSourceStack().withSuppressedOutput(),
-                "superpower add eop:mob_effects/distorted @s"
+                entity.createCommandSourceStack().withSuppressedOutput().withPermission(2),
+                "superpower add eop:mob_effects/distorted " + selector
         );
 
         if (amplifier >= 5) {
@@ -230,9 +231,10 @@ public class DistortedEffect extends MobEffect {
         INVERTED_TICKS.remove(entity.getUUID());
 
         entity.removeTag("EOP.Premature.Explosion");
+        String selector = entity.getStringUUID();
         entity.getServer().getCommands().performPrefixedCommand(
-                entity.createCommandSourceStack().withSuppressedOutput(),
-                "superpower remove eop:mob_effects/distorted @s"
+                entity.createCommandSourceStack().withSuppressedOutput().withPermission(2),
+                "superpower remove eop:mob_effects/distorted " + selector
         );
     }
 

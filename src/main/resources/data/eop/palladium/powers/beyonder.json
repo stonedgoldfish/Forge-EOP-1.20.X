@@ -531,10 +531,6 @@
                         "energy": 2,
                         "property": "eop_beyonder_energy",
                         "key_type": "right_click"
-                    },
-                    {
-                        "type": "eop:power_selected",
-                        "power": "eop:beyonder"
                     }
                 ],
                 "unlocking": [
@@ -546,6 +542,10 @@
                                 "tag": "EOP.Silenced"
                             }
                         ]
+                    },
+                    {
+                        "type": "eop:power_selected",
+                        "power": "eop:beyonder"
                     },
                     {
                         "type": "palladium:not",

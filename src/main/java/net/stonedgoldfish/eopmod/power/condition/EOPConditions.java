@@ -20,4 +20,6 @@ public class EOPConditions {
             CONDITIONS.register("toggle", ToggleCondition.Serializer::new);
     public static final RegistrySupplier<ConditionSerializer> POWER_SELECTED =
             CONDITIONS.register("power_selected", PowerSelectedCondition.Serializer::new);
+    public static final RegistrySupplier<ConditionSerializer> HEALTH_BELOW_PERCENT =
+            CONDITIONS.register("health_below_percent", HealthBelowPercentCondition.Serializer::new);
 }

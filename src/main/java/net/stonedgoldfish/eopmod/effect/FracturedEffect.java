@@ -25,9 +25,10 @@ public class FracturedEffect extends MobEffect {
         }
 
         entity.addTag("EOP.Premature.Explosion");
+        String selector = entity.getStringUUID();
         entity.getServer().getCommands().performPrefixedCommand(
-                entity.createCommandSourceStack().withSuppressedOutput(),
-                "superpower add eop:mob_effects/fractured @s"
+                entity.createCommandSourceStack().withSuppressedOutput().withPermission(2),
+                "superpower add eop:mob_effects/fractured " + selector
         );
 
         if (entity.getTags().contains("Plane.Explode")) {
@@ -154,9 +155,10 @@ public class FracturedEffect extends MobEffect {
     ) {
 
         entity.removeTag("EOP.Premature.Explosion");
+        String selector = entity.getStringUUID();
         entity.getServer().getCommands().performPrefixedCommand(
-                entity.createCommandSourceStack().withSuppressedOutput(),
-                "superpower remove eop:mob_effects/fractured @s"
+                entity.createCommandSourceStack().withSuppressedOutput().withPermission(2),
+                "superpower remove eop:mob_effects/fractured " + selector
         );
     }
 

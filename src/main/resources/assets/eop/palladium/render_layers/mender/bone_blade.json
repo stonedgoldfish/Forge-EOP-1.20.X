@@ -1,0 +1,401 @@
+{
+    "type": "palladium:compound",
+    "layers": [
+        {
+            "model": {
+                "normal": "eop:geo/mender/bone_blade.geo.json",
+                "slim": "eop:geo/mender/bone_blade_slim.geo.json"
+            },
+            "type": "geckolib:default",
+            "texture": {
+                "base": "eop:textures/models/mender/bone_blade_#METAL_text.png",
+                "transformers": [
+                    {
+                        "type": "palladium:alpha_mask",
+                        "mask": "eop:textures/alpha_mask/mender/cell_blade/bone_blade_#TIMER.png"
+                    }
+                ],
+                "variables": {
+                    "TIMER": {
+                        "type": "palladium:animation_timer_ability",
+                        "power": "eop:mender",
+                        "ability": "Bone.Blades"
+                    },
+                    "METAL": {
+                        "type": "palladium:objective_score",
+                        "objective": "EOP.Bone.Type"
+                    }
+                },
+                "output": "eop:textures/models/mender/bone_blade_#METAL_text_#TIMER_bone"
+            },
+            "conditions": [
+                {
+                    "type": "palladium:objective_score",
+                    "objective": "EOP.Claw.Type",
+                    "min_score": 0,
+                    "max_score": 0
+                }
+            ]
+        },
+        {
+            "model": {
+                "normal": "eop:geo/mender/bone_blade_paired.geo.json",
+                "slim": "eop:geo/mender/bone_blade_paired_slim.geo.json"
+            },
+            "type": "geckolib:default",
+            "texture": {
+                "base": "eop:textures/models/mender/bone_blade_#METAL_text.png",
+                "transformers": [
+                    {
+                        "type": "palladium:alpha_mask",
+                        "mask": "eop:textures/alpha_mask/mender/cell_blade/bone_blade_#TIMER.png"
+                    }
+                ],
+                "variables": {
+                    "TIMER": {
+                        "type": "palladium:animation_timer_ability",
+                        "power": "eop:mender",
+                        "ability": "Bone.Blades"
+                    },
+                    "METAL": {
+                        "type": "palladium:objective_score",
+                        "objective": "EOP.Bone.Type"
+                    }
+                },
+                "output": "eop:textures/models/mender/bone_blade_#METAL_text_#TIMER_bone_pair"
+            },
+            "conditions": [
+                {
+                    "type": "palladium:objective_score",
+                    "objective": "EOP.Claw.Type",
+                    "min_score": 1,
+                    "max_score": 1
+                }
+            ]
+        },
+        {
+            "model": {
+                "normal": "eop:geo/mender/bone_blade_classic.geo.json",
+                "slim": "eop:geo/mender/bone_blade_classic_slim.geo.json"
+            },
+            "type": "geckolib:default",
+            "texture": {
+                "base": "eop:textures/models/mender/bone_blade_#METAL_text.png",
+                "transformers": [
+                    {
+                        "type": "palladium:alpha_mask",
+                        "mask": "eop:textures/alpha_mask/mender/cell_blade/bone_blade_#TIMER.png"
+                    }
+                ],
+                "variables": {
+                    "TIMER": {
+                        "type": "palladium:animation_timer_ability",
+                        "power": "eop:mender",
+                        "ability": "Bone.Blades"
+                    },
+                    "METAL": {
+                        "type": "palladium:objective_score",
+                        "objective": "EOP.Bone.Type"
+                    }
+                },
+                "output": "eop:textures/models/mender/bone_blade_#METAL_text_#TIMER_bone_classic"
+            },
+            "conditions": [
+                {
+                    "type": "palladium:objective_score",
+                    "objective": "EOP.Claw.Type",
+                    "min_score": 2,
+                    "max_score": 2
+                }
+            ]
+        },
+        {
+            "model": {
+                "normal": "eop:geo/mender/bone_blade_offset.geo.json",
+                "slim": "eop:geo/mender/bone_blade_offset_slim.geo.json"
+            },
+            "type": "geckolib:default",
+            "texture": {
+                "base": "eop:textures/models/mender/bone_blade_#METAL_text.png",
+                "transformers": [
+                    {
+                        "type": "palladium:alpha_mask",
+                        "mask": "eop:textures/alpha_mask/mender/cell_blade/bone_blade_#TIMER.png"
+                    }
+                ],
+                "variables": {
+                    "TIMER": {
+                        "type": "palladium:animation_timer_ability",
+                        "power": "eop:mender",
+                        "ability": "Bone.Blades"
+                    },
+                    "METAL": {
+                        "type": "palladium:objective_score",
+                        "objective": "EOP.Bone.Type"
+                    }
+                },
+                "output": "eop:textures/models/mender/bone_blade_#METAL_text_#TIMER_bone_offset"
+            },
+            "conditions": [
+                {
+                    "type": "palladium:objective_score",
+                    "objective": "EOP.Claw.Type",
+                    "min_score": 3,
+                    "max_score": 3
+                }
+            ]
+        },
+        {
+            "model": {
+                "normal": "eop:geo/mender/bone_blade_nails.geo.json",
+                "slim": "eop:geo/mender/bone_blade_nails_slim.geo.json"
+            },
+            "type": "geckolib:default",
+            "texture": {
+                "base": "eop:textures/models/mender/bone_blade_#METAL_text.png",
+                "transformers": [
+                    {
+                        "type": "palladium:alpha_mask",
+                        "mask": "eop:textures/alpha_mask/mender/cell_blade/bone_blade_#TIMER.png"
+                    }
+                ],
+                "variables": {
+                    "TIMER": {
+                        "type": "palladium:animation_timer_ability",
+                        "power": "eop:mender",
+                        "ability": "Bone.Blades"
+                    },
+                    "METAL": {
+                        "type": "palladium:objective_score",
+                        "objective": "EOP.Bone.Type"
+                    }
+                },
+                "output": "eop:textures/models/mender/bone_blade_#METAL_text_#TIMER_bone_nails"
+            },
+            "conditions": [
+                {
+                    "type": "palladium:objective_score",
+                    "objective": "EOP.Claw.Type",
+                    "min_score": 4,
+                    "max_score": 4
+                }
+            ]
+        },
+        {
+            "model": {
+                "normal": "eop:geo/mender/bone_blade_rake.geo.json",
+                "slim": "eop:geo/mender/bone_blade_rake_slim.geo.json"
+            },
+            "type": "geckolib:default",
+            "texture": {
+                "base": "eop:textures/models/mender/bone_blade_#METAL_text.png",
+                "transformers": [
+                    {
+                        "type": "palladium:alpha_mask",
+                        "mask": "eop:textures/alpha_mask/mender/cell_blade/bone_blade_#TIMER.png"
+                    }
+                ],
+                "variables": {
+                    "TIMER": {
+                        "type": "palladium:animation_timer_ability",
+                        "power": "eop:mender",
+                        "ability": "Bone.Blades"
+                    },
+                    "METAL": {
+                        "type": "palladium:objective_score",
+                        "objective": "EOP.Bone.Type"
+                    }
+                },
+                "output": "eop:textures/models/mender/bone_blade_#METAL_text_#TIMER_bone_rake"
+            },
+            "conditions": [
+                {
+                    "type": "palladium:objective_score",
+                    "objective": "EOP.Claw.Type",
+                    "min_score": 5,
+                    "max_score": 5
+                }
+            ]
+        },
+        {
+            "model": {
+                "normal": "eop:geo/mender/bone_blade_feral.geo.json",
+                "slim": "eop:geo/mender/bone_blade_feral_slim.geo.json"
+            },
+            "type": "geckolib:default",
+            "texture": {
+                "base": "eop:textures/models/mender/bone_blade_#METAL_text.png",
+                "transformers": [
+                    {
+                        "type": "palladium:alpha_mask",
+                        "mask": "eop:textures/alpha_mask/mender/cell_blade/bone_blade_#TIMER.png"
+                    }
+                ],
+                "variables": {
+                    "TIMER": {
+                        "type": "palladium:animation_timer_ability",
+                        "power": "eop:mender",
+                        "ability": "Bone.Blades"
+                    },
+                    "METAL": {
+                        "type": "palladium:objective_score",
+                        "objective": "EOP.Bone.Type"
+                    }
+                },
+                "output": "eop:textures/models/mender/bone_blade_#METAL_text_#TIMER_bone_feral"
+            },
+            "conditions": [
+                {
+                    "type": "palladium:objective_score",
+                    "objective": "EOP.Claw.Type",
+                    "min_score": 6,
+                    "max_score": 6
+                }
+            ]
+        },
+        {
+            "model": {
+                "normal": "eop:geo/mender/bone_blade_split.geo.json",
+                "slim": "eop:geo/mender/bone_blade_split_slim.geo.json"
+            },
+            "type": "geckolib:default",
+            "texture": {
+                "base": "eop:textures/models/mender/bone_blade_#METAL_text.png",
+                "transformers": [
+                    {
+                        "type": "palladium:alpha_mask",
+                        "mask": "eop:textures/alpha_mask/mender/cell_blade/bone_blade_#TIMER.png"
+                    }
+                ],
+                "variables": {
+                    "TIMER": {
+                        "type": "palladium:animation_timer_ability",
+                        "power": "eop:mender",
+                        "ability": "Bone.Blades"
+                    },
+                    "METAL": {
+                        "type": "palladium:objective_score",
+                        "objective": "EOP.Bone.Type"
+                    }
+                },
+                "output": "eop:textures/models/mender/bone_blade_#METAL_text_#TIMER_bone_split"
+            },
+            "conditions": [
+                {
+                    "type": "palladium:objective_score",
+                    "objective": "EOP.Claw.Type",
+                    "min_score": 7,
+                    "max_score": 7
+                }
+            ]
+        },
+        {
+            "model": {
+                "normal": "eop:geo/mender/bone_blade_talon.geo.json",
+                "slim": "eop:geo/mender/bone_blade_talon_slim.geo.json"
+            },
+            "type": "geckolib:default",
+            "texture": {
+                "base": "eop:textures/models/mender/bone_blade_#METAL_text.png",
+                "transformers": [
+                    {
+                        "type": "palladium:alpha_mask",
+                        "mask": "eop:textures/alpha_mask/mender/cell_blade/bone_blade_#TIMER.png"
+                    }
+                ],
+                "variables": {
+                    "TIMER": {
+                        "type": "palladium:animation_timer_ability",
+                        "power": "eop:mender",
+                        "ability": "Bone.Blades"
+                    },
+                    "METAL": {
+                        "type": "palladium:objective_score",
+                        "objective": "EOP.Bone.Type"
+                    }
+                },
+                "output": "eop:textures/models/mender/bone_blade_#METAL_text_#TIMER_bone_talon"
+            },
+            "conditions": [
+                {
+                    "type": "palladium:objective_score",
+                    "objective": "EOP.Claw.Type",
+                    "min_score": 8,
+                    "max_score": 8
+                }
+            ]
+        },
+        {
+            "model": {
+                "normal": "eop:geo/mender/bone_blade_crown.geo.json",
+                "slim": "eop:geo/mender/bone_blade_crown_slim.geo.json"
+            },
+            "type": "geckolib:default",
+            "texture": {
+                "base": "eop:textures/models/mender/bone_blade_#METAL_text.png",
+                "transformers": [
+                    {
+                        "type": "palladium:alpha_mask",
+                        "mask": "eop:textures/alpha_mask/mender/cell_blade/bone_blade_#TIMER.png"
+                    }
+                ],
+                "variables": {
+                    "TIMER": {
+                        "type": "palladium:animation_timer_ability",
+                        "power": "eop:mender",
+                        "ability": "Bone.Blades"
+                    },
+                    "METAL": {
+                        "type": "palladium:objective_score",
+                        "objective": "EOP.Bone.Type"
+                    }
+                },
+                "output": "eop:textures/models/mender/bone_blade_#METAL_text_#TIMER_bone_crown"
+            },
+            "conditions": [
+                {
+                    "type": "palladium:objective_score",
+                    "objective": "EOP.Claw.Type",
+                    "min_score": 9,
+                    "max_score": 9
+                }
+            ]
+        },
+        {
+            "model": {
+                "normal": "eop:geo/mender/bone_blade_heavy.geo.json",
+                "slim": "eop:geo/mender/bone_blade_heavy_slim.geo.json"
+            },
+            "type": "geckolib:default",
+            "texture": {
+                "base": "eop:textures/models/marrow/bone_form_#METAL_text.png",
+                "transformers": [
+                    {
+                        "type": "palladium:alpha_mask",
+                        "mask": "eop:textures/alpha_mask/marrow/bone_form/bone_form_#TIMER.png"
+                    }
+                ],
+                "variables": {
+                    "TIMER": {
+                        "type": "palladium:animation_timer_ability",
+                        "power": "eop:mender",
+                        "ability": "Bone.Blade10"
+                    },
+					"METAL": {
+                        "type": "palladium:objective_score",
+                        "objective": "EOP.Bone.Type"
+                    }
+                },
+                "output": "eop:textures/models/marrow/bone_armor_#METAL_text_#TIMER_bone_heavy"
+            },
+            "conditions": [
+                {
+                    "type": "palladium:objective_score",
+                    "objective": "EOP.Claw.Type",
+                    "min_score": 10,
+                    "max_score": 10
+                }
+            ]
+        }
+    ]
+}

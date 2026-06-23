@@ -29,4 +29,12 @@ public class EOPEffects {
             MOB_EFFECTS.register("fractured", FracturedEffect::new);
     public static final RegistryObject<MobEffect> DISORIENTED =
             MOB_EFFECTS.register("disoriented", DisorientedEffect::new);
+    public static final RegistryObject<MobEffect> CELLULAR_REGENERATION =
+            MOB_EFFECTS.register("cellular_regeneration", CellularRegenerationEffect::new);
+    public static final RegistryObject<MobEffect> CELLULAR_IMMORTALITY =
+            MOB_EFFECTS.register("cellular_immortality", CellularImmortalityEffect::new);
+    public static final RegistryObject<MobEffect> MIOTIC_DETONATION =
+            MOB_EFFECTS.register("miotic_detonation", MioticDetonationEffect::new);
+    public static final RegistryObject<MobEffect> CELLULAR_ENHANCEMENT =
+            MOB_EFFECTS.register("cellular_enhancement", CellularEnhancementEffect::new);
 }

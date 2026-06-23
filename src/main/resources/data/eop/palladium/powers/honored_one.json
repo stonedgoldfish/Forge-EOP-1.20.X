@@ -1,0 +1,1038 @@
+{
+    "name": "Spatial Manipulation",
+    "background": "minecraft:textures/block/gray_concrete_powder.png",
+    "icon": "eop:textures/gui/honored_one.png",
+    "ability_bar_texture": "eop:textures/gui/ability_bars/eop_powers.png",
+    "gui_display_type": "tree",
+    "persistent_data": true,
+    "energy_bars": {
+        "space_energy": {
+            "color": "#0052aa",
+            "max": 100,
+            "synced_value": {
+                "type": "palladium_property",
+                "property": "eop_honored_one_energy",
+                "fallback": 0
+            }
+        }
+    },
+    "abilities": {
+        "HonoredOne": {
+            "type": "palladium:command",
+            "hidden": true,
+            "first_tick_commands": [
+                "tag @s add Honored_One",
+                "tag @s add EOP.Extra.Night.Vision",
+                "tag @s add EOP.Extra.Slow.Fall",
+                "tag @s add EOP.Extra.Entity.Sense",
+                "tag @s add EOP.Has.BM",
+                "tag @s add EOP.Has.Power"
+            ],
+            "last_tick_commands": [
+                "tag @s remove Honored_One",
+                "tag @s remove EOP.Extra.Night.Vision",
+                "tag @s remove EOP.Extra.Slow.Fall",
+                "tag @s remove EOP.Extra.Entity.Sense",
+                "tag @s remove EOP.Has.BM",
+                "tag @s remove EOP.Has.Power"
+            ],
+            "commands": []
+        },
+        "Spatial.Manipulation": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/honored_one.png",
+            "title": "Spatial Manipulation",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": -1,
+            "gui_position": [
+                0,
+                -2
+            ],
+            "description": "You have obtained the power to manipulate space itself"
+        },
+        "Power.Tag": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "tag @s add EOP.Has.Power"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Has.Power"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "BM.Tag": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "tag @s add EOP.Has.BM"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Has.BM"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Left.Stat1": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 0.5 more damage points",
+            "gui_position": [
+                -1,
+                -1.25
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 0.5,
+            "operation": 0,
+            "uuid": "87f2bfb8-ebf7-48ca-9a5d-368a3ab8c913",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Spatial.Manipulation"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_honored_one_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/honored_one.png",
+                        "description": {
+                            "text": "Spatial Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Left.Stat2": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/resistance.png",
+            "title": "Enhanced Armor",
+            "description": "Grants 3 more armor points",
+            "gui_position": [
+                -1.5,
+                -0.4
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.armor",
+            "amount": 3,
+            "operation": 0,
+            "uuid": "cb3993c6-cc15-4470-a1da-c61544ba6d28",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat1"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_honored_one_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/honored_one.png",
+                        "description": {
+                            "text": "Spatial Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Left.Stat3": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 1 more damage point",
+            "gui_position": [
+                -1,
+                0.25
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 1,
+            "operation": 0,
+            "uuid": "b036f298-6b3a-469a-bd4e-8f929452fd8e",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat2"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_honored_one_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/honored_one.png",
+                        "description": {
+                            "text": "Spatial Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Left.Stat4": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/resistance.png",
+            "title": "Enhanced Armor",
+            "description": "Grants 3 more armor points",
+            "gui_position": [
+                -1,
+                1.1
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.armor",
+            "amount": 3,
+            "operation": 0,
+            "uuid": "bedeb563-22a8-46e0-93fb-abf7b7e6fe89",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat3"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_honored_one_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/honored_one.png",
+                        "description": {
+                            "text": "Spatial Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Left.Stat5": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 1.5 more damage points",
+            "gui_position": [
+                -0.7,
+                2.1
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 1.5,
+            "operation": 0,
+            "uuid": "e8cf1286-251c-424a-8b0e-c3db7f9080c0",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat4"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_honored_one_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/honored_one.png",
+                        "description": {
+                            "text": "Spatial Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Right.Stat1": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 0.5 more damage points",
+            "gui_position": [
+                1,
+                -1.25
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 0.5,
+            "operation": 0,
+            "uuid": "31f1b86d-35c6-4a06-8741-cc8ed932bb9e",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Spatial.Manipulation"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_honored_one_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/honored_one.png",
+                        "description": {
+                            "text": "Spatial Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Right.Stat2": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/speed.png",
+            "title": "Enhanced Speed",
+            "description": "Grants 5% more speed",
+            "gui_position": [
+                1.5,
+                -0.4
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.movement_speed",
+            "amount": 0.05,
+            "operation": 1,
+            "uuid": "c6726057-166e-4abe-b1bc-b4fc92c05ae0",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat1"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_honored_one_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/honored_one.png",
+                        "description": {
+                            "text": "Spatial Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Right.Stat3": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 1 more damage point",
+            "gui_position": [
+                1,
+                0.25
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 1,
+            "operation": 0,
+            "uuid": "4d7c0ab5-7aeb-481b-88cd-85648a6de2b3",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat2"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_honored_one_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/honored_one.png",
+                        "description": {
+                            "text": "Spatial Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Right.Stat4": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/speed.png",
+            "title": "Enhanced Speed",
+            "description": "Grants 5% more speed",
+            "gui_position": [
+                1,
+                1.1
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.movement_speed",
+            "amount": 0.05,
+            "operation": 1,
+            "uuid": "c81014cc-2088-4e3a-a3da-79bbd8069990",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat3"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_honored_one_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/honored_one.png",
+                        "description": {
+                            "text": "Spatial Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Right.Stat5": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 1.5 more damage points",
+            "gui_position": [
+                0.7,
+                2.1
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 1.5,
+            "operation": 0,
+            "uuid": "6973a8f4-48bf-4eef-9cca-7a6370bd62df",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat4"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_honored_one_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/honored_one.png",
+                        "description": {
+                            "text": "Spatial Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Energy.Regen": {
+            "type": "eop:energy_regen",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "amount": 1,
+            "interval": 25,
+            "max": 100,
+            "enabled_energy_drain": true,
+            "drain_amount": 0,
+            "drain_interval": 200,
+            "invert": false
+        },
+        "Secondary.Ability": {
+            "type": "palladium:dummy",
+            "gui_position": [
+                1.25,
+                -2
+            ],
+            "title": "Teleport",
+            "description": "Teleport to an area of your choosing. §dBattlemode §fmust be enabled via keybind. §dRight Click §fto use this ability",
+            "icon": "eop:textures/gui/image.png",
+            "hidden": false,
+            "hidden_in_bar": true
+        },
+        "Teleport": {
+            "type": "palladium:animation_timer",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "start_value": 0,
+            "max_value": 2,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "eop:activation",
+                        "ticks": 2,
+                        "cooldown": 10,
+                        "energy": 1,
+                        "property": "eop_honored_one_energy",
+                        "toggle_mode": false,
+                        "key_type": "right_click"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "eop:power_selected",
+                        "power": "eop:honored_one"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Battle.Mode"
+                    }
+                ]
+            }
+        },
+        "Teleport.Ability": {
+            "type": "eop:teleport",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "range": 150,
+            "random_teleport": false,
+            "random_radius": 8,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "ability": "Teleport",
+                        "property": "value",
+                        "min": 1,
+                        "max": 1
+                    },
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Teleport"
+                    }
+                ]
+            }
+        },
+        "Teleport.Command": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "playsound minecraft:entity.enderman.teleport master @a ~ ~ ~ 1 1"
+            ],
+            "last_tick_commands": [
+                "playsound minecraft:entity.enderman.teleport master @a ~ ~ ~ 1 1"
+            ],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Teleport"
+                    }
+                ]
+            }
+        },
+        "Infinity.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/image.png",
+            "title": "Infinity",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": 0,
+            "gui_position": [
+                0,
+                -1.25
+            ],
+            "description": "description",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Spatial.Manipulation"
+                    }
+                ]
+            }
+        },
+        "Infinity": {
+            "type": "palladium:command",
+            "icon": "eop:textures/gui/infinity.png",
+            "title": "Infinity",
+            "bar_color": "light_gray",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "list_index": 0,
+            "first_tick_commands": [
+                "tag @s add Infinity",
+                "tag @s add Ability.Being.Used",
+                "playsound minecraft:entity.evoker.prepare_summon master @s ~ ~ ~ 1 1"
+            ],
+            "last_tick_commands": [
+                "tag @s remove Infinity",
+                "tag @s remove Ability.Being.Used",
+                "playsound minecraft:entity.evoker.prepare_summon master @s ~ ~ ~ 1 1"
+            ],
+            "commands": [
+                "tag @s add Ability.Being.Used"
+            ],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "eop:toggle",
+                        "cooldown": 20,
+                        "ticks": 0,
+                        "energy": 1,
+                        "consume_energy_repeatedly": true,
+                        "energy_interval": 20,
+                        "property": "eop_honored_one_energy",
+                        "toggle_mode": true,
+                        "key_type": "key_bind"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Infinity.Unlock"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Power.Erased"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "No.Infinity"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Infinity.Damage.Immunity": {
+            "type": "palladium:damage_immunity",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "damage_sources": [
+                "eop:infinity",
+                "minecraft:is_fall",
+                "eop:tacz_guns",
+                "eop:scorched_guns",
+                "eop:infinity_alexscaves",
+                "eop:infinity_alexmobs"
+            ],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Infinity"
+                    }
+                ]
+            }
+        },
+        "Infinity.Shader": {
+            "type": "palladium:shader_effect",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "shader": "minecraft:shaders/post/deconverge.json",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Infinity"
+                    }
+                ]
+            }
+        },
+        "Infinity.Spear.Tag": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [],
+            "last_tick_commands": [],
+            "commands": [
+                "tag @s remove No.Infinity"
+            ],
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "No.Infinity"
+                    },
+                    {
+                        "type": "palladium:interval",
+                        "active_ticks": 0,
+                        "disabled_ticks": 50
+                    }
+                ]
+            }
+        },
+        "Water.Walk": {
+            "type": "palladium:water_walk",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:crouching"
+                            },
+                            {
+                                "type": "palladium:in_water"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Infinity"
+                    }
+                ]
+            }
+        },
+        "Lava.Walk": {
+            "type": "palladium:fluid_walking",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "fluid_tag": "minecraft:lava",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:crouching"
+                            },
+                            {
+                                "type": "palladium:in_lava"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Infinity"
+                    }
+                ]
+            }
+        },
+        "Fly": {
+            "type": "eop:custom_flight",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "speed": 0.35,
+            "sprint_multiplier": 2,
+            "acceleration": 0.35,
+            "drag": 0.9,
+            "allow_sprint": false
+        },
+        "Blue.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/image.png",
+            "title": "Lapse Blue",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "gui_position": [
+                0,
+                -0.45
+            ],
+            "description": "description",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Infinity.Unlock"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_honored_one_skill_points",
+                        "score": 2,
+                        "icon": "eop:textures/gui/honored_one.png",
+                        "description": {
+                            "text": "Spatial Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Blue": {
+            "type": "palladium:animation_timer",
+            "icon": "eop:textures/gui/image.png",
+            "title": "Lapse Blue",
+            "bar_color": "light_gray",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "list_index": 1,
+            "start_value": 0,
+            "max_value": 10,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "eop:activation",
+                        "ticks": 10,
+                        "cooldown": 150,
+                        "energy": 10,
+                        "property": "eop_honored_one_energy",
+                        "toggle_mode": false,
+                        "key_type": "key_bind"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Blue.Unlock"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Blue.Commands": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "playsound minecraft:block.beacon.deactivate master @a ~ ~ ~ 1 0.5"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Blue"
+                    }
+                ]
+            }
+        },
+        "Blue.Animation": {
+            "type": "eop:trigger_animation",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "animation": "SHOOT",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Blue"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Blue",
+                        "property": "value",
+                        "min": 1,
+                        "max": 1
+                    }
+                ]
+            }
+        },
+        "Blue.Summon": {
+            "type": "eop:spawn_armor_stand",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "range": 8,
+            "lifetime": 40,
+            "enable_damage": false,
+            "damage_on_last_tick": false,
+            "knockback_on_last_tick": 0.2,
+            "aoe_damage": 2,
+            "aoe_radius": 10,
+            "aoe_damage_type": "eop:basic",
+            "target_command_radius": 10,
+            "stand_first_tick_commands": [
+                "playsound minecraft:block.beacon.activate master @a ~ ~ ~ 2 2",
+                "playsound minecraft:entity.warden.death master @a ~ ~ ~ 1 2",
+                "particle minecraft:end_rod ~ ~0.6 ~ 0 0 0 0.3 20"
+            ],
+            "stand_commands": [
+                "particle eop:dark_energy ~ ~1 ~ 0.1 0.1 0.1 0.6 10"
+            ],
+            "stand_last_tick_commands": [
+                "playsound minecraft:entity.generic.explode master @a ~ ~ ~ 2 1",
+                "particle minecraft:explosion ~ ~0.6 ~ 3 1 3 0 40",
+                "particle minecraft:poof ~ ~0.6 ~ 0 0 0 0.7 160",
+                "particle minecraft:end_rod ~ ~0.6 ~ 0 0 0 0.7 140"
+            ],
+            "target_first_tick_commands": [],
+            "target_commands": [],
+            "target_last_tick_commands": [
+                "effect give @s eop:stun 4 4 true"
+            ],
+            "stand_power": "null",
+            "pull_strength": 2,
+            "invert_pull": false,
+            "looping_sound": "eop:black_hole",
+            "looping_sound_volume": 2,
+            "looping_sound_pitch": 1,
+            "billboard": "lapse_blue",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Blue"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Blue",
+                        "property": "value",
+                        "min": 8,
+                        "max": 8
+                    }
+                ]
+            }
+        },
+        "Screen.Shake2": {
+            "type": "eop:screen_shake",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "intensity": 2,
+            "speed": 1,
+            "affect_others": false,
+            "range": 15,
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Blue"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Blue",
+                        "property": "value",
+                        "min": 0,
+                        "max": 8
+                    }
+                ]
+            }
+        },
+        "Ability3.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/image.png",
+            "title": "Ability Name",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": 2,
+            "gui_position": [
+                0,
+                0.3
+            ],
+            "description": "description",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "ability": "Blue.Unlock"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_honored_one_skill_points",
+                        "score": 3,
+                        "icon": "eop:textures/gui/honored_one.png",
+                        "description": {
+                            "text": "Spatial Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Ability4.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/image.png",
+            "title": "Ability Name",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": 2,
+            "gui_position": [
+                0,
+                1.2
+            ],
+            "description": "description",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "ability": "Ability3.Unlock"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_honored_one_skill_points",
+                        "score": 4,
+                        "icon": "eop:textures/gui/honored_one.png",
+                        "description": {
+                            "text": "Spatial Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Ability5.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/image.png",
+            "title": "Ability Name",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": 2,
+            "gui_position": [
+                0,
+                2.75
+            ],
+            "description": "description",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "ability": "Ability4.Unlock"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_honored_one_skill_points",
+                        "score": 6,
+                        "icon": "eop:textures/gui/honored_one.png",
+                        "description": {
+                            "text": "Spatial Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

@@ -1,0 +1,1291 @@
+{
+    "name": "Neogenesis",
+    "background": "minecraft:textures/block/gray_concrete_powder.png",
+    "icon": "eop:textures/gui/mender.png",
+    "ability_bar_texture": "eop:textures/gui/ability_bars/eop_powers.png",
+    "gui_display_type": "tree",
+    "persistent_data": true,
+    "energy_bars": {
+        "cell_energy": {
+            "color": "#f7b321",
+            "max": 100,
+            "synced_value": {
+                "type": "palladium_property",
+                "property": "eop_mender_energy",
+                "fallback": 0
+            }
+        }
+    },
+    "abilities": {
+        "Mender": {
+            "type": "palladium:command",
+            "hidden": true,
+            "first_tick_commands": [
+                "tag @s add Mender",
+                "tag @s add EOP.Extra.Climb",
+                "tag @s add EOP.Has.BM",
+                "tag @s add EOP.Has.Power",
+                "scoreboard objectives add EOP.Claw.Type dummy",
+                "scoreboard players add @s EOP.Claw.Type 0"
+            ],
+            "last_tick_commands": [
+                "tag @s remove Mender",
+                "tag @s remove EOP.Extra.Climb",
+                "tag @s remove EOP.Has.BM",
+                "tag @s remove EOP.Has.Power"
+            ],
+            "commands": []
+        },
+        "Neogenesis": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/mender.png",
+            "title": "Neogenesis",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": -1,
+            "gui_position": [
+                0,
+                -2
+            ],
+            "description": "You have obtained the power to regenerate your cells at impossible rates"
+        },
+        "Power.Tag": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "tag @s add EOP.Has.Power"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Has.Power"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "BM.Tag": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "tag @s add EOP.Has.BM"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Has.BM"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Left.Stat1": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/regeneration.png",
+            "title": "Enhanced Health",
+            "description": "Grants 1 more heart",
+            "gui_position": [
+                -1,
+                -1.25
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.max_health",
+            "amount": 2,
+            "operation": 0,
+            "uuid": "f7b74781-b476-48ed-a68b-d423a8d67aa5",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Neogenesis"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_mender_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/mender.png",
+                        "description": {
+                            "text": "Neogenesis Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Left.Stat2": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/resistance.png",
+            "title": "Enhanced Armor",
+            "description": "Grants 3 more armor points",
+            "gui_position": [
+                -1.5,
+                -0.4
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.armor",
+            "amount": 3,
+            "operation": 0,
+            "uuid": "9fe9b716-d382-41e1-b011-e49c261660c7",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat1"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_mender_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/mender.png",
+                        "description": {
+                            "text": "Neogenesis Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Left.Stat3": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/regeneration.png",
+            "title": "Enhanced Health",
+            "description": "Grants 1 more heart",
+            "gui_position": [
+                -1,
+                0.25
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.max_health",
+            "amount": 2,
+            "operation": 0,
+            "uuid": "48a55e5d-1b93-4f5b-ab7f-eb4ae98b9a67",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat2"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_mender_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/mender.png",
+                        "description": {
+                            "text": "Neogenesis Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Left.Stat4": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/resistance.png",
+            "title": "Enhanced Armor",
+            "description": "Grants 3 more armor points",
+            "gui_position": [
+                -1,
+                1.1
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.armor",
+            "amount": 3,
+            "operation": 0,
+            "uuid": "87f7b2d5-3d1e-44d5-ae8a-7e79d575a7a9",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat3"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_mender_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/mender.png",
+                        "description": {
+                            "text": "Neogenesis Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Left.Stat5": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/absorption.png",
+            "title": "Enhanced Toughness",
+            "description": "Grants 5 more toughness points",
+            "gui_position": [
+                -0.7,
+                2.1
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.armor_toughness",
+            "amount": 5,
+            "operation": 0,
+            "uuid": "cf3e9646-7aed-4a29-afff-3851e707d090",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat4"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_mender_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/mender.png",
+                        "description": {
+                            "text": "Neogenesis Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Right.Stat1": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/regeneration.png",
+            "title": "Enhanced Health",
+            "description": "Grants 1 more heart",
+            "gui_position": [
+                1,
+                -1.25
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.max_health",
+            "amount": 2,
+            "operation": 0,
+            "uuid": "1e876e79-1f4c-4cdb-ae2b-5e259a7abafb",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Neogenesis"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_mender_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/mender.png",
+                        "description": {
+                            "text": "Neogenesis Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Right.Stat2": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/speed.png",
+            "title": "Enhanced Speed",
+            "description": "Grants 5% more speed",
+            "gui_position": [
+                1.5,
+                -0.4
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.movement_speed",
+            "amount": 0.05,
+            "operation": 1,
+            "uuid": "df398059-8780-482e-b19a-7fadc3d86581",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat1"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_mender_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/mender.png",
+                        "description": {
+                            "text": "Neogenesis Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Right.Stat3": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/regeneration.png",
+            "title": "Enhanced Health",
+            "description": "Grants 1 more heart",
+            "gui_position": [
+                1,
+                0.25
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.max_health",
+            "amount": 2,
+            "operation": 0,
+            "uuid": "7acafd92-d091-4799-b643-a2e744a1726c",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat2"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_mender_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/mender.png",
+                        "description": {
+                            "text": "Neogenesis Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Right.Stat4": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/speed.png",
+            "title": "Enhanced Speed",
+            "description": "Grants 5% more speed",
+            "gui_position": [
+                1,
+                1.1
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.movement_speed",
+            "amount": 0.05,
+            "operation": 1,
+            "uuid": "a5cdc9ef-ce8a-4f77-aaed-64cc905cdf56",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat3"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_mender_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/mender.png",
+                        "description": {
+                            "text": "Neogenesis Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Right.Stat5": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/absorption.png",
+            "title": "Enhanced Toughness",
+            "description": "Grants 5 more toughness points",
+            "gui_position": [
+                0.7,
+                2.1
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.armor_toughness",
+            "amount": 5,
+            "operation": 0,
+            "uuid": "74cc645b-1a03-4be0-adaf-60b0688dc01f",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat4"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_mender_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/mender.png",
+                        "description": {
+                            "text": "Neogenesis Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Regen": {
+            "type": "palladium:healing",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "frequency": 20,
+            "amount": 1
+        },
+        "Effect.Immunity": {
+            "type": "eop:immune_to_effect",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "effects": [
+                "minecraft:instant_damage",
+                "minecraft:nausea",
+                "minecraft:blindness",
+                "minecraft:hunger",
+                "minecraft:poison",
+                "minecraft:wither"
+            ]
+        },
+        "Temp.Resistance": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [],
+            "last_tick_commands": [],
+            "commands": [
+                "effect give @s legendarysurvivaloverhaul:cold_resistance 1 0 true",
+                "effect give @s legendarysurvivaloverhaul:heat_resistance 1 0 true"
+            ],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:mod_loaded",
+                        "mod_id": "legendarysurvivaloverhaul"
+                    }
+                ]
+            }
+        },
+        "Energy.Regen": {
+            "type": "eop:energy_regen",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "amount": 1,
+            "interval": 15,
+            "max": 100,
+            "enabled_energy_drain": true,
+            "drain_amount": 0,
+            "drain_interval": 200,
+            "invert": false
+        },
+        "Hunger.Resistance": {
+            "type": "eop:hunger_resistance",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "resistance": 0.2
+        },
+        "Secondary.Ability": {
+            "type": "palladium:dummy",
+            "gui_position": [
+                1.25,
+                -2
+            ],
+            "title": "Withering Touch",
+            "description": "description. §dBattlemode §fmust be enabled via keybind. §dRight Click §fto use this ability",
+            "icon": "eop:textures/gui/wither.png",
+            "hidden": false,
+            "hidden_in_bar": true
+        },
+        "Withering.Touch": {
+            "type": "palladium:command",
+            "title": "Withering Touch",
+            "icon": "eop:textures/gui/wither.png",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": 0,
+            "first_tick_commands": [
+                "playsound minecraft:entity.wither.hurt master @a ~ ~ ~ 1 2"
+            ],
+            "last_tick_commands": [
+                "playsound minecraft:entity.wither.hurt master @a ~ ~ ~ 1 1.3"
+            ],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:toggle",
+                        "cooldown": 0,
+                        "key_type": "right_click"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "eop:power_selected",
+                        "power": "eop:mender"
+                    },
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Battle.Mode"
+                    }
+                ]
+            }
+        },
+        "Hide.Layers": {
+            "type": "palladium:hide_body_part",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "body_parts": [
+                "right_arm_overlay"
+            ],
+            "affects_first_person": true,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Withering.Touch"
+                    }
+                ]
+            }
+        },
+        "Wither.Hand.Animation": {
+            "type": "palladium:animation_timer",
+            "start_value": 0,
+            "max_value": 7,
+            "hidden": true,
+            "hidden_in_bar": true,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Withering.Touch"
+                    }
+                ]
+            }
+        },
+        "Wither.Hand.Render": {
+            "type": "palladium:render_layer",
+            "render_layer": "eop:mender/wither_hand",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_effect",
+                                "effect": "minecraft:invisibility"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Wither.Hand.Punch": {
+            "type": "eop:punch_command",
+            "hidden_in_bar": true,
+            "hidden": true,
+            "commands": [
+                "effect give @s wither 5 1 true"
+            ],
+            "allow_projectiles": false,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Withering.Touch"
+                    }
+                ]
+            }
+        },
+        "Bone.Blades.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/bone_blade.png",
+            "title": "Bone Blades",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": 0,
+            "gui_position": [
+                0,
+                -1.25
+            ],
+            "description": "description",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Neogenesis"
+                    }
+                ]
+            }
+        },
+        "Bone.Blades": {
+            "type": "palladium:animation_timer",
+            "icon": "eop:textures/gui/bone_blade.png",
+            "title": "Bone Blades",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "list_index": 0,
+            "start_value": 0,
+            "max_value": 4,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:toggle",
+                        "cooldown": 0,
+                        "key_type": "key_bind",
+                        "needs_empty_hand": false,
+                        "allow_scrolling_when_crouching": true
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Bone.Blades.Unlock"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Bone.Blade10": {
+            "type": "palladium:animation_timer",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "start_value": 0,
+            "max_value": 2,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Bone.Blades"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:objective_score",
+                        "objective": "EOP.Claw.Type",
+                        "min_score": 10,
+                        "max_score": 10
+                    }
+                ]
+            }
+        },
+        "Bone.Blade.Commands": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "execute if score @s EOP.Bone.Type matches 0 run playsound eop:form master @a ~ ~ ~ 1 2",
+                "execute if score @s EOP.Bone.Type matches 1 run playsound eop:claw master @a ~ ~ ~ 1 2"
+            ],
+            "last_tick_commands": [
+                "execute if score @s EOP.Bone.Type matches 0 run playsound eop:form master @a ~ ~ ~ 1 2",
+                "execute if score @s EOP.Bone.Type matches 1 run playsound eop:claw master @a ~ ~ ~ 1 2"
+            ],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Bone.Blades"
+                    }
+                ]
+            }
+        },
+        "Blade.Damage": {
+            "type": "palladium:attribute_modifier",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 4,
+            "operation": 0,
+            "uuid": "e88d2543-0c31-40c7-8c1d-141209977340",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Bone.Blades"
+                    },
+                    {
+                        "type": "palladium:objective_score",
+                        "objective": "EOP.Bone.Type",
+                        "min_score": 0,
+                        "max_score": 0
+                    }
+                ]
+            }
+        },
+        "Blade.Damage2": {
+            "type": "palladium:attribute_modifier",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 10,
+            "operation": 0,
+            "uuid": "a6f6ec07-13a9-4157-8bba-053f48f222c4",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Bone.Blades"
+                    },
+                    {
+                        "type": "palladium:objective_score",
+                        "objective": "EOP.Bone.Type",
+                        "min_score": 1,
+                        "max_score": 1
+                    }
+                ]
+            }
+        },
+        "Bone.Render": {
+            "type": "palladium:render_layer",
+            "render_layer": "eop:mender/bone_blade",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_effect",
+                                "effect": "minecraft:invisibility"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Cellular.Recontruction.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/cell_regen.png",
+            "title": "Cellular Reconstruction",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "gui_position": [
+                0,
+                -0.45
+            ],
+            "description": "description",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Bone.Blades.Unlock"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_mender_skill_points",
+                        "score": 2,
+                        "icon": "eop:textures/gui/mender.png",
+                        "description": {
+                            "text": "Neogenesis Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Cellular.Reconstruction": {
+            "type": "palladium:healing",
+            "icon": "eop:textures/gui/cell_regen.png",
+            "title": "Cellular Reconstruction",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "list_index": 1,
+            "frequency": 10,
+            "amount": 2,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "eop:toggle",
+                        "cooldown": 0,
+                        "ticks": 0,
+                        "energy": 3,
+                        "consume_energy_repeatedly": true,
+                        "energy_interval": 20,
+                        "property": "eop_mender_energy",
+                        "toggle_mode": true,
+                        "key_type": "key_bind"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Cellular.Recontruction.Unlock"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Cellular.Reconstruction.Ally.Healing": {
+            "type": "eop:aoe_commands",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "radius": 3,
+            "commands_on_targets": [],
+            "commands_on_allies": [
+                "effect give @s[palladium.power=!eop:mob_effects/cellular_reconstruction] eop:cellular_regeneration 5 0 true"
+            ],
+            "cone": false,
+            "cone_angle": 90,
+            "include_caster": false,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Cellular.Reconstruction"
+                    },
+                    {
+                        "type": "palladium:interval",
+                        "active_ticks": 0,
+                        "disabled_ticks": 5
+                    }
+                ]
+            }
+        },
+        "Cellular.Recontruction.Commands": {
+            "type": "palladium:command",
+            "title": "null",
+            "bar_color": "light_gray",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": -1,
+            "gui_position": "null",
+            "description": "null",
+            "first_tick_commands": [],
+            "last_tick_commands": [],
+            "commands": [
+                "playsound minecraft:block.fire.extinguish master @a ~ ~ ~ 1 1"
+            ],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Cellular.Reconstruction"
+                    },
+                    {
+                        "type": "palladium:interval",
+                        "active_ticks": 0,
+                        "disabled_ticks": 10
+                    },
+                    {
+                        "type": "eop:health_below_percent",
+                        "percent": 0.99
+                    }
+                ]
+            }
+        },
+        "Cellular.Recontruction.Particles": {
+            "type": "palladium:particles",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "emitter": "eop:general_body",
+            "particle_type": "minecraft:poof",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Cellular.Reconstruction"
+                    },
+                    {
+                        "type": "palladium:interval",
+                        "active_ticks": 0,
+                        "disabled_ticks": 10
+                    },
+                    {
+                        "type": "eop:health_below_percent",
+                        "percent": 0.99
+                    }
+                ]
+            }
+        },
+        "Bone.Healing": {
+            "type": "palladium:command",
+            "title": "null",
+            "bar_color": "light_gray",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": -1,
+            "gui_position": "null",
+            "description": "null",
+            "first_tick_commands": [],
+            "last_tick_commands": [],
+            "commands": [
+                "bodydamage @s heal ALL 1"
+            ],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Cellular.Reconstruction"
+                    },
+                    {
+                        "type": "palladium:interval",
+                        "active_ticks": 0,
+                        "disabled_ticks": 10
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:mod_loaded",
+                        "mod_id": "legendarysurvivaloverhaul"
+                    }
+                ]
+            }
+        },
+        "Increase.Regen.Tag": {
+            "type": "palladium:command",
+            "title": "null",
+            "bar_color": "light_gray",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": -1,
+            "gui_position": "null",
+            "description": "null",
+            "first_tick_commands": [
+                "tag @s add Ability.Being.Used",
+                "tag @s remove EOP.Chimera.Corrupted"
+            ],
+            "last_tick_commands": [
+                "tag @s remove Ability.Being.Used"
+            ],
+            "commands": [
+                "tag @s add Ability.Being.Used"
+            ],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Cellular.Reconstruction"
+                    }
+                ]
+            }
+        },
+        "Mitotic.Detonation.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/miotic_detonation.png",
+            "title": "Mitotic Detonation",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": 2,
+            "gui_position": [
+                0,
+                0.3
+            ],
+            "description": "description",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "ability": "Cellular.Recontruction.Unlock"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_mender_skill_points",
+                        "score": 3,
+                        "icon": "eop:textures/gui/mender.png",
+                        "description": {
+                            "text": "Neogenesis Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Mitotic.Detonation": {
+            "type": "palladium:command",
+            "title": "Mitotic Detonation",
+            "icon": "eop:textures/gui/miotic_detonation.png",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "list_index": 2,
+            "first_tick_commands": [
+                "playsound minecraft:entity.wither.hurt master @a ~ ~ ~ 1 2"
+            ],
+            "last_tick_commands": [
+                "playsound minecraft:entity.wither.hurt master @a ~ ~ ~ 1 1.3"
+            ],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "eop:activation",
+                        "ticks": 60,
+                        "cooldown": 200,
+                        "energy": 20,
+                        "property": "eop_mender_energy",
+                        "toggle_mode": false,
+                        "key_type": "key_bind"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Mitotic.Detonation.Punch": {
+            "type": "eop:punch_command",
+            "hidden_in_bar": true,
+            "hidden": true,
+            "commands": [
+                "effect give @s[tag=!EOP.Miotic.Explode] eop:miotic_detonation 4 0 true"
+            ],
+            "allow_projectiles": false,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Mitotic.Detonation"
+                    }
+                ]
+            }
+        },
+        "Cellular.Enhancement.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/augment.png",
+            "title": "Cellular Enhacement",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": 2,
+            "gui_position": [
+                0,
+                1.2
+            ],
+            "description": "description",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "ability": "Mitotic.Detonation.Unlock"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_mender_skill_points",
+                        "score": 4,
+                        "icon": "eop:textures/gui/mender.png",
+                        "description": {
+                            "text": "Neogenesis Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Cellular.Enhancement": {
+            "type": "palladium:command",
+            "icon": "eop:textures/gui/augment.png",
+            "title": "Cellular Enhacement",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "list_index": 3,
+            "first_tick_commands": [
+                "particle poof ~ ~ ~ 0.4 1 0.4 0 20 force",
+                "playsound minecraft:entity.warden.attack_impact master @a ~ ~ ~ 1 2"
+            ],
+            "last_tick_commands": [
+            ],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "eop:activation",
+                        "ticks": 30,
+                        "cooldown": 600,
+                        "energy": 25,
+                        "property": "eop_mender_energy",
+                        "toggle_mode": false,
+                        "key_type": "key_bind"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Cellular.Enhancement.Unlock"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Cellular.Enhancement.Ally": {
+            "type": "eop:aoe_commands",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "radius": 3,
+            "commands_on_targets": [],
+            "commands_on_allies": [
+                "effect give @s eop:cellular_enhancement 15 0 true"
+            ],
+            "cone": false,
+            "cone_angle": 90,
+            "include_caster": true,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Cellular.Enhancement"
+                    }
+                ]
+            }
+        },
+        "Evolutionary.Bloom.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/immortal.png",
+            "title": "Evolutionary Bloom",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": 2,
+            "gui_position": [
+                0,
+                2.75
+            ],
+            "description": "description",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "ability": "Cellular.Enhancement.Unlock"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_mender_skill_points",
+                        "score": 6,
+                        "icon": "eop:textures/gui/mender.png",
+                        "description": {
+                            "text": "Neogenesis Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Evolutionary.Bloom": {
+            "type": "palladium:command",
+            "icon": "eop:textures/gui/immortal.png",
+            "title": "Evolutionary Bloom",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "list_index": 4,
+            "first_tick_commands": [
+                "playsound minecraft:entity.evoker.prepare_attack master @a ~ ~ ~ 1 2"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "eop:activation",
+                        "ticks": 60,
+                        "cooldown": 2400,
+                        "energy": 70,
+                        "property": "eop_mender_energy",
+                        "toggle_mode": false,
+                        "key_type": "key_bind"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "ability": "Evolutionary.Bloom.Unlock"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Evolutionary.Bloom.Ally.Healing": {
+            "type": "eop:aoe_commands",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "radius": 3,
+            "commands_on_targets": [],
+            "commands_on_allies": [
+                "effect give @s[palladium.power=!eop:mob_effects/cellular_immortality] eop:cellular_immortality 30 0 true"
+            ],
+            "cone": false,
+            "cone_angle": 90,
+            "include_caster": true,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Evolutionary.Bloom"
+                    },
+                    {
+                        "type": "palladium:interval",
+                        "active_ticks": 0,
+                        "disabled_ticks": 5
+                    }
+                ]
+            }
+        }
+    }
+}

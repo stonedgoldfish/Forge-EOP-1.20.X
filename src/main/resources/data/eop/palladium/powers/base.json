@@ -10,7 +10,9 @@
             "hidden": true,
             "first_tick_commands": [
                 "scoreboard objectives add EOP.Base.Death deathCount",
-                "scoreboard players add @s EOP.Base.Death 0"
+                "scoreboard players add @s EOP.Base.Death 0",
+                "scoreboard objectives add EOP.Bone.Type dummy",
+                "scoreboard players add @s EOP.Bone.Type 0"
             ],
             "last_tick_commands": [],
             "commands": []

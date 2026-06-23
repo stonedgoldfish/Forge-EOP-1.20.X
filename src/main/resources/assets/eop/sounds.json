@@ -88,5 +88,35 @@
                 "stream": true
             }
         ]
+    },
+	"claw": {
+        "category": "neutral",
+        "subtitle": "claw",
+        "sounds": [
+            {
+                "name": "eop:claw",
+                "stream": true
+            }
+        ]
+    },
+	"flesh": {
+        "category": "neutral",
+        "subtitle": "flesh",
+        "sounds": [
+            {
+                "name": "eop:flesh",
+                "stream": true
+            }
+        ]
+    },
+	"form": {
+        "category": "neutral",
+        "subtitle": "form",
+        "sounds": [
+            {
+                "name": "eop:form",
+                "stream": true
+            }
+        ]
     }
 }
