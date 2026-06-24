@@ -1063,6 +1063,10 @@
                 ],
                 "unlocking": [
                     {
+                        "type": "palladium:ability_unlocked",
+                        "ability": "Mitotic.Detonation.Unlock"
+                    },
+                    {
                         "type": "palladium:not",
                         "conditions": [
                             {

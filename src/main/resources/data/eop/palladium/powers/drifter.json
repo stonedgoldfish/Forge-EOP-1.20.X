@@ -977,6 +977,7 @@
                         "energy": 10,
                         "property": "eop_drifter_energy",
                         "toggle_mode": false,
+                        "allow_concurrent": false,
                         "key_type": "key_bind"
                     }
                 ],
@@ -1201,6 +1202,7 @@
                         "energy": 15,
                         "property": "eop_drifter_energy",
                         "toggle_mode": false,
+                        "allow_concurrent": true,
                         "key_type": "key_bind"
                     }
                 ],
@@ -1415,6 +1417,7 @@
                         "energy": 20,
                         "property": "eop_drifter_energy",
                         "toggle_mode": false,
+                        "allow_concurrent": true,
                         "key_type": "key_bind"
                     }
                 ],

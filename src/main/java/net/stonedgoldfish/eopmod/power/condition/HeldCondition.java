@@ -23,6 +23,7 @@ public class HeldCondition extends KeyCondition {
     private final boolean consumeEnergyRepeatedly;
     private final int energyInterval;
     private final String energyProperty;
+    private final boolean allowConcurrent;
 
     public HeldCondition(
             int ticks,
@@ -32,7 +33,8 @@ public class HeldCondition extends KeyCondition {
             boolean consumeEnergyRepeatedly,
             String energyProperty,
             AbilityConfiguration.KeyType type,
-            boolean needsEmptyHand
+            boolean needsEmptyHand,
+            boolean allowConcurrent
     ) {
         super(cooldown, type, needsEmptyHand, true);
 
@@ -41,6 +43,7 @@ public class HeldCondition extends KeyCondition {
         this.consumeEnergyRepeatedly = consumeEnergyRepeatedly;
         this.energyInterval = energyInterval;
         this.energyProperty = energyProperty;
+        this.allowConcurrent = allowConcurrent;
     }
 
     @Override
@@ -91,6 +94,9 @@ public class HeldCondition extends KeyCondition {
         if (entry.cooldown > 0 || entry.keyPressed) {
             return;
         }
+        if (!EOPConditionLocks.canStart(entity, entry, this.allowConcurrent)) {
+            return;
+        }
 
         if (this.energy > 0 && !consumeEnergy(entity)) {
             sendNotEnoughEnergy(entity);
@@ -98,6 +104,7 @@ public class HeldCondition extends KeyCondition {
         }
 
         entry.keyPressed = true;
+        EOPConditionLocks.lock(entity, entry, this.allowConcurrent);
         if (this.ticks > 0) {
             entry.startActivationTimer(entity, this.ticks);
         } else {
@@ -122,6 +129,7 @@ public class HeldCondition extends KeyCondition {
     private void stopHeld(LivingEntity entity, AbilityInstance entry) {
         entry.keyPressed = false;
         entry.activationTimer = 0;
+        EOPConditionLocks.unlock(entity, entry);
 
         if (this.cooldown > 0) {
             entry.startCooldown(entity, this.cooldown);
@@ -186,25 +194,12 @@ public class HeldCondition extends KeyCondition {
 
     public static class Serializer extends ConditionSerializer {
 
-        public static final PalladiumProperty<Integer> TICKS =
-                new IntegerProperty("ticks")
-                        .configurable("Maximum amount of ticks the ability can stay active while held");
-
-        public static final PalladiumProperty<Integer> ENERGY =
-                new IntegerProperty("energy")
-                        .configurable("Energy consumed by the held ability");
-
-        public static final PalladiumProperty<Boolean> CONSUME_ENERGY_REPEATEDLY =
-                new BooleanProperty("consume_energy_repeatedly")
-                        .configurable("If true, consumes energy every energy_interval ticks while held. If false, only consumes once on activation.");
-
-        public static final PalladiumProperty<Integer> ENERGY_INTERVAL =
-                new IntegerProperty("energy_interval")
-                        .configurable("If above 0, consumes energy every X ticks while held. 0 = only consumes on activation.");
-
-        public static final PalladiumProperty<String> PROPERTY =
-                new StringProperty("property")
-                        .configurable("Name of the integer Palladium property used as the energy source");
+        public static final PalladiumProperty<Integer> TICKS = new IntegerProperty("ticks").configurable("Maximum amount of ticks the ability can stay active while held");
+        public static final PalladiumProperty<Integer> ENERGY = new IntegerProperty("energy").configurable("Energy consumed by the held ability");
+        public static final PalladiumProperty<Boolean> CONSUME_ENERGY_REPEATEDLY = new BooleanProperty("consume_energy_repeatedly").configurable("If true, consumes energy every energy_interval ticks while held. If false, only consumes once on activation.");
+        public static final PalladiumProperty<Integer> ENERGY_INTERVAL = new IntegerProperty("energy_interval").configurable("If above 0, consumes energy every X ticks while held. 0 = only consumes on activation.");
+        public static final PalladiumProperty<String> PROPERTY = new StringProperty("property").configurable("Name of the integer Palladium property used as the energy source");
+        public static final PalladiumProperty<Boolean> ALLOW_CONCURRENT = new BooleanProperty("allow_concurrent").configurable("If true, this condition can be used while another condition is active");
 
         public Serializer() {
             this.withProperty(net.threetag.palladium.condition.ActionCondition.Serializer.COOLDOWN, 0);
@@ -215,6 +210,7 @@ public class HeldCondition extends KeyCondition {
             this.withProperty(PROPERTY, "");
             this.withProperty(KeyCondition.KEY_TYPE_WITHOUT_SCROLLING, AbilityConfiguration.KeyType.KEY_BIND);
             this.withProperty(KeyCondition.NEEDS_EMPTY_HAND, false);
+            this.withProperty(ALLOW_CONCURRENT, false);
         }
 
         @Override
@@ -227,7 +223,8 @@ public class HeldCondition extends KeyCondition {
                     this.getProperty(json, CONSUME_ENERGY_REPEATEDLY),
                     this.getProperty(json, PROPERTY),
                     this.getProperty(json, KeyCondition.KEY_TYPE_WITHOUT_SCROLLING),
-                    this.getProperty(json, KeyCondition.NEEDS_EMPTY_HAND)
+                    this.getProperty(json, KeyCondition.NEEDS_EMPTY_HAND),
+                    this.getProperty(json, ALLOW_CONCURRENT)
             );
         }
 

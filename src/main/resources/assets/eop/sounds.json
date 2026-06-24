@@ -9,12 +9,12 @@
             }
         ]
     },
-    "energy_transform": {
+    "energy_transblue": {
         "category": "neutral",
-        "subtitle": "energy_transform",
+        "subtitle": "energy_transblue",
         "sounds": [
             {
-                "name": "eop:energy_transform",
+                "name": "eop:energy_transblue",
                 "stream": true
             }
         ]
@@ -115,6 +115,26 @@
         "sounds": [
             {
                 "name": "eop:form",
+                "stream": true
+            }
+        ]
+    },
+	"red": {
+        "category": "neutral",
+        "subtitle": "red",
+        "sounds": [
+            {
+                "name": "eop:red",
+                "stream": true
+            }
+        ]
+    },
+	"blue": {
+        "category": "neutral",
+        "subtitle": "blue",
+        "sounds": [
+            {
+                "name": "eop:blue",
                 "stream": true
             }
         ]

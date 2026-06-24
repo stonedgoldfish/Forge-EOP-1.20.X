@@ -30,12 +30,14 @@ public class ArmorStandBillboardRenderer {
         register("lapse_blue", new BillboardType(
                 "textures/entity/projectile/blue.png",
                 5,
-                2,
+                4,
                 true,
                 10,
                 2.0F,
+                true,
+                6,
                 3.5F,
-                1.8F
+                1.2F
         ));
     }
 
@@ -78,6 +80,10 @@ public class ArmorStandBillboardRenderer {
             ENTITY_BILLBOARDS.clear();
             EXPIRING_BILLBOARDS.clear();
             return;
+        }
+
+        for (ActiveBillboard active : ENTITY_BILLBOARDS.values()) {
+            active.age++;
         }
 
         Iterator<Map.Entry<Integer, ActiveBillboard>> activeIterator =
@@ -131,6 +137,7 @@ public class ArmorStandBillboardRenderer {
         MultiBufferSource.BufferSource buffer = minecraft.renderBuffers().bufferSource();
 
         Vec3 camera = minecraft.gameRenderer.getMainCamera().getPosition();
+        float partialTick = event.getPartialTick();
 
         AABB area = minecraft.player.getBoundingBox().inflate(128.0D);
 
@@ -152,6 +159,21 @@ public class ArmorStandBillboardRenderer {
             Vec3 pos = armorStand.position().add(0.0D, type.heightOffset(), 0.0D);
             active.lastPos = pos;
 
+            float size = type.size();
+
+            if (type.fadeIn()) {
+                float renderAge = active.age + partialTick;
+
+                float fadeProgress = Math.min(
+                        1.0F,
+                        renderAge / (float) Math.max(1, type.fadeInTime())
+                );
+
+                fadeProgress = fadeProgress * fadeProgress * (3.0F - 2.0F * fadeProgress);
+
+                size = type.size() * fadeProgress;
+            }
+
             renderBillboard(
                     poseStack,
                     buffer,
@@ -160,13 +182,16 @@ public class ArmorStandBillboardRenderer {
                     type.getTexture(),
                     frame,
                     type.frameCount(),
-                    type.size(),
+                    size,
                     255
             );
         }
 
         for (ExpiringBillboard billboard : EXPIRING_BILLBOARDS) {
-            float progress = billboard.age / (float) billboard.type.expireTime();
+            float progress = Math.min(
+                    1.0F,
+                    (billboard.age + partialTick) / (float) billboard.type.expireTime()
+            );
 
             float size = billboard.type.size()
                     * (1.0F + progress * (billboard.type.expireScale() - 1.0F));
@@ -267,6 +292,8 @@ public class ArmorStandBillboardRenderer {
             boolean fadeOnExpire,
             int expireTime,
             float expireScale,
+            boolean fadeIn,
+            int fadeInTime,
             float size,
             float heightOffset
     ) {
@@ -278,6 +305,7 @@ public class ArmorStandBillboardRenderer {
     private static class ActiveBillboard {
         final String id;
         Vec3 lastPos;
+        int age = 0;
 
         ActiveBillboard(String id, Vec3 lastPos) {
             this.id = id;

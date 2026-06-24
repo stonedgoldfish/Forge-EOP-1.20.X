@@ -477,6 +477,7 @@
                         "energy": 1,
                         "property": "eop_honored_one_energy",
                         "toggle_mode": false,
+                        "allow_concurrent": true,
                         "key_type": "right_click"
                     }
                 ],
@@ -546,7 +547,7 @@
         },
         "Infinity.Unlock": {
             "type": "palladium:dummy",
-            "icon": "eop:textures/gui/image.png",
+            "icon": "eop:textures/gui/infinity.png",
             "title": "Infinity",
             "bar_color": "light_gray",
             "hidden": false,
@@ -748,7 +749,7 @@
         },
         "Blue.Unlock": {
             "type": "palladium:dummy",
-            "icon": "eop:textures/gui/image.png",
+            "icon": "eop:textures/gui/blue.png",
             "title": "Lapse Blue",
             "hidden": false,
             "hidden_in_bar": true,
@@ -778,7 +779,7 @@
         },
         "Blue": {
             "type": "palladium:animation_timer",
-            "icon": "eop:textures/gui/image.png",
+            "icon": "eop:textures/gui/blue.png",
             "title": "Lapse Blue",
             "bar_color": "light_gray",
             "hidden": true,
@@ -795,6 +796,7 @@
                         "energy": 10,
                         "property": "eop_honored_one_energy",
                         "toggle_mode": false,
+                        "allow_concurrent": false,
                         "key_type": "key_bind"
                     }
                 ],
@@ -803,6 +805,14 @@
                         "type": "palladium:ability_unlocked",
                         "power": "null",
                         "ability": "Blue.Unlock"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:crouching"
+                            }
+                        ]
                     },
                     {
                         "type": "palladium:not",
@@ -821,7 +831,7 @@
             "hidden": true,
             "hidden_in_bar": true,
             "first_tick_commands": [
-                "playsound minecraft:block.beacon.deactivate master @a ~ ~ ~ 1 0.5"
+                "playsound eop:blue master @a ~ ~ ~ 1 1"
             ],
             "last_tick_commands": [],
             "commands": [],
@@ -862,36 +872,31 @@
             "type": "eop:spawn_armor_stand",
             "hidden": true,
             "hidden_in_bar": true,
-            "range": 8,
+            "range": 4,
             "lifetime": 40,
             "enable_damage": false,
             "damage_on_last_tick": false,
-            "knockback_on_last_tick": 0.2,
+            "knockback_on_last_tick": 1,
             "aoe_damage": 2,
             "aoe_radius": 10,
             "aoe_damage_type": "eop:basic",
             "target_command_radius": 10,
             "stand_first_tick_commands": [
                 "playsound minecraft:block.beacon.activate master @a ~ ~ ~ 2 2",
-                "playsound minecraft:entity.warden.death master @a ~ ~ ~ 1 2",
-                "particle minecraft:end_rod ~ ~0.6 ~ 0 0 0 0.3 20"
+                "playsound minecraft:entity.warden.death master @a ~ ~ ~ 1 2"
             ],
-            "stand_commands": [
-                "particle eop:dark_energy ~ ~1 ~ 0.1 0.1 0.1 0.6 10"
-            ],
+            "stand_commands": [],
             "stand_last_tick_commands": [
                 "playsound minecraft:entity.generic.explode master @a ~ ~ ~ 2 1",
-                "particle minecraft:explosion ~ ~0.6 ~ 3 1 3 0 40",
-                "particle minecraft:poof ~ ~0.6 ~ 0 0 0 0.7 160",
-                "particle minecraft:end_rod ~ ~0.6 ~ 0 0 0 0.7 140"
+                "particle minecraft:poof ~ ~0.6 ~ 0 0 0 0.7 160"
             ],
             "target_first_tick_commands": [],
             "target_commands": [],
             "target_last_tick_commands": [
                 "effect give @s eop:stun 4 4 true"
             ],
-            "stand_power": "null",
-            "pull_strength": 2,
+            "stand_power": "eop:models/blue",
+            "pull_strength": 1.2,
             "invert_pull": false,
             "looping_sound": "eop:black_hole",
             "looping_sound_volume": 2,
@@ -941,10 +946,131 @@
                 ]
             }
         },
-        "Ability3.Unlock": {
+        "Blue2": {
+            "type": "palladium:animation_timer",
+            "icon": "eop:textures/gui/blue.png",
+            "title": "Lapse Blue",
+            "bar_color": "light_gray",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "list_index": 1,
+            "start_value": 0,
+            "max_value": 10,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "eop:activation",
+                        "ticks": 10,
+                        "cooldown": 150,
+                        "energy": 10,
+                        "property": "eop_honored_one_energy",
+                        "toggle_mode": false,
+                        "allow_concurrent": false,
+                        "key_type": "key_bind"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Blue.Unlock"
+                    },
+                    {
+                        "type": "palladium:or",
+                        "conditions": [
+                            {
+                                "type": "palladium:crouching"
+                            },
+                            {
+                                "type": "palladium:ability_enabled",
+                                "power": "null",
+                                "ability": "Blue2"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Blue2.Commands": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [],
+            "last_tick_commands": [],
+            "commands": [
+                "playsound eop:blue master @a ~ ~ ~ 3 1"
+            ],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Blue2"
+                    }
+                ]
+            }
+        },
+        "Blue2.Particles": {
+            "type": "eop:particle_pattern",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "particle_pattern": "sphere_inwards_pulse",
+            "particle_type": "eop:star",
+            "particle_amount": 3,
+            "particle_radius": 10,
+            "particle_speed": 1.15,
+            "particle_y_offset": 0.3,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Blue2"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "ability": "Blue2",
+                        "property": "value",
+                        "min": 0,
+                        "max": 6
+                    }
+                ]
+            }
+        },
+        "Blue2.Pull": {
             "type": "palladium:dummy",
-            "icon": "eop:textures/gui/image.png",
-            "title": "Ability Name",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Blue2"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "ability": "Blue2",
+                        "property": "value",
+                        "min": 0,
+                        "max": 6
+                    }
+                ]
+            }
+        },
+        "Red.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/red.png",
+            "title": "Reverse Red",
             "bar_color": "light_gray",
             "hidden": false,
             "hidden_in_bar": true,
@@ -972,6 +1098,148 @@
                 ]
             }
         },
+        "Red": {
+            "type": "palladium:animation_timer",
+            "icon": "eop:textures/gui/red.png",
+            "title": "Reversal Red",
+            "bar_color": "light_gray",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "list_index": 2,
+            "start_value": 0,
+            "max_value": 2,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "eop:held",
+                        "ticks": 0,
+                        "cooldown": 100,
+                        "energy": 10,
+                        "property": "eop_honored_one_energy",
+                        "toggle_mode": true,
+                        "allow_concurrent": false,
+                        "key_type": "key_bind"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Red.Unlock"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Red.Offhand": {
+            "type": "palladium:show_both_arms",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Red"
+                    }
+                ]
+            }
+        },
+        "Red.Commands": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "playsound eop:red master @a ~ ~ ~ 1 1"
+            ],
+            "last_tick_commands": [
+                "playsound eop:energy_blast master @a ~ ~ ~ 1 2"
+            ],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Red"
+                    }
+                ]
+            }
+        },
+        "Red.Animation": {
+            "type": "eop:trigger_animation",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "animation": "RED",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Red"
+                    }
+                ]
+            }
+        },
+        "Red.Projectile": {
+            "type": "palladium:projectile",
+            "icon": "minecraft:fire_charge",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": 1,
+            "entity_type": "eop:red",
+            "entity_data": {
+                "Damage": 12,
+                "DamageType": "eop:basic",
+                "SetEntityOnFireSeconds": 0,
+                "IgnoreLiquids": true,
+                "CommandsOnBlockHit": [],
+                "CommandsForTargets": [],
+                "CommandsForTargetsRadius": 0,
+                "ExplosionRadius": 5,
+                "ExplosionBlockInteraction": "BREAK",
+                "ExplosionCausesFire": false,
+                "Gravity": 0,
+                "Lifetime": 100,
+                "DieOnEntityHit": true,
+                "DieOnBlockHit": true
+            },
+            "inaccuracy": 0,
+            "velocity": 2.5,
+            "swinging_arm": "none",
+            "damage_from_player": false,
+            "ignore_player_movement": false,
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:ability_enabled",
+                                "power": "null",
+                                "ability": "Red"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Red",
+                        "property": "value",
+                        "min": 1,
+                        "max": 1
+                    }
+                ]
+            }
+        },
         "Ability4.Unlock": {
             "type": "palladium:dummy",
             "icon": "eop:textures/gui/image.png",
@@ -989,7 +1257,7 @@
                 "unlocking": [
                     {
                         "type": "palladium:ability_unlocked",
-                        "ability": "Ability3.Unlock"
+                        "ability": "Red.Unlock"
                     },
                     {
                         "type": "palladium:property_buyable",

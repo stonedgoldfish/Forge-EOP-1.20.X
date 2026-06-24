@@ -29,6 +29,7 @@ public class EOPCreativeModeTabs {
                                 output.accept(EOPItems.ARGON_AXE.get());
                                 output.accept(EOPItems.ARGON_SHOVEL.get());
                                 output.accept(EOPItems.ARGON_HOE.get());
+                                output.accept(EOPItems.GENETIC_SEQUENCER.get());
                             })
                             .build()
             );

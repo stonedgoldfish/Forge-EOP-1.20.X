@@ -183,25 +183,11 @@ public class ToggleCondition extends KeyCondition {
 
     public static class Serializer extends ConditionSerializer {
 
-        public static final PalladiumProperty<Integer> TICKS =
-                new IntegerProperty("ticks")
-                        .configurable("Maximum amount of ticks the ability can stay active after toggled on");
-
-        public static final PalladiumProperty<Integer> ENERGY =
-                new IntegerProperty("energy")
-                        .configurable("Energy consumed by the toggle ability");
-
-        public static final PalladiumProperty<Integer> ENERGY_INTERVAL =
-                new IntegerProperty("energy_interval")
-                        .configurable("If repeated energy is enabled, consumes energy every X ticks while toggled on");
-
-        public static final PalladiumProperty<Boolean> CONSUME_ENERGY_REPEATEDLY =
-                new BooleanProperty("consume_energy_repeatedly")
-                        .configurable("If true, consumes energy every energy_interval ticks while toggled on. If false, only consumes once on activation.");
-
-        public static final PalladiumProperty<String> PROPERTY =
-                new StringProperty("property")
-                        .configurable("Name of the integer Palladium property used as the energy source");
+        public static final PalladiumProperty<Integer> TICKS = new IntegerProperty("ticks").configurable("Maximum amount of ticks the ability can stay active after toggled on");
+        public static final PalladiumProperty<Integer> ENERGY = new IntegerProperty("energy").configurable("Energy consumed by the toggle ability");
+        public static final PalladiumProperty<Integer> ENERGY_INTERVAL = new IntegerProperty("energy_interval").configurable("If repeated energy is enabled, consumes energy every X ticks while toggled on");
+        public static final PalladiumProperty<Boolean> CONSUME_ENERGY_REPEATEDLY = new BooleanProperty("consume_energy_repeatedly").configurable("If true, consumes energy every energy_interval ticks while toggled on. If false, only consumes once on activation.");
+        public static final PalladiumProperty<String> PROPERTY = new StringProperty("property").configurable("Name of the integer Palladium property used as the energy source");
 
         public Serializer() {
             this.withProperty(net.threetag.palladium.condition.ActionCondition.Serializer.COOLDOWN, 0);

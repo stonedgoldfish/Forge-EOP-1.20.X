@@ -135,6 +135,14 @@ public class EOPPlayerAnimation extends PalladiumAnimation {
                 }
             }
 
+            case RED -> {
+                if (firstPerson) {
+                    RedAnimation.animateFirstPerson(builder, anim);
+                } else {
+                    RedAnimation.animate(builder, anim);
+                }
+            }
+
             default -> {
             }
         }

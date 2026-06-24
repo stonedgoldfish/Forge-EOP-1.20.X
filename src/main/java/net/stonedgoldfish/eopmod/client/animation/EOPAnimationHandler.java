@@ -385,7 +385,8 @@ public class EOPAnimationHandler {
             case RIGHT_ARM_SWIPE -> 0.28F;
             case SHOOT -> 0.19F;
             case THIRD_PERSON -> 0.05F;
-            case RIGHT_ARM_LIFT -> 0.25F;
+            case RIGHT_ARM_LIFT,
+                 RED -> 0.25F;
 
             case DASH_FRONT,
                  DASH_LEFT,
@@ -405,7 +406,8 @@ public class EOPAnimationHandler {
             case RIGHT_ARM_SWIPE -> 0.08F;
             case SHOOT -> 0.11F;
             case THIRD_PERSON -> 0.05F;
-            case RIGHT_ARM_LIFT -> 0.25F;
+            case RIGHT_ARM_LIFT,
+                 RED -> 0.25F;
 
             case DASH_FRONT,
                  DASH_LEFT,

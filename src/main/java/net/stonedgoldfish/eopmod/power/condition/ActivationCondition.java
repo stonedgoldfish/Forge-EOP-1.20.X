@@ -29,6 +29,7 @@ public class ActivationCondition extends KeyCondition {
     private final boolean canToggleOff;
     private final int energy;
     private final String energyProperty;
+    private final boolean allowConcurrent;
 
     public ActivationCondition(
             int ticks,
@@ -38,7 +39,8 @@ public class ActivationCondition extends KeyCondition {
             boolean canToggleOff,
             AbilityConfiguration.KeyType type,
             boolean needsEmptyHand,
-            boolean allowScrollingWhenCrouching
+            boolean allowScrollingWhenCrouching,
+            boolean allowConcurrent
     ) {
         super(cooldown, type, needsEmptyHand, allowScrollingWhenCrouching);
 
@@ -46,12 +48,17 @@ public class ActivationCondition extends KeyCondition {
         this.energy = energy;
         this.energyProperty = energyProperty;
         this.canToggleOff = canToggleOff;
+        this.allowConcurrent = allowConcurrent;
     }
 
     @Override
     public boolean active(DataContext context) {
         LivingEntity entity = context.getLivingEntity();
         AbilityInstance entry = context.getAbility();
+        if (entry.activationTimer <= 0) {
+            EOPConditionLocks.unlock(entity, entry);
+            return false;
+        }
 
         if (entity == null || entry == null) {
             return false;
@@ -72,6 +79,9 @@ public class ActivationCondition extends KeyCondition {
             IPowerHolder holder
     ) {
         if (entry.cooldown > 0) {
+            return;
+        }
+        if (!EOPConditionLocks.canStart(entity, entry, this.allowConcurrent)) {
             return;
         }
 
@@ -129,6 +139,7 @@ public class ActivationCondition extends KeyCondition {
         }
 
         entry.startActivationTimer(entity, this.ticks);
+        EOPConditionLocks.lock(entity, entry, this.allowConcurrent);
     }
 
     @Override
@@ -147,6 +158,7 @@ public class ActivationCondition extends KeyCondition {
         public static final PalladiumProperty<Integer> ENERGY = new IntegerProperty("energy").configurable("Energy consumed when the activation starts");
         public static final PalladiumProperty<String> PROPERTY = new StringProperty("property").configurable("Name of the integer Palladium property used as the energy source");
         public static final PalladiumProperty<Boolean> TOGGLE_MODE = new BooleanProperty("toggle_mode").configurable("If true, pressing again while active disables the ability early");
+        public static final PalladiumProperty<Boolean> ALLOW_CONCURRENT = new BooleanProperty("allow_concurrent").configurable("If true, this condition can be used while another condition is active");
 
         public Serializer() {
             this.withProperty(ActionCondition.Serializer.COOLDOWN, 0);
@@ -157,6 +169,7 @@ public class ActivationCondition extends KeyCondition {
             this.withProperty(KeyCondition.KEY_TYPE_WITH_SCROLLING, AbilityConfiguration.KeyType.KEY_BIND);
             this.withProperty(KeyCondition.NEEDS_EMPTY_HAND, false);
             this.withProperty(KeyCondition.ALLOW_SCROLLING_DURING_CROUCHING, true);
+            this.withProperty(ALLOW_CONCURRENT, false);
         }
 
         @Override
@@ -169,7 +182,8 @@ public class ActivationCondition extends KeyCondition {
                     this.getProperty(json, TOGGLE_MODE),
                     this.getProperty(json, KeyCondition.KEY_TYPE_WITH_SCROLLING),
                     this.getProperty(json, KeyCondition.NEEDS_EMPTY_HAND),
-                    this.getProperty(json, KeyCondition.ALLOW_SCROLLING_DURING_CROUCHING)
+                    this.getProperty(json, KeyCondition.ALLOW_SCROLLING_DURING_CROUCHING),
+                    this.getProperty(json, ALLOW_CONCURRENT)
             );
         }
 

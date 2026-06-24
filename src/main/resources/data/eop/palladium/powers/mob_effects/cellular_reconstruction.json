@@ -24,7 +24,34 @@
             "last_tick_commands": [],
             "commands": [
                 "particle poof ~ ~ ~ 0.4 1 0.4 0 10 force",
-                "playsound minecraft:block.fire.extinguish master @a ~ ~ ~ 1 2",
+                "playsound minecraft:block.fire.extinguish master @a ~ ~ ~ 1 2"
+            ],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:interval",
+                        "active_ticks": 0,
+                        "disabled_ticks": 20
+                    },
+                    {
+                        "type": "eop:health_below_percent",
+                        "percent": 0.99
+                    }
+                ]
+            }
+        },
+        "Remove.Corrupt": {
+            "type": "palladium:command",
+            "title": "null",
+            "bar_color": "light_gray",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": -1,
+            "gui_position": "null",
+            "description": "null",
+            "first_tick_commands": [],
+            "last_tick_commands": [],
+            "commands": [
                 "tag @s remove EOP.Chimera.Corrupted"
             ],
             "conditions": {

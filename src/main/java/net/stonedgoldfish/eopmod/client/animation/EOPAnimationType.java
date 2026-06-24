@@ -21,7 +21,8 @@ public enum EOPAnimationType {
     IN_OUT_SWIPE_BOTH_ARMS(EOPAnimationPlaybackType.TWO_PHASE),
 
     THIRD_PERSON(EOPAnimationPlaybackType.HOLD),
-    RIGHT_ARM_LIFT(EOPAnimationPlaybackType.HOLD);
+    RIGHT_ARM_LIFT(EOPAnimationPlaybackType.HOLD),
+    RED(EOPAnimationPlaybackType.HOLD);
 
     public final EOPAnimationPlaybackType playbackType;
 

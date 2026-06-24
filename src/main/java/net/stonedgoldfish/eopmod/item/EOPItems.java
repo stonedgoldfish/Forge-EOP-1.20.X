@@ -69,4 +69,8 @@ public class EOPItems {
             ITEMS.register("argon_hoe", () ->
                     new ArgonHoeItem(EOPTiers.ARGON, -4, 0.0F, new Item.Properties())
             );
+
+    public static final RegistryObject<Item> GENETIC_SEQUENCER =
+            ITEMS.register("genetic_sequencer",
+                    () -> new GeneticSequencerItem(new Item.Properties().stacksTo(1)));
 }

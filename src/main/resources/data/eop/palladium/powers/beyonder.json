@@ -1006,6 +1006,7 @@
                         "energy": 5,
                         "property": "eop_beyonder_energy",
                         "toggle_mode": false,
+                        "allow_concurrent": true,
                         "key_type": "key_bind"
                     }
                 ],
@@ -1280,6 +1281,7 @@
                         "energy": 15,
                         "property": "eop_beyonder_energy",
                         "toggle_mode": false,
+                        "allow_concurrent": false,
                         "key_type": "key_bind"
                     }
                 ],
@@ -1551,6 +1553,7 @@
                         "energy": 20,
                         "property": "eop_beyonder_energy",
                         "toggle_mode": false,
+                        "allow_concurrent": false,
                         "key_type": "key_bind"
                     }
                 ],
@@ -1832,6 +1835,7 @@
                         "energy": 0,
                         "property": "eop_beyonder_energy",
                         "toggle_mode": true,
+                        "allow_concurrent": true,
                         "key_type": "key_bind"
                     }
                 ],
@@ -2495,6 +2499,7 @@
                         "energy": 0,
                         "property": "eop_beyonder_energy",
                         "key_type": "key_bind",
+                        "allow_concurrent": true,
                         "needs_empty_hand": false
                     }
                 ],
@@ -2503,6 +2508,16 @@
                         "type": "palladium:ability_enabled",
                         "power": "null",
                         "ability": "Eclipse.Ascension"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:ability_enabled",
+                                "power": "null",
+                                "ability": "Cosmic.Shift"
+                            }
+                        ]
                     },
                     {
                         "type": "palladium:ability_integer_property",
@@ -2626,6 +2641,7 @@
                         "energy": 0,
                         "property": "eop_beyonder_energy",
                         "toggle_mode": true,
+                        "allow_concurrent": false,
                         "key_type": "key_bind"
                     }
                 ],
@@ -2840,6 +2856,7 @@
                         "energy": 0,
                         "property": "eop_beyonder_energy",
                         "toggle_mode": true,
+                        "allow_concurrent": false,
                         "key_type": "key_bind"
                     }
                 ],
@@ -2848,6 +2865,16 @@
                         "type": "palladium:ability_enabled",
                         "power": "null",
                         "ability": "Eclipse.Ascension"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:ability_enabled",
+                                "power": "null",
+                                "ability": "Cosmic.Shift"
+                            }
+                        ]
                     },
                     {
                         "type": "palladium:ability_integer_property",
@@ -3007,6 +3034,7 @@
                         "energy": 0,
                         "property": "eop_beyonder_energy",
                         "toggle_mode": false,
+                        "allow_concurrent": true,
                         "key_type": "key_bind"
                     }
                 ],
@@ -3015,6 +3043,16 @@
                         "type": "palladium:ability_enabled",
                         "power": "null",
                         "ability": "Eclipse.Ascension"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:ability_enabled",
+                                "power": "null",
+                                "ability": "Cosmic.Shift"
+                            }
+                        ]
                     },
                     {
                         "type": "palladium:ability_integer_property",
