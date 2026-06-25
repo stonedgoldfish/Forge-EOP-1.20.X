@@ -30,6 +30,11 @@ public class EOPCreativeModeTabs {
                                 output.accept(EOPItems.ARGON_SHOVEL.get());
                                 output.accept(EOPItems.ARGON_HOE.get());
                                 output.accept(EOPItems.GENETIC_SEQUENCER.get());
+                                output.accept(EOPItems.BONE_CHIP.get());
+                                output.accept(EOPItems.VAMPIRE_CHIP.get());
+                                output.accept(EOPItems.TOTEM_OF_AATU.get());
+                                output.accept(EOPItems.FUSION_CATALYST.get());
+                                output.accept(EOPItems.CHIMERA_CORE.get());
                             })
                             .build()
             );

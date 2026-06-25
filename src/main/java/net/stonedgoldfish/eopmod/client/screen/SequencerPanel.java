@@ -12,4 +12,20 @@ public interface SequencerPanel {
             int panelX,
             int panelY
     );
+
+    default boolean showsChipSlot() {
+        return false;
+    }
+
+    default boolean showsFusionSlot() {
+        return false;
+    }
+
+    default boolean showsChimeraSlot() {
+        return false;
+    }
+
+    default boolean showsInventory() {
+        return false;
+    }
 }

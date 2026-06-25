@@ -30,9 +30,14 @@ public class EOPPowerRegistry {
         register("Diamond_Mimicry", "fortress", 10, false, false, false, false, false, 0x00EDE8, "Tank", "Defender", "Melee", "Easy");
         register("Hypervelocity", "speedster", 10, true, false, false, false, false, 0x5994FF, "Assassin", "Scout", "Melee", "Easy");
         register("Neogenesis", "mender", 10, true, false, false, false, false, 0xFA82FF, "Support", "Healer", "Melee", "Easy");
-        register("Hydrokinesis", "marine", 10, true, false, false, false, true, 0x534FFF, "Support", "Adaptable", "Melee/Ranged", "Easy");
-        register("Spatial_Manipulation", "honored_one", 2, true, true, false, false, false, 0x534FFF, "GG", "GG", "Melee/Ranged", "Medium");
-        register("Excision", "king", 2, false, true, false, false, false, 0x5b0000, "GG", "GG", "Melee/Ranged", "Medium");
+        register("Hydrokinesis", "marine", 10, true, false, false, false, true, 0x534FFF, "Support", "Adaptable", "Mixed", "Easy");
+        register("Spatial_Manipulation", "honored_one", 2, true, true, false, false, false, 0x534FFF, "Channeler", "GG", "Ranged", "Medium");
+        register("Excision", "king", 2, false, true, false, false, false, 0x5b0000, "Assassin", "GG", "Mixed", "Medium");
+        register("Bone_Manipulation", "marrow", 20, false, false, false, false, false, 0xFFFFFF, "Assassin", "GG", "Mixed", "Easy");
+        register("Vampirism", "bloodsucker", 15, true, false, false, false, false, 0xFFFFFF, "Assassin", "GG", "Mixed", "Easy");
+        register("Enhanced Physical Prowess", "champion", 5, false, false, false, true, false, 0xFFFFFF, "Assassin", "GG", "Mixed", "Easy");
+        register("Pyrokinesis", "flame", 15, true, false, false, false, true, 0xFFFFFF, "Assassin", "GG", "Mixed", "Easy");
+        register("Scaldweaving", "flame_marine", 15, true, false, true, false, false, 0xFFFFFF, "Assassin", "GG", "Mixed", "Easy");
     }
 
     private static void register(

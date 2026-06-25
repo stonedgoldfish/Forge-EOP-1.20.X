@@ -4,31 +4,32 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 
-public class ChipSequencerPanel implements SequencerPanel {
+public class FusionSequencerPanel implements SequencerPanel {
 
     private static final ResourceLocation TEXTURE =
             ResourceLocation.fromNamespaceAndPath(
                     "eop",
                     "textures/gui/ability_bars/power_gui/eop_genetic_sequencer_chip.png"
             );
-    private double successRate = 0;
-
-    public void setSuccessRate(double successRate) {
-        this.successRate = successRate;
-    }
 
     private static final int TEXTURE_WIDTH = 256;
     private static final int TEXTURE_HEIGHT = 256;
+
     private static final int PANEL_WIDTH = 230;
     private static final int PANEL_HEIGHT = 219;
-    private static final int CHIP_PANEL_U = 0;
-    private static final int CHIP_PANEL_V = 0;
+
+    private static final int PANEL_U = 0;
+    private static final int PANEL_V = 0;
+
     private static final int APPLY_BUTTON_X = 98;
     private static final int APPLY_BUTTON_Y = 198;
+
     public static final int APPLY_BUTTON_WIDTH = 35;
     public static final int APPLY_BUTTON_HEIGHT = 11;
+
     private static final int APPLY_NORMAL_U = 0;
     private static final int APPLY_NORMAL_V = 219;
+
     private static final int APPLY_HOVER_U = 35;
     private static final int APPLY_HOVER_V = 219;
 
@@ -45,21 +46,21 @@ public class ChipSequencerPanel implements SequencerPanel {
                 TEXTURE,
                 panelX,
                 panelY,
-                CHIP_PANEL_U,
-                CHIP_PANEL_V,
+                PANEL_U,
+                PANEL_V,
                 PANEL_WIDTH,
                 PANEL_HEIGHT,
                 TEXTURE_WIDTH,
                 TEXTURE_HEIGHT
         );
-        var font = Minecraft.getInstance().font;
 
+        var font = Minecraft.getInstance().font;
         int centerX = panelX + PANEL_WIDTH / 2;
 
-        drawCenteredScaledText(guiGraphics, "Genetic Chip Slot", centerX, panelY + 124, 0.85F, 0xFFFFFF);
-        drawCenteredScaledText(guiGraphics, "Insert Genetic Chip", centerX, panelY + 158, 0.75F, 0xAAAAAA);
-        drawCenteredScaledText(guiGraphics, "Success Rate", centerX, panelY + 173, 0.8F, 0xFFFFFF);
-        drawCenteredScaledText(guiGraphics, this.successRate + "%", centerX, panelY + 185, 1F, 0xFFFF00);
+        drawCenteredScaledText(guiGraphics, "Fusion Catalyst Slot", centerX, panelY + 124, 0.75F, 0xFFFFFF);
+        drawCenteredScaledText(guiGraphics, "Insert Fusion Catalyst", centerX, panelY + 158, 0.7F, 0xAAAAAA);
+        drawCenteredScaledText(guiGraphics, "Requires two fusion", centerX, panelY + 178, 0.7F, 0xAAAAAA);
+        drawCenteredScaledText(guiGraphics, "component powers", centerX, panelY + 188, 0.7F, 0xAAAAAA);
 
         int buttonX = panelX + APPLY_BUTTON_X;
         int buttonY = panelY + APPLY_BUTTON_Y;
@@ -134,7 +135,7 @@ public class ChipSequencerPanel implements SequencerPanel {
     }
 
     @Override
-    public boolean showsChipSlot() {
+    public boolean showsFusionSlot() {
         return true;
     }
 }

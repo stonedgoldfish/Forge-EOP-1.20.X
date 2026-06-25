@@ -1,0 +1,641 @@
+{
+    "name": "Power Name",
+    "background": "minecraft:textures/block/gray_concrete_powder.png",
+    "icon": "eop:textures/gui/beyonde.png",
+    "ability_bar_texture": "eop:textures/gui/ability_bars/eop_powers.png",
+    "gui_display_type": "tree",
+    "persistent_data": true,
+    "abilities": {
+        "PowerTag": {
+            "type": "palladium:command",
+            "hidden": true,
+            "first_tick_commands": [
+                "tag @s add PowerTag",
+                "tag @s add EOP.Extra.Smelting",
+                "tag @s add EOP.Has.BM",
+                "tag @s add EOP.Has.Power"
+            ],
+            "last_tick_commands": [
+                "tag @s remove PowerTag",
+                "tag @s remove EOP.Extra.Smelting",
+                "tag @s remove EOP.Has.BM",
+                "tag @s remove EOP.Has.Power"
+            ],
+            "commands": []
+        },
+        "Power.Name": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/beyonder.png",
+            "title": "Power Name",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": -1,
+            "gui_position": [
+                0,
+                -2
+            ],
+            "description": "Power Description"
+        },
+        "Power.Tag": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "tag @s add EOP.Has.Power"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Has.Power"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "BM.Tag": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "tag @s add EOP.Has.BM"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Has.BM"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Left.Stat1": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 0.5 more damage points",
+            "gui_position": [
+                -1,
+                -1.25
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 0.5,
+            "operation": 0,
+            "uuid": "87f2bfb8-ebf7-48ca-9a5d-368a3ab8c913",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Power.Name"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_beyonder_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/beyonder.png",
+                        "description": {
+                            "text": "Astral Energy Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Left.Stat2": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/resistance.png",
+            "title": "Enhanced Armor",
+            "description": "Grants 3 more armor points",
+            "gui_position": [
+                -1.5,
+                -0.4
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.armor",
+            "amount": 3,
+            "operation": 0,
+            "uuid": "cb3993c6-cc15-4470-a1da-c61544ba6d28",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat1"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_beyonder_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/beyonder.png",
+                        "description": {
+                            "text": "Astral Energy Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Left.Stat3": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 1 more damage point",
+            "gui_position": [
+                -1,
+                0.25
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 1,
+            "operation": 0,
+            "uuid": "b036f298-6b3a-469a-bd4e-8f929452fd8e",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat2"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_beyonder_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/beyonder.png",
+                        "description": {
+                            "text": "Astral Energy Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Left.Stat4": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/resistance.png",
+            "title": "Enhanced Armor",
+            "description": "Grants 3 more armor points",
+            "gui_position": [
+                -1,
+                1.1
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.armor",
+            "amount": 3,
+            "operation": 0,
+            "uuid": "bedeb563-22a8-46e0-93fb-abf7b7e6fe89",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat3"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_beyonder_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/beyonder.png",
+                        "description": {
+                            "text": "Astral Energy Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Left.Stat5": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 1.5 more damage points",
+            "gui_position": [
+                -0.7,
+                2.1
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 1.5,
+            "operation": 0,
+            "uuid": "e8cf1286-251c-424a-8b0e-c3db7f9080c0",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat4"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_beyonder_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/beyonder.png",
+                        "description": {
+                            "text": "Astral Energy Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Right.Stat1": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 0.5 more damage points",
+            "gui_position": [
+                1,
+                -1.25
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 0.5,
+            "operation": 0,
+            "uuid": "31f1b86d-35c6-4a06-8741-cc8ed932bb9e",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Astral.Energy.Manipulation"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_beyonder_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/beyonder.png",
+                        "description": {
+                            "text": "Astral Energy Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Right.Stat2": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/speed.png",
+            "title": "Enhanced Speed",
+            "description": "Grants 5% more speed",
+            "gui_position": [
+                1.5,
+                -0.4
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.movement_speed",
+            "amount": 0.05,
+            "operation": 1,
+            "uuid": "c6726057-166e-4abe-b1bc-b4fc92c05ae0",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat1"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_beyonder_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/beyonder.png",
+                        "description": {
+                            "text": "Astral Energy Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Right.Stat3": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 1 more damage point",
+            "gui_position": [
+                1,
+                0.25
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 1,
+            "operation": 0,
+            "uuid": "4d7c0ab5-7aeb-481b-88cd-85648a6de2b3",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat2"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_beyonder_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/beyonder.png",
+                        "description": {
+                            "text": "Astral Energy Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Right.Stat4": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/speed.png",
+            "title": "Enhanced Speed",
+            "description": "Grants 5% more speed",
+            "gui_position": [
+                1,
+                1.1
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.movement_speed",
+            "amount": 0.05,
+            "operation": 1,
+            "uuid": "c81014cc-2088-4e3a-a3da-79bbd8069990",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat3"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_beyonder_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/beyonder.png",
+                        "description": {
+                            "text": "Astral Energy Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Right.Stat5": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/strength.png",
+            "title": "Enhanced Strength",
+            "description": "Grants 1.5 more damage points",
+            "gui_position": [
+                0.7,
+                2.1
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.attack_damage",
+            "amount": 1.5,
+            "operation": 0,
+            "uuid": "6973a8f4-48bf-4eef-9cca-7a6370bd62df",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat4"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_beyonder_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/beyonder.png",
+                        "description": {
+                            "text": "Astral Energy Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Secondary.Ability": {
+            "type": "palladium:dummy",
+            "gui_position": [
+                1.25,
+                -2
+            ],
+            "title": "Ability Name",
+            "description": "description. §dBattlemode §fmust be enabled via keybind. §dRight Click §fto use this ability",
+            "icon": "eop:textures/gui/image.png",
+            "hidden": false,
+            "hidden_in_bar": true
+        },
+        "Ability1.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/image.png",
+            "title": "Ability Name",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": 0,
+            "gui_position": [
+                0,
+                -1.25
+            ],
+            "description": "description",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Power.Name"
+                    }
+                ]
+            }
+        },
+        "Starflare": {
+            "type": "palladium:command",
+            "first_tick_commands": [
+                "playsound eop:energy_blast master @a ~ ~ ~ 1 1.7"
+            ],
+            "commands": [],
+            "title": "Starflare",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "list_index": 0,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "eop:action",
+                        "cooldown": 10,
+                        "energy": 2,
+                        "property": "eop_beyonder_energy",
+                        "key_type": "key_bind"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:ability_enabled",
+                                "power": "null",
+                                "ability": "Eclipse.Ascension"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_effect",
+                                "effect": "eop:lunar_cloak"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Battle.Mode"
+                    }
+                ]
+            }
+        },
+        "Ability2.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/image.png",
+            "title": "Ability Name",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "gui_position": [
+                0,
+                -0.45
+            ],
+            "description": "description",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Ability1.Unlock"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_beyonder_skill_points",
+                        "score": 2,
+                        "icon": "eop:textures/gui/beyonder.png",
+                        "description": {
+                            "text": "Astral Energy Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Ability3.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/image.png",
+            "title": "Ability Name",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": 2,
+            "gui_position": [
+                0,
+                0.3
+            ],
+            "description": "description",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "ability": "Ability2.Unlock"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_beyonder_skill_points",
+                        "score": 3,
+                        "icon": "eop:textures/gui/beyonder.png",
+                        "description": {
+                            "text": "Astral Energy Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Ability4.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/image.png",
+            "title": "Ability Name",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": 2,
+            "gui_position": [
+                0,
+                1.2
+            ],
+            "description": "description",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "ability": "Ability3.Unlock"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_beyonder_skill_points",
+                        "score": 4,
+                        "icon": "eop:textures/gui/beyonder.png",
+                        "description": {
+                            "text": "Astral Energy Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Ability5.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/image.png",
+            "title": "Ability Name",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": 2,
+            "gui_position": [
+                0,
+                2.75
+            ],
+            "description": "description",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "ability": "Ability4.Unlock"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_beyonder_skill_points",
+                        "score": 6,
+                        "icon": "eop:textures/gui/beyonder.png",
+                        "description": {
+                            "text": "Astral Energy Manipulation Skill Point"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

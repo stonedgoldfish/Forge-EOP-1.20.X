@@ -14,6 +14,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.stonedgoldfish.eopmod.block.EOPBlocks;
 import net.stonedgoldfish.eopmod.item.EOPCreativeModeTabs;
 import net.stonedgoldfish.eopmod.item.EOPItems;
+import net.stonedgoldfish.eopmod.menu.EOPMenus;
 import net.stonedgoldfish.eopmod.particle.EOPParticles;
 import net.threetag.palladiumcore.forge.PalladiumCoreForge;
 import org.slf4j.Logger;
@@ -47,6 +48,7 @@ public class EOPMod {
         EOPNetwork.register();
         EOPEntities.ENTITIES.register(modEventBus);
         EOPEffects.MOB_EFFECTS.register(modEventBus);
+        EOPMenus.MENUS.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
 

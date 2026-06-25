@@ -3,6 +3,7 @@ package net.stonedgoldfish.eopmod.item;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -72,5 +73,31 @@ public class EOPItems {
 
     public static final RegistryObject<Item> GENETIC_SEQUENCER =
             ITEMS.register("genetic_sequencer",
-                    () -> new GeneticSequencerItem(new Item.Properties().stacksTo(1)));
+                    () -> new GeneticSequencerItem(new Item.Properties().stacksTo(1))
+            );
+
+    public static final RegistryObject<Item> BONE_CHIP =
+            ITEMS.register("bone_chip",
+                    () -> new GeneticChipItem(new Item.Properties().stacksTo(1).rarity(Rarity.COMMON), "marrow", 60)
+            );
+
+    public static final RegistryObject<Item> VAMPIRE_CHIP =
+            ITEMS.register("vampire_chip",
+                    () -> new GeneticChipItem(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON), "bloodsucker", 30)
+            );
+
+    public static final RegistryObject<Item> TOTEM_OF_AATU =
+            ITEMS.register("totem_of_aatu",
+                    () -> new PowerGrantingItem(new Item.Properties().stacksTo(1), "beyonder", 90, true)
+            );
+
+    public static final RegistryObject<Item> CHIMERA_CORE =
+            ITEMS.register("chimera_core",
+                    () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE))
+            );
+
+    public static final RegistryObject<Item> FUSION_CATALYST =
+            ITEMS.register("fusion_catalyst",
+                    () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE))
+            );
 }

@@ -816,6 +816,11 @@
                 ],
                 "unlocking": [
                     {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Rift.Carver.Unlock"
+                    },
+                    {
                         "type": "palladium:not",
                         "conditions": [
                             {

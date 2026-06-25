@@ -25,11 +25,26 @@
   "effect.eop.miotic_detonation": "Miotic Detonation",
   
   "block.eop.dimension_bit": "Dimension Bit",
-
   "block.eop.argon_pegmatite": "Argon Pegmatite",
   "block.eop.deepslate_argon_pegmatite": "Deepslate Argon Pegmatite",
   
   "item.eop.argon_crystal": "Argon Crystal",
+  
+  "item.eop.totem_of_aatu": "Totem of Aatu",
+  
+  "item.eop.chimera_core": "Chimera Core",
+  "item.eop.fusion_catalyst": "Fusion Catalyst",
+  
+  "item.eop.bone_chip": "Bone Chip",
+  "item.eop.genetic_chip": "Genetic Chip",
+  "item.eop.magala_chip": "Magala Chip",
+  "item.eop.narga_chip": "Nargacuga Chip",
+  "item.eop.adaptation_chip": "Adaptation Chip",
+  "item.eop.atomic_chip": "Atomic Chip",
+  "item.eop.slime_chip": "Polymorphic Chip",
+  "item.eop.vampire_chip": "Vampiric Chip",
+  
+  "item.eop.genetic_sequencer": "Genetic Sequencer",
 
   "item.eop.power_randomizer": "Power Randomizer (No Weights)",
   "item.eop.power_randomizer_weights": "Power Randomizer (Weights)",
