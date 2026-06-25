@@ -59,8 +59,8 @@ public class FusionSequencerPanel implements SequencerPanel {
 
         drawCenteredScaledText(guiGraphics, "Fusion Catalyst Slot", centerX, panelY + 124, 0.75F, 0xFFFFFF);
         drawCenteredScaledText(guiGraphics, "Insert Fusion Catalyst", centerX, panelY + 158, 0.7F, 0xAAAAAA);
-        drawCenteredScaledText(guiGraphics, "Requires two fusion", centerX, panelY + 178, 0.7F, 0xAAAAAA);
-        drawCenteredScaledText(guiGraphics, "component powers", centerX, panelY + 188, 0.7F, 0xAAAAAA);
+        drawCenteredScaledText(guiGraphics, "Requires two compatible", centerX, panelY + 178, 0.65F, 0xAAAAAA);
+        drawCenteredScaledText(guiGraphics, "powers", centerX, panelY + 188, 0.65F, 0xAAAAAA);
 
         int buttonX = panelX + APPLY_BUTTON_X;
         int buttonY = panelY + APPLY_BUTTON_Y;

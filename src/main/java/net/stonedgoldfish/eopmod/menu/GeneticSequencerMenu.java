@@ -51,6 +51,8 @@ public class GeneticSequencerMenu extends AbstractContainerMenu {
     public static final int FUSION_APPLY_BUTTON_ID = 1;
     public static final int CHIMERA_APPLY_BUTTON_ID = 2;
 
+    public static final int MENDER_CLAW_TYPE_BASE_ID = 200;
+
     public GeneticSequencerMenu(int containerId, Inventory playerInventory, FriendlyByteBuf extraData) {
         this(containerId, playerInventory);
     }
@@ -92,6 +94,19 @@ public class GeneticSequencerMenu extends AbstractContainerMenu {
     public boolean clickMenuButton(Player player, int id) {
         if (!(player instanceof ServerPlayer serverPlayer)) {
             return false;
+        }
+
+        if (id >= MENDER_CLAW_TYPE_BASE_ID && id < MENDER_CLAW_TYPE_BASE_ID + 11) {
+            int clawType = id - MENDER_CLAW_TYPE_BASE_ID;
+
+            serverPlayer.getServer().getCommands().performPrefixedCommand(
+                    serverPlayer.createCommandSourceStack()
+                            .withSuppressedOutput()
+                            .withPermission(2),
+                    "scoreboard players set @s EOP.Claw.Type " + clawType
+            );
+
+            return true;
         }
 
         if (id >= SET_ACTIVE_PANEL_BASE_ID) {

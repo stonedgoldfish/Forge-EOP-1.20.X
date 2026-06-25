@@ -25,6 +25,10 @@ public interface SequencerPanel {
         return false;
     }
 
+    default boolean showsCustomization() {
+        return false;
+    }
+
     default boolean showsInventory() {
         return false;
     }

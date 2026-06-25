@@ -77,6 +77,7 @@ public class GeneticSequencerScreen extends AbstractContainerScreen<GeneticSeque
         this.panels.put(0, new ChipSequencerPanel());
         this.panels.put(1, new FusionSequencerPanel());
         this.panels.put(2, new ChimeraSequencerPanel());
+        this.panels.put(3, new CustomizationSequencerPanel());
         updateSlotVisibility();
     }
 
@@ -210,6 +211,17 @@ public class GeneticSequencerScreen extends AbstractContainerScreen<GeneticSeque
 
                 playButtonClick();
                 return true;
+            }
+
+            if (selectedButton == 3) {
+                SequencerPanel activePanel = this.panels.get(this.selectedButton);
+
+                if (activePanel instanceof CustomizationSequencerPanel customizationPanel) {
+                    if (customizationPanel.mouseClicked(mouseX, mouseY, panelX, panelY)) {
+                        playButtonClick();
+                        return true;
+                    }
+                }
             }
         }
 
