@@ -35,6 +35,8 @@ public class EOPCreativeModeTabs {
                                 output.accept(EOPItems.TOTEM_OF_AATU.get());
                                 output.accept(EOPItems.FUSION_CATALYST.get());
                                 output.accept(EOPItems.CHIMERA_CORE.get());
+                                output.accept(EOPItems.STARHEART_FRAGMENT.get());
+                                output.accept(EOPItems.GLOWING_EYE.get());
                             })
                             .build()
             );

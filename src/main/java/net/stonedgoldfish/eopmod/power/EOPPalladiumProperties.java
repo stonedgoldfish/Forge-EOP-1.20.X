@@ -16,6 +16,8 @@ public class EOPPalladiumProperties {
     private static final Map<String, PalladiumProperty<Integer>> LEVEL_PROPERTIES = new HashMap<>();
     private static final Map<String, PalladiumProperty<Integer>> SKILL_POINT_PROPERTIES = new HashMap<>();
     private static final Map<String, PalladiumProperty<Integer>> ENERGY_PROPERTIES = new HashMap<>();
+    public static final PalladiumProperty<Integer> SPEEDSTER_PRIMARY_LIGHTNING_COLOR = new IntegerProperty("eop_speedster_primary_lightning_color");
+    public static final PalladiumProperty<Integer> SPEEDSTER_SECONDARY_LIGHTNING_COLOR = new IntegerProperty("eop_speedster_secondary_lightning_color");
     public static final PalladiumProperty<Integer> POWER_AMOUNT = new IntegerProperty("eop_power_amount");
     public static final PalladiumProperty<Boolean> LIVING_CREATURE = new BooleanProperty("EOP.LivingCreature");
     private static final PalladiumProperty<Boolean> CLIMB_EXTRA = new BooleanProperty("eop_climb_extra");
@@ -42,6 +44,8 @@ public class EOPPalladiumProperties {
                     if (power.energy()) {
                         handler.register(getOrCreateEnergyProperty(power.key()), 0);
                     }
+                    handler.register(SPEEDSTER_PRIMARY_LIGHTNING_COLOR, 0x0056E3);
+                    handler.register(SPEEDSTER_SECONDARY_LIGHTNING_COLOR, 0x0056E3);
                     handler.register(CLIMB_EXTRA, false);
                     handler.register(NIGHT_VISION_EXTRA, false);
                     handler.register(SMELTING_EXTRA, false);
@@ -60,6 +64,22 @@ public class EOPPalladiumProperties {
                 handler.register(EOPPalladiumProperties.LIVING_CREATURE, true);
             }
         });
+    }
+
+    public static int getSpeedsterPrimaryLightningColor(Entity entity) {
+        return SPEEDSTER_PRIMARY_LIGHTNING_COLOR.get(entity);
+    }
+
+    public static void setSpeedsterPrimaryLightningColor(Entity entity, int color) {
+        SPEEDSTER_PRIMARY_LIGHTNING_COLOR.set(entity, color);
+    }
+
+    public static int getSpeedsterSecondaryLightningColor(Entity entity) {
+        return SPEEDSTER_SECONDARY_LIGHTNING_COLOR.get(entity);
+    }
+
+    public static void setSpeedsterSecondaryLightningColor(Entity entity, int color) {
+        SPEEDSTER_SECONDARY_LIGHTNING_COLOR.set(entity, color);
     }
 
     public static int getPowerAmount(Entity entity) {

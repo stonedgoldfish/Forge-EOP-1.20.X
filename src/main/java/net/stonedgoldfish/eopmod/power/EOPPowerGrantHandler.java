@@ -55,6 +55,14 @@ public class EOPPowerGrantHandler {
 
         if (playerHasFusionPower(player)) {
             player.addEffect(new MobEffectInstance(MobEffects.WITHER, 200, 0));
+            player.level().playSound(
+                    null,
+                    player.blockPosition(),
+                    SoundEvents.WITHER_AMBIENT,
+                    SoundSource.PLAYERS,
+                    1.0F,
+                    1.0F
+            );
             return GrantResult.HAS_FUSION_POWER;
         }
 
@@ -67,6 +75,14 @@ public class EOPPowerGrantHandler {
                 usedChimeraCore = true;
             } else {
                 player.addEffect(new MobEffectInstance(MobEffects.WITHER, 200, 0));
+                player.level().playSound(
+                        null,
+                        player.blockPosition(),
+                        SoundEvents.WITHER_AMBIENT,
+                        SoundSource.PLAYERS,
+                        1.0F,
+                        1.0F
+                );
                 return GrantResult.POWER_LIMIT_REACHED;
             }
         }
@@ -187,7 +203,7 @@ public class EOPPowerGrantHandler {
         );
     }
 
-    private static void removePower(ServerPlayer player, String powerKey) {
+    public static void removePower(ServerPlayer player, String powerKey) {
         player.getServer().getCommands().performPrefixedCommand(
                 player.createCommandSourceStack()
                         .withSuppressedOutput()

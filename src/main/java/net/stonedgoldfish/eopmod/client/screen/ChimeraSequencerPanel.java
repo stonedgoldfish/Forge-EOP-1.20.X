@@ -9,7 +9,7 @@ public class ChimeraSequencerPanel implements SequencerPanel {
     private static final ResourceLocation TEXTURE =
             ResourceLocation.fromNamespaceAndPath(
                     "eop",
-                    "textures/gui/ability_bars/power_gui/eop_genetic_sequencer_chip.png"
+                    "textures/gui/ability_bars/power_gui/eop_genetic_sequencer_right.png"
             );
 
     private static final int TEXTURE_WIDTH = 256;
@@ -22,7 +22,7 @@ public class ChimeraSequencerPanel implements SequencerPanel {
     private static final int PANEL_V = 0;
 
     private static final int APPLY_BUTTON_X = 98;
-    private static final int APPLY_BUTTON_Y = 198;
+    private static final int APPLY_BUTTON_Y = 183;
 
     public static final int APPLY_BUTTON_WIDTH = 35;
     public static final int APPLY_BUTTON_HEIGHT = 11;
@@ -57,10 +57,9 @@ public class ChimeraSequencerPanel implements SequencerPanel {
         var font = Minecraft.getInstance().font;
         int centerX = panelX + PANEL_WIDTH / 2;
 
-        drawCenteredScaledText(guiGraphics, "Chimera Core Slot", centerX, panelY + 124, 0.85F, 0xFFFFFF);
-        drawCenteredScaledText(guiGraphics, "Insert Chimera Core", centerX, panelY + 158, 0.75F, 0xAAAAAA);
-        drawCenteredScaledText(guiGraphics, "20% DNA", centerX, panelY + 178, 0.7F, 0xFF6666);
-        drawCenteredScaledText(guiGraphics, "corruption chance", centerX, panelY + 188, 0.7F, 0xFF6666);
+        drawCenteredScaledText(guiGraphics, "Insert Chimera Core", centerX - 2, panelY + 158, 0.63F, 0xAAAAAA);
+        drawCenteredScaledText(guiGraphics, "20% DNA", centerX - 2, panelY + 167, 0.65F, 0xFF6666);
+        drawCenteredScaledText(guiGraphics, "corruption chance", centerX - 2, panelY + 174, 0.65F, 0xFF6666);
 
         int buttonX = panelX + APPLY_BUTTON_X;
         int buttonY = panelY + APPLY_BUTTON_Y;

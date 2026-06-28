@@ -1,0 +1,31 @@
+{
+    "type": "palladium:compound",
+    "layers": [
+        {
+            "type": "palladium:lightning_sparks",
+            "frequency": 1,
+            "amount": 5,
+            "core_color": "#FFFFFF",
+            "glow_color": {
+                "type": "palladium:integer_property",
+                "property": "eop_speedster_primary_lightning_color",
+                "fallback": 0
+            },
+            "thickness": 0.01,
+			"normal_transparency": false
+        },
+		{
+            "type": "palladium:lightning_sparks",
+            "frequency": 1,
+            "amount": 5,
+            "core_color": "#FFFFFF",
+            "glow_color": {
+                "type": "palladium:integer_property",
+                "property": "eop_speedster_secondary_lightning_color",
+                "fallback": 0
+            },
+            "thickness": 0.01,
+			"normal_transparency": false
+        }
+    ]
+}

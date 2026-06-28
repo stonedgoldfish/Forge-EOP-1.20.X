@@ -25,6 +25,10 @@ public class GeneticSequencerScreen extends AbstractContainerScreen<GeneticSeque
         SequencerPanel panel = this.panels.get(this.selectedButton);
         return panel != null && panel.showsInventory();
     }
+    private boolean showEvolutionSlot() {
+        SequencerPanel panel = this.panels.get(this.selectedButton);
+        return panel != null && panel.showsEvolutionSlot();
+    }
     private boolean showChipSlot() {
         SequencerPanel panel = this.panels.get(this.selectedButton);
         return panel != null && panel.showsChipSlot();
@@ -41,29 +45,30 @@ public class GeneticSequencerScreen extends AbstractContainerScreen<GeneticSeque
         this.menu.chipSlot.setVisible(showChipSlot());
         this.menu.fusionSlot.setVisible(showFusionSlot());
         this.menu.chimeraSlot.setVisible(showChimeraSlot());
+        this.menu.evolutionSlot.setVisible(showEvolutionSlot());
     }
 
     private static final int TEXTURE_WIDTH = 256;
     private static final int TEXTURE_HEIGHT = 256;
     private static final int PANEL_WIDTH = 230;
     private static final int PANEL_HEIGHT = 219;
-    private static final int BUTTON_WIDTH = 21;
-    private static final int BUTTON_HEIGHT = 21;
+    private static final int BUTTON_WIDTH = 17;
+    private static final int BUTTON_HEIGHT = 17;
     private static final int BUTTON_NORMAL_U = 0;
     private static final int BUTTON_NORMAL_V = 219;
-    private static final int BUTTON_HOVER_U = 21;
+    private static final int BUTTON_HOVER_U = 17;
     private static final int BUTTON_HOVER_V = 219;
-    private static final int BUTTON_SELECTED_U = 42;
+    private static final int BUTTON_SELECTED_U = 34;
     private static final int BUTTON_SELECTED_V = 219;
 
     private static final List<SequencerButton> BUTTONS = List.of(
-            new SequencerButton(0, 37, 139, 63, 219),
-            new SequencerButton(1, 12, 164, 84, 219),
-            new SequencerButton(2, 37, 164, 105, 219),
+            new SequencerButton(0, 51, 140, 51, 219),
+            new SequencerButton(1, 51, 158, 68, 219),
+            new SequencerButton(2, 51, 176, 85, 219),
 
-            new SequencerButton(3, 166, 139, 126, 219),
-            new SequencerButton(4, 166, 164, 147, 219),
-            new SequencerButton(5, 191, 164, 168, 219)
+            new SequencerButton(3, 160, 140, 102, 219),
+            new SequencerButton(4, 160, 158, 119, 219),
+            new SequencerButton(5, 160, 176, 136, 219)
     );
 
     private int selectedButton = -1;
@@ -78,7 +83,60 @@ public class GeneticSequencerScreen extends AbstractContainerScreen<GeneticSeque
         this.panels.put(1, new FusionSequencerPanel());
         this.panels.put(2, new ChimeraSequencerPanel());
         this.panels.put(3, new CustomizationSequencerPanel());
+        this.panels.put(4, new ScanSequencerPanel());
+        this.panels.put(5, new AwakeningSequencerPanel());
         updateSlotVisibility();
+    }
+
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
+        if (selectedButton == 3) {
+            int panelX = getPanelX();
+            int panelY = getPanelY();
+
+            SequencerPanel activePanel = this.panels.get(this.selectedButton);
+
+            if (activePanel instanceof CustomizationSequencerPanel customizationPanel) {
+                if (customizationPanel.mouseDragged(mouseX, mouseY, panelX, panelY)) {
+                    return true;
+                }
+            }
+        }
+
+        return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+    }
+
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        if (selectedButton == 3) {
+            int panelX = getPanelX();
+            int panelY = getPanelY();
+
+            SequencerPanel activePanel = this.panels.get(this.selectedButton);
+
+            if (activePanel instanceof CustomizationSequencerPanel customizationPanel) {
+                if (customizationPanel.mouseReleased(mouseX, mouseY, panelX, panelY)) {
+                    return true;
+                }
+            }
+        }
+
+        return super.mouseReleased(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean charTyped(char codePoint, int modifiers) {
+        if (selectedButton == 3) {
+            SequencerPanel activePanel = this.panels.get(this.selectedButton);
+
+            if (activePanel instanceof CustomizationSequencerPanel customizationPanel) {
+                if (customizationPanel.charTyped(codePoint, modifiers)) {
+                    return true;
+                }
+            }
+        }
+
+        return super.charTyped(codePoint, modifiers);
     }
 
     @Override
@@ -98,7 +156,6 @@ public class GeneticSequencerScreen extends AbstractContainerScreen<GeneticSeque
             renderButton(guiGraphics, mouseX, mouseY, panelX, panelY, button);
         }
 
-        guiGraphics.drawCenteredString(this.font, this.title, this.width / 2, panelY + 9, 0xFFFFFF);
 
         if (showInventory()) {
             this.renderTooltip(guiGraphics, mouseX, mouseY);
@@ -223,6 +280,29 @@ public class GeneticSequencerScreen extends AbstractContainerScreen<GeneticSeque
                     }
                 }
             }
+
+            if (selectedButton == 4) {
+                SequencerPanel activePanel = this.panels.get(this.selectedButton);
+
+                if (activePanel instanceof ScanSequencerPanel scanPanel) {
+                    if (scanPanel.mouseClicked(mouseX, mouseY, getPanelX(), getPanelY())) {
+                        playButtonClick();
+                        return true;
+                    }
+                }
+            }
+
+            if (selectedButton == 5) {
+                SequencerPanel activePanel = this.panels.get(this.selectedButton);
+
+                if (activePanel instanceof AwakeningSequencerPanel awakeningPanel) {
+                    if (awakeningPanel.mouseClicked(mouseX, mouseY, panelX, panelY)) {
+                        updateSlotVisibility();
+                        playButtonClick();
+                        return true;
+                    }
+                }
+            }
         }
 
         return super.mouseClicked(mouseX, mouseY, mouseButton);
@@ -230,8 +310,14 @@ public class GeneticSequencerScreen extends AbstractContainerScreen<GeneticSeque
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (!showInventory()) {
-            return super.keyPressed(keyCode, scanCode, modifiers);
+        if (selectedButton == 3) {
+            SequencerPanel activePanel = this.panels.get(this.selectedButton);
+
+            if (activePanel instanceof CustomizationSequencerPanel customizationPanel) {
+                if (customizationPanel.keyPressed(keyCode, scanCode, modifiers)) {
+                    return true;
+                }
+            }
         }
 
         return super.keyPressed(keyCode, scanCode, modifiers);

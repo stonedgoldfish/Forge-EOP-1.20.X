@@ -29,6 +29,10 @@ public interface SequencerPanel {
         return false;
     }
 
+    default boolean showsEvolutionSlot() {
+        return false;
+    }
+
     default boolean showsInventory() {
         return false;
     }

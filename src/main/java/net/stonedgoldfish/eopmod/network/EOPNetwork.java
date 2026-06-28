@@ -96,5 +96,12 @@ public class EOPNetwork {
                 SyncArmorStandBillboardPacket::decode,
                 SyncArmorStandBillboardPacket::handle
         );
+        CHANNEL.registerMessage(
+                packetId++,
+                ShowAwakeningErrorPacket.class,
+                ShowAwakeningErrorPacket::encode,
+                ShowAwakeningErrorPacket::new,
+                ShowAwakeningErrorPacket::handle
+        );
     }
 }

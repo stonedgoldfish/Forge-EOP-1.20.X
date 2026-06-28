@@ -16,4 +16,31 @@ public interface PowerCustomizationPanel {
     default boolean mouseClicked(double mouseX, double mouseY, int panelX, int panelY, int containerId) {
         return false;
     }
+
+    default boolean mouseDragged(
+            double mouseX,
+            double mouseY,
+            int panelX,
+            int panelY,
+            int containerId
+    ) {
+        return false;
+    }
+
+    default boolean mouseReleased(
+            double mouseX,
+            double mouseY,
+            int panelX,
+            int panelY
+    ) {
+        return false;
+    }
+
+    default boolean charTyped(char codePoint, int modifiers) {
+        return false;
+    }
+
+    default boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        return false;
+    }
 }

@@ -500,6 +500,85 @@
                 ]
             }
         },
+        "All.Abilities.Unlocked": {
+            "type": "palladium:dummy",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Celestial.Drift.Unlock"
+                    },
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Energetic.Surge.Unlock"
+                    },
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Gravitic.Collapse.Unlock"
+                    },
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Eclipse.Ascension.Unlock"
+                    },
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat1"
+                    },
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat2"
+                    },
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat3"
+                    },
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat4"
+                    },
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat5"
+                    },
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat1"
+                    },
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat2"
+                    },
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat3"
+                    },
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat4"
+                    },
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat5"
+                    }
+                ]
+            }
+        },
         "Secondary.Ability": {
             "type": "palladium:dummy",
             "gui_position": [

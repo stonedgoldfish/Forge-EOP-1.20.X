@@ -1,6 +1,9 @@
 package net.stonedgoldfish.eopmod.power;
 
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.Item;
+import net.stonedgoldfish.eopmod.item.EOPItems;
+import java.util.function.Supplier;
 import java.util.*;
 
 public class EOPPowerRegistry {
@@ -18,26 +21,27 @@ public class EOPPowerRegistry {
             String powerClass,
             String subclass,
             String combatStyle,
-            String difficulty
+            String difficulty,
+            Supplier<Item> evolutionItem
     ) {}
 
     private static final List<EOPPower> POWERS = new ArrayList<>();
     private static final Map<String, EOPPower> BY_KEY = new HashMap<>();
 
     static {
-        register("Astral_Energy_Manipulation", "beyonder", 5, true, true, false, false, false, 0xf7ff00, "Channeler", "Zoner", "Mixed", "Easy");
-        register("Plane_Manipulation", "drifter", 5, true, false, false, false, false, 0xccffcc, "Controller", "Utility", "Ranged", "Easy");
-        register("Diamond_Mimicry", "fortress", 10, false, false, false, false, false, 0x00EDE8, "Tank", "Defender", "Melee", "Easy");
-        register("Hypervelocity", "speedster", 10, true, false, false, false, false, 0x5994FF, "Assassin", "Scout", "Melee", "Easy");
-        register("Neogenesis", "mender", 10, true, false, false, false, false, 0xFA82FF, "Support", "Healer", "Melee", "Easy");
-        register("Hydrokinesis", "marine", 10, true, false, false, false, true, 0x534FFF, "Support", "Adaptable", "Mixed", "Easy");
-        register("Spatial_Manipulation", "honored_one", 2, true, true, false, false, false, 0x534FFF, "Channeler", "GG", "Ranged", "Medium");
-        register("Excision", "king", 2, false, true, false, false, false, 0x5b0000, "Assassin", "GG", "Mixed", "Medium");
-        register("Bone_Manipulation", "marrow", 20, false, false, false, false, false, 0xFFFFFF, "Assassin", "GG", "Mixed", "Easy");
-        register("Vampirism", "bloodsucker", 15, true, false, false, false, false, 0xFFFFFF, "Assassin", "GG", "Mixed", "Easy");
-        register("Enhanced Physical Prowess", "champion", 5, false, false, false, true, false, 0xFFFFFF, "Assassin", "GG", "Mixed", "Easy");
-        register("Pyrokinesis", "flame", 15, true, false, false, false, true, 0xFFFFFF, "Assassin", "GG", "Mixed", "Easy");
-        register("Scaldweaving", "flame_marine", 15, true, false, true, false, false, 0xFFFFFF, "Assassin", "GG", "Mixed", "Easy");
+        register("Astral_Energy_Manipulation", "beyonder", 5, true, true, false, false, false, 0xf7ff00, "Channeler", "Zoner", "Mixed", "Easy", EOPItems.STARHEART_FRAGMENT);
+        register("Plane_Manipulation", "drifter", 5, true, false, false, false, false, 0xccffcc, "Controller", "Utility", "Ranged", "Easy", () -> null);
+        register("Diamond_Mimicry", "fortress", 10, false, false, false, false, false, 0x00EDE8, "Tank", "Defender", "Melee", "Easy", () -> null);
+        register("Hypervelocity", "speedster", 10, true, false, false, false, false, 0x5994FF, "Assassin", "Scout", "Melee", "Easy", () -> null);
+        register("Neogenesis", "mender", 10, true, false, false, false, false, 0xFA82FF, "Support", "Healer", "Melee", "Easy", () -> null);
+        register("Hydrokinesis", "marine", 10, true, false, false, false, true, 0x534FFF, "Support", "Adaptable", "Mixed", "Easy", () -> null);
+        register("Spatial_Manipulation", "honored_one", 2, true, true, false, false, false, 0x534FFF, "Channeler", "GG", "Ranged", "Medium", EOPItems.GLOWING_EYE);
+        register("Excision", "king", 2, false, true, false, false, false, 0x5b0000, "Assassin", "GG", "Mixed", "Medium", () -> null);
+        register("Bone_Manipulation", "marrow", 20, false, false, false, false, false, 0xFFFFFF, "Assassin", "GG", "Mixed", "Easy", () -> null);
+        register("Vampirism", "bloodsucker", 15, true, false, false, false, false, 0xFFFFFF, "Assassin", "GG", "Mixed", "Easy", () -> null);
+        register("Enhanced Physical Prowess", "champion", 5, false, false, false, true, false, 0xFFFFFF, "Assassin", "GG", "Mixed", "Easy", () -> null);
+        register("Pyrokinesis", "flame", 15, true, false, false, false, true, 0xFFFFFF, "Assassin", "GG", "Mixed", "Easy", () -> null);
+        register("Scaldweaving", "flame_marine", 15, true, false, true, false, false, 0xFFFFFF, "Assassin", "GG", "Mixed", "Easy", () -> null);
     }
 
     private static void register(
@@ -53,7 +57,8 @@ public class EOPPowerRegistry {
             String powerClass,
             String subclass,
             String combatStyle,
-            String difficulty
+            String difficulty,
+            Supplier<Item> evolutionItem
     ) {
         EOPPower power = new EOPPower(
                 display,
@@ -68,7 +73,8 @@ public class EOPPowerRegistry {
                 powerClass,
                 subclass,
                 combatStyle,
-                difficulty
+                difficulty,
+                evolutionItem
         );
 
         POWERS.add(power);
@@ -81,6 +87,16 @@ public class EOPPowerRegistry {
 
     public static EOPPower getByKey(String key) {
         return BY_KEY.get(key);
+    }
+
+    public static Item getEvolutionItem(String key) {
+        EOPPower power = getByKey(key);
+
+        if (power == null || power.evolutionItem() == null) {
+            return null;
+        }
+
+        return power.evolutionItem().get();
     }
 
     public static boolean exists(String key) {

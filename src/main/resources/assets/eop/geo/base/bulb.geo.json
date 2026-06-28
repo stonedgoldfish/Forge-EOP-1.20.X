@@ -22,7 +22,7 @@
 				{
 					"name": "body",
 					"parent": "armorbody",
-					"pivot": [0, 24, 0],
+					"pivot": [15.475, 24.175, 0.5],
 					"cubes": [
 						{"origin": [12.975, 21.675, -2], "size": [5, 5, 5], "inflate": -0.3, "uv": [0, 10]}
 					]

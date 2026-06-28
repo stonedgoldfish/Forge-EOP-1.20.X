@@ -9,7 +9,7 @@ public class ChipSequencerPanel implements SequencerPanel {
     private static final ResourceLocation TEXTURE =
             ResourceLocation.fromNamespaceAndPath(
                     "eop",
-                    "textures/gui/ability_bars/power_gui/eop_genetic_sequencer_chip.png"
+                    "textures/gui/ability_bars/power_gui/eop_genetic_sequencer_right.png"
             );
     private double successRate = 0;
 
@@ -24,7 +24,7 @@ public class ChipSequencerPanel implements SequencerPanel {
     private static final int CHIP_PANEL_U = 0;
     private static final int CHIP_PANEL_V = 0;
     private static final int APPLY_BUTTON_X = 98;
-    private static final int APPLY_BUTTON_Y = 198;
+    private static final int APPLY_BUTTON_Y = 183;
     public static final int APPLY_BUTTON_WIDTH = 35;
     public static final int APPLY_BUTTON_HEIGHT = 11;
     private static final int APPLY_NORMAL_U = 0;
@@ -56,10 +56,16 @@ public class ChipSequencerPanel implements SequencerPanel {
 
         int centerX = panelX + PANEL_WIDTH / 2;
 
-        drawCenteredScaledText(guiGraphics, "Genetic Chip Slot", centerX, panelY + 124, 0.85F, 0xFFFFFF);
-        drawCenteredScaledText(guiGraphics, "Insert Genetic Chip", centerX, panelY + 158, 0.75F, 0xAAAAAA);
-        drawCenteredScaledText(guiGraphics, "Success Rate", centerX, panelY + 173, 0.8F, 0xFFFFFF);
-        drawCenteredScaledText(guiGraphics, this.successRate + "%", centerX, panelY + 185, 1F, 0xFFFF00);
+        drawCenteredScaledText(guiGraphics, "Insert Genetic Chip", centerX - 2, panelY + 158, 0.68F, 0xAAAAAA);
+        drawCenteredScaledText(guiGraphics, "Success Rate", centerX - 2, panelY + 167, 0.8F, 0xFFFFFF);
+        drawCenteredScaledText(
+                guiGraphics,
+                formatSuccessRate(this.successRate),
+                centerX + 2,
+                panelY + 175,
+                0.8F,
+                getSuccessRateColor(this.successRate)
+        );
 
         int buttonX = panelX + APPLY_BUTTON_X;
         int buttonY = panelY + APPLY_BUTTON_Y;
@@ -92,6 +98,27 @@ public class ChipSequencerPanel implements SequencerPanel {
                 buttonY + 1,
                 0xFFFFFF
         );
+    }
+
+    private static int getSuccessRateColor(double rate) {
+        if (rate < 25.0D) {
+            return 0xFF5555;
+        }
+
+        if (rate < 50.0D) {
+            return 0xFFAA00;
+        }
+
+        if (rate < 75.0D) {
+            return 0xFFFF55;
+        }
+
+        return 0x55FF55;
+    }
+
+    private static String formatSuccessRate(double rate) {
+        java.text.DecimalFormat format = new java.text.DecimalFormat("0.##");
+        return format.format(rate) + "%";
     }
 
     public static boolean isApplyButtonHovered(double mouseX, double mouseY, int panelX, int panelY) {

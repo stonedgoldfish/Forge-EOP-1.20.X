@@ -11,25 +11,28 @@ public class MenderCustomizationPanel implements PowerCustomizationPanel {
     private static final ResourceLocation TEXTURE =
             ResourceLocation.fromNamespaceAndPath(
                     EOPMod.MOD_ID,
-                    "textures/gui/ability_bars/power_gui/eop_genetic_sequencer_customize.png"
+                    "textures/gui/ability_bars/power_gui/eop_genetic_sequencer_icons.png"
             );
 
     private static final int TEXTURE_WIDTH = 256;
     private static final int TEXTURE_HEIGHT = 256;
 
-    private static final int BUTTON_WIDTH = 35;
-    private static final int BUTTON_HEIGHT = 11;
-    private static final int BUTTON_SPACING_X = 48;
-    private static final int BUTTON_SPACING_Y = 20;
+    private static final int BUTTON_WIDTH = 37;
+    private static final int BUTTON_HEIGHT = 13;
+    private static final int BUTTON_SPACING_X = 53;
+    private static final int BUTTON_SPACING_Y = 18;
+
+    private static final int BUTTONS_CENTER_X = 108;
+    private static final int BUTTONS_START_Y = 43;
 
     private static final int BUTTON_NORMAL_U = 0;
-    private static final int BUTTON_NORMAL_V = 219;
+    private static final int BUTTON_NORMAL_V = 216;
 
-    private static final int BUTTON_HOVER_U = 35;
-    private static final int BUTTON_HOVER_V = 219;
+    private static final int BUTTON_HOVER_U = 37;
+    private static final int BUTTON_HOVER_V = 216;
 
-    private static final int BUTTON_SELECTED_U = 70;
-    private static final int BUTTON_SELECTED_V = 219;
+    private static final int BUTTON_SELECTED_U = 74;
+    private static final int BUTTON_SELECTED_V = 216;
 
     private int selectedClawType = -1;
 
@@ -62,7 +65,7 @@ public class MenderCustomizationPanel implements PowerCustomizationPanel {
                 font,
                 "Bone Claw Type",
                 panelX + 115,
-                panelY + 25,
+                panelY + 32,
                 0xFFFFFF
         );
 
@@ -140,19 +143,21 @@ public class MenderCustomizationPanel implements PowerCustomizationPanel {
     }
 
     private static int getButtonX(int panelX, int index) {
-        int buttonsPerRow = 4;
+        int buttonsPerRow = 3;
         int rowIndex = index % buttonsPerRow;
 
-        int totalWidth = buttonsPerRow * BUTTON_WIDTH + (buttonsPerRow - 1) * (BUTTON_SPACING_X - BUTTON_WIDTH);
+        int totalWidth = buttonsPerRow * BUTTON_WIDTH
+                + (buttonsPerRow - 1) * (BUTTON_SPACING_X - BUTTON_WIDTH);
 
-        return panelX + 111 - totalWidth / 2 + rowIndex * BUTTON_SPACING_X;
+        return panelX + BUTTONS_CENTER_X - totalWidth / 2
+                + rowIndex * BUTTON_SPACING_X;
     }
 
     private static int getButtonY(int panelY, int index) {
-        int buttonsPerRow = 4;
+        int buttonsPerRow = 3;
         int row = index / buttonsPerRow;
 
-        return panelY + 46 + row * BUTTON_SPACING_Y;
+        return panelY + BUTTONS_START_Y + row * BUTTON_SPACING_Y;
     }
 
     private static boolean isMouseOver(double mouseX, double mouseY, int x, int y, int width, int height) {

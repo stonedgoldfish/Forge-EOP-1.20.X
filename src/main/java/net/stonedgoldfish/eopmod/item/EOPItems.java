@@ -100,4 +100,12 @@ public class EOPItems {
             ITEMS.register("fusion_catalyst",
                     () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE))
             );
+    public static final RegistryObject<Item> STARHEART_FRAGMENT =
+            ITEMS.register("starheart_fragment",
+                    () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC))
+            );
+    public static final RegistryObject<Item> GLOWING_EYE =
+            ITEMS.register("glowing_eye",
+                    () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC))
+            );
 }

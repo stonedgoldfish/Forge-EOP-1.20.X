@@ -82,33 +82,40 @@
             }
         },
         "DNA.Corrupted": {
-            "type": "palladium:gui_overlay",
+            "type": "palladium:dummy",
             "hidden": true,
             "hidden_in_bar": true,
-            "texture": "eop:textures/item/logo_corrupted.png",
-            "texture_width": 16,
-            "texture_height": 16,
-            "translate": [
-                -25,
-                10,
-                1
-            ],
-            "rotate": [
-                0,
-                0,
-                0
-            ],
-            "scale": [
-                2,
-                2,
-                2
-            ],
-            "alignment": "top_right",
             "conditions": {
                 "unlocking": [
                     {
                         "type": "palladium:has_tag",
-                        "tag": "EOP.Chimera.Corrupted"
+                        "tag": "EOP.DNA.Corrupted"
+                    }
+                ]
+            }
+        },
+        "Chimera.Core": {
+            "type": "palladium:dummy",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Chimera.Core"
+                    }
+                ]
+            }
+        },
+        "Awakened": {
+            "type": "palladium:dummy",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Awakened"
                     }
                 ]
             }

@@ -138,5 +138,45 @@
                 "stream": true
             }
         ]
+    },
+	"speedster_zoom": {
+        "category": "neutral",
+        "subtitle": "speedster_zoom",
+        "sounds": [
+            {
+                "name": "eop:speedster_zoom",
+                "stream": true
+            }
+        ]
+    },
+    "speed_start": {
+        "category": "neutral",
+        "subtitle": "speed_start",
+        "sounds": [
+            {
+                "name": "eop:speed_start",
+                "stream": true
+            }
+        ]
+    },
+	"speed_running": {
+        "category": "neutral",
+        "subtitle": "speed_running",
+        "sounds": [
+            {
+                "name": "eop:speed_running",
+                "stream": true
+            }
+        ]
+    },
+	"phase": {
+        "category": "neutral",
+        "subtitle": "phase",
+        "sounds": [
+            {
+                "name": "eop:phase",
+                "stream": true
+            }
+        ]
     }
 }
