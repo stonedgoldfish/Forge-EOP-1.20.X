@@ -1,0 +1,1462 @@
+{
+    "name": "Diamond Mimicry",
+    "background": "minecraft:textures/block/gray_concrete_powder.png",
+    "icon": "eop:textures/gui/fortress.png",
+    "ability_bar_texture": "eop:textures/gui/ability_bars/eop_powers.png",
+    "gui_display_type": "tree",
+    "persistent_data": true,
+    "abilities": {
+        "Fortress": {
+            "type": "palladium:command",
+            "hidden": true,
+            "first_tick_commands": [
+                "tag @s add Fortress",
+                "tag @s add EOP.Has.BM",
+                "tag @s add EOP.Has.Power"
+            ],
+            "last_tick_commands": [
+                "tag @s remove Fortress",
+                "tag @s remove EOP.Has.BM",
+                "tag @s remove EOP.Has.Power"
+            ],
+            "commands": []
+        },
+        "Diamond.Mimicry": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/fortress.png",
+            "title": "Diamond Mimicry",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": -1,
+            "gui_position": [
+                0,
+                -2
+            ],
+            "description": "You have obtained the power to convert your tissue into a diamond-like substance"
+        },
+        "Power.Tag": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "tag @s add EOP.Has.Power"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Has.Power"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "BM.Tag": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "tag @s add EOP.Has.BM"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Has.BM"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Left.Stat1": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/resistance.png",
+            "title": "Enhanced Armor",
+            "description": "Grants 3 more armor points",
+            "gui_position": [
+                -1,
+                -1.25
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.armor",
+            "amount": 3,
+            "operation": 0,
+            "uuid": "c0e7ed9a-89a7-4db0-98e8-5744f957f554",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Diamond.Mimicry"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_fortress_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/fortress.png",
+                        "description": {
+                            "text": "Diamond Mimicry Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Left.Stat2": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/regeneration.png",
+            "title": "Enhanced Health",
+            "description": "Grants 1 more heart",
+            "gui_position": [
+                -1.5,
+                -0.4
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.max_health",
+            "amount": 2,
+            "operation": 0,
+            "uuid": "3c2553d5-3d51-42ee-8ce7-f92d99579bd7",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat1"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_fortress_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/fortress.png",
+                        "description": {
+                            "text": "Diamond Mimicry Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Left.Stat3": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/resistance.png",
+            "title": "Enhanced Armor",
+            "description": "Grants 3 more armor points",
+            "gui_position": [
+                -1,
+                0.25
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.armor",
+            "amount": 3,
+            "operation": 0,
+            "uuid": "34643dba-aa71-411d-bb32-9314a9613011",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat2"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_fortress_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/fortress.png",
+                        "description": {
+                            "text": "Diamond Mimicry Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Left.Stat4": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/regeneration.png",
+            "title": "Enhanced Health",
+            "description": "Grants 1 more heart",
+            "gui_position": [
+                -1,
+                1.1
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.max_health",
+            "amount": 2,
+            "operation": 0,
+            "uuid": "a9354b63-817c-4b5a-b631-460eadf2dd6f",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat3"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_fortress_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/fortress.png",
+                        "description": {
+                            "text": "Diamond Mimicry Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Left.Stat5": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/absorption.png",
+            "title": "Enhanced Toughness",
+            "description": "Grants 5 more toughness points",
+            "gui_position": [
+                -0.7,
+                2.1
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.armor_toughness",
+            "amount": 5,
+            "operation": 0,
+            "uuid": "e118bc43-11ee-4a7c-843b-c82cf2db9ec2",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Left.Stat4"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_fortress_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/fortress.png",
+                        "description": {
+                            "text": "Diamond Mimicry Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Right.Stat1": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/resistance.png",
+            "title": "Enhanced Armor",
+            "description": "Grants 3 more armor points",
+            "gui_position": [
+                1,
+                -1.25
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.armor",
+            "amount": 3,
+            "operation": 0,
+            "uuid": "d3eb263d-6ac1-4833-8da0-0be1f5604324",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Diamond.Mimicry"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_fortress_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/fortress.png",
+                        "description": {
+                            "text": "Diamond Mimicry Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Right.Stat2": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/regeneration.png",
+            "title": "Enhanced Health",
+            "description": "Grants 1 more heart",
+            "gui_position": [
+                1.5,
+                -0.4
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.max_health",
+            "amount": 2,
+            "operation": 0,
+            "uuid": "6877b363-e4cb-4dcb-9d07-0d7da3457ef8",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat1"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_fortress_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/fortress.png",
+                        "description": {
+                            "text": "Diamond Mimicry Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Right.Stat3": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/resistance.png",
+            "title": "Enhanced Armor",
+            "description": "Grants 3 more armor points",
+            "gui_position": [
+                1,
+                0.25
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.armor",
+            "amount": 3,
+            "operation": 0,
+            "uuid": "15dc3ef3-0430-4df1-ae30-d3da4f0608c7",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat2"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_fortress_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/fortress.png",
+                        "description": {
+                            "text": "Diamond Mimicry Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Right.Stat4": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/regeneration.png",
+            "title": "Enhanced Health",
+            "description": "Grants 1 more heart",
+            "gui_position": [
+                1,
+                1.1
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.max_health",
+            "amount": 2,
+            "operation": 0,
+            "uuid": "ccbc67b9-b3d4-4c74-93f9-463cb390b2d3",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat3"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_fortress_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/fortress.png",
+                        "description": {
+                            "text": "Diamond Mimicry Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Right.Stat5": {
+            "type": "palladium:attribute_modifier",
+            "icon": "minecraft:textures/mob_effect/absorption.png",
+            "title": "Enhanced Toughness",
+            "description": "Grants 5 more toughness points",
+            "gui_position": [
+                0.7,
+                2.1
+            ],
+            "hidden": false,
+            "hidden_in_bar": true,
+            "attribute": "minecraft:generic.armor_toughness",
+            "amount": 5,
+            "operation": 0,
+            "uuid": "637f51ef-3c9a-406a-bad6-2d71935ed594",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Right.Stat4"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_fortress_skill_points",
+                        "score": 1,
+                        "icon": "eop:textures/gui/fortress.png",
+                        "description": {
+                            "text": "Diamond Mimicry Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Secondary.Ability": {
+            "type": "palladium:dummy",
+            "gui_position": [
+                1.25,
+                -2
+            ],
+            "title": "Shard Burst",
+            "description": "description. §dBattlemode §fmust be enabled via keybind. §dRight Click §fto use this ability",
+            "icon": "eop:textures/gui/image.png",
+            "hidden": false,
+            "hidden_in_bar": true
+        },
+        "Shard.Burst": {
+            "type": "palladium:animation_timer",
+            "title": "Shard Burst",
+            "icon": "eop:textures/gui/withe.png",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": 0,
+            "start_value": 0,
+            "max_value": 20,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "eop:activation",
+                        "ticks": 20,
+                        "cooldown": 60,
+                        "energy": 0,
+                        "property": "null",
+                        "toggle_mode": false,
+                        "allow_concurrent": true,
+                        "key_type": "right_click"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "eop:power_selected",
+                        "power": "eop:fortress"
+                    },
+                    {
+                        "type": "palladium:has_tag",
+                        "tag": "EOP.Battle.Mode"
+                    }
+                ]
+            }
+        },
+        "Shard.Burst.Aim": {
+            "type": "palladium:aim",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": 1,
+            "time": 5,
+            "arm": "off_arm",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Shard.Burst"
+                    }
+                ]
+            }
+        },
+        "Shard.Burst.Show.Both.Arms": {
+            "type": "palladium:show_both_arms",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Shard.Burst"
+                    }
+                ]
+            }
+        },
+        "Shards.Projectile": {
+            "type": "palladium:projectile",
+            "icon": "minecraft:fire_charge",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": 1,
+            "entity_type": "eop:basic_projectile",
+            "entity_data": {
+                "Damage": 3,
+                "DamageType": "eop:basic",
+                "SetEntityOnFireSeconds": 0,
+                "IgnoreLiquids": true,
+                "CommandsOnBlockHit": [
+                    "particle block diamond_block ~ ~ ~ 0.3 0.3 0.3 0 30"
+                ],
+                "CommandsForTargets": [],
+                "CommandsForTargetsRadius": 0,
+                "SpawnArmorStandOnBlockHit": false,
+                "SpawnArmorStandOnEntityHit": false,
+                "ArmorStandLifetime": 0,
+                "ArmorStandAOEDamage": 5,
+                "ArmorStandAOERadius": 10,
+                "ArmorStandAOEDamageType": "eop:basic",
+                "ArmorStandEnableDamage": true,
+                "ArmorStandDamageOnLastTick": false,
+                "ArmorStandKnockbackOnLastTick": 4,
+                "ArmorStandTargetCommandRadius": 10,
+                "ArmorStandPullStrength": 0.12,
+                "ArmorStandInvertPull": false,
+                "ArmorStandPower": "null",
+                "ArmorStandFirstTickCommands": [],
+                "ArmorStandCommands": [],
+                "ArmorStandLastTickCommands": [],
+                "ArmorStandTargetFirstTickCommands": [],
+                "ArmorStandTargetCommands": [],
+                "ArmorStandTargetLastTickCommands": [],
+                "ExplosionRadius": 0,
+                "ExplosionBlockInteraction": "BREAK",
+                "ExplosionCausesFire": true,
+                "Gravity": 0.015,
+                "Lifetime": 6,
+                "DieOnEntityHit": true,
+                "DieOnBlockHit": true,
+                "Appearances": [
+                    {
+                        "Type": "renderLayer",
+                        "RenderLayer": "eop:guardian/diamond_shard"
+                    }
+                ]
+            },
+            "velocity": 2,
+            "inaccuracy": 20,
+            "swinging_arm": "none",
+            "damage_from_player": false,
+            "ignore_player_movement": false,
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Shard.Burst"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Shard.Burst",
+                        "property": "value",
+                        "min": 6,
+                        "max": 20
+                    }
+                ]
+            }
+        },
+        "Sound.Shoot.Shards": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [],
+            "last_tick_commands": [],
+            "commands": [
+                "playsound minecraft:block.glass.break master @a ~ ~ ~ 1 2"
+            ],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Shard.Burst"
+                    },
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Shard.Burst",
+                        "property": "value",
+                        "min": 6,
+                        "max": 20
+                    }
+                ]
+            }
+        },
+        "Crystallise.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/image.png",
+            "title": "Crystallise",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": 0,
+            "gui_position": [
+                0,
+                -1.25
+            ],
+            "description": "description",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Diamond.Mimicry"
+                    }
+                ]
+            }
+        },
+        "Crystallise": {
+            "type": "palladium:animation_timer",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "icon": "eop:textures/gui/image.png",
+            "title": "Crystallise",
+            "list_index": 0,
+            "start_value": 0,
+            "max_value": 16,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:toggle",
+                        "cooldown": 0,
+                        "key_type": "key_bind",
+                        "needs_empty_hand": false,
+                        "allow_scrolling_when_crouching": true
+                    },
+                    {
+                        "type": "eop:power_selected",
+                        "power": "eop:fortress"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Crystallise.Unlock"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Diamond.Golem"
+                            },
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Big.Diamond.Golem"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Hide.Layers": {
+            "type": "palladium:hide_body_part",
+            "icon": "minecraft:blaze_rod",
+            "title": "null",
+            "bar_color": "light_gray",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": -1,
+            "gui_position": "null",
+            "description": "null",
+            "body_parts": [
+                "right_arm_overlay",
+                "left_arm_overlay",
+                "right_leg_overlay",
+                "left_leg_overlay",
+                "head_overlay",
+                "chest_overlay"
+            ],
+            "affects_first_person": true,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Crystallise"
+                    }
+                ]
+            }
+        },
+        "Diamond.Skin.Render": {
+            "type": "palladium:render_layer",
+            "render_layer": "eop:guardian/diamond_skin",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_effect",
+                                "effect": "minecraft:invisibility"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Diamond.Skin.Commands": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "playsound eop:form master @a ~ ~ ~ 1 1.6"
+            ],
+            "last_tick_commands": [
+                "playsound eop:form master @a ~ ~ ~ 1 1.6"
+            ],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Crystallise"
+                    }
+                ]
+            }
+        },
+        "Diamond.Skin.Resistance": {
+            "type": "eop:damage_reduction",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "reduction": 0.5,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Crystallise"
+                    }
+                ]
+            }
+        },
+        "Stats": {
+            "type": "eop:multi_attribute_modifier",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "attributes": [
+                "minecraft:generic.armor",
+                "minecraft:generic.armor_toughness",
+                "minecraft:generic.knockback_resistance",
+                "minecraft:generic.attack_damage"
+            ],
+            "amounts": [
+                30,
+                10,
+                5,
+                3
+            ],
+            "operations": [
+                "addition",
+                "addition",
+                "addition",
+                "addition"
+            ],
+            "modifier_uuids": [
+                "7490c2cf-1bfa-42b2-aa07-7d66516e5725",
+                "b9ae49e0-1c61-4430-9c95-d7b75354aa85",
+                "2dddb6e5-4521-40c1-890e-ba42ceae7b56",
+                "b1d2ecb1-50a6-405d-8718-5d713e7c8739"
+            ],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Crystallise"
+                    }
+                ]
+            }
+        },
+        "Sink": {
+            "type": "eop:sink",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:or",
+                        "conditions": [
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Crystallise"
+                            },
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Diamond.Golem"
+                            },
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Big.Diamond.Golem"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Damage.Immunity": {
+            "type": "palladium:damage_immunity",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": -1,
+            "damage_sources": [
+                "eop:diamond_immune",
+                "eop:tacz_guns",
+                "eop:scorched_guns"
+            ],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:or",
+                        "conditions": [
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Crystallise"
+                            },
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Diamond.Golem"
+                            },
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Big.Diamond.Golem"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "REDUCE_FALL_DAMAGE_LATER": {
+            "type": "palladium:dummy",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:or",
+                        "conditions": [
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Crystallise"
+                            },
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Diamond.Golem"
+                            },
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Big.Diamond.Golem"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Diamond.Rush.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/image.png",
+            "title": "Diamond Rush",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "gui_position": [
+                0,
+                -0.45
+            ],
+            "description": "description",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Crystallise.Unlock"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_fortress_skill_points",
+                        "score": 2,
+                        "icon": "eop:textures/gui/fortress.png",
+                        "description": {
+                            "text": "Diamond Mimicry Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Diamond.Rush": {
+            "type": "palladium:animation_timer",
+            "title": "Diamond Rush",
+            "icon": "eop:textures/gui/withe.png",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "list_index": 1,
+            "start_value": 0,
+            "max_value": 20,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "eop:activation",
+                        "ticks": 200,
+                        "cooldown": 300,
+                        "energy": 0,
+                        "property": "null",
+                        "toggle_mode": true,
+                        "allow_concurrent": false,
+                        "key_type": "key_bind"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Diamond.Rush.Unlock"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Diamond.Rush.Commands": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "playsound minecraft:entity.evoker.prepare_attack master @a ~ ~ ~ 1 2"
+            ],
+            "last_tick_commands": [],
+            "commands": [
+                "particle minecraft:campfire_cosy_smoke ~ ~ ~ 0.1 0.1 0.1 0.05 3 force",
+                "particle minecraft:poof ~ ~ ~ 1 1 1 0.05 1 force"
+            ],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Diamond.Rush"
+                    }
+                ]
+            }
+        },
+        "Diamond.Rush.Charge": {
+            "type": "eop:charge",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "acceleration": 0.02,
+            "max_speed": 0.4,
+            "stop_motion_on_end": true,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Diamond.Rush"
+                    }
+                ]
+            }
+        },
+        "Diamond.Rush.Third.Person": {
+            "type": "eop:trigger_animation",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "animation": "THIRD_PERSON2",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Diamond.Rush"
+                    }
+                ]
+            }
+        },
+        "Crystal.Bastion.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/image.png",
+            "title": "Crystal Bastion",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": 2,
+            "gui_position": [
+                0,
+                0.3
+            ],
+            "description": "description",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "ability": "Diamond.Rush.Unlock"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_fortress_skill_points",
+                        "score": 3,
+                        "icon": "eop:textures/gui/fortress.png",
+                        "description": {
+                            "text": "Diamond Mimicry Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Crystal.Bastion": {
+            "type": "palladium:animation_timer",
+            "title": "Crystal Bastion",
+            "icon": "eop:textures/gui/withe.png",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "list_index": 2,
+            "start_value": 0,
+            "max_value": 20,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "eop:held",
+                        "ticks": 60,
+                        "cooldown": 200,
+                        "energy": 0,
+                        "property": "null",
+                        "key_type": "key_bind",
+                        "allow_concurrent": false,
+                        "needs_empty_hand": false
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Crystal.Bastion.Unlock"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Crystal.Bastion.Wall": {
+            "type": "eop:wall_creation",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "range": 4,
+            "size": 3,
+            "block": "minecraft:diamond_block",
+            "max_height": 5,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Crystal.Bastion"
+                    }
+                ]
+            }
+        },
+        "Carbon.Tank.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/image.png",
+            "title": "Carbon Tank",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": 2,
+            "gui_position": [
+                0,
+                1.2
+            ],
+            "description": "description",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "ability": "Crystal.Bastion.Unlock"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_fortress_skill_points",
+                        "score": 4,
+                        "icon": "eop:textures/gui/fortress.png",
+                        "description": {
+                            "text": "Diamond Mimicry Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Carbon.Tank": {
+            "type": "palladium:animation_timer",
+            "title": "Carbon Tank",
+            "icon": "eop:textures/gui/withe.png",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "list_index": 3,
+            "start_value": 0,
+            "max_value": 20,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "eop:activation",
+                        "ticks": 100,
+                        "cooldown": 600,
+                        "energy": 0,
+                        "property": "null",
+                        "toggle_mode": true,
+                        "allow_concurrent": false,
+                        "key_type": "key_bind"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Carbon.Tank.Unlock"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Carbon.Tank.Movement": {
+            "type": "eop:no_movement",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Carbon.Tank"
+                    }
+                ]
+            }
+        },
+        "Carbon.Tank.Heal": {
+            "type": "palladium:healing",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "frequency": 10,
+            "amount": 1,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Carbon.Tank"
+                    }
+                ]
+            }
+        },
+        "Diamond.Golem.Unlock": {
+            "type": "palladium:dummy",
+            "icon": "eop:textures/gui/image.png",
+            "title": "Diamond Golem",
+            "bar_color": "light_gray",
+            "hidden": false,
+            "hidden_in_bar": true,
+            "list_index": 2,
+            "gui_position": [
+                0,
+                2.75
+            ],
+            "description": "description",
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "ability": "Carbon.Tank.Unlock"
+                    },
+                    {
+                        "type": "palladium:property_buyable",
+                        "property": "eop_fortress_skill_points",
+                        "score": 6,
+                        "icon": "eop:textures/gui/fortress.png",
+                        "description": {
+                            "text": "Diamond Mimicry Skill Point"
+                        }
+                    }
+                ]
+            }
+        },
+        "Diamond.Golem": {
+            "type": "palladium:animation_timer",
+            "icon": "eop:textures/gui/diamond_golem.png",
+            "title": "Diamond Golem",
+            "hidden": true,
+            "hidden_in_bar": false,
+            "list_index": 4,
+            "start_value": 0,
+            "max_value": 40,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "eop:activation",
+                        "ticks": 1200,
+                        "cooldown": 10,
+                        "energy": 0,
+                        "property": "null",
+                        "toggle_mode": true,
+                        "allow_concurrent": false,
+                        "key_type": "key_bind"
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_unlocked",
+                        "power": "null",
+                        "ability": "Diamond.Golem.Unlock"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Silenced"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Save.Health": {
+            "type": "eop:save_health",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "max_health": 40,
+            "full_heal_cooldown": 1200,
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Diamond.Golem"
+                    }
+                ]
+            }
+        },
+        "Store.Equipment": {
+            "type": "eop:saved_restrict_slots",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "slots": [
+                "head",
+                "chest",
+                "legs",
+                "feet",
+                "mainhand"
+            ],
+            "conditions": {
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Diamond.Golem"
+                    }
+                ]
+            }
+        },
+        "Golem.Render": {
+            "type": "palladium:render_layer",
+            "render_layer": "eop:guardian/diamond_golem",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_effect",
+                                "effect": "minecraft:invisibility"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Diamond.Golem.Hide.Body": {
+            "type": "palladium:hide_body_part",
+            "icon": "minecraft:blaze_rod",
+            "title": "null",
+            "bar_color": "light_gray",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": -1,
+            "gui_position": "null",
+            "description": "null",
+            "body_parts": [
+                "right_arm_overlay",
+                "left_arm_overlay",
+                "right_leg_overlay",
+                "left_leg_overlay",
+                "head_overlay",
+                "chest_overlay",
+                "right_arm",
+                "left_arm",
+                "right_leg",
+                "left_leg",
+                "head",
+                "chest",
+                "cape"
+            ],
+            "affects_first_person": true,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Diamond.Golem",
+                        "property": "value",
+                        "min": 12,
+                        "max": 40
+                    }
+                ]
+            }
+        },
+        "Diamond.Golem.Sounds": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [],
+            "last_tick_commands": [],
+            "commands": [
+                "playsound eop:form master @a ~ ~ ~ 1 0.7",
+                "particle block diamond_block ~ ~1 ~ 0.5 0.5 0.5 0 150 force"
+            ],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Diamond.Golem",
+                        "property": "value",
+                        "min": 1,
+                        "max": 39
+                    },
+                    {
+                        "type": "palladium:interval",
+                        "active_ticks": 0,
+                        "disabled_ticks": 5
+                    }
+                ]
+            }
+        },
+        "Diamond.Golem.Commands": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "tag @s add Diamond.Golem"
+            ],
+            "last_tick_commands": [
+                "tag @s remove Diamond.Golem"
+            ],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Diamond.Golem"
+                    }
+                ]
+            }
+        },
+        "Diamond.Golem.Resistance": {
+            "type": "eop:damage_reduction",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "reduction": 0.6,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Diamond.Golem"
+                    }
+                ]
+            }
+        },
+        "Stats.Golem": {
+            "type": "eop:multi_attribute_modifier",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "attributes": [
+                "minecraft:generic.armor",
+                "minecraft:generic.armor_toughness",
+                "minecraft:generic.knockback_resistance",
+                "minecraft:generic.attack_damage"
+            ],
+            "amounts": [
+                30,
+                20,
+                5,
+                10
+            ],
+            "operations": [
+                "addition",
+                "addition",
+                "addition",
+                "addition"
+            ],
+            "modifier_uuids": [
+                "df080929-9ce8-483a-bb2f-70eee8de7238",
+                "c84c5188-a488-4f11-97c2-f977bb01c6cd",
+                "f5cf49e3-fa23-4be4-9d0e-a024378013ca",
+                "17a03c95-3856-4609-b185-79f401ed74e2"
+            ],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Diamond.Golem"
+                    }
+                ]
+            }
+        }
+    }
+}

@@ -16,6 +16,10 @@
   ],
   "mixins": [
     "EntityMixin",
+    "AbstractContainerMenuMixin",
+    "ArmorItemMixin",
+    "LivingEntityHandMixin",
+    "InventoryMixin",
     "LivingEntityMixin",
     "PlayerMixin",
     "PlayerRendererMixin",

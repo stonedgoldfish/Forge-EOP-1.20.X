@@ -220,7 +220,7 @@ public class AwakeningSequencerPanel implements SequencerPanel {
         drawRequirementLine(guiGraphics, x, y, "DNA: ", dnaClean ? "Clean" : "Corrupt", dnaClean);
         y += lineHeight;
 
-        drawRequirementLine(guiGraphics, x, y, "All Abilities: ", allAbilitiesUnlocked ? "True" : "False", allAbilitiesUnlocked);
+        drawRequirementLine(guiGraphics, x, y, "Unlocked All Abilities: ", allAbilitiesUnlocked ? "True" : "False", allAbilitiesUnlocked);
         y += lineHeight;
 
         drawRequirementLine(guiGraphics, x, y, "Power Amount: ", powerAmount + "/1", exactlyOnePower);

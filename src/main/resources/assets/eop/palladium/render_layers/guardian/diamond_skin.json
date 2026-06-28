@@ -19,7 +19,7 @@
                     "TIMER": {
                         "type": "palladium:animation_timer_ability",
                         "power": "eop:fortress",
-                        "ability": "Transform"
+                        "ability": "Crystallise"
                     },
                     "TYPE": {
                         "type": "palladium:animation_timer_ability",

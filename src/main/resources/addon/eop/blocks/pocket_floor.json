@@ -1,7 +1,0 @@
-{
-
-  "sound_type": "minecraft:stone",
-  "destroy_time": 100000000000,
-  "explosion_resistance": 100000000000,
-  "no_occlusion": true
-}

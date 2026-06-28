@@ -1158,6 +1158,7 @@
             "particle_amount": 20,
             "particle_speed": 0.08,
             "particle_trail": true,
+            "dash_animation": "normal",
             "conditions": {
                 "enabling": [
                     {
@@ -1194,6 +1195,7 @@
             "particle": "eop:dark_energy",
             "particle_amount": 20,
             "particle_speed": 0.08,
+            "dash_animation": "normal",
             "conditions": {
                 "enabling": [
                     {

@@ -27,6 +27,7 @@ public class DashAbility extends Ability {
     public static final PalladiumProperty<Float> SOUND_PITCH = new FloatProperty("sound_pitch").configurable("Pitch of the dash activation sound");
     public static final PalladiumProperty<Integer> PARTICLE_AMOUNT = new IntegerProperty("particle_amount").configurable("Amount of particles spawned when dashing");
     public static final PalladiumProperty<Float> PARTICLE_SPEED = new FloatProperty("particle_speed").configurable("Speed of the particles spawned when dashing");
+    public static final PalladiumProperty<String> DASH_ANIMATION = new StringProperty("dash_animation").configurable("Dash animation style: normal, claw");
 
     public DashAbility() {
         this.withProperty(ICON, new ItemIcon(Items.FEATHER));
@@ -38,6 +39,7 @@ public class DashAbility extends Ability {
         this.withProperty(SOUND_PITCH, 1.0F);
         this.withProperty(PARTICLE_AMOUNT, 12);
         this.withProperty(PARTICLE_SPEED, 0.05F);
+        this.withProperty(DASH_ANIMATION, "normal");
     }
 
     @Override
@@ -49,7 +51,7 @@ public class DashAbility extends Ability {
         if (entity.level().isClientSide) {
             net.minecraftforge.fml.DistExecutor.unsafeRunWhenOn(
                     net.minecraftforge.api.distmarker.Dist.CLIENT,
-                    () -> () -> net.stonedgoldfish.eopmod.client.EOPClientDashHelper.dash(entry.getProperty(STRENGTH),entry.getProperty(ADD_PITCH))
+                    () -> () -> net.stonedgoldfish.eopmod.client.EOPClientDashHelper.dash(entry.getProperty(STRENGTH),entry.getProperty(ADD_PITCH),entry.getProperty(DASH_ANIMATION))
             );
 
             return;

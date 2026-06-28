@@ -104,6 +104,10 @@ public class EOPAbilities {
             ABILITIES.register("auto_dodge", AutoDodgeAbility::new);
     public static final RegistrySupplier<Ability> NO_CLICK =
             ABILITIES.register("no_click", NoClickAbility::new);
+    public static final RegistrySupplier<Ability> SAVE_HEALTH =
+            ABILITIES.register("save_health", TransformedHealthAbility::new);
+    public static final RegistrySupplier<Ability> SAVED_RESTRICT_SLOTS =
+            ABILITIES.register("saved_restrict_slots", SavedRestrictSlotsAbility::new);
 
     public static void init() {
 

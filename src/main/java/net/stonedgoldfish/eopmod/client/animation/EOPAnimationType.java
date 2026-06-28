@@ -8,6 +8,11 @@ public enum EOPAnimationType {
     DASH_RIGHT(EOPAnimationPlaybackType.ONE_SHOT),
     DASH_BACK(EOPAnimationPlaybackType.ONE_SHOT),
 
+    CLAW_DASH_FRONT(EOPAnimationPlaybackType.ONE_SHOT),
+    CLAW_DASH_LEFT(EOPAnimationPlaybackType.ONE_SHOT),
+    CLAW_DASH_RIGHT(EOPAnimationPlaybackType.ONE_SHOT),
+    CLAW_DASH_BACK(EOPAnimationPlaybackType.ONE_SHOT),
+
     AUTO_DODGE_1(EOPAnimationPlaybackType.ONE_SHOT),
     AUTO_DODGE_2(EOPAnimationPlaybackType.ONE_SHOT),
     AUTO_DODGE_3(EOPAnimationPlaybackType.ONE_SHOT),
@@ -21,6 +26,7 @@ public enum EOPAnimationType {
     IN_OUT_SWIPE_BOTH_ARMS(EOPAnimationPlaybackType.TWO_PHASE),
 
     THIRD_PERSON(EOPAnimationPlaybackType.HOLD),
+    THIRD_PERSON2(EOPAnimationPlaybackType.HOLD),
     RIGHT_ARM_LIFT(EOPAnimationPlaybackType.HOLD),
     RED(EOPAnimationPlaybackType.HOLD);
 

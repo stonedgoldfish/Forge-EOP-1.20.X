@@ -10,7 +10,7 @@ import net.stonedgoldfish.eopmod.network.EOPNetwork;
 
 public class EOPClientDashHelper {
 
-    public static void dash(float strength, boolean addPitch) {
+    public static void dash(float strength, boolean addPitch, String dashAnimation) {
         Minecraft minecraft = Minecraft.getInstance();
         LocalPlayer player = minecraft.player;
 
@@ -75,15 +75,21 @@ public class EOPClientDashHelper {
 
         direction = direction.normalize();
 
+        EOPAnimationType animationType;
+
+        boolean claw = dashAnimation.equalsIgnoreCase("claw");
+
         if (pressingForward || !pressingAnything) {
-            EOPAnimationHandler.play(EOPAnimationType.DASH_FRONT);
+            animationType = claw ? EOPAnimationType.CLAW_DASH_FRONT : EOPAnimationType.DASH_FRONT;
         } else if (pressingBack) {
-            EOPAnimationHandler.play(EOPAnimationType.DASH_BACK);
+            animationType = claw ? EOPAnimationType.CLAW_DASH_BACK : EOPAnimationType.DASH_BACK;
         } else if (pressingLeft) {
-            EOPAnimationHandler.play(EOPAnimationType.DASH_LEFT);
-        } else if (pressingRight) {
-            EOPAnimationHandler.play(EOPAnimationType.DASH_RIGHT);
+            animationType = claw ? EOPAnimationType.CLAW_DASH_LEFT : EOPAnimationType.DASH_LEFT;
+        } else {
+            animationType = claw ? EOPAnimationType.CLAW_DASH_RIGHT : EOPAnimationType.DASH_RIGHT;
         }
+
+        EOPAnimationHandler.play(animationType);
 
         EOPNetwork.CHANNEL.sendToServer(
                 new DashPacket(direction.x, direction.y, direction.z, strength)

@@ -88,6 +88,15 @@ public class EOPAnimationHandler {
                     0.15F
             );
 
+            case THIRD_PERSON2 -> new EOPCameraTransition.CameraProfile(
+                    0.0D,
+                    0.25D,
+                    2.0D,
+                    0.30F,
+                    0.55F,
+                    0.15F
+            );
+
             default -> new EOPCameraTransition.CameraProfile(
                     0.0D,
                     0.0D,
@@ -246,7 +255,8 @@ public class EOPAnimationHandler {
             case TRANSFORM,
                  CREATE,
                  CREATE2,
-                 THIRD_PERSON -> true;
+                 THIRD_PERSON,
+                 THIRD_PERSON2-> true;
 
             default -> false;
         };
@@ -384,7 +394,8 @@ public class EOPAnimationHandler {
         return switch (type) {
             case RIGHT_ARM_SWIPE -> 0.28F;
             case SHOOT -> 0.19F;
-            case THIRD_PERSON -> 0.05F;
+            case THIRD_PERSON,
+                 THIRD_PERSON2 -> 0.05F;
             case RIGHT_ARM_LIFT,
                  RED -> 0.25F;
 
@@ -405,7 +416,8 @@ public class EOPAnimationHandler {
         return switch (type) {
             case RIGHT_ARM_SWIPE -> 0.08F;
             case SHOOT -> 0.11F;
-            case THIRD_PERSON -> 0.05F;
+            case THIRD_PERSON,
+                 THIRD_PERSON2-> 0.05F;
             case RIGHT_ARM_LIFT,
                  RED -> 0.25F;
 

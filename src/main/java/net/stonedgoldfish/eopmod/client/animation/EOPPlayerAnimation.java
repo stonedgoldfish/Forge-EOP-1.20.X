@@ -53,6 +53,27 @@ public class EOPPlayerAnimation extends PalladiumAnimation {
                 }
             }
 
+            case CLAW_DASH_FRONT -> {
+                if (!firstPerson) {
+                    EOPClawDashAnimation.front(builder, anim);
+                }
+            }
+            case CLAW_DASH_LEFT -> {
+                if (!firstPerson) {
+                    EOPClawDashAnimation.left(builder, anim);
+                }
+            }
+            case CLAW_DASH_RIGHT -> {
+                if (!firstPerson) {
+                    EOPClawDashAnimation.right(builder, anim);
+                }
+            }
+            case CLAW_DASH_BACK -> {
+                if (!firstPerson) {
+                    EOPClawDashAnimation.back(builder, anim);
+                }
+            }
+
             case AUTO_DODGE_1 -> {
                 if (!firstPerson) {
                     AutoDodgeAnimation.animateBack(builder, anim);
@@ -123,7 +144,8 @@ public class EOPPlayerAnimation extends PalladiumAnimation {
                 }
             }
 
-            case THIRD_PERSON -> {
+            case THIRD_PERSON,
+                 THIRD_PERSON2-> {
                 if (!firstPerson) {
                     ThirdPersonAnimation.animate(builder, anim);
                 }
