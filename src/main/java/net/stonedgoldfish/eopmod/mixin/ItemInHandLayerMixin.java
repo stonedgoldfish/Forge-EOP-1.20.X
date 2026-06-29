@@ -44,8 +44,8 @@ public class ItemInHandLayerMixin {
 
         poseStack.translate(
                 transform.position().x() / 16.0F,
-                transform.position().y() / 16.0F,
-                transform.position().z() / 16.0F
+                -(transform.position().z()) / 16.0F,
+                (transform.position().y() + 8) / 16.0F
         );
 
         poseStack.mulPose(Axis.XP.rotation(transform.rotation().x()));
