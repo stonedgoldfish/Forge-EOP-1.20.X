@@ -55,10 +55,7 @@
 				{
 					"name": "rightHeldItem",
 					"parent": "armorRightArm",
-					"pivot": [-26.45, 12.4, -11.25],
-					"cubes": [
-						{"origin": [-27.45, 12.4, -12.25], "size": [2, 2, 2], "uv": [0, 0]}
-					]
+					"pivot": [-26.45, 12.4, -11.25]
 				},
 				{
 					"name": "armorLeftArm",

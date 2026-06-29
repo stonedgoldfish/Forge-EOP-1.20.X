@@ -6,7 +6,7 @@
                 "normal": "eop:geo/mender/wither_hand.geo.json",
                 "slim": "eop:geo/mender/wither_hand_slim.geo.json"
             },
-            "type": "geckolib:default",
+            "type": "eop:geckolib",
             "texture": {
                 "base": "eop:textures/models/mender/wither_hand_text.png",
                 "transformers": [

@@ -46,6 +46,7 @@ public class EOPGeckoRenderLayer extends AbstractPackRenderLayer {
     public final RenderTypeFunction renderType;
     private final EOPGeckoRenderLayerModel model;
 
+
     public EOPGeckoRenderLayer(SkinTypedValue<DynamicTexture> texture, SkinTypedValue<DynamicTexture> modelLocation, ResourceLocation animationLocation, List<ParsedAnimationController<EOPGeckoLayerState>> animationControllers, RenderTypeFunction renderType, DynamicColor tint) {
         this.texture = texture;
         this.renderType = renderType;
@@ -136,10 +137,14 @@ public class EOPGeckoRenderLayer extends AbstractPackRenderLayer {
     public static EOPGeckoRenderLayer parse(JsonObject json) {
         SkinTypedValue<DynamicTexture> modelLocation = SkinTypedValue.fromJSON(json.get("model"), DynamicTextureManager::fromJson);
         var texture = SkinTypedValue.fromJSON(json.get("texture"), DynamicTextureManager::fromJson);
-        var renderType = PackRenderLayerManager.getRenderType(ResourceLocation.parse(GsonHelper.getAsString(json, "render_type", "solid")));
+        var renderType = PackRenderLayerManager.getRenderType(
+                ResourceLocation.parse(GsonHelper.getAsString(json, "render_type", "solid"))
+        );
 
         if (renderType == null) {
-            throw new JsonParseException("Unknown render type '" + ResourceLocation.parse(GsonHelper.getAsString(json, "render_type", "solid")) + "'");
+            throw new JsonParseException(
+                    "Unknown render type '" + GsonHelper.getAsString(json, "render_type", "solid") + "'"
+            );
         }
 
         var layer = new EOPGeckoRenderLayer(
