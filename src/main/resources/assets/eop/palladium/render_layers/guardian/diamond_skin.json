@@ -6,7 +6,11 @@
                 "normal": "eop:geo/guardian/diamond_skin.geo.json",
                 "slim": "eop:geo/guardian/diamond_skin_slim.geo.json"
             },
-            "type": "geckolib:default",
+            "type": "eop:geckolib",
+			"bones": {
+    "right_held_item": "rightHeldItem",
+    "left_held_item": "leftHeldItem"
+  },
             "texture": {
                 "base": "eop:textures/models/guardian/diamond_skin_#TYPE.png",
                 "transformers": [

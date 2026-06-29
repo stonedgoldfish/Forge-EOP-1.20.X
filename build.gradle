@@ -114,6 +114,7 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
+    mavenCentral()
     // ThreeTAG
     maven {
         url 'https://maven.threetag.net'
@@ -155,7 +156,6 @@ dependencies {
     runtimeOnly fg.deobf("net.threetag:palladium-forge:4.5.5+1.20.1:forge@jar")
     runtimeOnly fg.deobf("net.threetag:palladiumcore-forge:1.0.1+1.20.1:forge@jar")
     runtimeOnly fg.deobf("dev.kosmx.player-anim:player-animation-lib-forge:1.0.2-rc1+1.20@jar")
-    runtimeOnly fg.deobf("software.bernie.geckolib:geckolib-forge-1.20.1:4.8.2")
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:5.14.1+1.20.1")
     runtimeOnly fg.deobf("curse.maven:packet-fixer-689467:5101975")
     runtimeOnly fg.deobf("curse.maven:embeddium-908741:5681725")
@@ -164,12 +164,13 @@ dependencies {
     implementation fg.deobf("dev.latvian.mods:kubejs-forge:2001.6.5-build.16")
     implementation fg.deobf("dev.latvian.mods:rhino-forge:2001.2.3-build.10")
     implementation fg.deobf("dev.architectury:architectury-forge:9.2.14")
+    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-1.20.1:4.8.2")
+    implementation fg.deobf("com.eliotlash.mclib:mclib:20")
 
 
     compileOnly fg.deobf("net.threetag:palladium-forge:4.5.5+1.20.1:forge@jar")
     compileOnly fg.deobf("net.threetag:palladiumcore-forge:1.0.1+1.20.1:forge@jar")
     compileOnly fg.deobf("dev.kosmx.player-anim:player-animation-lib-forge:1.0.2-rc1+1.20@jar")
-    compileOnly fg.deobf("software.bernie.geckolib:geckolib-forge-1.20.1:4.8.2")
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:5.14.1+1.20.1:api")
     compileOnly fg.deobf("curse.maven:jade-324717:5072729")
 

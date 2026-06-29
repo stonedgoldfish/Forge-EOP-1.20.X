@@ -20,6 +20,7 @@ import net.stonedgoldfish.eopmod.EOPMod;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.stonedgoldfish.eopmod.client.animation.EOPCameraTransition;
+import net.stonedgoldfish.eopmod.client.renderlayer.gecko.EOPGeckolib;
 import net.stonedgoldfish.eopmod.client.screen.GeneticSequencerScreen;
 import net.stonedgoldfish.eopmod.client.sound.EOPFlightSound;
 import net.stonedgoldfish.eopmod.client.sound.EOPFlightSoundHandler;
@@ -114,6 +115,7 @@ public class EOPClientEvents {
         PalladiumClientEvents.RENDER_POWER_SCREEN.register(EOPClientEvents::renderPowerScreen);
 
         EOPScreenShakeEvents.init();
+        EOPGeckolib.initClient();
 
         PalladiumClientEvents.REGISTER_ANIMATIONS.register(registry -> {
             registry.accept(
