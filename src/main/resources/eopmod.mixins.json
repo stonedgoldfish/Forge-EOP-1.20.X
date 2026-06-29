@@ -12,6 +12,7 @@
     "GuiMixin",
     "MouseHandlerMixin",
     "ClientLevelMixin",
+    "ItemInHandLayerMixin",
     "LevelRendererMixin"
   ],
   "mixins": [

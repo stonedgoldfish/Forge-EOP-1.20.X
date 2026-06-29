@@ -280,6 +280,34 @@ public class EOPGeckoRenderLayerModel extends HumanoidModel<AbstractClientPlayer
             copyScaleAndVisibility(leftLegPart, this.leftLeg);
             this.leftLeg.updatePosition(leftLegPart.x - 2, 12 - leftLegPart.y, leftLegPart.z);
         }
+
+        if (this.currentEntity != null && this.rightHeldItem != null && this.rightArm != null) {
+            float offsetX = this.rightHeldItem.getPivotX() - this.rightArm.getPivotX();
+            float offsetY = this.rightHeldItem.getPivotY() - this.rightArm.getPivotY();
+            float offsetZ = this.rightHeldItem.getPivotZ() - this.rightArm.getPivotZ();
+
+            EOPHeldItemTransforms.set(
+                    this.currentEntity.getUUID(),
+                    true,
+                    new org.joml.Vector3f(offsetX, offsetY, offsetZ),
+                    new org.joml.Vector3f(this.rightHeldItem.getRotX(), this.rightHeldItem.getRotY(), this.rightHeldItem.getRotZ()),
+                    new org.joml.Vector3f(this.rightHeldItem.getScaleX(), this.rightHeldItem.getScaleY(), this.rightHeldItem.getScaleZ())
+            );
+        }
+
+        if (this.currentEntity != null && this.leftHeldItem != null && this.leftArm != null) {
+            float offsetX = this.leftHeldItem.getPivotX() - this.leftArm.getPivotX();
+            float offsetY = this.leftHeldItem.getPivotY() - this.leftArm.getPivotY();
+            float offsetZ = this.leftHeldItem.getPivotZ() - this.leftArm.getPivotZ();
+
+            EOPHeldItemTransforms.set(
+                    this.currentEntity.getUUID(),
+                    false,
+                    new org.joml.Vector3f(offsetX, offsetY, offsetZ),
+                    new org.joml.Vector3f(this.leftHeldItem.getRotX(), this.leftHeldItem.getRotY(), this.leftHeldItem.getRotZ()),
+                    new org.joml.Vector3f(this.leftHeldItem.getScaleX(), this.leftHeldItem.getScaleY(), this.leftHeldItem.getScaleZ())
+            );
+        }
     }
 
     public static void copyScaleAndVisibility(ModelPart from, CoreGeoBone to) {
