@@ -282,9 +282,9 @@ public class EOPGeckoRenderLayerModel extends HumanoidModel<AbstractClientPlayer
         }
 
         if (this.currentEntity != null && this.rightHeldItem != null && this.rightArm != null) {
-            float offsetX = this.rightHeldItem.getPivotX() - this.rightArm.getPivotX();
-            float offsetY = this.rightHeldItem.getPivotY() - this.rightArm.getPivotY();
-            float offsetZ = this.rightHeldItem.getPivotZ() - this.rightArm.getPivotZ();
+            float offsetX = this.rightHeldItem.getPivotX() - 5.0F;
+            float offsetY = this.rightHeldItem.getPivotY() - 22.0F;
+            float offsetZ = this.rightHeldItem.getPivotZ();
 
             EOPHeldItemTransforms.set(
                     this.currentEntity.getUUID(),
@@ -296,9 +296,9 @@ public class EOPGeckoRenderLayerModel extends HumanoidModel<AbstractClientPlayer
         }
 
         if (this.currentEntity != null && this.leftHeldItem != null && this.leftArm != null) {
-            float offsetX = this.leftHeldItem.getPivotX() - this.leftArm.getPivotX();
-            float offsetY = this.leftHeldItem.getPivotY() - this.leftArm.getPivotY();
-            float offsetZ = this.leftHeldItem.getPivotZ() - this.leftArm.getPivotZ();
+            float offsetX = this.leftHeldItem.getPivotX() + 5.0F;
+            float offsetY = this.leftHeldItem.getPivotY() - 22.0F;
+            float offsetZ = this.leftHeldItem.getPivotZ();
 
             EOPHeldItemTransforms.set(
                     this.currentEntity.getUUID(),

@@ -30,6 +30,12 @@ public class InventoryMixin {
     private void eop$hideSelectedItemWhenMainhandRestricted(
             CallbackInfoReturnable<ItemStack> cir
     ) {
+        if (SavedRestrictSlotsAbility.shouldBypassHandRestriction()
+                || this.player.isDeadOrDying()
+                || this.player.getHealth() <= 0.0F) {
+            return;
+        }
+
         if (SavedRestrictSlotsAbility.isEquipmentSlotRestricted(this.player, EquipmentSlot.MAINHAND)) {
             cir.setReturnValue(ItemStack.EMPTY);
         }
@@ -44,6 +50,12 @@ public class InventoryMixin {
             int slot,
             CallbackInfoReturnable<ItemStack> cir
     ) {
+        if (SavedRestrictSlotsAbility.shouldBypassHandRestriction()
+                || this.player.isDeadOrDying()
+                || this.player.getHealth() <= 0.0F) {
+            return;
+        }
+
         if (slot == this.selected
                 && SavedRestrictSlotsAbility.isEquipmentSlotRestricted(this.player, EquipmentSlot.MAINHAND)) {
             cir.setReturnValue(ItemStack.EMPTY);

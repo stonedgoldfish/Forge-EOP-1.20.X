@@ -4,22 +4,27 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.PacketDistributor;
+import net.stonedgoldfish.eopmod.network.EOPNetwork;
+import net.stonedgoldfish.eopmod.network.FakeLaunchedBlockPacket;
 import net.stonedgoldfish.eopmod.util.EOPGameRules;
 import net.threetag.palladium.power.IPowerHolder;
 import net.threetag.palladium.power.ability.Ability;
 import net.threetag.palladium.power.ability.AbilityInstance;
 import net.threetag.palladium.util.icon.ItemIcon;
 import net.threetag.palladium.util.property.*;
-import net.minecraft.world.phys.AABB;
+
 import java.util.*;
 
 public class WallCreationAbility extends Ability {
@@ -28,12 +33,23 @@ public class WallCreationAbility extends Ability {
     public static final PalladiumProperty<Integer> SIZE = new IntegerProperty("size").configurable("Square wall size");
     public static final PalladiumProperty<String> BLOCK = new StringProperty("block").configurable("Block used for the wall");
     public static final PalladiumProperty<Integer> MAX_HEIGHT = new IntegerProperty("max_height").configurable("Maximum height each wall can reach");
+
+    private static final int RISING_TIME = 7;
+    private static final double RISING_MARKER = 999.0D;
+
     private static final Map<UUID, List<WallData>> ACTIVE_WALLS = new HashMap<>();
+    private static final Map<UUID, List<PendingBlockPlacement>> PENDING_BLOCKS = new HashMap<>();
 
     private record WallData(
             BlockPos baseCenter,
             int currentHeight,
             int tickTimer
+    ) {}
+
+    private record PendingBlockPlacement(
+            BlockPos pos,
+            BlockState state,
+            int ticksLeft
     ) {}
 
     public WallCreationAbility() {
@@ -46,15 +62,21 @@ public class WallCreationAbility extends Ability {
 
     @Override
     public void tick(LivingEntity entity, AbilityInstance entry, IPowerHolder holder, boolean enabled) {
-        if (!enabled || entity.level().isClientSide) {
+        if (entity.level().isClientSide) {
+            return;
+        }
+
+        UUID uuid = entity.getUUID();
+
+        processPendingBlocks(entity, uuid);
+
+        if (!enabled) {
             return;
         }
 
         float range = entry.getProperty(RANGE);
         int size = Math.max(1, entry.getProperty(SIZE));
         BlockState wallState = getBlockState(entry.getProperty(BLOCK));
-
-        UUID uuid = entity.getUUID();
 
         List<WallData> walls = ACTIVE_WALLS.computeIfAbsent(
                 uuid,
@@ -91,6 +113,52 @@ public class WallCreationAbility extends Ability {
         ACTIVE_WALLS.remove(entity.getUUID());
     }
 
+    private static void processPendingBlocks(LivingEntity entity, UUID uuid) {
+        List<PendingBlockPlacement> pendingBlocks = PENDING_BLOCKS.get(uuid);
+
+        if (pendingBlocks == null || pendingBlocks.isEmpty()) {
+            return;
+        }
+
+        Iterator<PendingBlockPlacement> iterator = pendingBlocks.iterator();
+        List<PendingBlockPlacement> updated = new ArrayList<>();
+
+        while (iterator.hasNext()) {
+            PendingBlockPlacement pending = iterator.next();
+            int ticksLeft = pending.ticksLeft() - 1;
+
+            if (ticksLeft > 0) {
+                updated.add(new PendingBlockPlacement(
+                        pending.pos(),
+                        pending.state(),
+                        ticksLeft
+                ));
+
+                iterator.remove();
+                continue;
+            }
+
+            BlockState currentState = entity.level().getBlockState(pending.pos());
+
+            boolean destructionMode = EOPGameRules.isDestructionMode(
+                    entity.level().getServer()
+            );
+
+            if (canReplaceForWall(currentState, destructionMode)
+                    && !hasLivingEntityInside(entity, pending.pos())) {
+                entity.level().setBlockAndUpdate(pending.pos(), pending.state());
+            }
+
+            iterator.remove();
+        }
+
+        pendingBlocks.addAll(updated);
+
+        if (pendingBlocks.isEmpty()) {
+            PENDING_BLOCKS.remove(uuid);
+        }
+    }
+
     private static void extendAllWalls(
             LivingEntity entity,
             List<WallData> walls,
@@ -107,7 +175,7 @@ public class WallCreationAbility extends Ability {
 
             int timer = wall.tickTimer() + 1;
 
-            if (timer < 5) {
+            if (timer < RISING_TIME + 2) {
                 walls.set(
                         i,
                         new WallData(
@@ -119,8 +187,7 @@ public class WallCreationAbility extends Ability {
                 continue;
             }
 
-            BlockPos nextCenter =
-                    wall.baseCenter().above(wall.currentHeight());
+            BlockPos nextCenter = wall.baseCenter().above(wall.currentHeight());
 
             boolean placedAny = createWallLayer(
                     entity,
@@ -205,9 +272,11 @@ public class WallCreationAbility extends Ability {
             for (int z = -half; z <= half; z++) {
                 BlockPos floorPos = center.offset(x, -1, z);
                 BlockPos placePos = center.offset(x, 0, z);
+
                 if (height >= 2 && hasLivingEntityInColumn(entity, placePos)) {
                     continue;
                 }
+
                 if (!shouldPlaceImperfectBlock(entity, x, z, half, height)) {
                     continue;
                 }
@@ -230,12 +299,62 @@ public class WallCreationAbility extends Ability {
                     continue;
                 }
 
-                entity.level().setBlockAndUpdate(placePos, state);
+                if (hasPendingBlock(entity.getUUID(), placePos)) {
+                    continue;
+                }
+
+                sendRisingBlockAnimation(entity, placePos, state);
+
+                PENDING_BLOCKS
+                        .computeIfAbsent(entity.getUUID(), key -> new ArrayList<>())
+                        .add(new PendingBlockPlacement(
+                                placePos,
+                                state,
+                                RISING_TIME
+                        ));
+
                 placedAny = true;
             }
         }
 
         return placedAny;
+    }
+
+    private static boolean hasPendingBlock(UUID uuid, BlockPos pos) {
+        List<PendingBlockPlacement> pendingBlocks = PENDING_BLOCKS.get(uuid);
+
+        if (pendingBlocks == null) {
+            return false;
+        }
+
+        for (PendingBlockPlacement pending : pendingBlocks) {
+            if (pending.pos().equals(pos)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static void sendRisingBlockAnimation(
+            LivingEntity entity,
+            BlockPos pos,
+            BlockState state
+    ) {
+        if (!(entity.level() instanceof ServerLevel serverLevel)) {
+            return;
+        }
+
+        EOPNetwork.CHANNEL.send(
+                PacketDistributor.TRACKING_CHUNK.with(
+                        () -> serverLevel.getChunkAt(pos)
+                ),
+                new FakeLaunchedBlockPacket(
+                        state,
+                        Vec3.atLowerCornerOf(pos).add(0.0D, -1.0D, 0.0D),
+                        new Vec3(0.0D, RISING_MARKER, 0.0D)
+                )
+        );
     }
 
     private static boolean shouldPlaceImperfectBlock(
@@ -329,6 +448,6 @@ public class WallCreationAbility extends Ability {
 
     @Override
     public String getDocumentationDescription() {
-        return "Creates and extends multiple vertical walls";
+        return "Creates and extends multiple vertical walls with rising block animations";
     }
 }

@@ -16,10 +16,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.stonedgoldfish.eopmod.EOPMod;
 import net.stonedgoldfish.eopmod.client.screen.AwakeningSequencerPanel;
 import net.stonedgoldfish.eopmod.item.GeneticChipItem;
-import net.stonedgoldfish.eopmod.menu.slot.ChimeraCoreSlot;
-import net.stonedgoldfish.eopmod.menu.slot.ChipsSlot;
-import net.stonedgoldfish.eopmod.menu.slot.EvolutionItemSlot;
-import net.stonedgoldfish.eopmod.menu.slot.FusionCatalystSlot;
+import net.stonedgoldfish.eopmod.menu.slot.*;
 import net.stonedgoldfish.eopmod.power.EOPPalladiumProperties;
 import net.stonedgoldfish.eopmod.power.EOPPowerGrantHandler;
 import net.stonedgoldfish.eopmod.power.EOPPowerRegistry;
@@ -78,6 +75,8 @@ public class GeneticSequencerMenu extends AbstractContainerMenu {
     public static final int MENDER_CLAW_TYPE_BASE_ID = 200;
     public static final int SPEEDSTER_APPLY_COLOR_BASE_ID = 300;
 
+    private final java.util.List<Slot> playerInventorySlots = new java.util.ArrayList<>();
+
     public GeneticSequencerMenu(int containerId, Inventory playerInventory, FriendlyByteBuf extraData) {
         this(containerId, playerInventory);
     }
@@ -99,22 +98,36 @@ public class GeneticSequencerMenu extends AbstractContainerMenu {
 
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 9; col++) {
-                this.addSlot(new Slot(
+                ToggleableSlot slot = new ToggleableSlot(
                         playerInventory,
                         col + row * 9 + 9,
                         INVENTORY_X + col * 18,
                         INVENTORY_Y + row * 18
-                ));
+                );
+
+                this.playerInventorySlots.add(slot);
+                this.addSlot(slot);
             }
         }
 
         for (int col = 0; col < 9; col++) {
-            this.addSlot(new Slot(
+            ToggleableSlot slot = new ToggleableSlot(
                     playerInventory,
                     col,
                     INVENTORY_X + col * 18,
                     HOTBAR_Y
-            ));
+            );
+
+            this.playerInventorySlots.add(slot);
+            this.addSlot(slot);
+        }
+    }
+
+    public void setPlayerInventoryVisible(boolean visible) {
+        for (Slot slot : this.playerInventorySlots) {
+            if (slot instanceof ToggleableSlot toggleableSlot) {
+                toggleableSlot.setVisible(visible);
+            }
         }
     }
 

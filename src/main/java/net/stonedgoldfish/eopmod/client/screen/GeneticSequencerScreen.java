@@ -46,6 +46,7 @@ public class GeneticSequencerScreen extends AbstractContainerScreen<GeneticSeque
         this.menu.fusionSlot.setVisible(showFusionSlot());
         this.menu.chimeraSlot.setVisible(showChimeraSlot());
         this.menu.evolutionSlot.setVisible(showEvolutionSlot());
+        this.menu.setPlayerInventoryVisible(showInventory());
     }
 
     private static final int TEXTURE_WIDTH = 256;

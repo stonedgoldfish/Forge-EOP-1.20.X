@@ -36,4 +36,12 @@ public class EOPConditionLocks {
             LOCKS.remove(entity.getUUID());
         }
     }
+
+    public static void clear(LivingEntity entity) {
+        if (entity == null) {
+            return;
+        }
+
+        LOCKS.remove(entity.getUUID());
+    }
 }

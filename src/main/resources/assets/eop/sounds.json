@@ -9,12 +9,12 @@
             }
         ]
     },
-    "energy_transblue": {
+    "energy_transform": {
         "category": "neutral",
-        "subtitle": "energy_transblue",
+        "subtitle": "energy_transform",
         "sounds": [
             {
-                "name": "eop:energy_transblue",
+                "name": "eop:energy_transform",
                 "stream": true
             }
         ]
@@ -85,6 +85,16 @@
         "sounds": [
             {
                 "name": "eop:cracks",
+                "stream": true
+            }
+        ]
+    },
+	"burrow": {
+        "category": "neutral",
+        "subtitle": "burrow",
+        "sounds": [
+            {
+                "name": "eop:burrow",
                 "stream": true
             }
         ]

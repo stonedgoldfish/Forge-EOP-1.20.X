@@ -477,7 +477,6 @@ public class SpeedsterCustomizationPanel implements PowerCustomizationPanel {
             return false;
         }
 
-        // Ctrl + V paste
         if (Screen.hasControlDown() && keyCode == InputConstants.KEY_V) {
             String clipboard = Minecraft.getInstance().keyboardHandler.getClipboard();
 

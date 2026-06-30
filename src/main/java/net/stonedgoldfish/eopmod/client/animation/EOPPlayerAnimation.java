@@ -54,7 +54,9 @@ public class EOPPlayerAnimation extends PalladiumAnimation {
             }
 
             case CLAW_DASH_FRONT -> {
-                if (!firstPerson) {
+                if (firstPerson) {
+                    EOPClawDashAnimation.frontFirstPerson(builder, anim);
+                } else {
                     EOPClawDashAnimation.front(builder, anim);
                 }
             }

@@ -55,12 +55,11 @@ public class ActivationCondition extends KeyCondition {
     public boolean active(DataContext context) {
         LivingEntity entity = context.getLivingEntity();
         AbilityInstance entry = context.getAbility();
-        if (entry.activationTimer <= 0) {
-            EOPConditionLocks.unlock(entity, entry);
+        if (entity == null || entry == null) {
             return false;
         }
-
-        if (entity == null || entry == null) {
+        if (entry.activationTimer <= 0) {
+            EOPConditionLocks.unlock(entity, entry);
             return false;
         }
 

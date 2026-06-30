@@ -500,7 +500,7 @@
                 -2
             ],
             "title": "Withering Touch",
-            "description": "description. §dBattlemode §fmust be enabled via keybind. §dRight Click §fto use this ability",
+            "description": "Empower your next melee attack to inflict Wither. §dBattlemode §fmust be enabled via keybind. §dRight Click §fto use this ability",
             "icon": "eop:textures/gui/wither.png",
             "hidden": false,
             "hidden_in_bar": true
@@ -636,7 +636,7 @@
                 0,
                 -1.25
             ],
-            "description": "description",
+            "description": "Grow bone claws, empowering your melee attacks with increased damage and reach",
             "conditions": {
                 "unlocking": [
                     {
@@ -871,6 +871,20 @@
                 ]
             }
         },
+        "Claw.Strike.Offhand": {
+            "type": "palladium:show_both_arms",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Claw.Strike"
+                    }
+                ]
+            }
+        },
         "Claw.Strike.Damage": {
             "type": "eop:aoe_damage",
             "hidden": true,
@@ -907,7 +921,7 @@
                 0,
                 -0.45
             ],
-            "description": "description",
+            "description": "Accelerate cellular regeneration, rapidly restoring health to yourself and nearby allies",
             "conditions": {
                 "unlocking": [
                     {
@@ -1129,7 +1143,7 @@
                 0,
                 0.3
             ],
-            "description": "description",
+            "description": "Cause a tumor to rapidly grow within an enemy before violently exploding",
             "conditions": {
                 "unlocking": [
                     {
@@ -1220,7 +1234,7 @@
                 0,
                 1.2
             ],
-            "description": "description",
+            "description": "Stimulate cellular growth, increasing the attributes of yourself and nearby allies",
             "conditions": {
                 "unlocking": [
                     {
@@ -1316,7 +1330,7 @@
                 0,
                 2.75
             ],
-            "description": "description",
+            "description": "Perfect your cellular regeneration, becoming nearly impossible to kill",
             "conditions": {
                 "unlocking": [
                     {

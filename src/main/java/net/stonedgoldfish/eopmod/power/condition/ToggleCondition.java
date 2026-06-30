@@ -112,9 +112,7 @@ public class ToggleCondition extends KeyCondition {
             AbilityInstance entry,
             Power power,
             IPowerHolder holder
-    ) {
-        // Do nothing. Toggle only changes on key press.
-    }
+    ) {}
 
     private void stopToggle(LivingEntity entity, AbilityInstance entry) {
         entry.keyPressed = false;

@@ -530,7 +530,7 @@
                 -2
             ],
             "title": "Rift Plane",
-            "description": "Enter the Rift Plane, becoming intangible. §dBattlemode §fmust be enabled via keybind. §dRight Click §fto use this ability",
+            "description": "Phase into another plane, becoming briefly intangible. §dBattlemode §fmust be enabled via keybind. §dRight Click §fto use this ability",
             "icon": "eop:textures/gui/rift_plane.png",
             "hidden": false,
             "hidden_in_bar": true
@@ -600,7 +600,7 @@
                 0,
                 -1.25
             ],
-            "description": "Access your own pocket dimension",
+            "description": "Enter your Pocket Dimension before re-emerging at your last location",
             "conditions": {
                 "unlocking": [
                     {
@@ -769,7 +769,7 @@
                 0,
                 -0.45
             ],
-            "description": "description",
+            "description": "Sever reality with a dimensional slash that damages enemies with a chance to apply §3Distorted",
             "conditions": {
                 "unlocking": [
                     {
@@ -945,7 +945,7 @@
                 0,
                 0.3
             ],
-            "description": "description",
+            "description": "Distort the surrounding area, slowing enemies while empowering nearby allies",
             "conditions": {
                 "unlocking": [
                     {
@@ -1170,7 +1170,7 @@
                 0,
                 1.2
             ],
-            "description": "description",
+            "description": "Consume §3Distorted §fstacks, causing enemies to explode and suffer additional effects",
             "conditions": {
                 "unlocking": [
                     {
@@ -1384,7 +1384,7 @@
                 0,
                 2.75
             ],
-            "description": "description",
+            "description": "Tear open reality, fracturing the battlefield and continuously applying §dFractured §fto nearby enemies",
             "conditions": {
                 "unlocking": [
                     {

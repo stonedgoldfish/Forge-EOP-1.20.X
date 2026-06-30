@@ -13,6 +13,11 @@
 			"bones": [
 				{
 					"name": "armorHead",
+					"pivot": [0, 31.475, -5.075]
+				},
+				{
+					"name": "head",
+					"parent": "armorHead",
 					"pivot": [0, 31.475, -5.075],
 					"cubes": [
 						{"origin": [-4, 28, -13.5], "size": [8, 8, 8], "uv": [32, 41]},
@@ -21,6 +26,11 @@
 				},
 				{
 					"name": "armorBody",
+					"pivot": [0, 31, 0]
+				},
+				{
+					"name": "body",
+					"parent": "armorBody",
 					"pivot": [0, 31, 0],
 					"cubes": [
 						{"origin": [-9, 21, -6], "size": [18, 13, 14], "uv": [0, 0]},
@@ -36,7 +46,12 @@
 				{
 					"name": "armorRightArm",
 					"pivot": [-11, 31, 0],
-					"rotation": [7.5, 0, 0],
+					"rotation": [7.5, 0, 0]
+				},
+				{
+					"name": "rarm",
+					"parent": "armorRightArm",
+					"pivot": [-11, 31, 0],
 					"cubes": [
 						{"origin": [-14, 19.5, -3], "size": [5, 11, 6], "pivot": [-11, 28, 0], "rotation": [0, 0, 7.5], "uv": [26, 69]},
 						{"origin": [-15, 27.5, -4], "size": [6, 7, 8], "uv": [64, 0]},
@@ -48,7 +63,12 @@
 				{
 					"name": "armorLeftArm",
 					"pivot": [11, 31, 0],
-					"rotation": [7.5, 0, 0],
+					"rotation": [7.5, 0, 0]
+				},
+				{
+					"name": "larm",
+					"parent": "armorLeftArm",
+					"pivot": [11, 31, 0],
 					"cubes": [
 						{"origin": [9, 19.5, -3], "size": [5, 11, 6], "pivot": [11, 28, 0], "rotation": [0, 0, -7.5], "uv": [26, 69], "mirror": true},
 						{"origin": [9, 27.5, -4], "size": [6, 7, 8], "uv": [64, 0], "mirror": true},
@@ -59,6 +79,11 @@
 				},
 				{
 					"name": "armorRightLeg",
+					"pivot": [-4, 16, 0]
+				},
+				{
+					"name": "rleg",
+					"parent": "armorRightLeg",
 					"pivot": [-4, 16, 0],
 					"cubes": [
 						{"origin": [-7.5, 8, -3], "size": [6, 8, 6], "uv": [64, 41]},
@@ -67,6 +92,11 @@
 				},
 				{
 					"name": "armorLeftLeg",
+					"pivot": [4, 16, 0]
+				},
+				{
+					"name": "lleg",
+					"parent": "armorLeftLeg",
 					"pivot": [4, 16, 0],
 					"cubes": [
 						{"origin": [1.5, 8, -3], "size": [6, 8, 6], "uv": [64, 41], "mirror": true},

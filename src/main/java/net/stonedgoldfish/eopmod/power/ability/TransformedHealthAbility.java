@@ -18,7 +18,7 @@ import java.util.UUID;
 
 public class TransformedHealthAbility extends Ability {
 
-    public static final PalladiumProperty<Float> MAX_HEALTH = new FloatProperty("max_health").configurable("The max health while transformed");
+    public static final PalladiumProperty<Float> HEALTH_BONUS = new FloatProperty("health_bonus").configurable("Additional max health while transformed");
     public static final PalladiumProperty<Integer> FULL_HEAL_COOLDOWN = new IntegerProperty("full_heal_cooldown").configurable("Ticks before transformed health is set to max again");
 
     private static final UUID TRANSFORMED_HEALTH_MODIFIER_UUID =
@@ -31,7 +31,7 @@ public class TransformedHealthAbility extends Ability {
 
     public TransformedHealthAbility() {
         this.withProperty(ICON, new ItemIcon(Items.GOLDEN_APPLE));
-        this.withProperty(MAX_HEALTH, 40.0F);
+        this.withProperty(HEALTH_BONUS, 20.0F);
         this.withProperty(FULL_HEAL_COOLDOWN, 1200);
     }
 
@@ -43,7 +43,7 @@ public class TransformedHealthAbility extends Ability {
 
         CompoundTag data = entity.getPersistentData();
 
-        float targetMaxHealth = Math.max(1.0F, entry.getProperty(MAX_HEALTH));
+        float targetMaxHealth = Math.max(1.0F, entry.getProperty(HEALTH_BONUS));
 
         data.putFloat(NORMAL_HEALTH_KEY, entity.getHealth());
 
@@ -79,17 +79,15 @@ public class TransformedHealthAbility extends Ability {
 
         CompoundTag data = entity.getPersistentData();
 
-        // Save transformed-form health before reverting
         data.putFloat(TRANSFORMED_HEALTH_KEY, entity.getHealth());
 
         removeMaxHealthModifier(entity);
 
-        // Restore normal-form health
         float savedNormalHealth = data.getFloat(NORMAL_HEALTH_KEY);
         entity.setHealth(clamp(savedNormalHealth, 1.0F, entity.getMaxHealth()));
     }
 
-    private static void applyMaxHealth(LivingEntity entity, float targetMaxHealth) {
+    private static void applyMaxHealth(LivingEntity entity, float healthBonus) {
         AttributeInstance maxHealthAttribute = entity.getAttribute(Attributes.MAX_HEALTH);
 
         if (maxHealthAttribute == null) {
@@ -98,13 +96,10 @@ public class TransformedHealthAbility extends Ability {
 
         removeMaxHealthModifier(entity);
 
-        float currentMaxHealth = entity.getMaxHealth();
-        float amountToAdd = targetMaxHealth - currentMaxHealth;
-
         AttributeModifier modifier = new AttributeModifier(
                 TRANSFORMED_HEALTH_MODIFIER_UUID,
                 "Transformed Health",
-                amountToAdd,
+                healthBonus,
                 AttributeModifier.Operation.ADDITION
         );
 

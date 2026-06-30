@@ -25,7 +25,8 @@
     "PlayerMixin",
     "PlayerRendererMixin",
     "ProjectileMixin",
-    "BlockStateBaseMixin"
+    "BlockStateBaseMixin",
+    "ServerGamePacketListenerImplMixin"
   ],
   "injectors": {
     "defaultRequire": 1

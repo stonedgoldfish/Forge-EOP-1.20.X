@@ -31,6 +31,18 @@ public class EOPClawDashAnimation {
                 .animate(Easing.INOUTCUBIC, anim);
     }
 
+    public static void frontFirstPerson(Builder builder, float anim) {
+        builder.get(PlayerModelPart.RIGHT_ARM)
+                .setXRotShortestDegrees(-30F)
+                .setYRotShortestDegrees(-25F)
+                .animate(Easing.INOUTCUBIC, anim);
+
+        builder.get(PlayerModelPart.LEFT_ARM)
+                .setXRotShortestDegrees(-30F)
+                .setYRotShortestDegrees(25F)
+                .animate(Easing.INOUTCUBIC, anim);
+    }
+
     public static void left(Builder builder, float anim) {
         EOPDashAnimation.left(builder, anim);
     }

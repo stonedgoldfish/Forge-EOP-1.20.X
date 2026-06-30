@@ -33,10 +33,19 @@ public class FakeLaunchedBlockRenderer {
     private static final double BOUNCE_UPWARD = 0.35D;
     private static final double STOP_SPEED = 0.015D;
     private static final int COLLISION_GRACE_TICKS = 5;
+    private static final int RISING_HOLD_TIME = 2;
 
     public static void add(BlockState state, Vec3 position, Vec3 velocity) {
+        if (velocity.y == RISING_MARKER) {
+            Vec3 target = position.add(0.0D, 1.0D, 0.0D);
+            BLOCKS.add(new FakeBlock(state, position, Vec3.ZERO, target));
+            return;
+        }
+
         BLOCKS.add(new FakeBlock(state, position, velocity));
     }
+    private static final double RISING_MARKER = 999.0D;
+    private static final int RISING_TIME = 8;
 
     @SubscribeEvent
     public static void clientTick(TickEvent.ClientTickEvent event) {
@@ -60,6 +69,36 @@ public class FakeLaunchedBlockRenderer {
             block.prevRotY = block.rotY;
             block.prevRotZ = block.rotZ;
             block.prevScale = block.scale;
+
+            if (block.rising) {
+                block.risingAge++;
+
+                float progress = block.risingAge / (float) RISING_TIME;
+                progress = Math.min(1.0F, progress);
+
+                float eased = 1.0F - (1.0F - progress) * (1.0F - progress);
+
+                Vec3 start = block.targetPosition.add(0.0D, -1.0D, 0.0D);
+                block.position = start.lerp(block.targetPosition, eased);
+                float scaleProgress = progress;
+                scaleProgress = Math.min(1.0F, scaleProgress);
+
+                float easedScale = 1.0F - (1.0F - scaleProgress) * (1.0F - scaleProgress);
+
+                block.scale = 0.15F + (0.85F * easedScale);
+                spawnRisingParticles(mc, block);
+
+                if (progress >= 1.0F) {
+                    block.position = block.targetPosition;
+                    block.risingHoldAge++;
+
+                    if (block.risingHoldAge >= RISING_HOLD_TIME) {
+                        iterator.remove();
+                    }
+                }
+
+                continue;
+            }
 
             if (!block.stopped) {
                 Vec3 nextPosition = block.position.add(block.velocity);
@@ -122,6 +161,33 @@ public class FakeLaunchedBlockRenderer {
         }
     }
 
+    private static void spawnRisingParticles(Minecraft mc, FakeBlock block) {
+        if (mc.level == null) {
+            return;
+        }
+
+        java.util.Random random = new java.util.Random();
+
+        for (int i = 0; i < 4; i++) {
+            double x = block.position.x + random.nextDouble();
+            double y = block.position.y + random.nextDouble();
+            double z = block.position.z + random.nextDouble();
+
+            mc.level.addParticle(
+                    new net.minecraft.core.particles.BlockParticleOption(
+                            net.minecraft.core.particles.ParticleTypes.BLOCK,
+                            block.state
+                    ),
+                    x,
+                    y,
+                    z,
+                    0.0D,
+                    0.04D,
+                    0.0D
+            );
+        }
+    }
+
     @SubscribeEvent
     public static void render(RenderLevelStageEvent event) {
         if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_SOLID_BLOCKS) {
@@ -149,14 +215,15 @@ public class FakeLaunchedBlockRenderer {
 
             BlockPos lightPos = BlockPos.containing(pos.x, pos.y + 0.5D, pos.z);
 
+            if (!mc.level.getBlockState(lightPos).isAir()) {
+                lightPos = findAirLightPos(mc, lightPos);
+            }
+
             int packedLight = LevelRenderer.getLightColor(
                     mc.level,
                     lightPos
             );
 
-            int minimumLight = 0x00A000A0;
-
-            packedLight = Math.max(packedLight, minimumLight);
 
             poseStack.pushPose();
 
@@ -196,6 +263,22 @@ public class FakeLaunchedBlockRenderer {
         buffer.endBatch();
     }
 
+    private static BlockPos findAirLightPos(Minecraft mc, BlockPos startPos) {
+        if (mc.level == null) {
+            return startPos;
+        }
+
+        for (int i = 1; i <= 6; i++) {
+            BlockPos above = startPos.above(i);
+
+            if (mc.level.getBlockState(above).isAir()) {
+                return above;
+            }
+        }
+
+        return startPos;
+    }
+
     private static boolean collidesWithWorld(Minecraft mc, Vec3 pos) {
         if (mc.level == null) {
             return false;
@@ -223,6 +306,9 @@ public class FakeLaunchedBlockRenderer {
         Vec3 position;
         Vec3 prevPosition;
         Vec3 velocity;
+        Vec3 targetPosition;
+        boolean rising = false;
+        int risingAge = 0;
 
         int age = 0;
         float scale = 1.0F;
@@ -231,6 +317,7 @@ public class FakeLaunchedBlockRenderer {
         boolean stopped = false;
         boolean disappearing = false;
         int disappearAge = 0;
+        int risingHoldAge = 0;
 
         float rotX;
         float rotY;
@@ -263,6 +350,28 @@ public class FakeLaunchedBlockRenderer {
             this.spinX = -8.0F + random.nextFloat() * 16.0F;
             this.spinY = -8.0F + random.nextFloat() * 16.0F;
             this.spinZ = -8.0F + random.nextFloat() * 16.0F;
+        }
+
+        FakeBlock(BlockState state, Vec3 position, Vec3 velocity, Vec3 targetPosition) {
+            this(state, position, velocity);
+
+            this.targetPosition = targetPosition;
+            this.rising = true;
+
+            this.scale = 0.15F;
+            this.prevScale = 0.15F;
+
+            this.rotX = 0.0F;
+            this.rotY = 0.0F;
+            this.rotZ = 0.0F;
+
+            this.prevRotX = 0.0F;
+            this.prevRotY = 0.0F;
+            this.prevRotZ = 0.0F;
+
+            this.spinX = 0.0F;
+            this.spinY = 0.0F;
+            this.spinZ = 0.0F;
         }
     }
 }

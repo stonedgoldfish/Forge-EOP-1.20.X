@@ -23,6 +23,12 @@ public class EOPBlocks {
                                     .randomTicks()
                     )
             );
+    public static final RegistryObject<Block> TEMPORARY_DIAMOND =
+            BLOCKS.register("temporary_diamond_block",
+                    () -> new TemporaryDiamondBlock(
+                            BlockBehaviour.Properties.copy(Blocks.DIAMOND_BLOCK)
+                                    .strength(-1.0F, 3600000.0F)
+                    ));
     public static final RegistryObject<Block> DIMENSION_BIT =
             BLOCKS.register("dimension_bit", () ->
                     new Block(BlockBehaviour.Properties

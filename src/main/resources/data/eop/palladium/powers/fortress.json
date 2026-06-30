@@ -119,7 +119,7 @@
             "type": "palladium:attribute_modifier",
             "icon": "minecraft:textures/mob_effect/regeneration.png",
             "title": "Enhanced Health",
-            "description": "Grants 1 more heart",
+            "description": "Grants 2 more hearts",
             "gui_position": [
                 -1.5,
                 -0.4
@@ -127,7 +127,7 @@
             "hidden": false,
             "hidden_in_bar": true,
             "attribute": "minecraft:generic.max_health",
-            "amount": 2,
+            "amount": 4,
             "operation": 0,
             "uuid": "3c2553d5-3d51-42ee-8ce7-f92d99579bd7",
             "conditions": {
@@ -187,7 +187,7 @@
             "type": "palladium:attribute_modifier",
             "icon": "minecraft:textures/mob_effect/regeneration.png",
             "title": "Enhanced Health",
-            "description": "Grants 1 more heart",
+            "description": "Grants 2 more hearts",
             "gui_position": [
                 -1,
                 1.1
@@ -195,7 +195,7 @@
             "hidden": false,
             "hidden_in_bar": true,
             "attribute": "minecraft:generic.max_health",
-            "amount": 2,
+            "amount": 4,
             "operation": 0,
             "uuid": "a9354b63-817c-4b5a-b631-460eadf2dd6f",
             "conditions": {
@@ -289,7 +289,7 @@
             "type": "palladium:attribute_modifier",
             "icon": "minecraft:textures/mob_effect/regeneration.png",
             "title": "Enhanced Health",
-            "description": "Grants 1 more heart",
+            "description": "Grants 2 more hearts",
             "gui_position": [
                 1.5,
                 -0.4
@@ -297,7 +297,7 @@
             "hidden": false,
             "hidden_in_bar": true,
             "attribute": "minecraft:generic.max_health",
-            "amount": 2,
+            "amount": 4,
             "operation": 0,
             "uuid": "6877b363-e4cb-4dcb-9d07-0d7da3457ef8",
             "conditions": {
@@ -357,7 +357,7 @@
             "type": "palladium:attribute_modifier",
             "icon": "minecraft:textures/mob_effect/regeneration.png",
             "title": "Enhanced Health",
-            "description": "Grants 1 more heart",
+            "description": "Grants 2 more hearts",
             "gui_position": [
                 1,
                 1.1
@@ -365,7 +365,7 @@
             "hidden": false,
             "hidden_in_bar": true,
             "attribute": "minecraft:generic.max_health",
-            "amount": 2,
+            "amount": 4,
             "operation": 0,
             "uuid": "ccbc67b9-b3d4-4c74-93f9-463cb390b2d3",
             "conditions": {
@@ -428,15 +428,15 @@
                 -2
             ],
             "title": "Shard Burst",
-            "description": "description. §dBattlemode §fmust be enabled via keybind. §dRight Click §fto use this ability",
-            "icon": "eop:textures/gui/image.png",
+            "description": "Fire a burst of diamond shards in front of you. §dBattlemode §fmust be enabled via keybind. §dRight Click §fto use this ability",
+            "icon": "eop:textures/gui/diamond_shards.png",
             "hidden": false,
             "hidden_in_bar": true
         },
         "Shard.Burst": {
             "type": "palladium:animation_timer",
             "title": "Shard Burst",
-            "icon": "eop:textures/gui/withe.png",
+            "icon": "eop:textures/gui/diamond_shards.png",
             "hidden": true,
             "hidden_in_bar": true,
             "list_index": 0,
@@ -472,6 +472,19 @@
                     {
                         "type": "palladium:has_tag",
                         "tag": "EOP.Battle.Mode"
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Diamond.Golem"
+                            },
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Big.Diamond.Golem"
+                            }
+                        ]
                     }
                 ]
             }
@@ -522,8 +535,10 @@
                 "CommandsOnBlockHit": [
                     "particle block diamond_block ~ ~ ~ 0.3 0.3 0.3 0 30"
                 ],
-                "CommandsForTargets": [],
-                "CommandsForTargetsRadius": 0,
+                "CommandsForTargets": [
+                    "effect give @s slowness 3 0 true"
+                ],
+                "CommandsForTargetsRadius": 2,
                 "SpawnArmorStandOnBlockHit": false,
                 "SpawnArmorStandOnEntityHit": false,
                 "ArmorStandLifetime": 0,
@@ -607,10 +622,10 @@
                 ]
             }
         },
-        "Crystallise.Unlock": {
+        "Crystallize.Unlock": {
             "type": "palladium:dummy",
-            "icon": "eop:textures/gui/image.png",
-            "title": "Crystallise",
+            "icon": "eop:textures/gui/crystallize.png",
+            "title": "Crystallize",
             "bar_color": "light_gray",
             "hidden": false,
             "hidden_in_bar": true,
@@ -619,7 +634,7 @@
                 0,
                 -1.25
             ],
-            "description": "description",
+            "description": "Harden your body into diamond, greatly increasing your defense",
             "conditions": {
                 "unlocking": [
                     {
@@ -630,15 +645,13 @@
                 ]
             }
         },
-        "Crystallise": {
-            "type": "palladium:animation_timer",
+        "Crystallize": {
+            "type": "palladium:dummy",
             "hidden": true,
             "hidden_in_bar": false,
-            "icon": "eop:textures/gui/image.png",
-            "title": "Crystallise",
+            "icon": "eop:textures/gui/crystallize.png",
+            "title": "Crystallize",
             "list_index": 0,
-            "start_value": 0,
-            "max_value": 16,
             "conditions": {
                 "enabling": [
                     {
@@ -657,7 +670,7 @@
                     {
                         "type": "palladium:ability_unlocked",
                         "power": "null",
-                        "ability": "Crystallise.Unlock"
+                        "ability": "Crystallize.Unlock"
                     },
                     {
                         "type": "palladium:not",
@@ -678,6 +691,34 @@
                             {
                                 "type": "palladium:has_tag",
                                 "tag": "EOP.Silenced"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Crystallize.Transformation": {
+            "type": "palladium:animation_timer",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "start_value": 0,
+            "max_value": 16,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:or",
+                        "conditions": [
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Crystallize"
+                            },
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Diamond.Rush"
+                            },
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Carbon.Tank"
                             }
                         ]
                     }
@@ -706,9 +747,21 @@
             "conditions": {
                 "enabling": [
                     {
-                        "type": "palladium:ability_enabled",
-                        "power": "null",
-                        "ability": "Crystallise"
+                        "type": "palladium:or",
+                        "conditions": [
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Crystallize"
+                            },
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Diamond.Rush"
+                            },
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Carbon.Tank"
+                            }
+                        ]
                     }
                 ]
             }
@@ -726,9 +779,7 @@
                                 "effect": "minecraft:invisibility"
                             }
                         ]
-                    },{
-                                "type": "palladium:crouching"
-                            }
+                    }
                 ]
             }
         },
@@ -746,9 +797,21 @@
             "conditions": {
                 "enabling": [
                     {
-                        "type": "palladium:ability_enabled",
-                        "power": "null",
-                        "ability": "Crystallise"
+                        "type": "palladium:or",
+                        "conditions": [
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Crystallize"
+                            },
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Diamond.Rush"
+                            },
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Carbon.Tank"
+                            }
+                        ]
                     }
                 ]
             }
@@ -757,13 +820,21 @@
             "type": "eop:damage_reduction",
             "hidden": true,
             "hidden_in_bar": true,
-            "reduction": 0.5,
+            "reduction": 0.4,
             "conditions": {
                 "enabling": [
                     {
-                        "type": "palladium:ability_enabled",
-                        "power": "null",
-                        "ability": "Crystallise"
+                        "type": "palladium:or",
+                        "conditions": [
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Crystallize"
+                            },
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Diamond.Rush"
+                            }
+                        ]
                     }
                 ]
             }
@@ -799,8 +870,21 @@
             "conditions": {
                 "enabling": [
                     {
-                        "type": "palladium:ability_enabled",
-                        "ability": "Crystallise"
+                        "type": "palladium:or",
+                        "conditions": [
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Crystallize"
+                            },
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Diamond.Rush"
+                            },
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Carbon.Tank"
+                            }
+                        ]
                     }
                 ]
             }
@@ -816,7 +900,7 @@
                         "conditions": [
                             {
                                 "type": "palladium:ability_enabled",
-                                "ability": "Crystallise"
+                                "ability": "Crystallize"
                             },
                             {
                                 "type": "palladium:ability_enabled",
@@ -825,6 +909,14 @@
                             {
                                 "type": "palladium:ability_enabled",
                                 "ability": "Big.Diamond.Golem"
+                            },
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Diamond.Rush"
+                            },
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Carbon.Tank"
                             }
                         ]
                     }
@@ -848,7 +940,7 @@
                         "conditions": [
                             {
                                 "type": "palladium:ability_enabled",
-                                "ability": "Crystallise"
+                                "ability": "Crystallize"
                             },
                             {
                                 "type": "palladium:ability_enabled",
@@ -857,6 +949,14 @@
                             {
                                 "type": "palladium:ability_enabled",
                                 "ability": "Big.Diamond.Golem"
+                            },
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Diamond.Rush"
+                            },
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Carbon.Tank"
                             }
                         ]
                     }
@@ -874,7 +974,7 @@
                         "conditions": [
                             {
                                 "type": "palladium:ability_enabled",
-                                "ability": "Crystallise"
+                                "ability": "Crystallize"
                             },
                             {
                                 "type": "palladium:ability_enabled",
@@ -883,6 +983,14 @@
                             {
                                 "type": "palladium:ability_enabled",
                                 "ability": "Big.Diamond.Golem"
+                            },
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Diamond.Rush"
+                            },
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Carbon.Tank"
                             }
                         ]
                     }
@@ -891,7 +999,7 @@
         },
         "Diamond.Rush.Unlock": {
             "type": "palladium:dummy",
-            "icon": "eop:textures/gui/image.png",
+            "icon": "eop:textures/gui/diamond_rush.png",
             "title": "Diamond Rush",
             "hidden": false,
             "hidden_in_bar": true,
@@ -899,13 +1007,13 @@
                 0,
                 -0.45
             ],
-            "description": "description",
+            "description": "Charge forward, knocking aside enemies in your path",
             "conditions": {
                 "unlocking": [
                     {
                         "type": "palladium:ability_unlocked",
                         "power": "null",
-                        "ability": "Crystallise.Unlock"
+                        "ability": "Crystallize.Unlock"
                     },
                     {
                         "type": "palladium:property_buyable",
@@ -922,12 +1030,12 @@
         "Diamond.Rush": {
             "type": "palladium:animation_timer",
             "title": "Diamond Rush",
-            "icon": "eop:textures/gui/withe.png",
+            "icon": "eop:textures/gui/diamond_rush.png",
             "hidden": true,
             "hidden_in_bar": false,
             "list_index": 1,
             "start_value": 0,
-            "max_value": 20,
+            "max_value": 16,
             "conditions": {
                 "enabling": [
                     {
@@ -951,6 +1059,19 @@
                         "type": "palladium:not",
                         "conditions": [
                             {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Diamond.Golem"
+                            },
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Big.Diamond.Golem"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
                                 "type": "palladium:has_tag",
                                 "tag": "EOP.Silenced"
                             }
@@ -968,7 +1089,7 @@
             ],
             "last_tick_commands": [],
             "commands": [
-                "particle minecraft:campfire_cosy_smoke ~ ~ ~ 0.1 0.1 0.1 0.05 3 force",
+                "particle minecraft:campfire_cosy_smoke ~ ~ ~ 0.1 0.1 0.1 0.05 1 force",
                 "particle minecraft:poof ~ ~ ~ 1 1 1 0.05 1 force"
             ],
             "conditions": {
@@ -1010,9 +1131,55 @@
                 ]
             }
         },
+        "Charge.Damage": {
+            "type": "eop:aoe_damage",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "damage": 5,
+            "enable_damage": true,
+            "knockback": 1,
+            "radius": 3,
+            "commands_on_target": [],
+            "cone": true,
+            "cone_angle": 90,
+            "damage_type": "eop:basic",
+            "set_on_fire": 0,
+            "create_explosion": false,
+            "explosion_causes_fire": false,
+            "explosion_radius": 3,
+            "explosion_drop_blocks": false,
+            "enable_particles": false,
+            "particle_type": "minecraft:poof",
+            "particle_speed": 0.2,
+            "particle_amount": 24,
+            "cause_fire": false,
+            "smelt_blocks": false,
+            "block_effect_quantity": 0.4,
+            "launch_blocks": false,
+            "launched_block_amount": 22,
+            "launched_block_sideways_strength": 1.2,
+            "launched_block_upward_strength": 0.15,
+            "stop_motion_on_first_target": false,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Diamond.Rush",
+                        "property": "value",
+                        "min": 7,
+                        "max": 16
+                    },
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Diamond.Rush"
+                    }
+                ]
+            }
+        },
         "Crystal.Bastion.Unlock": {
             "type": "palladium:dummy",
-            "icon": "eop:textures/gui/image.png",
+            "icon": "eop:textures/gui/crystal_bastion.png",
             "title": "Crystal Bastion",
             "bar_color": "light_gray",
             "hidden": false,
@@ -1022,7 +1189,7 @@
                 0,
                 0.3
             ],
-            "description": "description",
+            "description": "Create diamond constructs to block attacks and reshape the battlefield",
             "conditions": {
                 "unlocking": [
                     {
@@ -1044,7 +1211,7 @@
         "Crystal.Bastion": {
             "type": "palladium:animation_timer",
             "title": "Crystal Bastion",
-            "icon": "eop:textures/gui/withe.png",
+            "icon": "eop:textures/gui/crystal_bastion.png",
             "hidden": true,
             "hidden_in_bar": false,
             "list_index": 2,
@@ -1073,6 +1240,19 @@
                         "type": "palladium:not",
                         "conditions": [
                             {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Diamond.Golem"
+                            },
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Big.Diamond.Golem"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
                                 "type": "palladium:has_tag",
                                 "tag": "EOP.Silenced"
                             }
@@ -1081,14 +1261,99 @@
                 ]
             }
         },
+        "Crystal.Bastion.Aim": {
+            "type": "palladium:aim",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": 1,
+            "time": 5,
+            "arm": "both",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Crystal.Bastion"
+                    }
+                ]
+            }
+        },
+        "Crystal.Bastion.Offhand": {
+            "type": "palladium:show_both_arms",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Crystal.Bastion"
+                    }
+                ]
+            }
+        },
         "Crystal.Bastion.Wall": {
             "type": "eop:wall_creation",
             "hidden": true,
             "hidden_in_bar": true,
-            "range": 4,
+            "range": 7,
             "size": 3,
-            "block": "minecraft:diamond_block",
+            "block": "eop:temporary_diamond_block",
             "max_height": 5,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Crystal.Bastion"
+                    }
+                ]
+            }
+        },
+        "Crystal.Bastion.Sound": {
+            "type": "eop:play_sound",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "sound": "eop:cracks",
+            "volume": 1,
+            "pitch": 1,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Crystal.Bastion"
+                    }
+                ]
+            }
+        },
+        "Crystal.Bastion.Sound2": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [],
+            "last_tick_commands": [],
+            "commands": [
+                "playsound minecraft:block.amethyst_block.break master @a ~ ~ ~ 1 0.1"
+            ],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Crystal.Bastion"
+                    },
+                    {
+                        "type": "palladium:interval",
+                        "active_ticks": 0,
+                        "disabled_ticks": 3
+                    }
+                ]
+            }
+        },
+        "Screen.Shake.Wall": {
+            "type": "eop:screen_shake",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "intensity": 1,
+            "speed": 1,
+            "affect_others": true,
+            "range": 7,
             "conditions": {
                 "enabling": [
                     {
@@ -1100,7 +1365,7 @@
         },
         "Carbon.Tank.Unlock": {
             "type": "palladium:dummy",
-            "icon": "eop:textures/gui/image.png",
+            "icon": "eop:textures/gui/carbon_tank.png",
             "title": "Carbon Tank",
             "bar_color": "light_gray",
             "hidden": false,
@@ -1110,7 +1375,7 @@
                 0,
                 1.2
             ],
-            "description": "description",
+            "description": "Root yourself in place to rapidly regenerate health and greatly reduce incoming damage",
             "conditions": {
                 "unlocking": [
                     {
@@ -1132,7 +1397,7 @@
         "Carbon.Tank": {
             "type": "palladium:animation_timer",
             "title": "Carbon Tank",
-            "icon": "eop:textures/gui/withe.png",
+            "icon": "eop:textures/gui/carbon_tank.png",
             "hidden": true,
             "hidden_in_bar": false,
             "list_index": 3,
@@ -1161,10 +1426,81 @@
                         "type": "palladium:not",
                         "conditions": [
                             {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Diamond.Golem"
+                            },
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Big.Diamond.Golem"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
                                 "type": "palladium:has_tag",
                                 "tag": "EOP.Silenced"
                             }
                         ]
+                    }
+                ]
+            }
+        },
+        "Carbon.Tank.Commands": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "playsound minecraft:entity.evoker.cast_spell master @a ~ ~ ~ 1 2",
+                "particle block diamond_block ~ ~1 ~ 0.5 0.5 0.5 0 150 force"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Carbon.Tank"
+                    }
+                ]
+            }
+        },
+        "Carbon.Tank.Commands2": {
+            "type": "palladium:command",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "particle block diamond_block ~ ~1 ~ 0.5 0.5 0.5 0 150 force"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Carbon.Tank"
+                    },
+                    {
+                        "type": "palladium:interval",
+                        "active_ticks": 0,
+                        "disabled_ticks": 5
+                    }
+                ]
+            }
+        },
+        "Carbon.Tank.Sounds": {
+            "type": "eop:play_sound",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "sound": "eop:burrow",
+            "volume": 1,
+            "pitch": 1,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Carbon.Tank"
                     }
                 ]
             }
@@ -1186,8 +1522,37 @@
             "type": "palladium:healing",
             "hidden": true,
             "hidden_in_bar": true,
-            "frequency": 10,
+            "frequency": 7,
             "amount": 1,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Carbon.Tank"
+                    }
+                ]
+            }
+        },
+        "Carbon.Tank.No.Click": {
+            "type": "eop:no_click",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "left_click": true,
+            "right_click": true,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Carbon.Tank"
+                    }
+                ]
+            }
+        },
+        "Carbon.Tank.Resistance": {
+            "type": "eop:damage_reduction",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "reduction": 0.8,
             "conditions": {
                 "enabling": [
                     {
@@ -1199,7 +1564,7 @@
         },
         "Diamond.Golem.Unlock": {
             "type": "palladium:dummy",
-            "icon": "eop:textures/gui/image.png",
+            "icon": "eop:textures/gui/diamond_golem.png",
             "title": "Diamond Golem",
             "bar_color": "light_gray",
             "hidden": false,
@@ -1209,7 +1574,7 @@
                 0,
                 2.75
             ],
-            "description": "description",
+            "description": "Transform into a Diamond Golem, becoming an unstoppable frontline defender",
             "conditions": {
                 "unlocking": [
                     {
@@ -1246,7 +1611,7 @@
                         "energy": 0,
                         "property": "null",
                         "toggle_mode": true,
-                        "allow_concurrent": false,
+                        "allow_concurrent": true,
                         "key_type": "key_bind"
                     }
                 ],
@@ -1272,7 +1637,7 @@
             "type": "eop:save_health",
             "hidden": true,
             "hidden_in_bar": true,
-            "max_health": 40,
+            "health_bonus": 20,
             "full_heal_cooldown": 1200,
             "conditions": {
                 "unlocking": [
@@ -1293,8 +1658,10 @@
                 "chest",
                 "legs",
                 "feet",
-                "mainhand"
+                "mainhand",
+                "offhand"
             ],
+            "ignored_items": [],
             "conditions": {
                 "unlocking": [
                     {
@@ -1394,10 +1761,10 @@
             "hidden": true,
             "hidden_in_bar": true,
             "first_tick_commands": [
-                "tag @s add Diamond.Golem"
+                "tag @s add Diamond.Golem","tag @s add EOP.Ability.Disabled"
             ],
             "last_tick_commands": [
-                "tag @s remove Diamond.Golem"
+                "tag @s remove Diamond.Golem","tag @s remove EOP.Ability.Disabled"
             ],
             "commands": [],
             "conditions": {
@@ -1431,31 +1798,417 @@
                 "minecraft:generic.armor",
                 "minecraft:generic.armor_toughness",
                 "minecraft:generic.knockback_resistance",
-                "minecraft:generic.attack_damage"
+                "minecraft:generic.attack_damage",
+                "minecraft:generic.movement_speed"
             ],
             "amounts": [
                 30,
                 20,
                 5,
-                10
+                10,
+                -0.3
             ],
             "operations": [
                 "addition",
                 "addition",
                 "addition",
-                "addition"
+                "addition",
+                "multiply_base"
             ],
             "modifier_uuids": [
                 "df080929-9ce8-483a-bb2f-70eee8de7238",
                 "c84c5188-a488-4f11-97c2-f977bb01c6cd",
                 "f5cf49e3-fa23-4be4-9d0e-a024378013ca",
-                "17a03c95-3856-4609-b185-79f401ed74e2"
+                "17a03c95-3856-4609-b185-79f401ed74e2",
+                "72944a35-afee-469b-9df1-743556a78d90"
             ],
             "conditions": {
                 "enabling": [
                     {
                         "type": "palladium:ability_enabled",
                         "ability": "Diamond.Golem"
+                    }
+                ]
+            }
+        },
+        "Diamond.Golem.Smash": {
+            "type": "palladium:animation_timer",
+            "title": "Smash",
+            "icon": "eop:textures/gui/diamond_smash.png",
+            "start_value": 0,
+            "max_value": 41,
+            "list_index": 0,
+            "hidden": true,
+            "hidden_in_bar": false,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:activation",
+                        "cooldown": 60,
+                        "ticks": 41,
+                        "key_type": "key_bind",
+                        "needs_empty_hand": false,
+                        "allow_scrolling_when_crouching": true
+                    },
+                    {
+                        "type": "palladium:or",
+                        "conditions": [
+                            {
+                                "type": "palladium:on_ground"
+                            },
+                            {
+                                "type": "palladium:ability_enabled",
+                                "ability": "Diamond.Golem.Smash"
+                            }
+                        ]
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Diamond.Golem",
+                        "property": "value",
+                        "min": 40,
+                        "max": 40
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Power.Erased"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Smash.Animation": {
+            "type": "geckolib:render_layer_animation",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "render_layer": "eop:guardian/diamond_golem",
+            "controller": "attack",
+            "animation_trigger": "smash",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Diamond.Golem.Smash",
+                        "property": "value",
+                        "min": 2,
+                        "max": 2
+                    },
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Diamond.Golem.Smash"
+                    }
+                ]
+            }
+        },
+        "Golem.Clap.Damage": {
+            "type": "eop:aoe_damage",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": -1,
+            "damage": 10,
+            "enable_damage": true,
+            "knockback": 0.5,
+            "radius": 5,
+            "commands_on_target": [
+            ],
+            "cone": false,
+            "cone_angle": 90,
+            "damage_type": "eop:basic",
+            "set_on_fire": 0,
+            "create_explosion": false,
+            "explosion_causes_fire": false,
+            "explosion_radius": 3,
+            "explosion_drop_blocks": false,
+            "enable_particles": false,
+            "particle_type": "minecraft:poof",
+            "particle_speed": 0.2,
+            "particle_amount": 24,
+            "cause_fire": false,
+            "smelt_blocks": false,
+            "block_effect_quantity": 0.4,
+            "launch_blocks": true,
+            "launched_block_amount": 22,
+            "launched_block_sideways_strength": 1.2,
+            "launched_block_upward_strength": 0.15,
+            "stop_motion_on_first_target": false,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Diamond.Golem.Smash",
+                        "property": "value",
+                        "min": 20,
+                        "max": 20
+                    },
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Diamond.Golem.Smash"
+                    }
+                ]
+            }
+        },
+        "Golem.Clap.Damage.Blocks": {
+            "type": "eop:aoe_damage",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "list_index": -1,
+            "damage": 0,
+            "enable_damage": true,
+            "knockback": 0,
+            "radius": 5,
+            "commands_on_target": [],
+            "cone": false,
+            "cone_angle": 90,
+            "damage_type": "eop:basic",
+            "set_on_fire": 0,
+            "create_explosion": false,
+            "explosion_causes_fire": false,
+            "explosion_radius": 3,
+            "explosion_drop_blocks": false,
+            "enable_particles": false,
+            "particle_type": "minecraft:poof",
+            "particle_speed": 0.2,
+            "particle_amount": 24,
+            "cause_fire": false,
+            "smelt_blocks": false,
+            "block_effect_quantity": 0.4,
+            "launch_blocks": true,
+            "launched_block_amount": 12,
+            "launched_block_sideways_strength": 0.5,
+            "launched_block_upward_strength": 0.7,
+            "stop_motion_on_first_target": false,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Diamond.Golem.Smash",
+                        "property": "value",
+                        "min": 20,
+                        "max": 20
+                    },
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Diamond.Golem.Smash"
+                    }
+                ]
+            }
+        },
+        "Golem.Clap.Part": {
+            "type": "palladium:command",
+            "icon": "minecraft:command_block",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "particle minecraft:explosion ~ ~ ~ 1.5 1 1.5 0 15",
+                "particle minecraft:campfire_cosy_smoke ~ ~ ~ 0.3 0.3 0.3 0.1 15 force",
+                "playsound minecraft:entity.generic.explode master @a ~ ~ ~ 1 0.9"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Golem.Clap.Damage"
+                    }
+                ]
+            }
+        },
+        "Screen.Shake.Smash": {
+            "type": "eop:screen_shake",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "intensity": 2,
+            "speed": 1,
+            "affect_others": true,
+            "range": 10,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Diamond.Golem.Smash",
+                        "property": "value",
+                        "min": 20,
+                        "max": 28
+                    },
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Diamond.Golem.Smash"
+                    }
+                ]
+            }
+        },
+        "Diamond.Golem.Smack": {
+            "type": "palladium:animation_timer",
+            "title": "Smash",
+            "icon": "eop:textures/gui/diamond_smash.png",
+            "start_value": 0,
+            "max_value": 41,
+            "list_index": 1,
+            "hidden": true,
+            "hidden_in_bar": false,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:activation",
+                        "cooldown": 60,
+                        "ticks": 41,
+                        "key_type": "key_bind",
+                        "needs_empty_hand": false,
+                        "allow_scrolling_when_crouching": true
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Diamond.Golem",
+                        "property": "value",
+                        "min": 40,
+                        "max": 40
+                    },
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Power.Erased"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "Smack.Animation": {
+            "type": "geckolib:render_layer_animation",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "render_layer": "eop:guardian/diamond_golem",
+            "controller": "attack",
+            "animation_trigger": "smack",
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Diamond.Golem.Smack",
+                        "property": "value",
+                        "min": 2,
+                        "max": 2
+                    },
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Diamond.Golem.Smack"
+                    }
+                ]
+            }
+        },
+        "Golem.Smack.Damage": {
+            "type": "eop:aoe_damage",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "damage": 20,
+            "enable_damage": true,
+            "knockback": 2.5,
+            "radius": 5,
+            "commands_on_target": [
+                "effect give @s slowness 5 3 true"
+            ],
+            "cone": true,
+            "cone_angle": 180,
+            "damage_type": "eop:basic",
+            "set_on_fire": 0,
+            "create_explosion": false,
+            "explosion_causes_fire": false,
+            "explosion_radius": 3,
+            "explosion_drop_blocks": false,
+            "enable_particles": true,
+            "particle_type": "minecraft:poof",
+            "particle_speed": 1,
+            "particle_amount": 24,
+            "cause_fire": false,
+            "smelt_blocks": false,
+            "block_effect_quantity": 0.4,
+            "launch_blocks": false,
+            "launched_block_amount": 22,
+            "launched_block_sideways_strength": 1.2,
+            "launched_block_upward_strength": 0.15,
+            "stop_motion_on_first_target": false,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Diamond.Golem.Smack",
+                        "property": "value",
+                        "min": 20,
+                        "max": 20
+                    },
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Diamond.Golem.Smack"
+                    }
+                ]
+            }
+        },
+        "Golem.Smack.Part": {
+            "type": "palladium:command",
+            "icon": "minecraft:command_block",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "first_tick_commands": [
+                "playsound minecraft:entity.player.attack.sweep master @a ~ ~ ~ 1 0.5"
+            ],
+            "last_tick_commands": [],
+            "commands": [],
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_enabled",
+                        "ability": "Golem.Smack.Damage"
+                    }
+                ]
+            }
+        },
+        "Screen.Shake.Smack": {
+            "type": "eop:screen_shake",
+            "hidden": true,
+            "hidden_in_bar": true,
+            "intensity": 2,
+            "speed": 1,
+            "affect_others": true,
+            "range": 10,
+            "conditions": {
+                "enabling": [
+                    {
+                        "type": "palladium:ability_integer_property",
+                        "power": "null",
+                        "ability": "Diamond.Golem.Smack",
+                        "property": "value",
+                        "min": 20,
+                        "max": 28
+                    },
+                    {
+                        "type": "palladium:ability_enabled",
+                        "power": "null",
+                        "ability": "Diamond.Golem.Smack"
                     }
                 ]
             }
