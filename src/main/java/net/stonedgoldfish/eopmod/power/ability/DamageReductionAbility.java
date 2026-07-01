@@ -52,7 +52,7 @@ public class DamageReductionAbility extends Ability {
             ACTIVE_REDUCTIONS
                     .computeIfAbsent(entityId, id -> new HashMap<>())
                     .put(instanceId, new Settings(
-                            clamp01(entry.getProperty(REDUCTION)),
+                            clampReduction(entry.getProperty(REDUCTION)),
                             entry.getProperty(SPECIFIC_DAMAGE),
                             entry.getProperty(DAMAGE_TYPES)
                     ));
@@ -90,17 +90,19 @@ public class DamageReductionAbility extends Ability {
             return;
         }
 
-        float strongestReduction = 0.0F;
+        Float strongestReduction = null;
 
         for (Settings settings : reductions.values()) {
             if (!matchesDamage(settings, damageType)) {
                 continue;
             }
 
-            strongestReduction = Math.max(strongestReduction, settings.reduction());
+            if (strongestReduction == null || Math.abs(settings.reduction()) > Math.abs(strongestReduction)) {
+                strongestReduction = settings.reduction();
+            }
         }
 
-        if (strongestReduction <= 0.0F) {
+        if (strongestReduction == null || strongestReduction == 0.0F) {
             return;
         }
 
@@ -142,8 +144,8 @@ public class DamageReductionAbility extends Ability {
         }
     }
 
-    private static float clamp01(float value) {
-        return Math.max(0.0F, Math.min(1.0F, value));
+    private static float clampReduction(float value) {
+        return Math.max(-10.0F, Math.min(1.0F, value));
     }
 
     @Override
