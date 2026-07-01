@@ -6,7 +6,7 @@
             "first_person_conditions": false,
             "type": "geckolib:default",
             "texture": {
-                "base": "eop:textures/models/guardian/diamond_golem_text_#TYPE.png",
+                "base": "eop:textures/models/guardian/diamond_golem_text.png",
                 "transformers": [
                     {
                         "type": "palladium:alpha_mask",
@@ -18,14 +18,9 @@
                         "type": "palladium:animation_timer_ability",
                         "power": "eop:fortress",
                         "ability": "Diamond.Golem"
-                    },
-                    "TYPE": {
-                        "type": "palladium:animation_timer_ability",
-                        "power": "eop:fortress",
-                        "ability": "Diamond.Type"
                     }
                 },
-                "output": "eop:textures/models/guardian/diamond_golem_text_#TIMER_#TYPE_color"
+                "output": "eop:textures/models/guardian/diamond_golem_text_#TIMER_color"
             },
             "render_type": "cutout",
             "conditions": [
@@ -41,6 +36,11 @@
                             "type": "palladium:ability_enabled",
                             "power": "eop:fortress",
                             "ability": "Diamond.Golem.Smack"
+                        },
+                        {
+                            "type": "palladium:ability_enabled",
+                            "power": "eop:fortress",
+                            "ability": "Diamond.Golem.Fortification"
                         }
                     ]
                 }
@@ -51,7 +51,7 @@
             "first_person_conditions": false,
             "type": "geckolib:default",
             "texture": {
-                "base": "eop:textures/models/guardian/diamond_golem_text_#TYPE.png",
+                "base": "eop:textures/models/guardian/diamond_golem_text.png",
                 "transformers": [
                     {
                         "type": "palladium:alpha_mask",
@@ -63,14 +63,9 @@
                         "type": "palladium:animation_timer_ability",
                         "power": "eop:fortress",
                         "ability": "Diamond.Golem"
-                    },
-                    "TYPE": {
-                        "type": "palladium:animation_timer_ability",
-                        "power": "eop:fortress",
-                        "ability": "Diamond.Type"
                     }
                 },
-                "output": "eop:textures/models/guardian/diamond_golem_text_#TIMER_#TYPE_color"
+                "output": "eop:textures/models/guardian/diamond_golem_text_#TIMER_color"
             },
             "render_type": "cutout",
             "animation_file": "eop:animations/diamond_golem.json",
@@ -80,7 +75,8 @@
                     "transition_tick_time": 0,
                     "triggers": {
                         "smash": "smash",
-                        "smack": "swipe"
+                        "smack": "swipe",
+                        "fortify": "fortify"
                     }
                 }
             ],
@@ -103,6 +99,11 @@
                             "type": "palladium:ability_enabled",
                             "power": "eop:fortress",
                             "ability": "Diamond.Golem.Smack"
+                        },
+                        {
+                            "type": "palladium:ability_enabled",
+                            "power": "eop:fortress",
+                            "ability": "Diamond.Golem.Fortification"
                         }
                     ]
                 }
@@ -113,7 +114,7 @@
             "third_person_conditions": false,
             "type": "geckolib:default",
             "texture": {
-                "base": "eop:textures/models/guardian/diamond_golem_text_#TYPE.png",
+                "base": "eop:textures/models/guardian/diamond_golem_text.png",
                 "transformers": [
                     {
                         "type": "palladium:alpha_mask",
@@ -125,14 +126,9 @@
                         "type": "palladium:animation_timer_ability",
                         "power": "eop:fortress",
                         "ability": "Diamond.Golem"
-                    },
-                    "TYPE": {
-                        "type": "palladium:animation_timer_ability",
-                        "power": "eop:fortress",
-                        "ability": "Diamond.Type"
                     }
                 },
-                "output": "eop:textures/models/guardian/diamond_golem_text_#TIMER_#TYPE_color"
+                "output": "eop:textures/models/guardian/diamond_golem_text_#TIMER_color"
             },
             "render_type": "cutout"
         }

@@ -22,7 +22,7 @@ public class EOPKeybinds {
     public static final KeyMapping EXTRAS_PANEL = new KeyMapping(
             "key.eop.extras_panel",
             InputConstants.Type.KEYSYM,
-            GLFW.GLFW_KEY_X,
+            GLFW.GLFW_KEY_H,
             CATEGORY
     );
 

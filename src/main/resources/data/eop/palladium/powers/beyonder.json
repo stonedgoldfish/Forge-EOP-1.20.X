@@ -96,13 +96,24 @@
             "last_tick_commands": [],
             "commands": [],
             "conditions": {
-                "unlocking": [
+                "enabling": [
                     {
                         "type": "palladium:not",
                         "conditions": [
                             {
                                 "type": "palladium:has_tag",
                                 "tag": "EOP.Has.BM"
+                            }
+                        ]
+                    }
+                ],
+                "unlocking": [
+                    {
+                        "type": "palladium:not",
+                        "conditions": [
+                            {
+                                "type": "palladium:has_tag",
+                                "tag": "EOP.Ability.Disabled"
                             }
                         ]
                     }
@@ -646,8 +657,10 @@
                         ]
                     },
                     {
-                        "type": "palladium:has_tag",
-                        "tag": "EOP.Battle.Mode"
+                        "type": "palladium:objective_score",
+                        "objective": "EOP.Battle.Mode",
+                        "min_score": 1,
+                        "max_score": 1
                     }
                 ]
             }
@@ -2482,8 +2495,10 @@
                         ]
                     },
                     {
-                        "type": "palladium:has_tag",
-                        "tag": "EOP.Battle.Mode"
+                        "type": "palladium:objective_score",
+                        "objective": "EOP.Battle.Mode",
+                        "min_score": 1,
+                        "max_score": 1
                     }
                 ]
             }

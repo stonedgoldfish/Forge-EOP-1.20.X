@@ -8,7 +8,7 @@
             },
             "type": "eop:geckolib",
             "texture": {
-                "base": "eop:textures/models/guardian/diamond_skin_#TYPE.png",
+                "base": "eop:textures/models/guardian/diamond_skin.png",
                 "transformers": [
                     {
                         "type": "palladium:alpha_mask",
@@ -20,14 +20,9 @@
                         "type": "palladium:animation_timer_ability",
                         "power": "eop:fortress",
                         "ability": "Crystallize.Transformation"
-                    },
-                    "TYPE": {
-                        "type": "palladium:animation_timer_ability",
-                        "power": "eop:fortress",
-                        "ability": "Diamond.Type"
                     }
                 },
-                "output": "eop:textures/alpha_mask/guardian/diamond_skin/diamond_skin_#TIMER_#TYPE"
+                "output": "eop:textures/alpha_mask/guardian/diamond_skin/diamond_skin_#TIMER"
             }
         }
     ]

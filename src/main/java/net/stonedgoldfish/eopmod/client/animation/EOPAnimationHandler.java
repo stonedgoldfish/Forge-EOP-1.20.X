@@ -322,6 +322,8 @@ public class EOPAnimationHandler {
             case CREATE -> 12;
             case CREATE2 -> 16;
             case IN_OUT_SWIPE_BOTH_ARMS -> 15;
+            case FIRST_PERSON_SMASH,
+                 FIRST_PERSON_IN_OUT_SWIPE_RIGHT_ARM -> 15;
             default -> 10;
         };
     }
@@ -331,6 +333,8 @@ public class EOPAnimationHandler {
             case TRANSFORM -> 6;
             case CREATE,
                  IN_OUT_SWIPE_BOTH_ARMS -> 8;
+            case FIRST_PERSON_SMASH,
+                 FIRST_PERSON_IN_OUT_SWIPE_RIGHT_ARM -> 8;
             case CREATE2 -> 8;
             default -> 5;
         };
@@ -341,6 +345,8 @@ public class EOPAnimationHandler {
             case TRANSFORM -> 15;
             case CREATE,
                  IN_OUT_SWIPE_BOTH_ARMS -> 10;
+            case FIRST_PERSON_SMASH,
+                 FIRST_PERSON_IN_OUT_SWIPE_RIGHT_ARM -> 10;
             case CREATE2 -> 17;
             default -> 5;
         };
@@ -351,6 +357,8 @@ public class EOPAnimationHandler {
             case TRANSFORM -> 1.0F;
             case CREATE,
                  IN_OUT_SWIPE_BOTH_ARMS-> 1.0F;
+            case FIRST_PERSON_SMASH,
+                 FIRST_PERSON_IN_OUT_SWIPE_RIGHT_ARM -> 1.0F;
             case CREATE2 -> 0.8F;
             default -> 1.0F;
         };
@@ -362,6 +370,8 @@ public class EOPAnimationHandler {
             case CREATE,
                  CREATE2,
                  IN_OUT_SWIPE_BOTH_ARMS-> 2.0F;
+            case FIRST_PERSON_SMASH,
+                 FIRST_PERSON_IN_OUT_SWIPE_RIGHT_ARM -> 2.0F;
             default -> 1.0F;
         };
     }
@@ -372,6 +382,8 @@ public class EOPAnimationHandler {
             case CREATE,
                  CREATE2,
                  IN_OUT_SWIPE_BOTH_ARMS-> 1.0F;
+            case FIRST_PERSON_SMASH,
+                 FIRST_PERSON_IN_OUT_SWIPE_RIGHT_ARM -> 1.0F;
             default -> 1.0F;
         };
     }

@@ -89,6 +89,16 @@
             }
         ]
     },
+	"charge": {
+        "category": "neutral",
+        "subtitle": "charge",
+        "sounds": [
+            {
+                "name": "eop:charge",
+                "stream": true
+            }
+        ]
+    },
 	"burrow": {
         "category": "neutral",
         "subtitle": "burrow",

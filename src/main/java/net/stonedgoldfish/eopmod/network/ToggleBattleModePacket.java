@@ -36,16 +36,6 @@ public class ToggleBattleModePacket {
                 return;
             }
 
-            boolean currentlyOn = player.getTags().contains("EOP.Battle.Mode");
-
-            if (currentlyOn) {
-                player.removeTag("EOP.Battle.Mode");
-            } else {
-                player.addTag("EOP.Battle.Mode");
-            }
-
-            boolean nowOn = !currentlyOn;
-
             var scoreboard = player.getScoreboard();
 
             var objective = scoreboard.getObjective("EOP.Battle.Mode");
@@ -54,7 +44,7 @@ public class ToggleBattleModePacket {
                 objective = scoreboard.addObjective(
                         "EOP.Battle.Mode",
                         net.minecraft.world.scores.criteria.ObjectiveCriteria.DUMMY,
-                        net.minecraft.network.chat.Component.literal("Battle Mode"),
+                        Component.literal("Battle Mode"),
                         net.minecraft.world.scores.criteria.ObjectiveCriteria.RenderType.INTEGER
                 );
             }
@@ -64,6 +54,7 @@ public class ToggleBattleModePacket {
                     objective
             );
 
+            boolean nowOn = score.getScore() == 0;
             score.setScore(nowOn ? 1 : 0);
 
             player.level().playSound(
