@@ -21,6 +21,9 @@
             "type": "palladium:command",
             "hidden": true,
             "first_tick_commands": [
+                "tag @s remove Ability.Being.Used",
+                "tag @s remove EOP.Sun.Form",
+                "tag @s remove EOP.Moon.Form",
                 "tag @s add Beyonder",
                 "scoreboard objectives add Astral.Energy dummy",
                 "scoreboard players add @s Astral.Energy 0",

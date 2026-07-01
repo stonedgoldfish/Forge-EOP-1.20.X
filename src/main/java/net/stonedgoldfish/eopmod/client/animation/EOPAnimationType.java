@@ -30,6 +30,7 @@ public enum EOPAnimationType {
     THIRD_PERSON(EOPAnimationPlaybackType.HOLD),
     THIRD_PERSON2(EOPAnimationPlaybackType.HOLD),
     RIGHT_ARM_LIFT(EOPAnimationPlaybackType.HOLD),
+    FIRST_PERSON_BOTH_ARMS_DOWN(EOPAnimationPlaybackType.HOLD),
     RED(EOPAnimationPlaybackType.HOLD);
 
     public final EOPAnimationPlaybackType playbackType;

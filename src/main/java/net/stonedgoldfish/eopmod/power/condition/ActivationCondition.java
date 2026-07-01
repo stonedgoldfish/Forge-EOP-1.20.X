@@ -51,6 +51,24 @@ public class ActivationCondition extends KeyCondition {
         this.allowConcurrent = allowConcurrent;
     }
 
+    public void forceEnd(LivingEntity entity, AbilityInstance entry) {
+        if (entity == null || entry == null) {
+            return;
+        }
+
+        if (entry.activationTimer <= 0) {
+            return;
+        }
+
+        entry.activationTimer = 0;
+
+        if (this.cooldown > 0) {
+            entry.startCooldown(entity, this.cooldown);
+        }
+
+        EOPConditionLocks.unlock(entity, entry);
+    }
+
     @Override
     public boolean active(DataContext context) {
         LivingEntity entity = context.getLivingEntity();

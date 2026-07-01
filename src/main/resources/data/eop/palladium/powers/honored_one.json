@@ -21,6 +21,9 @@
             "type": "palladium:command",
             "hidden": true,
             "first_tick_commands": [
+                "tag @s remove Ability.Being.Used",
+                "tag @s remove Infinity",
+                "tag @s remove No.Infinity",
                 "tag @s add Honored_One",
                 "tag @s add EOP.Extra.Night.Vision",
                 "tag @s add EOP.Extra.Slow.Fall",

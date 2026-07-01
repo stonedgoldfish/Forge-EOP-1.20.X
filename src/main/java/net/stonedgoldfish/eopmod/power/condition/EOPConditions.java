@@ -22,4 +22,6 @@ public class EOPConditions {
             CONDITIONS.register("power_selected", PowerSelectedCondition.Serializer::new);
     public static final RegistrySupplier<ConditionSerializer> HEALTH_BELOW_PERCENT =
             CONDITIONS.register("health_below_percent", HealthBelowPercentCondition.Serializer::new);
+    public static final RegistrySupplier<ConditionSerializer> DAMAGE_TAKEN =
+            CONDITIONS.register("damage_taken", DamageTakenCondition.Serializer::new);
 }

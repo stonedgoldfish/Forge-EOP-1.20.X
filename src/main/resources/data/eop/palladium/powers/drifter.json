@@ -21,6 +21,7 @@
             "type": "palladium:command",
             "hidden": true,
             "first_tick_commands": [
+                "tag @s remove Ability.Being.Used",
                 "tag @s add Drifter",
                 "tag @s add EOP.Extra.Night.Vision",
                 "tag @s add EOP.Extra.Entity.Sense",

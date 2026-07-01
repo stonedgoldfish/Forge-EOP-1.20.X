@@ -249,27 +249,12 @@ public class EOPForgeEvents {
             boolean projectileHit =
                     event.getSource().getDirectEntity() != null
                             && event.getSource().getDirectEntity() != caster;
-
             CommandOnPunchAbility.runCommands(
                     caster,
                     event.getEntity(),
                     projectileHit
             );
         }
-
-        if (!(event.getEntity() instanceof Player player)) {
-            return;
-        }
-
-        float reduction = DamageReductionAbility.consumeHighestReduction(player);
-
-        if (reduction <= 0.0F) {
-            return;
-        }
-
-        float multiplier = 1.0F - (reduction / 100.0F);
-
-        event.setAmount(event.getAmount() * multiplier);
     }
 
     @SubscribeEvent
@@ -589,6 +574,21 @@ public class EOPForgeEvents {
         if (!(event.getSource().getEntity() instanceof ServerPlayer player)) {
             return;
         }
+
+        String powerId = player.getPersistentData().getString("EOP.RemovePowerOnDeath");
+
+        if (powerId == null || powerId.isBlank()) {
+            return;
+        }
+
+        player.getPersistentData().remove("EOP.RemovePowerOnDeath");
+
+        player.getServer().getCommands().performPrefixedCommand(
+                player.createCommandSourceStack()
+                        .withPermission(4)
+                        .withSuppressedOutput(),
+                "superpower remove " + player.getScoreboardName() + " " + powerId
+        );
 
         float mobMaxHealth = event.getEntity().getMaxHealth();
 

@@ -21,6 +21,7 @@
             "type": "palladium:command",
             "hidden": true,
             "first_tick_commands": [
+                "tag @s remove Ability.Being.Used",
                 "tag @s add Mender",
                 "tag @s add EOP.Extra.Climb",
                 "tag @s add EOP.Has.BM",

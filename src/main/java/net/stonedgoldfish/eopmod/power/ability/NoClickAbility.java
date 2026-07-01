@@ -16,13 +16,10 @@ import java.util.UUID;
 
 public class NoClickAbility extends Ability {
 
-    public static final PalladiumProperty<Boolean> LEFT_CLICK =
-            new BooleanProperty("left_click").configurable("Disable left click");
+    public static final PalladiumProperty<Boolean> LEFT_CLICK = new BooleanProperty("left_click").configurable("Disable left click");
+    public static final PalladiumProperty<Boolean> RIGHT_CLICK = new BooleanProperty("right_click").configurable("Disable right click");
 
-    public static final PalladiumProperty<Boolean> RIGHT_CLICK =
-            new BooleanProperty("right_click").configurable("Disable right click");
-
-    private static final Map<UUID, Settings> BLOCKED_PLAYERS = new HashMap<>();
+    private static final Map<UUID, Map<Integer, Settings>> BLOCKED_PLAYERS = new HashMap<>();
 
     public record Settings(
             boolean leftClick,
@@ -31,7 +28,6 @@ public class NoClickAbility extends Ability {
 
     public NoClickAbility() {
         this.withProperty(ICON, new ItemIcon(Items.BARRIER));
-
         this.withProperty(LEFT_CLICK, true);
         this.withProperty(RIGHT_CLICK, true);
     }
@@ -42,38 +38,79 @@ public class NoClickAbility extends Ability {
             return;
         }
 
+        UUID playerId = player.getUUID();
+        int instanceId = System.identityHashCode(entry);
+
         if (enabled) {
-            BLOCKED_PLAYERS.put(
-                    player.getUUID(),
-                    new Settings(
+            BLOCKED_PLAYERS
+                    .computeIfAbsent(playerId, id -> new HashMap<>())
+                    .put(instanceId, new Settings(
                             entry.getProperty(LEFT_CLICK),
                             entry.getProperty(RIGHT_CLICK)
-                    )
-            );
+                    ));
         } else {
-            BLOCKED_PLAYERS.remove(player.getUUID());
+            removeInstance(playerId, instanceId);
         }
     }
 
     @Override
     public void lastTick(LivingEntity entity, AbilityInstance entry, IPowerHolder holder, boolean enabled) {
-        if (entity instanceof Player player) {
-            BLOCKED_PLAYERS.remove(player.getUUID());
+        if (!(entity instanceof Player player)) {
+            return;
+        }
+
+        removeInstance(player.getUUID(), System.identityHashCode(entry));
+    }
+
+    private static void removeInstance(UUID playerId, int instanceId) {
+        Map<Integer, Settings> settings = BLOCKED_PLAYERS.get(playerId);
+
+        if (settings == null) {
+            return;
+        }
+
+        settings.remove(instanceId);
+
+        if (settings.isEmpty()) {
+            BLOCKED_PLAYERS.remove(playerId);
         }
     }
 
     public static boolean blocksLeftClick(Player player) {
-        Settings settings = BLOCKED_PLAYERS.get(player.getUUID());
-        return settings != null && settings.leftClick();
+        Map<Integer, Settings> settings = BLOCKED_PLAYERS.get(player.getUUID());
+
+        if (settings == null) {
+            return false;
+        }
+
+        for (Settings value : settings.values()) {
+            if (value.leftClick()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public static boolean blocksRightClick(Player player) {
-        Settings settings = BLOCKED_PLAYERS.get(player.getUUID());
-        return settings != null && settings.rightClick();
+        Map<Integer, Settings> settings = BLOCKED_PLAYERS.get(player.getUUID());
+
+        if (settings == null) {
+            return false;
+        }
+
+        for (Settings value : settings.values()) {
+            if (value.rightClick()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public static boolean isBlocked(Player player) {
-        return BLOCKED_PLAYERS.containsKey(player.getUUID());
+        Map<Integer, Settings> settings = BLOCKED_PLAYERS.get(player.getUUID());
+        return settings != null && !settings.isEmpty();
     }
 
     @Override

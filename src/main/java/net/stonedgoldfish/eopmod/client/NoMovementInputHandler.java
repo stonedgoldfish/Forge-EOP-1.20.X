@@ -3,6 +3,7 @@ package net.stonedgoldfish.eopmod.client;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
+import net.stonedgoldfish.eopmod.power.EOPAbilityHelper;
 import net.minecraftforge.client.event.MovementInputUpdateEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -68,7 +69,8 @@ public class NoMovementInputHandler {
                 || player.hasEffect(EOPEffects.SNARE.get())
                 || NoMovementAbility.isFrozen(player)
                 || ChargeAbility.isCharging(player)
-                || SinkAbility.shouldBlockJump(player);
+                || SinkAbility.shouldBlockJump(player)
+                || EOPAbilityHelper.isAbilityActive(player, "eop", "fortress", "Diamond.Golem.Carapace");
     }
 
     public static boolean isSprintBlocked(Player player) {

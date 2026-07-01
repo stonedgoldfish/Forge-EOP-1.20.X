@@ -409,7 +409,8 @@ public class EOPAnimationHandler {
             case THIRD_PERSON,
                  THIRD_PERSON2 -> 0.05F;
             case RIGHT_ARM_LIFT,
-                 RED -> 0.25F;
+                 RED,
+                 FIRST_PERSON_BOTH_ARMS_DOWN -> 0.25F;
 
             case DASH_FRONT,
                  DASH_LEFT,
@@ -431,7 +432,8 @@ public class EOPAnimationHandler {
             case THIRD_PERSON,
                  THIRD_PERSON2-> 0.05F;
             case RIGHT_ARM_LIFT,
-                 RED -> 0.25F;
+                 RED,
+                 FIRST_PERSON_BOTH_ARMS_DOWN -> 0.25F;
 
             case DASH_FRONT,
                  DASH_LEFT,

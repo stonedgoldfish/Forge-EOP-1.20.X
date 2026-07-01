@@ -144,6 +144,9 @@ repositories {
     maven {
         url = "https://maven.architectury.dev/"
     }
+    maven {
+        url = "https://jitpack.io"
+    }
     repositories {
         maven { url = "https://cursemaven.com" }
     }
@@ -153,7 +156,7 @@ dependencies {
 
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    runtimeOnly fg.deobf("net.threetag:palladium-forge:4.5.5+1.20.1:forge@jar")
+    runtimeOnly fg.deobf("net.threetag:palladium-forge:4.5.6+1.20.1:forge@jar")
     runtimeOnly fg.deobf("net.threetag:palladiumcore-forge:1.0.1+1.20.1:forge@jar")
     runtimeOnly fg.deobf("dev.kosmx.player-anim:player-animation-lib-forge:1.0.2-rc1+1.20@jar")
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:5.14.1+1.20.1")
@@ -167,12 +170,17 @@ dependencies {
     implementation fg.deobf("software.bernie.geckolib:geckolib-forge-1.20.1:4.8.2")
     implementation fg.deobf("com.eliotlash.mclib:mclib:20")
 
+    implementation fg.deobf("com.github.Virtuoel:Pehkui:3.8.2+1.20.1-forge")
 
-    compileOnly fg.deobf("net.threetag:palladium-forge:4.5.5+1.20.1:forge@jar")
+
+    compileOnly fg.deobf("net.threetag:palladium-forge:4.5.6+1.20.1:forge@jar")
     compileOnly fg.deobf("net.threetag:palladiumcore-forge:1.0.1+1.20.1:forge@jar")
     compileOnly fg.deobf("dev.kosmx.player-anim:player-animation-lib-forge:1.0.2-rc1+1.20@jar")
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:5.14.1+1.20.1:api")
     compileOnly fg.deobf("curse.maven:jade-324717:5072729")
+
+    implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:0.2.0"))
+    implementation "io.github.llamalad7:mixinextras-forge:0.2.0"
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 

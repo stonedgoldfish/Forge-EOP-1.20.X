@@ -158,6 +158,12 @@ public class EOPPlayerAnimation extends PalladiumAnimation {
                 }
             }
 
+            case FIRST_PERSON_BOTH_ARMS_DOWN -> {
+                if (firstPerson) {
+                    FirstPersonBothArmsDownAnimation.animateFirstPerson(builder, anim);
+                }
+            }
+
             case THIRD_PERSON,
                  THIRD_PERSON2-> {
                 if (!firstPerson) {

@@ -10,6 +10,7 @@
             "type": "palladium:command",
             "hidden": true,
             "first_tick_commands": [
+                "tag @s remove Ability.Being.Used",
                 "tag @s add PowerTag",
                 "tag @s add EOP.Extra.Smelting",
                 "tag @s add EOP.Has.BM",

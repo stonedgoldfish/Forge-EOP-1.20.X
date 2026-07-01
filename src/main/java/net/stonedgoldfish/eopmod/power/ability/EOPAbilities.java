@@ -108,6 +108,10 @@ public class EOPAbilities {
             ABILITIES.register("save_health", TransformedHealthAbility::new);
     public static final RegistrySupplier<Ability> SAVED_RESTRICT_SLOTS =
             ABILITIES.register("saved_restrict_slots", SavedRestrictSlotsAbility::new);
+    public static final RegistrySupplier<Ability> ANIMATION_TIMER =
+            ABILITIES.register("animation_timer", PersistentAnimationTimerAbility::new);
+    public static final RegistrySupplier<Ability> EOP_SCALE =
+            ABILITIES.register("scale", ScaleAbility::new);
 
     public static void init() {
 

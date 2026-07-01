@@ -40,9 +40,7 @@ public class HealthBelowPercentCondition extends Condition {
 
     public static class Serializer extends ConditionSerializer {
 
-        public static final PalladiumProperty<Float> PERCENT =
-                new FloatProperty("percent")
-                        .configurable("Health percentage threshold. Example: 0.5 = 50%");
+        public static final PalladiumProperty<Float> PERCENT = new FloatProperty("percent").configurable("Health percentage threshold. Example: 0.5 = 50%");
 
         public Serializer() {
             this.withProperty(PERCENT, 0.5F);
